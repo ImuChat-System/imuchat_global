@@ -1,0 +1,21 @@
+# CODEOWNERS - ImuChat Global
+# https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+# Ces propriétaires seront demandés pour review sur les PRs
+# qui modifient les fichiers correspondants.
+
+# Default owners pour tout
+* @ImuChat-System/core-team
+
+# Configuration workspace
+ImuChat.code-workspace @ImuChat-System/devops
+.devcontainer/ @ImuChat-System/devops
+.vscode/ @ImuChat-System/devops
+.github/ @ImuChat-System/devops
+
+# Scripts
+scripts/ @ImuChat-System/devops
+
+# Documentation
+*.md @ImuChat-System/core-team
+docs/ @ImuChat-System/core-team

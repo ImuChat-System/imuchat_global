@@ -1,0 +1,62 @@
+{
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": "explicit",
+        "source.organizeImports": "explicit"
+    },
+    "typescript.tsdk": "node_modules/typescript/lib",
+    "typescript.enablePromptUseWorkspaceTsdk": true,
+    "files.associations": {
+        "*.css": "tailwindcss"
+    },
+    "tailwindCSS.experimental.classRegex": [
+        [
+            "cva\\(([^)]*)\\)",
+            "[\"'`]([^\"'`]*).*?[\"'`]"
+        ],
+        [
+            "cn\\(([^)]*)\\)",
+            "[\"'`]([^\"'`]*).*?[\"'`]"
+        ]
+    ],
+    "eslint.workingDirectories": [
+        {
+            "directory": "../platform-core",
+            "changeProcessCWD": true
+        },
+        {
+            "directory": "../web-app",
+            "changeProcessCWD": true
+        },
+        {
+            "directory": "../mobile-app",
+            "changeProcessCWD": true
+        },
+        {
+            "directory": "../desktop-app",
+            "changeProcessCWD": true
+        },
+        {
+            "directory": "../ui-kit",
+            "changeProcessCWD": true
+        },
+        {
+            "directory": "../shared-types",
+            "changeProcessCWD": true
+        }
+    ],
+    "search.exclude": {
+        "**/node_modules": true,
+        "**/.next": true,
+        "**/dist": true,
+        "**/.expo": true,
+        "**/coverage": true
+    },
+    "files.watcherExclude": {
+        "**/node_modules/**": true,
+        "**/.next/**": true,
+        "**/dist/**": true,
+        "**/.expo/**": true
+    }
+}

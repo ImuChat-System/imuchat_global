@@ -1,0 +1,91 @@
+{
+  "folders": [
+    {
+      "path": ".",
+      "name": "imuchat_global (root)"
+    },
+    {
+      "path": "../platform-core"
+    },
+    {
+      "path": "../web-app"
+    },
+    {
+      "path": "../mobile-app"
+    },
+    {
+      "path": "../desktop-app"
+    },
+    {
+      "path": "../ui-kit"
+    },
+    {
+      "path": "../shared-types"
+    },
+    {
+      "path": "../infra"
+    }
+  ],
+  "settings": {
+    "files.exclude": {
+      "**/.next": true,
+      "**/node_modules": true,
+      "**/.turbo": true,
+      "**/dist": true,
+      "**/.expo": true
+    },
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": "explicit"
+    },
+    "eslint.packageManager": "pnpm",
+    "typescript.tsdk": "node_modules/typescript/lib",
+    "typescript.enablePromptUseWorkspaceTsdk": true,
+    "search.exclude": {
+      "**/node_modules": true,
+      "**/.next": true,
+      "**/dist": true,
+      "**/.expo": true
+    }
+  },
+  "extensions": {
+    "recommendations": [
+      "dbaeumer.vscode-eslint",
+      "esbenp.prettier-vscode",
+      "ms-vscode.vscode-typescript-next",
+      "msjsdiag.debugger-for-chrome",
+      "eamodio.gitlens",
+      "ms-azuretools.vscode-docker",
+      "ms-vscode-remote.remote-containers",
+      "orta.vscode-jest",
+      "bradlc.vscode-tailwindcss",
+      "streetsidesoftware.code-spell-checker",
+      "usernamehw.errorlens",
+      "christian-kohler.path-intellisense",
+      "mikestead.dotenv"
+    ]
+  },
+  "launch": {
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "name": "Debug Web App",
+        "type": "chrome",
+        "request": "launch",
+        "url": "http://localhost:3000",
+        "webRoot": "${workspaceFolder:web-app}"
+      },
+      {
+        "name": "Debug Desktop App",
+        "type": "node",
+        "request": "launch",
+        "cwd": "${workspaceFolder:desktop-app}",
+        "runtimeExecutable": "pnpm",
+        "runtimeArgs": [
+          "dev"
+        ]
+      }
+    ]
+  }
+}

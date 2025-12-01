@@ -1,0 +1,69 @@
+name: CI - ImuChat Global
+
+on:
+    push:
+        branches: [main, develop]
+    pull_request:
+        branches: [main, develop]
+
+env:
+    NODE_VERSION: "20"
+    PNPM_VERSION: "8"
+
+jobs:
+    lint-and-validate:
+        name: Lint & Validate
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: ${{ env.NODE_VERSION }}
+
+            - name: Setup pnpm
+              uses: pnpm/action-setup@v2
+              with:
+                  version: ${{ env.PNPM_VERSION }}
+
+            - name: Validate workspace files
+              run: |
+                  echo "Validating workspace configuration..."
+                  test -f ImuChat.code-workspace
+                  test -f .devcontainer/devcontainer.json
+                  test -f .vscode/tasks.json
+                  echo "✅ All workspace files present"
+
+            - name: Validate scripts
+              run: |
+                  echo "Checking scripts are executable..."
+                  chmod +x scripts/*.sh
+                  bash -n scripts/clone-all-repos.sh
+                  bash -n scripts/run-all-tests.sh
+                  bash -n scripts/lint-all.sh
+                  echo "✅ All scripts valid"
+
+    docs:
+        name: Documentation Check
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+
+            - name: Check documentation
+              run: |
+                  echo "Checking required documentation..."
+                  test -f README.md
+                  test -f DEVELOPER_ONBOARDING.md
+                  test -f CONTRIBUTING.md
+                  test -f CODEOWNERS
+                  echo "✅ All documentation present"
+
+            - name: Check markdown links
+              uses: gaurav-nelson/github-action-markdown-link-check@v1
+              with:
+                  use-quiet-mode: "yes"
+                  config-file: ".github/markdown-link-check.json"
+              continue-on-error: true

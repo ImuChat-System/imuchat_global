@@ -1,0 +1,20 @@
+{
+    "ignorePatterns": [
+        {
+            "pattern": "^https://github.com/ImuChat-System/(?!imuchat_global)"
+        },
+        {
+            "pattern": "^https://notion.so"
+        },
+        {
+            "pattern": "^https://figma.com"
+        },
+        {
+            "pattern": "^https://linear.app"
+        }
+    ],
+    "timeout": "10s",
+    "retryOn429": true,
+    "retryCount": 3,
+    "fallbackRetryDelay": "30s"
+}

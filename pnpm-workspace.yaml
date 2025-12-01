@@ -1,0 +1,8 @@
+packages:
+  - 'platform-core'
+  - 'web-app'
+  - 'mobile-app'
+  - 'desktop-app'
+  - 'ui-kit'
+  - 'shared-types'
+  - 'infra'

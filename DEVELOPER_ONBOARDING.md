@@ -229,12 +229,14 @@ pnpm db:migrate
 
 - **Branches** : `feature/xxx`, `fix/xxx`, `chore/xxx`
 - **Commits** : [Conventional Commits](https://www.conventionalcommits.org/)
+
   ```
   feat: add user authentication
   fix: resolve login bug
   docs: update README
   chore: update dependencies
   ```
+
 - **PR** : Toujours avec review, liée à une issue
 
 ### Code

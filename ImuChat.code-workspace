@@ -5,25 +5,32 @@
       "name": "imuchat_global (root)"
     },
     {
-      "path": "../platform-core"
+      "path": "platform-core",
+      "name": "platform-core"
     },
     {
-      "path": "../web-app"
+      "path": "web-app",
+      "name": "web-app"
     },
     {
-      "path": "../mobile-app"
+      "path": "mobile-app",
+      "name": "mobile-app"
     },
     {
-      "path": "../desktop-app"
+      "path": "desktop-app",
+      "name": "desktop-app"
     },
     {
-      "path": "../ui-kit"
+      "path": "ui-kit",
+      "name": "ui-kit"
     },
     {
-      "path": "../shared-types"
+      "path": "shared-types",
+      "name": "shared-types"
     },
     {
-      "path": "../infra"
+      "path": "infra",
+      "name": "infra"
     }
   ],
   "settings": {

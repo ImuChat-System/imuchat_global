@@ -28,8 +28,7 @@
       }
     }
   },
-  "workspaceMount": "source=${localWorkspaceFolder}/..,target=/workspace,type=bind,consistency=cached",
-  "workspaceFolder": "/workspace/imuchat_global",
+  "workspaceFolder": "/workspaces/imuchat_global",
   "remoteUser": "node",
   "containerEnv": {
     "NODE_ENV": "development"

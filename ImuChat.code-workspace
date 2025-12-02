@@ -2,35 +2,7 @@
   "folders": [
     {
       "path": ".",
-      "name": "imuchat_global (root)"
-    },
-    {
-      "path": "platform-core",
-      "name": "platform-core"
-    },
-    {
-      "path": "web-app",
-      "name": "web-app"
-    },
-    {
-      "path": "mobile-app",
-      "name": "mobile-app"
-    },
-    {
-      "path": "desktop-app",
-      "name": "desktop-app"
-    },
-    {
-      "path": "ui-kit",
-      "name": "ui-kit"
-    },
-    {
-      "path": "shared-types",
-      "name": "shared-types"
-    },
-    {
-      "path": "infra",
-      "name": "infra"
+      "name": "🏠 imuchat_global"
     }
   ],
   "settings": {

@@ -1,7 +1,8 @@
 # 🗺️ ImuChat - Roadmap Unifiée Monorepo
 
 **Date de création :** 2 décembre 2025  
-**Version :** 1.0  
+**Version :** 1.1  
+**Dernière mise à jour :** 2 décembre 2025  
 **Objectif :** Feuille de route consolidée Web + Mobile + Desktop dans le monorepo
 
 ---
@@ -15,7 +16,15 @@
 | **Web** | Phase 2 (50%) | 4/16 | 399 tests (7% coverage) | 🟡 En cours |
 | **Mobile** | Phase 1.7 (80%) | 6/16 | Infrastructure prête | 🟢 Avancé |
 | **Desktop** | Setup initial | 0/16 | À configurer | 🔴 À démarrer |
-| **Monorepo** | Migration | Packages partagés | ✅ installé | 🟢 Prêt |
+| **Monorepo** | Phase A (75%) | Packages partagés | ✅ Builds OK | 🟢 En cours |
+
+### 📦 Packages Partagés - État Actuel
+
+| Package | Version | Types/Composants | Build | Status |
+|---------|---------|------------------|-------|--------|
+| `@imuchat/shared-types` | 1.1.0 | 15 modules de types | ✅ | 🟢 Prêt |
+| `@imuchat/ui-kit` | 1.0.0 | 19 composants, 7 thèmes | ✅ | 🟢 Prêt |
+| `@imuchat/platform-core` | 1.0.0 | API + WebSocket | ⏳ | 🟡 En cours |
 
 ---
 
@@ -24,8 +33,8 @@
 ### Packages Partagés (Créés)
 
 ```
-@imuchat/shared-types    → Types TypeScript communs
-@imuchat/ui-kit          → Design System + Composants
+@imuchat/shared-types    → Types TypeScript communs (15 modules)
+@imuchat/ui-kit          → Design System + 19 Composants + 7 Thèmes
 @imuchat/platform-core   → Backend services + API
 ```
 
@@ -84,20 +93,45 @@
 
 #### Semaine 1-2 : Migration & Synchronisation
 
-- [ ] **Migration composants ImuChat web → ui-kit**
-  - [ ] Copier composants shadcn/ui validés
-  - [ ] Adapter pour React Native (via nativewind)
+- [x] **Synchronisation types** ✅ COMPLÉTÉ
+  - [x] Merger types web + mobile dans shared-types
+  - [x] Validation TypeScript cross-platform
+  - [x] Export schemas Zod partagés
+  - [x] Ajout types: wallet, theme, notification, contact, i18n
+
+- [x] **Configuration workspace** ✅ COMPLÉTÉ
+  - [x] Correction ImuChat.code-workspace (suppression doublons)
+  - [x] pnpm workspace fonctionnel
+
+- [x] **UI Kit** ✅ 19 COMPOSANTS
+  - [x] Button, IconButton
+  - [x] Card, Modal, Dialog
+  - [x] Input, Label, Checkbox, Switch, Select
+  - [x] Avatar, Badge, Text
+  - [x] Tabs, DropdownMenu
+  - [x] Tooltip, Popover
+  - [x] Spinner, Skeleton
+
+- [x] **Design Tokens** ✅ COMPLÉTÉ
+  - [x] Couleurs (primary, secondary, success, error, etc.)
+  - [x] Typographie (fonts, sizes, weights)
+  - [x] Espacement (spacing, spacingNumeric)
+  - [x] Ombres (shadows, shadowsNative)
+  - [x] Animations (durations, easings)
+
+- [x] **Thèmes** ✅ 7 THÈMES
+  - [x] Light (défaut)
+  - [x] Dark
+  - [x] Sakura Pink
+  - [x] Cyber Neon (premium)
+  - [x] Zen Green
+  - [x] Midnight Purple
+  - [x] Ocean Blue
+
+- [ ] **À faire cette semaine**
+  - [ ] Adapter composants pour React Native (nativewind)
   - [ ] Tests unitaires partagés
-
-- [ ] **Synchronisation types**
-  - [ ] Merger types web + mobile dans shared-types
-  - [ ] Validation TypeScript cross-platform
-  - [ ] Export schemas Zod partagés
-
-- [ ] **Configuration builds**
-  - [ ] tsup pour packages partagés
-  - [ ] Build scripts monorepo
-  - [ ] CI/CD GitHub Actions unifié
+  - [ ] Build scripts CI/CD
 
 #### Livrables Semaine 2
 - ✅ Workspace pnpm fonctionnel

@@ -1,16 +1,7 @@
 {
   "name": "ImuChat Dev Container",
-  "image": "mcr.microsoft.com/vscode/devcontainers/javascript-node:20",
-  "features": {
-    "ghcr.io/devcontainers/features/docker-in-docker:2": {},
-    "ghcr.io/devcontainers/features/github-cli:1": {},
-    "ghcr.io/devcontainers/features/kubectl-helm-minikube:1": {
-      "kubectl": "latest",
-      "helm": "latest",
-      "minikube": "none"
-    }
-  },
-  "postCreateCommand": "corepack enable && corepack prepare pnpm@latest --activate && bash .devcontainer/post-create.sh",
+  "image": "mcr.microsoft.com/devcontainers/javascript-node:20",
+  "postCreateCommand": "corepack enable && corepack prepare pnpm@latest --activate && pnpm install",
   "customizations": {
     "vscode": {
       "extensions": [

@@ -16,14 +16,14 @@
 | **Web** | Phase 2 (50%) | 4/16 | 399 tests (7% coverage) | 🟡 En cours |
 | **Mobile** | Phase 1.7 (80%) | 6/16 | Infrastructure prête | 🟢 Avancé |
 | **Desktop** | Setup initial | 0/16 | À configurer | 🔴 À démarrer |
-| **Monorepo** | Phase A (75%) | Packages partagés | ✅ Builds OK | 🟢 En cours |
+| **Monorepo** | Phase A (90%) | Packages partagés | ✅ Builds OK | 🟢 En cours |
 
 ### 📦 Packages Partagés - État Actuel
 
 | Package | Version | Types/Composants | Build | Status |
 |---------|---------|------------------|-------|--------|
 | `@imuchat/shared-types` | 1.1.0 | 15 modules de types | ✅ | 🟢 Prêt |
-| `@imuchat/ui-kit` | 1.0.0 | 19 composants, 7 thèmes | ✅ | 🟢 Prêt |
+| `@imuchat/ui-kit` | 1.0.0 | 28 composants, 7 thèmes | ✅ | 🟢 Prêt |
 | `@imuchat/platform-core` | 1.0.0 | API + WebSocket | ⏳ | 🟡 En cours |
 
 ---
@@ -103,7 +103,7 @@
   - [x] Correction ImuChat.code-workspace (suppression doublons)
   - [x] pnpm workspace fonctionnel
 
-- [x] **UI Kit** ✅ 19 COMPOSANTS
+- [x] **UI Kit** ✅ 28 COMPOSANTS
   - [x] Button, IconButton
   - [x] Card, Modal, Dialog
   - [x] Input, Label, Checkbox, Switch, Select
@@ -111,6 +111,13 @@
   - [x] Tabs, DropdownMenu
   - [x] Tooltip, Popover
   - [x] Spinner, Skeleton
+  - [x] ChatBubble, ChatInput, TypingIndicator
+  - [x] MessageList, ScrollToBottomButton
+  - [x] UserAvatar, MiniUserCard
+  - [x] ChannelItem, ChannelCategory, VoiceChannelUser
+  - [x] ServerIcon, ServerList, ServerFolder
+  - [x] OnlineIndicator, StatusSelector, PresenceDot
+  - [x] EmojiReaction, ReactionBar, QuickReactions, EmojiGrid
 
 - [x] **Design Tokens** ✅ COMPLÉTÉ
   - [x] Couleurs (primary, secondary, success, error, etc.)
@@ -128,8 +135,17 @@
   - [x] Midnight Purple
   - [x] Ocean Blue
 
+- [x] **Internationalisation (i18n)** ✅ COMPLÉTÉ
+  - [x] Types i18n dans shared-types (12 locales)
+  - [x] I18nProvider avec contexte React
+  - [x] Hooks: useI18n, useTranslation, useLocale, useDirection
+  - [x] Traductions fr/en de base
+  - [x] Formatters: dates, nombres, devises, temps relatif
+  - [x] LanguageSwitcher component
+  - [x] Support RTL (arabe)
+
 - [ ] **À faire cette semaine**
-  - [ ] Adapter composants pour React Native (nativewind)
+  - [x] Adapter composants pour React Native (nativewind)
   - [ ] Tests unitaires partagés
   - [ ] Build scripts CI/CD
 

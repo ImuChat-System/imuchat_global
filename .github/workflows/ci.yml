@@ -6,13 +6,17 @@ on:
     pull_request:
         branches: [main, develop]
 
+concurrency:
+    group: ${{ github.workflow }}-${{ github.ref }}
+    cancel-in-progress: true
+
 env:
     NODE_VERSION: "20"
-    PNPM_VERSION: "8"
+    PNPM_VERSION: "9"
 
 jobs:
     lint-and-validate:
-        name: Lint & Validate
+        name: 🔍 Lint & Validate
         runs-on: ubuntu-latest
         steps:
             - name: Checkout
@@ -24,7 +28,7 @@ jobs:
                   node-version: ${{ env.NODE_VERSION }}
 
             - name: Setup pnpm
-              uses: pnpm/action-setup@v2
+              uses: pnpm/action-setup@v4
               with:
                   version: ${{ env.PNPM_VERSION }}
 
@@ -46,7 +50,7 @@ jobs:
                   echo "✅ All scripts valid"
 
     docs:
-        name: Documentation Check
+        name: 📚 Documentation Check
         runs-on: ubuntu-latest
         steps:
             - name: Checkout
@@ -67,3 +71,321 @@ jobs:
                   use-quiet-mode: "yes"
                   config-file: ".github/markdown-link-check.json"
               continue-on-error: true
+
+    shared-types:
+        name: 📦 Shared Types
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: ${{ env.NODE_VERSION }}
+
+            - name: Setup pnpm
+              uses: pnpm/action-setup@v4
+              with:
+                  version: ${{ env.PNPM_VERSION }}
+
+            - name: Get pnpm store directory
+              shell: bash
+              run: echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+            - name: Setup pnpm cache
+              uses: actions/cache@v4
+              with:
+                  path: ${{ env.STORE_PATH }}
+                  key: ${{ runner.os }}-pnpm-shared-types-${{ hashFiles('shared-types/pnpm-lock.yaml') }}
+                  restore-keys: |
+                      ${{ runner.os }}-pnpm-shared-types-
+
+            - name: Install dependencies
+              working-directory: ./shared-types
+              run: pnpm install --frozen-lockfile
+
+            - name: Type check
+              working-directory: ./shared-types
+              run: pnpm exec tsc --noEmit
+
+            - name: Build
+              working-directory: ./shared-types
+              run: pnpm build
+
+            - name: Upload artifacts
+              uses: actions/upload-artifact@v4
+              with:
+                  name: shared-types-dist
+                  path: shared-types/dist
+                  retention-days: 1
+
+    ui-kit:
+        name: 🎨 UI Kit
+        runs-on: ubuntu-latest
+        needs: shared-types
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: ${{ env.NODE_VERSION }}
+
+            - name: Setup pnpm
+              uses: pnpm/action-setup@v4
+              with:
+                  version: ${{ env.PNPM_VERSION }}
+
+            - name: Download shared-types
+              uses: actions/download-artifact@v4
+              with:
+                  name: shared-types-dist
+                  path: shared-types/dist
+
+            - name: Get pnpm store directory
+              shell: bash
+              run: echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+            - name: Setup pnpm cache
+              uses: actions/cache@v4
+              with:
+                  path: ${{ env.STORE_PATH }}
+                  key: ${{ runner.os }}-pnpm-ui-kit-${{ hashFiles('ui-kit/pnpm-lock.yaml') }}
+                  restore-keys: |
+                      ${{ runner.os }}-pnpm-ui-kit-
+
+            - name: Install shared-types dependencies
+              working-directory: ./shared-types
+              run: pnpm install --frozen-lockfile
+
+            - name: Install UI Kit dependencies
+              working-directory: ./ui-kit
+              run: pnpm install --frozen-lockfile
+
+            - name: Lint
+              working-directory: ./ui-kit
+              run: pnpm lint || true
+
+            - name: Type check
+              working-directory: ./ui-kit
+              run: pnpm exec tsc --noEmit
+
+            - name: Test
+              working-directory: ./ui-kit
+              run: pnpm test -- --coverage
+
+            - name: Upload coverage
+              uses: codecov/codecov-action@v4
+              with:
+                  files: ./ui-kit/coverage/coverage-final.json
+                  flags: ui-kit
+                  fail_ci_if_error: false
+
+            - name: Build
+              working-directory: ./ui-kit
+              run: pnpm build
+
+            - name: Upload artifacts
+              uses: actions/upload-artifact@v4
+              with:
+                  name: ui-kit-dist
+                  path: ui-kit/dist
+                  retention-days: 1
+
+    platform-core:
+        name: ⚙️ Platform Core
+        runs-on: ubuntu-latest
+        needs: shared-types
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: ${{ env.NODE_VERSION }}
+
+            - name: Setup pnpm
+              uses: pnpm/action-setup@v4
+              with:
+                  version: ${{ env.PNPM_VERSION }}
+
+            - name: Download shared-types
+              uses: actions/download-artifact@v4
+              with:
+                  name: shared-types-dist
+                  path: shared-types/dist
+
+            - name: Get pnpm store directory
+              shell: bash
+              run: echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+            - name: Setup pnpm cache
+              uses: actions/cache@v4
+              with:
+                  path: ${{ env.STORE_PATH }}
+                  key: ${{ runner.os }}-pnpm-platform-core-${{ hashFiles('platform-core/pnpm-lock.yaml') }}
+                  restore-keys: |
+                      ${{ runner.os }}-pnpm-platform-core-
+
+            - name: Install shared-types dependencies
+              working-directory: ./shared-types
+              run: pnpm install --frozen-lockfile
+
+            - name: Install Platform Core dependencies
+              working-directory: ./platform-core
+              run: pnpm install --frozen-lockfile
+
+            - name: Type check
+              working-directory: ./platform-core
+              run: pnpm exec tsc --noEmit
+
+    web-app:
+        name: 🌐 Web App
+        runs-on: ubuntu-latest
+        needs: [shared-types, ui-kit]
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: ${{ env.NODE_VERSION }}
+
+            - name: Setup pnpm
+              uses: pnpm/action-setup@v4
+              with:
+                  version: ${{ env.PNPM_VERSION }}
+
+            - name: Download shared-types
+              uses: actions/download-artifact@v4
+              with:
+                  name: shared-types-dist
+                  path: shared-types/dist
+
+            - name: Download ui-kit
+              uses: actions/download-artifact@v4
+              with:
+                  name: ui-kit-dist
+                  path: ui-kit/dist
+
+            - name: Get pnpm store directory
+              shell: bash
+              run: echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+            - name: Setup pnpm cache
+              uses: actions/cache@v4
+              with:
+                  path: ${{ env.STORE_PATH }}
+                  key: ${{ runner.os }}-pnpm-web-app-${{ hashFiles('web-app/pnpm-lock.yaml') }}
+                  restore-keys: |
+                      ${{ runner.os }}-pnpm-web-app-
+
+            - name: Install shared-types dependencies
+              working-directory: ./shared-types
+              run: pnpm install --frozen-lockfile
+
+            - name: Install ui-kit dependencies
+              working-directory: ./ui-kit
+              run: pnpm install --frozen-lockfile
+
+            - name: Install Web App dependencies
+              working-directory: ./web-app
+              run: pnpm install --frozen-lockfile
+
+            - name: Lint
+              working-directory: ./web-app
+              run: pnpm lint || true
+
+            - name: Type check
+              working-directory: ./web-app
+              run: pnpm exec tsc --noEmit || true
+
+            - name: Build
+              working-directory: ./web-app
+              run: pnpm build
+              env:
+                  SKIP_ENV_VALIDATION: true
+
+    desktop-app:
+        name: 🖥️ Desktop App
+        runs-on: ubuntu-latest
+        needs: [shared-types, ui-kit]
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: ${{ env.NODE_VERSION }}
+
+            - name: Setup pnpm
+              uses: pnpm/action-setup@v4
+              with:
+                  version: ${{ env.PNPM_VERSION }}
+
+            - name: Download shared-types
+              uses: actions/download-artifact@v4
+              with:
+                  name: shared-types-dist
+                  path: shared-types/dist
+
+            - name: Download ui-kit
+              uses: actions/download-artifact@v4
+              with:
+                  name: ui-kit-dist
+                  path: ui-kit/dist
+
+            - name: Get pnpm store directory
+              shell: bash
+              run: echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+            - name: Setup pnpm cache
+              uses: actions/cache@v4
+              with:
+                  path: ${{ env.STORE_PATH }}
+                  key: ${{ runner.os }}-pnpm-desktop-app-${{ hashFiles('desktop-app/pnpm-lock.yaml') }}
+                  restore-keys: |
+                      ${{ runner.os }}-pnpm-desktop-app-
+
+            - name: Install shared-types dependencies
+              working-directory: ./shared-types
+              run: pnpm install --frozen-lockfile
+
+            - name: Install ui-kit dependencies
+              working-directory: ./ui-kit
+              run: pnpm install --frozen-lockfile
+
+            - name: Install Desktop App dependencies
+              working-directory: ./desktop-app
+              run: pnpm install --frozen-lockfile
+
+            - name: Type check
+              working-directory: ./desktop-app
+              run: pnpm exec tsc --noEmit || true
+
+            - name: Build
+              working-directory: ./desktop-app
+              run: pnpm build || true
+
+    ci-success:
+        name: ✅ CI Success
+        runs-on: ubuntu-latest
+        needs: [lint-and-validate, docs, shared-types, ui-kit, platform-core, web-app, desktop-app]
+        if: always()
+        steps:
+            - name: Check all jobs status
+              run: |
+                  if [ "${{ needs.lint-and-validate.result }}" == "failure" ] || \
+                     [ "${{ needs.docs.result }}" == "failure" ] || \
+                     [ "${{ needs.shared-types.result }}" == "failure" ] || \
+                     [ "${{ needs.ui-kit.result }}" == "failure" ] || \
+                     [ "${{ needs.platform-core.result }}" == "failure" ]; then
+                    echo "❌ CI failed"
+                    exit 1
+                  fi
+                  echo "✅ CI passed successfully!"

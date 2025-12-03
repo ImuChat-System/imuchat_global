@@ -16,15 +16,15 @@
 | **Web** | Phase 2 (50%) | 4/16 | 399 tests (7% coverage) | 🟡 En cours |
 | **Mobile** | Phase 1.7 (80%) | 6/16 | Infrastructure prête | 🟢 Avancé |
 | **Desktop** | Setup initial | 0/16 | À configurer | 🔴 À démarrer |
-| **Monorepo** | Phase A (90%) | Packages partagés | ✅ Builds OK | 🟢 En cours |
+| **Monorepo** | Phase A (95%) | Packages partagés | ✅ Tests + CI/CD | 🟢 Avancé |
 
 ### 📦 Packages Partagés - État Actuel
 
-| Package | Version | Types/Composants | Build | Status |
-|---------|---------|------------------|-------|--------|
-| `@imuchat/shared-types` | 1.1.0 | 15 modules de types | ✅ | 🟢 Prêt |
-| `@imuchat/ui-kit` | 1.0.0 | 28 composants, 7 thèmes | ✅ | 🟢 Prêt |
-| `@imuchat/platform-core` | 1.0.0 | API + WebSocket | ⏳ | 🟡 En cours |
+| Package | Version | Types/Composants | Tests | Build | Status |
+|---------|---------|------------------|-------|-------|--------|
+| `@imuchat/shared-types` | 1.1.0 | 15 modules de types | ✅ 130 tests | ✅ | 🟢 Prêt |
+| `@imuchat/ui-kit` | 1.0.0 | 28 composants, 7 thèmes | ✅ 80 tests (75% coverage) | ✅ | 🟢 Prêt |
+| `@imuchat/platform-core` | 1.0.0 | API + WebSocket | ⏳ | ⏳ | 🟡 En cours |
 
 ---
 
@@ -144,30 +144,58 @@
   - [x] LanguageSwitcher component
   - [x] Support RTL (arabe)
 
-- [ ] **À faire cette semaine**
-  - [x] Adapter composants pour React Native (nativewind)
-  - [ ] Tests unitaires partagés
-  - [ ] Build scripts CI/CD
+- [x] **Tests Unitaires** ✅ 210 TESTS
+  - [x] ui-kit: 80 tests (75% coverage)
+    - Button, Input, tokens, themes, i18n
+  - [x] shared-types: 130 tests
+    - schemas.test.ts (39 tests - Zod validation)
+    - i18n.test.ts (69 tests - locales, formats)
+    - auth.test.ts (12 tests - Firebase errors)
+    - api.test.ts (10 tests - Error codes)
+  - [x] Configuration Vitest pour tous les packages
+  - [x] Scripts test + test:coverage
+
+- [x] **CI/CD Pipeline** ✅ COMPLÉTÉ
+  - [x] GitHub Actions workflow amélioré
+  - [x] Jobs séparés par package (shared-types, ui-kit, platform-core, web-app, desktop-app)
+  - [x] Tests automatisés avec couverture
+  - [x] Build artifacts partagés entre jobs
+  - [x] Cache pnpm optimisé
+  - [x] Intégration Codecov
 
 #### Livrables Semaine 2
 - ✅ Workspace pnpm fonctionnel
-- 📦 ui-kit avec 15+ composants partagés
-- 📦 shared-types complets
-- 🔧 Scripts build automatisés
+- ✅ ui-kit avec 28 composants partagés + 7 thèmes
+- ✅ shared-types complets avec 15 modules
+- ✅ 210 tests unitaires (130 shared-types + 80 ui-kit)
+- ✅ CI/CD pipeline GitHub Actions complet
 
 ---
 
-### Phase B : Modules Core Partagés (Janvier 2026)
+### Phase B : Modules Core Partagés (Janvier 2026) 🚀 EN COURS
 *Durée : 4 semaines | Priorité : HAUTE*
 
-#### Semaine 3-4 : Infrastructure Modules
+#### Semaine 3-4 : Infrastructure Modules ✅ 80% COMPLÉTÉ
 
-| Module | Tâches | Owner |
-|--------|--------|-------|
-| **Auth** | Unifier Firebase Auth web/mobile | shared |
-| **WebSocket** | Service partagé Socket.IO | platform-core |
-| **Event Bus** | Centraliser dans platform-core | shared |
-| **Module Registry** | Interface commune | shared |
+| Module | Tâches | Statut | Owner |
+|--------|--------|--------|-------|
+| **Module Registry** | Interface commune | ✅ COMPLÉTÉ | platform-core |
+| **Event Bus** | Système pub/sub avec priorités | ✅ COMPLÉTÉ | platform-core |
+| **BaseModule** | Classe abstraite + lifecycle hooks | ✅ COMPLÉTÉ | platform-core |
+| **Auth** | Module Firebase Admin complet | ✅ COMPLÉTÉ | platform-core |
+| **WebSocket** | Service Socket.IO temps réel | ✅ COMPLÉTÉ | platform-core |
+
+**Infrastructure complétée:**
+- ✅ ModuleRegistry.ts (310 lignes) - Gestionnaire de cycle de vie
+- ✅ EventBus.ts (270 lignes) - Communication inter-modules avec file de priorité
+- ✅ BaseModule.ts (88 lignes) - Classe de base abstraite
+- ✅ AuthModule.ts (380 lignes) - Firebase Admin SDK intégré
+- ✅ WebSocketModule.ts (620 lignes) - Socket.IO avec rooms, auth, événements
+- ✅ 69 tests unitaires (100% passants : 42 Auth + 27 WebSocket)
+- ✅ Hooks React (useAuth, AuthProvider) dans shared-types
+- ✅ Exemples d'usage (auth-demo.ts)
+- ✅ Build TypeScript sans erreurs
+- ✅ Documentation complète (MODULE_SYSTEM.md)
 
 #### Semaine 5-6 : Modules Communication
 

@@ -109,6 +109,10 @@ jobs:
               working-directory: ./shared-types
               run: pnpm exec tsc --noEmit
 
+            - name: Test
+              working-directory: ./shared-types
+              run: pnpm test
+
             - name: Build
               working-directory: ./shared-types
               run: pnpm build

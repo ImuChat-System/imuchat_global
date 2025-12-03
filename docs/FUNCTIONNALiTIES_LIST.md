@@ -1,4 +1,4 @@
-
+**
 
 Voici 50 fonctionnalités, organisées par groupes de 5, couvrant l’ensemble de l’écosystème ImuChat (core + modules + apps + social + outils avancés), mon projet de super-application :
 ✅ ImuChat — 50 fonctionnalités (10 groupes × 5)
@@ -77,3 +77,4 @@ Groupe 10 — App Store & Écosystème
 
 Si tu veux, je peux maintenant te générer :
 ✅ une version PDF✅ une version tableau Notion✅ une version pitch deck (10 slides)✅ une roadmap 12 mois basée sur ces 50 fonctionnalités
+**

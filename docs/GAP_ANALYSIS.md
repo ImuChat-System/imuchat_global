@@ -78,7 +78,7 @@ Gap : Wrapper Electron + 5-10 composants spéciaux
 | `Conversation` | ✅ | ✅ | À unifier |
 | `Contact` | ✅ | ⏳ | Web plus complet |
 | `Notification` | ✅ | ⏳ | Web plus complet |
-| `Guild/Community` | ✅ | ✅ | À unifier |
+| `Server/Community` | ✅ | ✅ | À unifier |
 | `Theme` | ✅ | ✅ | Aligné |
 | `Wallet` | ✅ | ✅ | Mobile plus complet |
 | `Store/Module` | ✅ | ✅ | À unifier |

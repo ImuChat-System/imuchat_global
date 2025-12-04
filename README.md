@@ -5,7 +5,7 @@ Dépôt racine du projet **ImuChat** - Une plateforme de messagerie multiplatefo
 ## ✨ Fonctionnalités
 
 - 💬 **Messagerie temps réel** - Chat 1:1 et groupes avec WebSocket
-- 🏰 **Guildes** - Communautés de type Discord avec channels et rôles
+- 🖥️ **Serveurs** - Communautés de type Discord avec channels et rôles
 - 🎨 **Thèmes** - 7 thèmes prédéfinis (Light, Dark, Sakura, Cyber, Zen, Midnight, Ocean)
 - 🧩 **Modules** - Système extensible (Watch Party, Musique, Mini-jeux, etc.)
 - 🌐 **Multiplateforme** - Web, Mobile (iOS/Android), Desktop (Windows/macOS/Linux)
@@ -49,7 +49,7 @@ imuchat_global/           ← Ce dépôt (workspace pnpm)
 │   ├── src/
 │   │   ├── user.ts       # User, Profile, Settings
 │   │   ├── chat.ts       # Message, Conversation, Reaction
-│   │   ├── guild.ts      # Guild, Channel, Role, Member
+│   │   ├── server.ts     # Server, Channel, Role, Member
 │   │   ├── module.ts     # Module, ModuleConfig, Event
 │   │   ├── store.ts      # AppState, slices
 │   │   └── api.ts        # ApiResponse, Error, Pagination

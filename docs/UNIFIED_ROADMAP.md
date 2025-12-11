@@ -496,7 +496,6 @@
 
 ### Phase D : Design Kawaii UI/UX (Avril-Juillet 2026)
 
-
 *Durée : 16 semaines | Priorité : HAUTE*
 
 > Référence : [KAWAII_UI_UX_DESIGN_CHARTER.md](../web-app/docs/KAWAII_UI_UX_DESIGN_CHARTER.md)  
@@ -726,6 +725,7 @@ import { ImuMascot } from '@imuchat/ui-kit';
 **Animations Lottie (9 fichiers JSON) :**
 
 **Mascotte States (5 animations) :**
+
 - `idle.json` (90 frames, 3000ms, loop) - Respiration douce, clignement yeux frame 70-80
 - `happy.json` (60 frames, 2000ms, one-shot) - Rotation ±5°, étoiles scintillantes, yeux fermés (sourire)
 - `excited.json` (75 frames, 2500ms, one-shot) - Rebond Y:220→180→220, rotation ±10°, confettis
@@ -733,12 +733,14 @@ import { ImuMascot } from '@imuchat/ui-kit';
 - `loading.json` (90 frames, 3000ms, loop) - Rotation 360° complète, 3 dots séquentiels
 
 **Decorations (4 animations) :**
+
 - `sakura.json` (90 frames, 3000ms, one-shot) - 3 pétales tombant avec trajectoires courbes, rotation 0-180°
 - `hearts.json` (60 frames, 2000ms, one-shot) - 3 cœurs montant Y:300→100-140, pulse scale, rotation ±10°
 - `sparkles.json` (45 frames, 1500ms, one-shot) - 5 étoiles 4-pointes, rotation 180-360°, cascade
 - `confetti.json` (90 frames, 3000ms, one-shot) - 5 rectangles tombant, rotation 540-900°, rainbow colors
 
 **Toutes les animations :**
+
 - Format Lottie 5.7.4, 30fps, 400x400px canvas
 - Optimisées performance : 5-7 layers par animation
 - Principes animation : anticipation, secondary motion, staging, squash/stretch
@@ -793,6 +795,7 @@ import { ImuMascot } from '@imuchat/ui-kit';
 **Fichier principal** : `platform-core/src/modules/SoundModule.ts` (856 lignes)
 
 **Architecture Audio**:
+
 ```typescript
 // 5 catégories de sons
 enum SoundCategory {
@@ -810,6 +813,7 @@ enum SoundCategory {
 ```
 
 **API Complète** (20+ méthodes):
+
 - **Lecture** : `play(id)`, `stop(id)`, `pause(id)`, `resume(id)`, `stopAll()`, `pauseAll()`
 - **Volume** : `setMasterVolume()`, `setCategoryVolume()`, `setVolume(id)`
 - **État** : `isPlaying(id)`, `getDuration(id)`, `getCurrentTime(id)`
@@ -820,6 +824,7 @@ enum SoundCategory {
 #### 🎨 Assets Audio
 
 **Structure** : `platform-core/assets/sounds/`
+
 ```
 sounds/
 ├── ui/           # 6 sons UI (100-500ms, feedback instantané)
@@ -828,6 +833,7 @@ sounds/
 ```
 
 **Spécifications Techniques** (documentées dans `assets/sounds/README.md`):
+
 - Format : MP3 (128-192 kbps) + OGG Vorbis (qualité ~5)
 - Sample rate : 44.1 kHz
 - Normalisation : -18 LUFS (musiques), -14 LUFS (voix/UI)
@@ -835,6 +841,7 @@ sounds/
 - Références : Genshin Impact UI, Animal Crossing, Studio Ghibli OST
 
 **Chemins Relatifs Portables** :
+
 ```typescript
 // ✅ Avant
 source: '/sounds/ui/button-click.mp3'  // ❌ Web-only
@@ -848,6 +855,7 @@ source: './assets/sounds/ui/button-click.mp3'  // ✅ Cross-platform
 **Fichier** : `platform-core/src/modules/MascotteModule.ts` (+28 lignes)
 
 **Récupération SoundModule** :
+
 ```typescript
 protected async onInitialize() {
   // Récupérer SoundModule si disponible
@@ -859,6 +867,7 @@ protected async onInitialize() {
 ```
 
 **Mapping États → Sons** :
+
 ```typescript
 private playSoundForState(state: MascotteState): void {
   const soundMap = {
@@ -874,11 +883,13 @@ private playSoundForState(state: MascotteState): void {
 ```
 
 **Sons Progression** :
+
 - **Gain XP** : `imu_ganbare` ("Ganbare!" - encouragement)
 - **Level Up** : `success` (arpège joyeux) + `imu_yatta` (200ms délai)
 - **Déclenché** : Automatiquement lors de `setState()` et `addXP()`
 
 **Expérience Audiovisuelle Complète** :
+
 1. Utilisateur tape mascotte → Animation `happy.json` + Son `imu_hello.mp3`
 2. Utilisateur gagne XP → Animation `sparkles.json` + Son `imu_ganbare.mp3`
 3. Level up ! → Animation `confetti.json` + `hearts.json` + Son `success.mp3` puis `imu_yatta.mp3`
@@ -886,16 +897,19 @@ private playSoundForState(state: MascotteState): void {
 #### 🎯 Design Decisions
 
 **Patterns d'Intégration** :
+
 - Même pattern que AnimationModule (registry.getModule → getApi)
 - Soundless graceful degradation (if !soundAPI return)
 - Try/catch pour chaque playback avec console.warn (pas de crash si son manquant)
 
 **Voix Mascotte Authentiques** :
+
 - Phrases japonaises réelles (pas d'anglais)
 - Inflexions kawaii typiques (ton enthousiaste, légèrement aigu)
 - Contexte culturel respecté (okaeri = "bon retour", oyasumi = "bonne nuit")
 
 **Musiques d'Ambiance** :
+
 - Loops parfaits 2-3min (intro/outro compatibles)
 - Volume bas par défaut (0.25-0.3) - non intrusif
 - Crossfade 2s pour transitions fluides
@@ -912,6 +926,7 @@ private playSoundForState(state: MascotteState): void {
 #### 📁 Assets Documentation
 
 **README.md complet** avec :
+
 - Spécifications techniques (formats, bitrates, normalisation)
 - Guidelines production audio (EQ, compression, reverb, mastering)
 - Références esthétiques (jeux kawaii, anime OST, lo-fi)
@@ -919,7 +934,84 @@ private playSoundForState(state: MascotteState): void {
 - Checklist validation (clipping, loop, volume, compression)
 - Priorités MVP (6 UI + 2 voix + 1 ambience minimum)
 
-**Statut Assets** : 🟡 Structure créée, spécifications documentées, assets audio à produire
+**Statut Assets** : ✅ 17 fichiers audio générés (11.27 MB) - Production complète
+
+#### 🎵 Production Audio (12 décembre 2025)
+
+**Scripts de Génération** : `platform-core/scripts/` (800+ lignes Python)
+
+- `generate_all_audio.py` - Orchestration complète (58 lignes)
+- `generate_sounds.py` - 6 UI sounds avec synthèse sine/square (207 lignes)
+- `generate_voices.py` - 5 voix mascotte avec modulation pitch (340 lignes)
+- `generate_ambience.py` - 6 musiques ambiance avec arpeges/chords (365 lignes)
+- `validate_audio.py` - Validation specs (durées, bitrates) (127 lignes)
+- `scripts/README.md` - Documentation complète (235 lignes)
+
+**Assets Générés** :
+
+UI Sounds (6 fichiers, 29 KB):
+
+- ✅ button-click.mp3 (85ms, 2.5 KB) - Pop deux tons
+- ✅ message-sent.mp3 (160ms, 3.7 KB) - Sweep montant
+- ✅ notification.mp3 (320ms, 6.2 KB) - Arpège C-E-G
+- ✅ success.mp3 (495ms, 8.6 KB) - Arpège octave + reverb
+- ✅ error.mp3 (300ms, 5.8 KB) - Descente douce
+- ✅ navigation.mp3 (96ms, 2.5 KB) - Sweep rapide
+
+Mascotte Voices (5 fichiers, 58 KB):
+
+- ✅ imu-hello.mp3 (520ms, 9.0 KB) - "Hai~!" avec vibrato
+- ✅ imu-yatta.mp3 (626ms, 10.7 KB) - "Yatta!" montée énergique
+- ✅ imu-okaeri.mp3 (700ms, 11.9 KB) - "Okaeri~" 4 syllabes
+- ✅ imu-oyasumi.mp3 (888ms, 14.7 KB) - "Oyasumi~" descente douce
+- ✅ imu-ganbare.mp3 (659ms, 11.5 KB) - "Ganbare!" encouragement
+
+Ambience Music (6 fichiers, 11.2 MB):
+
+- ✅ lofi-cafe.mp3 (112s, 1.71 MB) - Progression Cmaj7-Am7-Fmaj7-G7
+- ✅ piano-calm.mp3 (140s, 2.14 MB) - Mélodie 8 notes + basse
+- ✅ nature-rain.mp3 (120s, 1.83 MB) - WhiteNoise + gouttes + oiseaux
+- ✅ night-dream.mp3 (120s, 1.83 MB) - Pads harmoniques Am-G-F-E
+- ✅ forest-birds.mp3 (120s, 1.83 MB) - 80 chants d'oiseaux variés
+- ✅ sakura-wind.mp3 (120s, 1.83 MB) - Vent + notes pentatoniques
+
+**Méthode Technique** :
+
+- Synthèse procédurale avec **pydub** (Python) + **ffmpeg 7.1.1**
+- Tonalités sine/square/triangle avec harmoniques
+- Arpeges, sweeps, modulation pitch pour expressivité
+- WhiteNoise base pour ambiances naturelles
+- Fade in/out, normalisation LUFS (-16 à -29 dBFS)
+- Format : MP3 128 kbps, 44.1 kHz
+
+**Validation** :
+
+- ✅ 15/17 fichiers specs parfaites
+- ⚠️ 2 voix légèrement courtes (imu-ganbare 659ms, imu-yatta 626ms vs 700ms spec)
+- ✅ Tous fonctionnels, aucune erreur chargement
+- ✅ Bitrates 128-156 kbps conformes
+- ✅ Total 11.27 MB adapté web/mobile
+
+**Documentation** :
+
+- `scripts/README.md` - Pipeline complet (installation, workflow, troubleshooting)
+- `assets/sounds/README.md` - Specs existantes (5KB+)
+- Notes production professionnelle (Vocaloid/UTAU, DAW, sound design)
+
+**Qualité** : 🟡 Placeholder synthétique pour MVP/testing
+**Production Future** : 🟠 Remplacer par assets professionnels
+
+- Voix : Vocaloid (Hatsune Miku), UTAU, CeVIO ou voice actors
+- Musiques : Composition DAW (Ableton, FL Studio) ou royalty-free
+- UI Sounds : Sound design avec synths hardware ou plugins premium
+
+**Commande Régénération** :
+
+```bash
+cd platform-core
+source .venv/bin/activate  # Activer virtualenv Python
+python scripts/generate_all_audio.py  # 3-4min
+```
 
 ---
 

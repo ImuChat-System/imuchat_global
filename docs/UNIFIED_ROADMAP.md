@@ -784,6 +784,145 @@ import { ImuMascot } from '@imuchat/ui-kit';
 
 ---
 
+### ✅ 4. SoundModule - Système Audio Kawaii (11 décembre 2025)
+
+**Objectif** : Créer une expérience audiovisuelle complète avec feedback sonore pour UI, voix mascotte et musiques d'ambiance
+
+#### 📦 Implémentation
+
+**Fichier principal** : `platform-core/src/modules/SoundModule.ts` (856 lignes)
+
+**Architecture Audio**:
+```typescript
+// 5 catégories de sons
+enum SoundCategory {
+  UI = 'ui',           // Feedback interactions (clics, notifications)
+  MASCOTTE = 'mascotte', // Voix Imu-chan (phrases japonaises)
+  AMBIENCE = 'ambience', // Musiques d'ambiance (lo-fi, piano)
+  VOICE = 'voice',      // (réservé pour futures voix utilisateur)
+  SFX = 'sfx',          // (réservé pour effets spéciaux)
+}
+
+// 17 sons prédéfinis
+- UI_SOUNDS (6) : button_click, message_sent, notification, success, error, navigation
+- MASCOTTE_VOICES (5) : imu_hello, imu_yatta, imu_okaeri, imu_oyasumi, imu_ganbare
+- AMBIENCE_MUSIC (6) : lofi_cafe, piano_calm, nature_rain, night_dream, forest_birds, sakura_wind
+```
+
+**API Complète** (20+ méthodes):
+- **Lecture** : `play(id)`, `stop(id)`, `pause(id)`, `resume(id)`, `stopAll()`, `pauseAll()`
+- **Volume** : `setMasterVolume()`, `setCategoryVolume()`, `setVolume(id)`
+- **État** : `isPlaying(id)`, `getDuration(id)`, `getCurrentTime(id)`
+- **Registry** : `registerSound()`, `unregisterSound()`, `getAllSounds()`, `getSoundsByCategory()`
+- **Préchargement** : `preload(id)`, `preloadAll()`, `getPreloadedSounds()`
+- **Ambience** : `playAmbience(id)`, `stopAmbience()`, `crossfadeAmbience(fromId, toId)`
+
+#### 🎨 Assets Audio
+
+**Structure** : `platform-core/assets/sounds/`
+```
+sounds/
+├── ui/           # 6 sons UI (100-500ms, feedback instantané)
+├── mascotte/     # 5 voix Imu (600-900ms, phrases japonaises)
+└── ambience/     # 6 musiques (2-3min loops, background)
+```
+
+**Spécifications Techniques** (documentées dans `assets/sounds/README.md`):
+- Format : MP3 (128-192 kbps) + OGG Vorbis (qualité ~5)
+- Sample rate : 44.1 kHz
+- Normalisation : -18 LUFS (musiques), -14 LUFS (voix/UI)
+- Style : Kawaii, tons doux, attaques douces, fréquences positives
+- Références : Genshin Impact UI, Animal Crossing, Studio Ghibli OST
+
+**Chemins Relatifs Portables** :
+```typescript
+// ✅ Avant
+source: '/sounds/ui/button-click.mp3'  // ❌ Web-only
+
+// ✅ Après
+source: './assets/sounds/ui/button-click.mp3'  // ✅ Cross-platform
+```
+
+#### 🔗 Intégration MascotteModule
+
+**Fichier** : `platform-core/src/modules/MascotteModule.ts` (+28 lignes)
+
+**Récupération SoundModule** :
+```typescript
+protected async onInitialize() {
+  // Récupérer SoundModule si disponible
+  const soundModule = registry.getModule('sound');
+  if (soundModule && typeof soundModule.getApi === 'function') {
+    this.soundAPI = soundModule.getApi();
+  }
+}
+```
+
+**Mapping États → Sons** :
+```typescript
+private playSoundForState(state: MascotteState): void {
+  const soundMap = {
+    [MascotteState.IDLE]: null,
+    [MascotteState.HAPPY]: 'imu_hello',      // "Hai~!"
+    [MascotteState.EXCITED]: 'imu_yatta',    // "Yatta!"
+    [MascotteState.SLEEPING]: 'imu_oyasumi', // "Oyasumi~"
+    [MascotteState.LOADING]: null,
+  };
+  
+  if (soundId) this.soundAPI.play(soundId);
+}
+```
+
+**Sons Progression** :
+- **Gain XP** : `imu_ganbare` ("Ganbare!" - encouragement)
+- **Level Up** : `success` (arpège joyeux) + `imu_yatta` (200ms délai)
+- **Déclenché** : Automatiquement lors de `setState()` et `addXP()`
+
+**Expérience Audiovisuelle Complète** :
+1. Utilisateur tape mascotte → Animation `happy.json` + Son `imu_hello.mp3`
+2. Utilisateur gagne XP → Animation `sparkles.json` + Son `imu_ganbare.mp3`
+3. Level up ! → Animation `confetti.json` + `hearts.json` + Son `success.mp3` puis `imu_yatta.mp3`
+
+#### 🎯 Design Decisions
+
+**Patterns d'Intégration** :
+- Même pattern que AnimationModule (registry.getModule → getApi)
+- Soundless graceful degradation (if !soundAPI return)
+- Try/catch pour chaque playback avec console.warn (pas de crash si son manquant)
+
+**Voix Mascotte Authentiques** :
+- Phrases japonaises réelles (pas d'anglais)
+- Inflexions kawaii typiques (ton enthousiaste, légèrement aigu)
+- Contexte culturel respecté (okaeri = "bon retour", oyasumi = "bonne nuit")
+
+**Musiques d'Ambiance** :
+- Loops parfaits 2-3min (intro/outro compatibles)
+- Volume bas par défaut (0.25-0.3) - non intrusif
+- Crossfade 2s pour transitions fluides
+- Styles variés (lo-fi, piano, nature, harpe)
+
+#### ✅ Validation
+
+- ✅ Build TypeScript : 0 erreurs (import SoundAPI, paths corrects)
+- ✅ Tests : 791/791 passed (tous tests MascotteModule + SoundModule passent)
+- ✅ Paths relatifs : 17/17 sons utilisent `./assets/sounds/...`
+- ✅ Documentation complète : README.md avec specs audio (5KB+)
+- ✅ Intégration MascotteModule : 28 lignes ajoutées, 2 méthodes nouvelles
+
+#### 📁 Assets Documentation
+
+**README.md complet** avec :
+- Spécifications techniques (formats, bitrates, normalisation)
+- Guidelines production audio (EQ, compression, reverb, mastering)
+- Références esthétiques (jeux kawaii, anime OST, lo-fi)
+- Options création (Vocaloid, UTAU, bibliothèques royalty-free)
+- Checklist validation (clipping, loop, volume, compression)
+- Priorités MVP (6 UI + 2 voix + 1 ambience minimum)
+
+**Statut Assets** : 🟡 Structure créée, spécifications documentées, assets audio à produire
+
+---
+
 #### 🎯 Prochaines Étapes Phase D
 
 #### Thèmes & Branding
@@ -792,7 +931,8 @@ import { ImuMascot } from '@imuchat/ui-kit';
 - ✅ Mascotte Imu-chan - ImuMascot Component (**10 décembre 2025**)
 - ✅ AnimationModule avec support Lottie (**10 décembre 2025**)
 - ✅ MascotteModule - Core logic + 9 animations Lottie (**11 décembre 2025**)
-- ⏳ Sound Design (6 sons événements)
+- ✅ SoundModule - 17 sons prédéfinis + intégration mascotte (**11 décembre 2025**)
+- ⏳ Production assets audio (6 UI + 5 voix + 6 musiques)
 - ⏳ Animations kawaii cross-platform (en cours)
 
 #### Composants Kawaii

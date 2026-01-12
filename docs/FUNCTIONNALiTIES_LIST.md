@@ -3,6 +3,7 @@
 Voici 50 fonctionnalités, organisées par groupes de 5, couvrant l’ensemble de l’écosystème ImuChat (core + modules + apps + social + outils avancés), mon projet de super-application :
 ✅ ImuChat — 50 fonctionnalités (10 groupes × 5)
 Groupe 1 — Messagerie & Communication
+
 1. Messagerie instantanée (texte, emojis, GIFs).
 2. Messages vocaux transcrits automatiquement.
 3. Pièces jointes (photos, vidéos, fichiers).
@@ -10,6 +11,7 @@ Groupe 1 — Messagerie & Communication
 5. Réactions rapides aux messages (tap-hold).
 
 Groupe 2 — Appels audio & vidéo
+
 1. Appels audio (1-to-1 ou groupe).
 2. Appels vidéo HD avec réduction du bruit.
 3. Mini-fenêtre flottante (PiP).
@@ -17,6 +19,7 @@ Groupe 2 — Appels audio & vidéo
 5. Filtre beauté IA + flou d’arrière-plan.
 
 Groupe 3 — Profils & Identité
+
 1. Profils privés, publics et anonymes.
 2. Multi-profils (perso, professionnel, créateur).
 3. Avatars 2D/3D personnalisables.
@@ -24,6 +27,7 @@ Groupe 3 — Profils & Identité
 5. Vérification d’identité volontaire (badge bleu privé).
 
 Groupe 4 — Personnalisation avancée
+
 1. Thèmes visuels (Kawaii, Pro, Night, Solar, Neon…).
 2. Arrière-plans animés pour les chats.
 3. Police personnalisable par conversation.
@@ -31,6 +35,7 @@ Groupe 4 — Personnalisation avancée
 5. Widget homescreen (statuts, contacts, mini-lecteur).
 
 Groupe 5 — Mini-apps sociales natives
+
 1. Stories 24h (texte, photo, vidéo, glosses kawaii).
 2. Mur social type "timeline".
 3. Mini-blogs personnels.
@@ -38,6 +43,7 @@ Groupe 5 — Mini-apps sociales natives
 5. Groupes publics/privés basiques avec feed.
 
 Groupe 6 — Modules avancés (installables via Store)
+
 1. Productivity Hub (tâches, to-do, planning).
 2. Suite Office (texte, tableur, présentation).
 3. Module PDF complet.
@@ -45,6 +51,7 @@ Groupe 6 — Modules avancés (installables via Store)
 5. Cooking & Home (courses, ménage, repas, alarmes).
 
 Groupe 7 — Services utilitaires publics
+
 1. Horaires métro/tram/bus avec alertes.
 2. Info trafic routier en temps réel.
 3. Numéros d’urgence géolocalisés.
@@ -52,6 +59,7 @@ Groupe 7 — Services utilitaires publics
 5. Suivi colis multi-transporteurs intégré.
 
 Groupe 8 — Divertissement & Création
+
 1. Mini-lecteur musique + playlists partagées.
 2. Podcasts (catalogue + favoris).
 3. Lecteur vidéo intégré (qualité adaptative).
@@ -59,6 +67,7 @@ Groupe 8 — Divertissement & Création
 5. Outil de création de stickers & emojis.
 
 Groupe 9 — IA intégrée
+
 1. Chatbot multi-personas (assistant, coach, prof…).
 2. Suggestions intelligentes de réponses.
 3. Résumé automatisé des conversations.
@@ -66,6 +75,7 @@ Groupe 9 — IA intégrée
 5. Traduction instantanée dans les chats.
 
 Groupe 10 — App Store & Écosystème
+
 1. Store d’apps internes & partenaires.
 2. Installation/désinstallation des modules.
 3. Système de permissions par app (granulaire).

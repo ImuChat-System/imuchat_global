@@ -84,7 +84,3 @@ Groupe 10 — App Store & Écosystème
 
 📌 Résumé rapide
 👉 10 catégories × 5 fonctionnalités = 50 fonctionnalités👉 Couvre messagerie, IA, appels, personnalisation, utilitaires, modules avancés, Store, multimedia, social, et services publics.👉 Idéal pour un dossier PEPITE, un pitch deck, ton roadmap ou ton plan produit.
-
-Si tu veux, je peux maintenant te générer :
-✅ une version PDF✅ une version tableau Notion✅ une version pitch deck (10 slides)✅ une roadmap 12 mois basée sur ces 50 fonctionnalités
-**

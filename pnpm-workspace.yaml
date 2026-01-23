@@ -3,6 +3,7 @@ packages:
   - 'platform-core'
   - 'web-app'
   - 'mobile-app'
+  - 'mobile'
   - 'desktop-app'
   - 'ui-kit'
   - 'infra'

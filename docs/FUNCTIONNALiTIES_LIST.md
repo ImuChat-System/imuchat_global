@@ -1,6 +1,5 @@
-**
+**Voici 50 fonctionnalités, organisées par groupes de 5, couvrant l’ensemble de l’écosystème ImuChat (core + modules + apps + social + outils avancés), mon projet de super-application :**
 
-Voici 50 fonctionnalités, organisées par groupes de 5, couvrant l’ensemble de l’écosystème ImuChat (core + modules + apps + social + outils avancés), mon projet de super-application :
 ✅ ImuChat — 50 fonctionnalités (10 groupes × 5)
 Groupe 1 — Messagerie & Communication
 

@@ -1,3 +1,4 @@
+import { useColors, useSpacing } from '@/providers/ThemeProvider';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 
 export default function HomeScreen() {

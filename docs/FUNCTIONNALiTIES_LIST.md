@@ -28,7 +28,7 @@ Groupe 3 — Profils & Identité
 
 Groupe 4 — Personnalisation avancée
 
-1. Thèmes visuels (Kawaii, Pro, Night, Solar, Neon…).
+1. Thèmes visuels par défaut (Kawaii, Pro, Night, Solar, Neon…).
 2. Arrière-plans animés pour les chats.
 3. Police personnalisable par conversation.
 4. Packs d’icônes et de sons téléchargeables.
@@ -40,7 +40,7 @@ Groupe 5 — Mini-apps sociales natives
 2. Mur social type "timeline".
 3. Mini-blogs personnels.
 4. Événements (invites, inscriptions, rappels).
-5. Groupes publics/privés basiques avec feed.
+5. Groupes publics/privés basiques à avancés avec feed.
 
 Groupe 6 — Modules avancés (installables via Store)
 

@@ -3,7 +3,7 @@
  * Provides theme context using ui-kit tokens
  */
 
-import { borderRadius, colors, shadows, spacing, typography } from '@imuchat/ui-kit/native/tokens';
+import { borderRadius, colors, shadows, spacing, typography } from '@imuchat/ui-kit/native';
 import { createContext, ReactNode, useContext, useState } from 'react';
 
 // Theme type

@@ -96,7 +96,7 @@ Pour transformer tes **50 fonctionnalités** en une roadmap mobile claire, il fa
 
 1. Stories  
 2. Mur social  
-3. Groupes basiques  
+3. Groupes basiques à avancés
 4. Mini-blog  
 5. Événements  
 
@@ -147,6 +147,7 @@ Pour transformer tes **50 fonctionnalités** en une roadmap mobile claire, il fa
 **Écrans nécessaires :**
 
 - **Écran Mini-lecteur musique**.
+- **Écran Livres**.
 - **Écran Podcasts**.
 - **Écran Lecteur vidéo**.
 - **Écran Mini-jeux sociaux**.
@@ -155,10 +156,11 @@ Pour transformer tes **50 fonctionnalités** en une roadmap mobile claire, il fa
 **Implémentation logique :**
 
 1. Mini-lecteur musique  
-2. Lecteur vidéo  
-3. Podcasts  
-4. Mini-jeux  
-5. Création stickers/emojis  
+2. Livres  
+3. Lecteur vidéo  
+4. Podcasts  
+5. Mini-jeux  
+6. Création stickers/emojis  
 
 ---
 

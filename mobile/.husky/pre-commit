@@ -1,1 +1,1 @@
-npm test
+cd mobile && npx lint-staged

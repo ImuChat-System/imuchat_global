@@ -59,7 +59,7 @@ bash scripts/clone-all-repos.sh
 # 4. Installer les dépendances dans chaque repo
 cd ../platform-core && pnpm install
 cd ../web-app && pnpm install
-cd ../mobile-app && pnpm install
+cd ../mobile && pnpm install
 cd ../desktop-app && pnpm install
 cd ../ui-kit && pnpm install
 cd ../shared-types && pnpm install

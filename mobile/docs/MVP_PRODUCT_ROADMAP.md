@@ -10,11 +10,11 @@ Les fonctionnalités "gadgets", "sociales" ou "modules avancés" sont volontaire
 
 ## 📦 Périmètre du MVP (Scope)
 
-Le MVP se concentre exclusivement sur les **Groupes 1, 2 et 3** du document de référence `50_FONCTIONNALITIES_SCREENS.md`.
+Le MVP se concentre exclusivement sur les **Groupes 1, 2 et 3** du document de référence `../../docs/50_FONCTIONNALITIES_SCREENS.md`.
 
 ### 1. Messagerie & Communication (Core)
 
-*L'essence de l'application. Doit être rapide, fiable et temps-réel.*
+_L'essence de l'application. Doit être rapide, fiable et temps-réel._
 
 - [ ] **Liste des conversations** : Vue d'ensemble, statut de présence, indicateurs de messages non-lus.
 - [ ] **Chat Room** :
@@ -27,7 +27,7 @@ Le MVP se concentre exclusivement sur les **Groupes 1, 2 et 3** du document de r
 
 ### 2. Appels Audio & Vidéo (Vital)
 
-*Fonctionnalités critiques pour concurrencer les standards actuels.*
+_Fonctionnalités critiques pour concurrencer les standards actuels._
 
 - [ ] **Appels Audio 1-to-1** : Connexion P2P via WebRTC ou solution tierce (ex: Agora/Stream).
 - [ ] **Appels Vidéo 1-to-1** : Vidéo HD avec bascule caméra avant/arrière.
@@ -36,9 +36,9 @@ Le MVP se concentre exclusivement sur les **Groupes 1, 2 et 3** du document de r
 
 ### 3. Profils & Identité (Identity)
 
-*La base de l'interaction sociale.*
+_La base de l'interaction sociale._
 
-- [ ] **Onboarding & Auth** : Inscription/Connexion (Email/Password ou OAuth), setup initial du profil.
+- [x] **Onboarding & Auth** : Inscription/Connexion (Email/Password ou OAuth), setup initial du profil.
 - [ ] **Profil Utilisateur** : Photo de profil (avatar), Nom d'affichage, Bio/Statut texte simple.
 - [ ] **Paramètres de base** : Gestion du compte (déconnexion, suppression).
 
@@ -73,9 +73,9 @@ Ces éléments ne bloquent pas le lancement du MVP.
 
 ## 📅 Roadmap Simplifiée
 
-| Phase | Focus | Livrables Clés |
-| :--- | :--- | :--- |
-| **Phase 1** | **Fondations & Auth** | Projet initialisé, Design System, Auth fonctionnelle, Profils basiques. |
-| **Phase 2** | **Chat Core** | Liste conversations, Envoi/Réception temps-réel, Messages texte/photo. |
-| **Phase 3** | **Appels (Audio/Vidéo)** | Intégration WebRTC/SDK, UI d'appel, Notifications d'appel natives. |
-| **Phase 4** | **Polish & Launch** | Fix bugs, Optimisation perfs, Polish UI/UX, Build de production. |
+| Phase       | Focus                    | Livrables Clés                                                          |
+| :---------- | :----------------------- | :---------------------------------------------------------------------- |
+| **Phase 1** | **Fondations & Auth**    | Projet initialisé, Design System, Auth fonctionnelle, Profils basiques. |
+| **Phase 2** | **Chat Core**            | Liste conversations, Envoi/Réception temps-réel, Messages texte/photo.  |
+| **Phase 3** | **Appels (Audio/Vidéo)** | Intégration WebRTC/SDK, UI d'appel, Notifications d'appel natives.      |
+| **Phase 4** | **Polish & Launch**      | Fix bugs, Optimisation perfs, Polish UI/UX, Build de production.        |

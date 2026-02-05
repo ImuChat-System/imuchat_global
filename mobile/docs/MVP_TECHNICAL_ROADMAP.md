@@ -8,7 +8,7 @@
 - **Backend / Database** : Supabase (Auth, Postgres, Realtime, Storage, Edge Functions).
 - **UI Kit** : @imuchat/ui-kit (Design Tokens & Components).
 - **State Management** : Zustand (léger et performant) ou React Context pour les cas simples.
-- **Appels Audio/Vidéo** : *À définir (ex: Stream Video SDK, Agora, ou WebRTC custom via Janus/Mediasoup).*
+- **Appels Audio/Vidéo** : _À définir (ex: Stream Video SDK, Agora, ou WebRTC custom via Janus/Mediasoup)._
 
 ---
 
@@ -16,25 +16,25 @@
 
 ### 🏁 Phase 0 : Initialisation & Config (Semaine 1)
 
-*Objectif : Socle technique propre et environnement de dev prêt.*
+_Objectif : Socle technique propre et environnement de dev prêt._
 
 - [x] Initialiser projet Expo + TypeScript.
-- [ ] **Config Code Quality** : ESLint, Prettier, Husky (pre-commit hooks).
-- [ ] **Architecture Dossiers** : Mettre en place la structure (features/, components/, hooks/, services/).
-- [ ] **Intégration UI Kit** :
+- [x] **Config Code Quality** : ESLint, Prettier, Husky (pre-commit hooks).
+- [x] **Architecture Dossiers** : Mettre en place la structure (features/, components/, hooks/, services/).
+- [x] **Intégration UI Kit** :
   - Configurer le `ThemeProvider` global.
   - Importer les tokens (couleurs, typos, spacing) du package `@imuchat/ui-kit`.
   - Créer les composants atomiques de base (Button, textInput, Typography) si non présents dans le UI Kit.
-- [ ] **Navigation Shell** : Squelette de la navigation (Tabs + Stacks vides).
+- [x] **Navigation Shell** : Squelette de la navigation (Tabs + Stacks vides).
 
 ### 🔐 Phase 1 : Authentification & Profils (Semaine 2)
 
-*Objectif : L'utilisateur peut se créer un compte et gérer son identité.*
+_Objectif : L'utilisateur peut se créer un compte et gérer son identité._
 
-- [ ] **Supabase Setup** :
+- [x] **Supabase Setup** :
   - Configurer le client Supabase dans l'app mobile.
   - Créer les tables `users` / `profiles` (RLS policies).
-- [ ] **Auth Flow** :
+- [x] **Auth Flow** :
   - Écrans : Login, Register, Forgot Password.
   - Logique : AuthContext pour gérer la session persistante.
 - [ ] **Gestion Profil** :
@@ -43,7 +43,7 @@
 
 ### 💬 Phase 2 : Messagerie Instantanée (Semaines 3-4)
 
-*Objectif : Chat texte temps-réel fonctionnel.*
+_Objectif : Chat texte temps-réel fonctionnel._
 
 - [ ] **Data Layer (Chat)** :
   - Tables : `conversations`, `conversation_participants`, `messages`.
@@ -65,7 +65,7 @@
 
 ### 📞 Phase 3 : Appels Audio/Vidéo (Semaines 5-6)
 
-*Objectif : Intégration de la brique la plus complexe.*
+_Objectif : Intégration de la brique la plus complexe._
 
 - [ ] **POC Technique** :
   - Choisir et tester le SDK (Stream.io recommandé pour la rapidité, ou Agora).
@@ -80,7 +80,7 @@
 
 ### 🧹 Phase 4 : Polish & Release (Semaine 7)
 
-*Objectif : Stabilisation.*
+_Objectif : Stabilisation._
 
 - [ ] **Gestion des erreurs** : Error Boundaries globales.
 - [ ] **Mode Offline** : Support basique (cache local via React Query ou WatermelonDB si besoin, sinon simple cache mémoire).
@@ -91,6 +91,6 @@
 
 ## 🧱 Décisions Techniques Clés à Valider
 
-1. **Lib d'Appel** : Stream Video React Native SDK vs Agora vs LiveKit. *(Reco : Stream ou LiveKit pour la DX).*
+1. **Lib d'Appel** : Stream Video React Native SDK vs Agora vs LiveKit. _(Reco : Stream ou LiveKit pour la DX)._
 2. **State Server** : `TanStack Query` (React Query) est fortement recommandé pour gérer le cache serveur Supabase.
-3. **Local Database** : Est-ce nécessaire pour le MVP ? *(Reco : Non, cache mémoire + persist React Query suffisent pour v1).*
+3. **Local Database** : Est-ce nécessaire pour le MVP ? _(Reco : Non, cache mémoire + persist React Query suffisent pour v1)._

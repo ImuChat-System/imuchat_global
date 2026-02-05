@@ -15,8 +15,8 @@ Pour transformer tes **50 fonctionnalités** en une roadmap mobile claire, il fa
 **Implémentation logique :**
 
 1. Chat principal  
-2. Conversation basique (texte + emojis)  
-3. Pièces jointes  
+2. Conversation (texte + emojis + GIFs + pièces jointes)  
+3. Pièces jointes (preview photo/vidéo/fichier)  
 4. Messages vocaux + transcription  
 5. Options message (édition/suppression/réactions)  
 

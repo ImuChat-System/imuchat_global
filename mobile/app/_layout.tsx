@@ -13,6 +13,7 @@ import "react-native-reanimated";
 import { useColorScheme } from "@/components/useColorScheme";
 import { AuthProvider, useAuth } from "@/providers/AuthProvider";
 import { ThemeProvider } from "@/providers/ThemeProvider";
+import { useCallManager } from "@/hooks/useCallManager";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -60,6 +61,7 @@ function RootLayoutNav() {
   const { session, loading } = useAuth();
   const segments = useSegments();
   const router = useRouter();
+  const { IncomingCallModal } = useCallManager();
 
   useEffect(() => {
     if (loading) return;
@@ -87,8 +89,13 @@ function RootLayoutNav() {
         <Stack>
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
           <Stack.Screen name="(auth)/login" options={{ headerShown: false }} />
+          <Stack.Screen
+            name="chat/active"
+            options={{ headerShown: false, presentation: "fullScreenModal" }}
+          />
           <Stack.Screen name="modal" options={{ presentation: "modal" }} />
         </Stack>
+        <IncomingCallModal />
       </NavigationThemeProvider>
     </ThemeProvider>
   );

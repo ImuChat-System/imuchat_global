@@ -37,7 +37,7 @@ _Objectif : L'utilisateur peut se créer un compte et gérer son identité._
 - [x] **Auth Flow** :
   - Écrans : Login, Register, Forgot Password.
   - Logique : AuthContext pour gérer la session persistante.
-- [ ] **Gestion Profil** :
+- [x] **Gestion Profil** :
   - Écran "Edit Profile" (Upload Avatar > Storage Supabase).
   - Mise à jour des champs (Display Name, Bio).
 
@@ -45,17 +45,17 @@ _Objectif : L'utilisateur peut se créer un compte et gérer son identité._
 
 _Objectif : Chat texte temps-réel fonctionnel._
 
-- [ ] **Data Layer (Chat)** :
+- [x] **Data Layer (Chat)** :
   - Tables : `conversations`, `conversation_participants`, `messages`.
   - RLS : Sécuriser l'accès aux conversations privées.
-- [ ] **Liste des Conversations** :
+- [x] **Liste des Conversations** :
   - Query Supabase optimisée (pagination).
   - Abonnements Realtime (nouveau message = update liste).
-- [ ] **Chat Room UI** :
+- [x] **Chat Room UI** :
   - Liste des messages (FlatList inversée).
   - Input bar (auto-growing text input).
   - Bulles de messages (soi vs autres).
-- [ ] **Logique d'envoi** :
+- [x] **Logique d'envoi** :
   - Optimistic UI (affichage immédiat avant confirmation serveur).
   - Gestion des erreurs d'envoi.
 - [ ] **Médias Simples** :

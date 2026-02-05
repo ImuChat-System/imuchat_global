@@ -16,8 +16,8 @@ Le MVP se concentre exclusivement sur les **Groupes 1, 2 et 3** du document de r
 
 _L'essence de l'application. Doit être rapide, fiable et temps-réel._
 
-- [ ] **Liste des conversations** : Vue d'ensemble, statut de présence, indicateurs de messages non-lus.
-- [ ] **Chat Room** :
+- [x] **Liste des conversations** : Vue d'ensemble, statut de présence, indicateurs de messages non-lus.
+- [x] **Chat Room** :
   - Envoi/réception de messages texte en temps réel via Supabase.
   - Support des Emojis et GIFs de base.
   - Indicateurs "En train d'écrire..." et "Lu".
@@ -39,8 +39,8 @@ _Fonctionnalités critiques pour concurrencer les standards actuels._
 _La base de l'interaction sociale._
 
 - [x] **Onboarding & Auth** : Inscription/Connexion (Email/Password ou OAuth), setup initial du profil.
-- [ ] **Profil Utilisateur** : Photo de profil (avatar), Nom d'affichage, Bio/Statut texte simple.
-- [ ] **Paramètres de base** : Gestion du compte (déconnexion, suppression).
+- [x] **Profil Utilisateur** : Photo de profil (avatar), Nom d'affichage, Bio/Statut texte simple.
+- [x] **Paramètres de base** : Gestion du compte (déconnexion, suppression).
 
 ---
 

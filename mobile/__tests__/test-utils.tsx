@@ -29,7 +29,7 @@ export const createMockMessage = (overrides = {}) => ({
   sender: {
     id: "user-123",
     username: "testuser",
-    avatar_url: null,
+    avatar_url: "",
     full_name: "Test User",
   },
   ...overrides,
@@ -53,7 +53,7 @@ export const createMockConversation = (overrides = {}) => ({
       profile: {
         id: "user-123",
         username: "testuser",
-        avatar_url: null,
+        avatar_url: "",
         full_name: "Test User",
       },
     },

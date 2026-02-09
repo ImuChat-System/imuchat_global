@@ -11,9 +11,9 @@ import { useEffect } from "react";
 import "react-native-reanimated";
 
 import { useColorScheme } from "@/components/useColorScheme";
+import { useCallManager } from "@/hooks/useCallManagerHook";
 import { AuthProvider, useAuth } from "@/providers/AuthProvider";
 import { ThemeProvider } from "@/providers/ThemeProvider";
-import { useCallManager } from "@/hooks/useCallManager";
 
 export {
   // Catch any errors thrown by the Layout component.

@@ -1,20 +1,32 @@
-const { getDefaultConfig } = require('expo/metro-config');
-const path = require('path');
+const { getDefaultConfig } = require("expo/metro-config");
+const path = require("path");
 
-// Find the project and workspace directories
 const projectRoot = __dirname;
-const workspaceRoot = path.resolve(projectRoot, '../');
+const workspaceRoot = path.resolve(projectRoot, "..");
 
-const config = getDefaultConfig(projectRoot);
+module.exports = (async () => {
+  const config = await getDefaultConfig(projectRoot);
 
-// 1. Watch all files within the monorepo
-config.watchFolders = [workspaceRoot];
-// 2. Let Metro know where to resolve packages and in what order
-config.resolver.nodeModulesPaths = [
-  path.resolve(projectRoot, 'node_modules'),
-  path.resolve(workspaceRoot, 'node_modules'),
-];
-// 3. Force Metro to resolve (sub)dependencies from the `nodeModulesPaths`
-config.resolver.disableHierarchicalLookup = true;
+  // Watch the monorepo root so Metro resolves pnpm workspace packages
+  config.watchFolders = config.watchFolders || [];
+  if (!config.watchFolders.includes(workspaceRoot)) {
+    config.watchFolders.push(workspaceRoot);
+  }
 
-module.exports = config;
+  config.resolver = config.resolver || {};
+  config.resolver.nodeModulesPaths = [
+    path.resolve(projectRoot, "node_modules"),
+    path.resolve(workspaceRoot, "node_modules"),
+  ];
+  // Prefer these nodeModulesPaths and avoid hierarchical lookup
+  config.resolver.disableHierarchicalLookup = true;
+
+  // Map unresolved modules to the workspace node_modules when appropriate.
+  // This helps Metro resolve packages hoisted by pnpm when running inside a workspace.
+  const extraNodeModules = new Proxy({}, {
+    get: (_, name) => path.resolve(workspaceRoot, 'node_modules', name),
+  });
+  config.resolver.extraNodeModules = extraNodeModules;
+
+  return config;
+})();

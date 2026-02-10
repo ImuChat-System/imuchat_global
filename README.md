@@ -23,12 +23,14 @@ imuchat_global/           ← Ce dépôt (workspace pnpm)
 │   │   ├── config/       # Configuration centralisée
 │   │   └── utils/        # Helpers partagés
 │   └── package.json
+|
+|-- site-vitrine/
 │
 ├── web-app/              ← 🌐 Application Web (Next.js 16)
 │   ├── src/app/          # App Router
 │   └── package.json
 │
-├── mobile-app/           ← 📱 Application Mobile (Expo/React Native)
+├── mobile/           ← 📱 Application Mobile (Expo/React Native)
 │   ├── App.tsx
 │   └── package.json
 │
@@ -121,8 +123,9 @@ pnpm lint
 | Package | Description | Technologies |
 |---------|-------------|--------------|
 | `@imuchat/platform-core` | Backend API & Services | Fastify, Drizzle ORM, PostgreSQL |
+| `@imuchat/site-vitrine` | Site Vitrine | Next.js 16, React 19, TailwindCSS 4 |
 | `@imuchat/web-app` | Application Web | Next.js 16, React 19, TailwindCSS 4 |
-| `@imuchat/mobile-app` | Application Mobile | React Native, Expo 54 |
+| `@imuchat/mobile` | Application Mobile | React Native, Expo 54 |
 | `@imuchat/desktop-app` | Application Desktop | Electron 30, Vite, React |
 | `@imuchat/ui-kit` | Design System | React, Storybook, TailwindCSS |
 | `@imuchat/shared-types` | Types TypeScript | TypeScript 5.9 |
@@ -132,6 +135,7 @@ pnpm lint
 Le Design System (`@imuchat/ui-kit`) fournit :
 
 ### Tokens
+
 - `colors` - Palette de couleurs sémantiques
 - `typography` - Familles, tailles, poids
 - `spacing` - Échelle d'espacement
@@ -140,6 +144,7 @@ Le Design System (`@imuchat/ui-kit`) fournit :
 - `animations` - Durées et easings
 
 ### Thèmes
+
 - 🌞 **Light** - Thème clair par défaut
 - 🌙 **Dark** - Thème sombre
 - 🌸 **Sakura** - Rose cerisier japonais
@@ -149,6 +154,7 @@ Le Design System (`@imuchat/ui-kit`) fournit :
 - 🌊 **Ocean** - Teintes marines
 
 ### Composants
+
 - `Button`, `IconButton` - Boutons variés
 - `Input` - Champs de formulaire
 - `Card` - Conteneurs stylisés
@@ -166,8 +172,8 @@ Dans le workspace VS Code :
 | Tâche | Raccourci | Description |
 |-------|-----------|-------------|
 | 🚀 Start Full Stack | Default Build | Web + API en parallèle |
-| 🌐 Start Web App | - | http://localhost:3000 |
-| ⚙️ Start Platform Core | - | http://localhost:8080 |
+| 🌐 Start Web App | - | <http://localhost:3000> |
+| ⚙️ Start Platform Core | - | <http://localhost:8080> |
 | 📱 Start Mobile App | - | Expo DevTools |
 | 🖥️ Start Desktop App | - | Fenêtre Electron |
 | 🧪 Run All Tests | - | Tests de tous les repos |

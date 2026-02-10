@@ -321,3 +321,214 @@ Politique de confidentialité • Mentions légales
 * prêt pour une audience européenne… et internationale (dont le Japon plus tard 🇯🇵)
 
 ---
+
+On passe au **concret technique**, étape par étape, **sans blabla**, pour que `imuchat.app` pointe proprement vers **Firebase Hosting**.
+
+Je te donne la **procédure complète**, testée et standard.
+
+---
+
+# 🔥 Objectif final
+
+👉 Avoir :
+
+* `https://imuchat.app`
+* `https://www.imuchat.app` (optionnel mais recommandé)
+
+servis par **Firebase Hosting**, avec **HTTPS automatique**.
+
+---
+
+# 🧱 Prérequis
+
+Assure-toi d’avoir :
+
+* un compte Google
+* un projet Firebase créé
+* le domaine **imuchat.app** actif chez ton registrar
+* Node.js installé (`node -v`)
+
+---
+
+# 1️⃣ Créer / sélectionner le projet Firebase
+
+### Via la console
+
+👉 [https://console.firebase.google.com](https://console.firebase.google.com)
+
+* Créer un projet : **ImuChat**
+* Activer **Firebase Hosting**
+
+(Analytics : optionnel)
+
+---
+
+# 2️⃣ Installer Firebase CLI
+
+Dans ton terminal :
+
+```bash
+npm install -g firebase-tools
+firebase login
+```
+
+Puis, dans ton projet (ou dossier vitrine) :
+
+```bash
+firebase init
+```
+
+### Choisis :
+
+* ✅ Hosting
+* ❌ Functions (pas maintenant)
+* ❌ Firestore (pas pour la vitrine)
+
+### Configuration Hosting :
+
+* Public directory : `out` (Next.js export) ou `dist` / `public`
+* SPA : **yes** (si landing one-page)
+* GitHub deploy : **no** (plus tard)
+
+---
+
+# 3️⃣ Déployer une première version (important)
+
+Même un simple `index.html` suffit.
+
+```bash
+firebase deploy
+```
+
+Tu obtiens une URL du type :
+
+```
+https://imuchat-xxxx.web.app
+```
+
+👉 **Ne passe pas au domaine custom tant que ça ne marche pas.**
+
+---
+
+# 4️⃣ Ajouter le domaine personnalisé `imuchat.app`
+
+### Dans Firebase Console
+
+* Hosting
+* ⚙️ Paramètres du domaine
+* ➕ **Ajouter un domaine personnalisé**
+* Entre : `imuchat.app`
+
+Firebase va te donner **2 types d’entrées DNS**.
+
+---
+
+# 5️⃣ Configuration DNS chez ton registrar
+
+### A) Domaine racine (`imuchat.app`)
+
+Firebase te demandera :
+
+#### TXT (validation)
+
+```
+Type : TXT
+Nom : @
+Valeur : firebase=XXXXXXXX
+```
+
+#### A records (obligatoires)
+
+```
+Type : A
+Nom : @
+IP : 199.36.158.100
+IP : 199.36.158.101
+IP : 199.36.158.102
+IP : 199.36.158.103
+```
+
+⚠️ Supprime **tout autre A record existant** sur `@`.
+
+---
+
+### B) Sous-domaine `www.imuchat.app` (recommandé)
+
+```
+Type : CNAME
+Nom : www
+Valeur : imuchat-xxxx.web.app
+```
+
+(la valeur exacte est fournie par Firebase)
+
+---
+
+# 6️⃣ Attendre la validation + HTTPS
+
+⏳ Délai :
+
+* validation DNS : 5 min → 1h
+* certificat SSL : jusqu’à 24h (souvent < 1h)
+
+Firebase affiche :
+✅ Domaine connecté
+🔒 Certificat SSL actif
+
+---
+
+# 7️⃣ Redirection propre (fortement conseillé)
+
+Dans Firebase Hosting :
+
+* Définis `www.imuchat.app` → redirection vers `imuchat.app`
+  ou l’inverse.
+
+👉 **Choisis UNE version canonique** (SEO + sérieux).
+
+Je recommande :
+
+```
+https://imuchat.app
+```
+
+---
+
+# 8️⃣ Exemple `firebase.json` clean
+
+```json
+{
+  "hosting": {
+    "public": "public",
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  }
+}
+```
+
+---
+
+# 9️⃣ Checklist finale (rapide)
+
+* ✅ `imuchat.app` charge correctement
+* ✅ HTTPS actif
+* ✅ aucune erreur DNS
+* ✅ Firebase Hosting OK
+* ✅ prêt pour PeeL / incubateur
+
+---
+
+# 🧠 Bonnes pratiques (important)
+
+* Garde Firebase Hosting **uniquement pour la vitrine**
+* L’app plus tard → `app.imuchat.app`
+* API plus tard → `api.imuchat.app`
+
+👉 séparation claire = zéro dette technique.
+
+---

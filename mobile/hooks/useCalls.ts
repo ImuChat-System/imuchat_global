@@ -30,6 +30,7 @@ import {
     type CallOptions,
     type CallParticipant,
 } from '@/services/calls';
+import { generateStreamToken } from '@/services/stream-token';
 import type { Call } from '@stream-io/video-react-native-sdk';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useAuth } from './useAuth';
@@ -90,22 +91,29 @@ export function useCalls(): UseCallsReturn {
             if (!user) return;
 
             try {
-                // TODO: Récupérer le token Stream depuis le backend
-                // Pour le moment, on utilise un token de développement
-                const mockToken = 'development-token';
+                // Récupérer le token Stream depuis le backend platform-core
+                const userName = user.user_metadata?.display_name || user.email || 'Utilisateur';
+                const userImage = user.user_metadata?.avatar_url;
+
+                const tokenData = await generateStreamToken({
+                    userId: user.id,
+                    userName,
+                    userImage,
+                });
 
                 await initializeStreamClient(
                     {
                         id: user.id,
-                        name: user.user_metadata?.display_name || user.email || 'Utilisateur',
-                        image: user.user_metadata?.avatar_url,
+                        name: userName,
+                        image: userImage,
                     },
-                    mockToken
+                    tokenData.token
                 );
 
                 clientInitialized.current = true;
+                console.log('✅ Client Stream initialisé avec token backend');
             } catch (err) {
-                console.error('Erreur lors de l\'initialisation du client Stream:', err);
+                console.error('❌ Erreur lors de l\'initialisation du client Stream:', err);
                 setError('Impossible d\'initialiser le client vidéo');
             }
         }

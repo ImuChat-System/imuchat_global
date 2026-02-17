@@ -3,11 +3,17 @@
  * Provides theme context using ui-kit tokens
  */
 
-import { borderRadius, colors, shadows, spacing, typography } from '@imuchat/ui-kit/native';
-import { createContext, ReactNode, useContext, useState } from 'react';
+import {
+  borderRadius,
+  colors,
+  shadows,
+  spacing,
+  typography,
+} from "@imuchat/ui-kit/native/tokens";
+import { createContext, ReactNode, useContext, useState } from "react";
 
 // Theme type
-export type ThemeMode = 'light' | 'dark';
+export type ThemeMode = "light" | "dark";
 
 export interface Theme {
   colors: typeof colors;
@@ -28,7 +34,7 @@ interface ThemeContextType {
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
-  const [mode, setMode] = useState<ThemeMode>('dark');
+  const [mode, setMode] = useState<ThemeMode>("dark");
 
   const theme: Theme = {
     colors,
@@ -40,7 +46,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   };
 
   const toggleMode = () => {
-    setMode(prev => prev === 'dark' ? 'light' : 'dark');
+    setMode((prev) => (prev === "dark" ? "light" : "dark"));
   };
 
   return (
@@ -53,7 +59,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
 export function useTheme() {
   const context = useContext(ThemeContext);
   if (!context) {
-    throw new Error('useTheme must be used within ThemeProvider');
+    throw new Error("useTheme must be used within ThemeProvider");
   }
   return context;
 }

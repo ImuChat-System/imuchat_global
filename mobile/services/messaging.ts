@@ -298,3 +298,49 @@ export async function markConversationAsRead(conversationId: string) {
         throw error;
     }
 }
+
+/**
+ * Send typing indicator for a conversation
+ */
+export async function sendTypingIndicator(
+    conversationId: string,
+    isTyping: boolean = true
+) {
+    const { data: { user } } = await supabase.auth.getUser();
+
+    if (!user) {
+        throw new Error("No authenticated user");
+    }
+
+    const channel = supabase.channel(`conversation:${conversationId}`);
+
+    await channel.send({
+        type: 'broadcast',
+        event: 'typing',
+        payload: {
+            user_id: user.id,
+            is_typing: isTyping,
+            timestamp: Date.now(),
+        },
+    });
+}
+
+/**
+ * Subscribe to typing indicators for a conversation
+ */
+export function subscribeToTypingIndicators(
+    conversationId: string,
+    onTyping: (userId: string, isTyping: boolean) => void
+) {
+    const channel = supabase
+        .channel(`conversation:${conversationId}`)
+        .on('broadcast', { event: 'typing' }, (payload: any) => {
+            const { user_id, is_typing } = payload.payload;
+            onTyping(user_id, is_typing);
+        })
+        .subscribe();
+
+    return () => {
+        channel.unsubscribe();
+    };
+}

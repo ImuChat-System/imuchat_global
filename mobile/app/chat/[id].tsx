@@ -13,6 +13,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   StyleSheet,
+  Text,
   TouchableOpacity,
   View,
 } from "react-native";
@@ -27,7 +28,9 @@ export default function ChatRoomScreen() {
     loading,
     sending,
     currentUserId,
+    typingUsers,
     sendMessage: handleSendMessage,
+    sendTypingIndicator,
   } = useChat({ conversationId: id, autoLoad: true });
   const flatListRef = useRef<FlatList>(null);
   const { theme } = useTheme();
@@ -58,13 +61,16 @@ export default function ChatRoomScreen() {
       // Create call event in Supabase
       const callEvent = await initiateCall(recipientId, callType, streamCallId);
 
-      // Navigate to active call screen
+      // Navigate to outgoing call screen (showing "Calling...")
       router.push({
-        pathname: "/call/active",
+        pathname: "/call/outgoing",
         params: {
           callId: streamCallId,
           callEventId: callEvent.id,
           callType,
+          calleeId: recipientId,
+          calleeName: "User", // TODO: Get from conversation
+          calleeAvatar: undefined, // TODO: Get from conversation
         },
       } as any);
     } catch (error) {
@@ -128,7 +134,20 @@ export default function ChatRoomScreen() {
         }
       />
 
-      <MessageInput onSend={handleSendMessage} disabled={sending} />
+      {/* Typing indicator */}
+      {typingUsers.size > 0 && (
+        <View style={styles.typingContainer}>
+          <Text style={[styles.typingText, { color: theme.colors.textMuted }]}>
+            Someone is typing...
+          </Text>
+        </View>
+      )}
+
+      <MessageInput
+        onSend={handleSendMessage}
+        onTyping={sendTypingIndicator}
+        disabled={sending}
+      />
     </KeyboardAvoidingView>
   );
 }
@@ -144,5 +163,13 @@ const styles = StyleSheet.create({
   },
   messagesList: {
     paddingVertical: 16,
+  },
+  typingContainer: {
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+  },
+  typingText: {
+    fontSize: 12,
+    fontStyle: "italic",
   },
 });

@@ -10,11 +10,13 @@ import {
     getMessages as fetchMessages,
     markConversationAsRead,
     sendMessage as sendMessageToDb,
+    sendTypingIndicator as sendTypingIndicatorToServer,
     subscribeToConversation,
     subscribeToConversations,
+    subscribeToTypingIndicators,
 } from '@/services/messaging';
 import { supabase } from '@/services/supabase';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 export interface UseChatOptions {
     conversationId?: string;
@@ -31,6 +33,10 @@ export function useChat(options: UseChatOptions = {}) {
     const [sending, setSending] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [currentUserId, setCurrentUserId] = useState<string | null>(null);
+    const [typingUsers, setTypingUsers] = useState<Set<string>>(new Set());
+
+    // Ref for typing timeout
+    const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
     // Get current user
     useEffect(() => {
@@ -149,6 +155,7 @@ export function useChat(options: UseChatOptions = {}) {
         if (!autoLoad) return;
 
         let unsubscribe: (() => void) | null = null;
+        let unsubscribeTyping: (() => void) | null = null;
 
         if (conversationId) {
             // Subscribe to specific conversation
@@ -161,6 +168,36 @@ export function useChat(options: UseChatOptions = {}) {
                     return [...prev, newMessage];
                 });
             });
+
+            // Subscribe to typing indicators
+            unsubscribeTyping = subscribeToTypingIndicators(
+                conversationId,
+                (userId, isTyping) => {
+                    // Don't show typing indicator for current user
+                    if (userId === currentUserId) return;
+
+                    setTypingUsers((prev) => {
+                        const newSet = new Set(prev);
+                        if (isTyping) {
+                            newSet.add(userId);
+                        } else {
+                            newSet.delete(userId);
+                        }
+                        return newSet;
+                    });
+
+                    // Auto-remove typing indicator after 5 seconds
+                    if (isTyping) {
+                        setTimeout(() => {
+                            setTypingUsers((prev) => {
+                                const newSet = new Set(prev);
+                                newSet.delete(userId);
+                                return newSet;
+                            });
+                        }, 5000);
+                    }
+                }
+            );
         } else {
             // Subscribe to all conversations
             unsubscribe = subscribeToConversations(() => {
@@ -172,8 +209,29 @@ export function useChat(options: UseChatOptions = {}) {
             if (unsubscribe) {
                 unsubscribe();
             }
+            if (unsubscribeTyping) {
+                unsubscribeTyping();
+            }
         };
-    }, [conversationId, autoLoad, loadConversations]);
+    }, [conversationId, autoLoad, loadConversations, currentUserId]);
+
+    // Send typing indicator (debounced)
+    const sendTypingIndicator = useCallback(() => {
+        if (!conversationId) return;
+
+        // Send "typing" signal
+        sendTypingIndicatorToServer(conversationId, true);
+
+        // Clear existing timeout
+        if (typingTimeoutRef.current) {
+            clearTimeout(typingTimeoutRef.current);
+        }
+
+        // Set timeout to send "not typing" after 3 seconds
+        typingTimeoutRef.current = setTimeout(() => {
+            sendTypingIndicatorToServer(conversationId, false);
+        }, 3000);
+    }, [conversationId]);
 
     return {
         // State
@@ -183,12 +241,14 @@ export function useChat(options: UseChatOptions = {}) {
         sending,
         error,
         currentUserId,
+        typingUsers,
 
         // Actions
         loadConversations,
         loadMessages,
         sendMessage,
         markAsRead: markConversationAsRead,
+        sendTypingIndicator,
 
         // Utils
         setConversations,

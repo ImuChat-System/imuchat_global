@@ -5,11 +5,13 @@ import { StyleSheet, TextInput, TouchableOpacity, View } from "react-native";
 
 interface MessageInputProps {
   onSend: (message: string) => void;
+  onTyping?: () => void;
   disabled?: boolean;
 }
 
 export default function MessageInput({
   onSend,
+  onTyping,
   disabled = false,
 }: MessageInputProps) {
   const [message, setMessage] = useState("");
@@ -19,6 +21,14 @@ export default function MessageInput({
     if (message.trim()) {
       onSend(message.trim());
       setMessage("");
+    }
+  };
+
+  const handleChangeText = (text: string) => {
+    setMessage(text);
+    // Trigger typing indicator
+    if (text.length > 0 && onTyping) {
+      onTyping();
     }
   };
 
@@ -37,7 +47,7 @@ export default function MessageInput({
         placeholder="Type a message..."
         placeholderTextColor={colors.textMuted}
         value={message}
-        onChangeText={setMessage}
+        onChangeText={handleChangeText}
         multiline
         maxLength={1000}
         editable={!disabled}

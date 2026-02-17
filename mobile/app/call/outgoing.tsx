@@ -4,18 +4,20 @@
  * Utilise les composants UI-Kit pour un design cohérent
  */
 
-import { useCalls } from "@/hooks/useCalls";
+import { useCallsSafe } from "@/hooks/useCallsSafe";
 import { useColors, useSpacing } from "@/providers/ThemeProvider";
 import { Ionicons } from "@expo/vector-icons";
-import { Avatar, KawaiiButton } from "@imuchat/ui-kit/native";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useCallback, useEffect, useState } from "react";
 import {
+  ActivityIndicator,
   Animated,
+  Image,
   Platform,
   StatusBar,
   StyleSheet,
   Text,
+  TouchableOpacity,
   View,
 } from "react-native";
 
@@ -33,8 +35,72 @@ export default function OutgoingCallScreen() {
     callType: "audio" | "video";
   }>();
 
-  const { call, leaveCall } = useCalls();
+  const { call, leaveCall, isAvailable, isChecking } = useCallsSafe();
   const [canceling, setCanceling] = useState(false);
+
+  // Show loading if checking SDK availability
+  if (isChecking) {
+    return (
+      <View
+        style={[
+          styles.container,
+          {
+            backgroundColor: colors.background,
+            justifyContent: "center",
+            alignItems: "center",
+          },
+        ]}
+      >
+        <ActivityIndicator size="large" color={colors.primary} />
+      </View>
+    );
+  }
+
+  // Show error if SDK not available
+  if (!isAvailable) {
+    return (
+      <View
+        style={[
+          styles.container,
+          {
+            backgroundColor: colors.background,
+            justifyContent: "center",
+            alignItems: "center",
+            padding: 20,
+          },
+        ]}
+      >
+        <Ionicons name="warning" size={48} color={colors.error} />
+        <Text
+          style={[
+            styles.callerName,
+            { color: colors.text, textAlign: "center", marginTop: 16 },
+          ]}
+        >
+          Appels non disponibles
+        </Text>
+        <Text
+          style={[
+            styles.callType,
+            { color: colors.textMuted, textAlign: "center" },
+          ]}
+        >
+          Les appels vidéo nécessitent un build de développement.\nExpo Go n'est
+          pas supporté.
+        </Text>
+        <TouchableOpacity
+          style={{ marginTop: 20, padding: 12 }}
+          onPress={() => router.back()}
+        >
+          <Text
+            style={{ color: colors.primary, fontSize: 16, fontWeight: "600" }}
+          >
+            Retour
+          </Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
 
   // Animation de pulsation pour l'avatar
   const pulseAnim = useState(new Animated.Value(1))[0];
@@ -114,12 +180,33 @@ export default function OutgoingCallScreen() {
             },
           ]}
         >
-          <Avatar
-            src={params.calleeAvatar}
-            alt={params.calleeName}
-            size="xl"
-            style={styles.avatar}
-          />
+          {params.calleeAvatar ? (
+            <Image
+              source={{ uri: params.calleeAvatar }}
+              style={[
+                styles.avatar,
+                { width: 120, height: 120, borderRadius: 60 },
+              ]}
+            />
+          ) : (
+            <View
+              style={[
+                styles.avatar,
+                {
+                  width: 120,
+                  height: 120,
+                  borderRadius: 60,
+                  backgroundColor: colors.primary,
+                  justifyContent: "center",
+                  alignItems: "center",
+                },
+              ]}
+            >
+              <Text style={{ color: "#fff", fontSize: 48, fontWeight: "bold" }}>
+                {(params.calleeName || "U").charAt(0).toUpperCase()}
+              </Text>
+            </View>
+          )}
         </Animated.View>
 
         <Text style={[styles.callerName, { color: colors.text }]}>
@@ -148,16 +235,20 @@ export default function OutgoingCallScreen() {
 
       {/* Bouton annuler */}
       <View style={[styles.buttonsContainer, { paddingBottom: spacing.xl }]}>
-        <KawaiiButton
-          variant="secondary"
-          size="lg"
+        <TouchableOpacity
           onPress={handleCancel}
           disabled={canceling}
-          loading={canceling}
-          style={styles.cancelButton}
+          style={[
+            styles.cancelButton,
+            { backgroundColor: colors.error, opacity: canceling ? 0.5 : 1 },
+          ]}
         >
-          <Text style={styles.buttonText}>Annuler</Text>
-        </KawaiiButton>
+          {canceling ? (
+            <ActivityIndicator color="#fff" size="small" />
+          ) : (
+            <Text style={styles.buttonText}>Annuler</Text>
+          )}
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -213,8 +304,11 @@ const styles = StyleSheet.create({
     paddingBottom: 40,
   },
   cancelButton: {
-    flex: 1,
-    backgroundColor: "#EF4444",
+    paddingVertical: 16,
+    paddingHorizontal: 32,
+    borderRadius: 12,
+    alignItems: "center",
+    justifyContent: "center",
   },
   buttonText: {
     fontSize: 18,

@@ -15,6 +15,10 @@ class PlatformService {
     private eventBus: EventBus;
     private authModule: SupabaseAuthModule;
     private chatModule: ChatEngineModule;
+    private _initialized = false;
+    private _initPromise: Promise<boolean> | null = null;
+    private _started = false;
+    private _startPromise: Promise<boolean> | null = null;
 
     constructor() {
         this.eventBus = new EventBus();
@@ -46,6 +50,23 @@ class PlatformService {
     }
 
     async initialize() {
+        // Prevent multiple initializations
+        if (this._initialized) {
+            console.log('[PlatformService] Already initialized, skipping');
+            return true;
+        }
+
+        // If initialization is in progress, wait for it
+        if (this._initPromise) {
+            console.log('[PlatformService] Initialization already in progress, waiting...');
+            return this._initPromise;
+        }
+
+        this._initPromise = this._doInitialize();
+        return this._initPromise;
+    }
+
+    private async _doInitialize(): Promise<boolean> {
         console.log('[PlatformService] Initializing modules...');
 
         try {
@@ -53,23 +74,44 @@ class PlatformService {
             await this.registry.initialize(this.authModule.config.id);
             await this.registry.initialize(this.chatModule.config.id);
 
+            this._initialized = true;
             console.log('[PlatformService] All modules initialized successfully');
             return true;
         } catch (error) {
             console.error('[PlatformService] Module initialization failed:', error);
+            this._initPromise = null; // Reset to allow retry
             return false;
         }
     }
 
     async start() {
+        // Prevent multiple starts
+        if (this._started) {
+            console.log('[PlatformService] Already started, skipping');
+            return true;
+        }
+
+        // If start is in progress, wait for it
+        if (this._startPromise) {
+            console.log('[PlatformService] Start already in progress, waiting...');
+            return this._startPromise;
+        }
+
+        this._startPromise = this._doStart();
+        return this._startPromise;
+    }
+
+    private async _doStart(): Promise<boolean> {
         console.log('[PlatformService] Starting modules...');
 
         try {
             await this.registry.startAll();
+            this._started = true;
             console.log('[PlatformService] All modules started successfully');
             return true;
         } catch (error) {
             console.error('[PlatformService] Module start failed:', error);
+            this._startPromise = null; // Reset to allow retry
             return false;
         }
     }
@@ -77,6 +119,8 @@ class PlatformService {
     async stop() {
         console.log('[PlatformService] Stopping modules...');
         await this.registry.stopAll();
+        this._started = false;
+        this._startPromise = null;
     }
 
     // Getters pour accès aux modules

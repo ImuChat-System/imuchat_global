@@ -4,13 +4,21 @@
  * Utilise les composants UI-Kit pour un design cohérent
  */
 
-import { useCalls } from "@/hooks/useCalls";
+import { useCallsSafe } from "@/hooks/useCallsSafe";
 import { useColors, useSpacing } from "@/providers/ThemeProvider";
 import { Ionicons } from "@expo/vector-icons";
-import { Avatar, KawaiiButton } from "@imuchat/ui-kit/native";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useCallback, useState } from "react";
-import { Platform, StatusBar, StyleSheet, Text, View } from "react-native";
+import {
+  ActivityIndicator,
+  Image,
+  Platform,
+  StatusBar,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
 export default function IncomingCallScreen() {
   const router = useRouter();
@@ -26,8 +34,69 @@ export default function IncomingCallScreen() {
     callType: "audio" | "video";
   }>();
 
-  const { joinCall, leaveCall, isConnecting } = useCalls();
+  const { joinCall, leaveCall, isConnecting, isAvailable, isChecking, error } =
+    useCallsSafe();
   const [rejecting, setRejecting] = useState(false);
+
+  // Show loading if checking SDK availability
+  if (isChecking) {
+    return (
+      <View
+        style={[
+          styles.container,
+          {
+            backgroundColor: colors.background,
+            justifyContent: "center",
+            alignItems: "center",
+          },
+        ]}
+      >
+        <ActivityIndicator size="large" color={colors.primary} />
+      </View>
+    );
+  }
+
+  // Show error if SDK not available
+  if (!isAvailable) {
+    return (
+      <View
+        style={[
+          styles.container,
+          {
+            backgroundColor: colors.background,
+            justifyContent: "center",
+            alignItems: "center",
+            padding: 20,
+          },
+        ]}
+      >
+        <Ionicons name="warning" size={48} color={colors.error} />
+        <Text
+          style={[
+            styles.callerName,
+            { color: colors.text, textAlign: "center", marginTop: 16 },
+          ]}
+        >
+          Appels non disponibles
+        </Text>
+        <Text
+          style={[
+            styles.callType,
+            { color: colors.textMuted, textAlign: "center" },
+          ]}
+        >
+          Les appels vidéo nécessitent un build de développement.\nExpo Go n'est
+          pas supporté.
+        </Text>
+        <Text
+          style={[styles.callType, { color: colors.primary, marginTop: 20 }]}
+          onPress={() => router.back()}
+        >
+          Retour
+        </Text>
+      </View>
+    );
+  }
 
   // Accepter l'appel
   const handleAccept = useCallback(async () => {
@@ -83,12 +152,33 @@ export default function IncomingCallScreen() {
       {/* Info appelant */}
       <View style={styles.callerInfo}>
         <View style={styles.avatarContainer}>
-          <Avatar
-            src={params.callerAvatar}
-            alt={params.callerName || "Inconnu"}
-            size="xl"
-            style={styles.avatar}
-          />
+          {params.callerAvatar ? (
+            <Image
+              source={{ uri: params.callerAvatar }}
+              style={[
+                styles.avatar,
+                { width: 120, height: 120, borderRadius: 60 },
+              ]}
+            />
+          ) : (
+            <View
+              style={[
+                styles.avatar,
+                {
+                  width: 120,
+                  height: 120,
+                  borderRadius: 60,
+                  backgroundColor: colors.primary,
+                  justifyContent: "center",
+                  alignItems: "center",
+                },
+              ]}
+            >
+              <Text style={{ color: "#fff", fontSize: 48, fontWeight: "bold" }}>
+                {(params.callerName || "U").charAt(0).toUpperCase()}
+              </Text>
+            </View>
+          )}
         </View>
 
         <Text style={[styles.callerName, { color: colors.text }]}>
@@ -119,28 +209,42 @@ export default function IncomingCallScreen() {
       <View style={[styles.actions, { paddingHorizontal: spacing.lg }]}>
         <View style={styles.buttonRow}>
           {/* Bouton Refuser */}
-          <KawaiiButton
-            variant="secondary"
-            size="lg"
+          <TouchableOpacity
             onPress={handleReject}
             disabled={rejecting || isConnecting}
-            loading={rejecting}
-            style={styles.rejectButton}
+            style={[
+              styles.rejectButton,
+              {
+                backgroundColor: colors.error,
+                opacity: rejecting || isConnecting ? 0.5 : 1,
+              },
+            ]}
           >
-            <Text style={styles.buttonText}>Refuser</Text>
-          </KawaiiButton>
+            {rejecting ? (
+              <ActivityIndicator color="#fff" size="small" />
+            ) : (
+              <Text style={styles.buttonText}>Refuser</Text>
+            )}
+          </TouchableOpacity>
 
           {/* Bouton Accepter */}
-          <KawaiiButton
-            variant="primary"
-            size="lg"
+          <TouchableOpacity
             onPress={handleAccept}
             disabled={rejecting || isConnecting}
-            loading={isConnecting}
-            style={styles.acceptButton}
+            style={[
+              styles.acceptButton,
+              {
+                backgroundColor: colors.success,
+                opacity: rejecting || isConnecting ? 0.5 : 1,
+              },
+            ]}
           >
-            <Text style={styles.buttonText}>Accepter</Text>
-          </KawaiiButton>
+            {isConnecting ? (
+              <ActivityIndicator color="#fff" size="small" />
+            ) : (
+              <Text style={styles.buttonText}>Accepter</Text>
+            )}
+          </TouchableOpacity>
         </View>
       </View>
     </View>
@@ -203,16 +307,23 @@ const styles = StyleSheet.create({
   rejectButton: {
     flex: 1,
     marginRight: 8,
-    backgroundColor: "#f87171",
+    paddingVertical: 16,
+    borderRadius: 12,
+    alignItems: "center",
+    justifyContent: "center",
   },
   acceptButton: {
     flex: 1,
     marginLeft: 8,
-    backgroundColor: "#34d399",
+    paddingVertical: 16,
+    borderRadius: 12,
+    alignItems: "center",
+    justifyContent: "center",
   },
   buttonText: {
     fontSize: 18,
     fontWeight: "600",
     color: "#FFFFFF",
+    textAlign: "center",
   },
 });

@@ -61,7 +61,6 @@ function RootLayoutNav() {
   const { session, loading } = useAuth();
   const segments = useSegments();
   const router = useRouter();
-  const { IncomingCallModal } = useCallManager();
 
   useEffect(() => {
     if (loading) return;
@@ -89,14 +88,19 @@ function RootLayoutNav() {
         <Stack>
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
           <Stack.Screen name="(auth)/login" options={{ headerShown: false }} />
-          <Stack.Screen
-            name="chat/active"
-            options={{ headerShown: false, presentation: "fullScreenModal" }}
-          />
           <Stack.Screen name="modal" options={{ presentation: "modal" }} />
         </Stack>
-        <IncomingCallModal />
+        {/* Call manager must be inside ThemeProvider */}
+        <CallManagerProvider />
       </NavigationThemeProvider>
     </ThemeProvider>
   );
+}
+
+/**
+ * Separate component for call manager to ensure it's within ThemeProvider context
+ */
+function CallManagerProvider() {
+  const { IncomingCallModal } = useCallManager();
+  return <IncomingCallModal />;
 }

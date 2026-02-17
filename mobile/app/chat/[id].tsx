@@ -3,12 +3,12 @@ import MessageInput from "@/components/MessageInput";
 import { useChat } from "@/hooks/useChat";
 import { useTheme } from "@/providers/ThemeProvider";
 import { initiateCall } from "@/services/call-signaling";
-import { createStreamCall } from "@/services/stream-video";
 import { Ionicons } from "@expo/vector-icons";
 import { Stack, useLocalSearchParams, useRouter } from "expo-router";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   ActivityIndicator,
+  Alert,
   FlatList,
   KeyboardAvoidingView,
   Platform,
@@ -35,6 +35,7 @@ export default function ChatRoomScreen() {
   const flatListRef = useRef<FlatList>(null);
   const { theme } = useTheme();
   const router = useRouter();
+  const [initiatingCall, setInitiatingCall] = useState(false);
 
   // Auto-scroll to bottom when new messages arrive
   useEffect(() => {
@@ -51,12 +52,30 @@ export default function ChatRoomScreen() {
       return;
     }
 
+    if (initiatingCall) return;
+    setInitiatingCall(true);
+
     try {
+      // Dynamically load Stream Video to avoid crash in Expo Go
+      const streamVideo = await import("@/services/stream-video").catch((e) => {
+        console.error("Stream Video not available:", e);
+        return null;
+      });
+
+      if (!streamVideo) {
+        Alert.alert(
+          "Appels non disponibles",
+          "Les appels vidéo nécessitent un build de développement. Expo Go n'est pas supporté.",
+        );
+        setInitiatingCall(false);
+        return;
+      }
+
       // Generate unique call ID
       const streamCallId = `call-${Date.now()}`;
 
       // Create Stream call
-      await createStreamCall(streamCallId, callType);
+      await streamVideo.createStreamCall(streamCallId, callType);
 
       // Create call event in Supabase
       const callEvent = await initiateCall(recipientId, callType, streamCallId);
@@ -75,6 +94,9 @@ export default function ChatRoomScreen() {
       } as any);
     } catch (error) {
       console.error("Error initiating call:", error);
+      Alert.alert("Erreur", "Impossible d'initier l'appel");
+    } finally {
+      setInitiatingCall(false);
     }
   }
 

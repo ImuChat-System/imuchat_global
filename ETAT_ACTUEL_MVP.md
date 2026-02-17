@@ -241,6 +241,7 @@ import { StreamVideoClient } from '@stream-io/video-react-sdk';
 
 // Intégration Supabase call_logs table
 ```
+
 ```
 
 ### **Vendredi 19 fév** - Demo MVP Sprint 1
@@ -346,6 +347,7 @@ import { StreamVideoClient } from '@stream-io/video-react-sdk';
 ## 📊 **Files Créés Cette Session**
 
 ```
+
 ✅ INFRASTRUCTURE:
 ✅ supabase_schema.sql                       # Schema DB complet
 ✅ platform-core/.env                        # Config complète (68 lignes)
@@ -405,6 +407,7 @@ import { StreamVideoClient } from '@stream-io/video-react-sdk';
 ✅ DOCUMENTATION GÉNÉRALE:
 ✅ PLATFORM_INTEGRATION_COMPLETE.md         # Documentation complète
 ✅ ETAT_ACTUEL_MVP.md                       # État actuel (ce fichier)
+
 ```
 
 ---
@@ -512,6 +515,7 @@ import { StreamVideoClient } from '@stream-io/video-react-sdk';
 ### **📈 Progrès MVP**
 
 ```
+
 Frontend Auth + Chat:     ████████████████████░░  85% ✅
 Backend Platform-Core:    ████████████░░░░░░░░░░  60% 🟡
 Services Integration:     ███████████████░░░░░░░  75% 🟡
@@ -519,6 +523,7 @@ Documentation:            ██████████████████
 Configuration:            ████████████░░░░░░░░░░  60% 🟡 (credentials manquants)
 
 GLOBAL MVP:               ████████████░░░░░░░░░░  75% 🟡
+
 ```
 
 **Estimation temps restant MVP complet:** 2-3 semaines (si choix stratégique clair)
@@ -616,6 +621,7 @@ GET  /api/v1/presence/batch           // Batch fetch statuses
 **Principe** : Finaliser un MVP déployable avec les endpoints actuels, ajouter backend au besoin
 
 **Avantages** ✅:
+
 - **MVP fonctionnel rapidement** (5-7 jours)
 - Validation UX immédiate
 - Démos visuelles motivantes
@@ -624,6 +630,7 @@ GET  /api/v1/presence/batch           // Batch fetch statuses
 - Priorisation features par usage
 
 **Inconvénients** ❌:
+
 - Refactoring backend possible après tests
 - Certaines features limitées au début
 - Peut nécessiter mocks temporaires
@@ -632,6 +639,7 @@ GET  /api/v1/presence/batch           // Batch fetch statuses
 **Timeline estimée** : 1 semaine UI → MVP démo → Itérations backend → 3 semaines total
 
 **Features MVP immédiates** (avec endpoints existants) :
+
 ```typescript
 // Auth ✅ (Supabase direct)
 - Login, Signup, Forgot Password → TERMINÉ
@@ -698,6 +706,7 @@ GET  /api/v1/presence/batch           // Batch fetch statuses
 ```
 
 **Features MVP Déployable** (Approche B) :
+
 - ✅ Auth complète
 - ✅ Chat temps réel
 - ✅ Appels vidéo/audio
@@ -709,6 +718,7 @@ GET  /api/v1/presence/batch           // Batch fetch statuses
 - ❌ Presence (post-MVP)
 
 **Ce qui peut attendre post-MVP** :
+
 - API Contacts complète (add, block, list)
 - API Presence (status en temps réel)
 - API Media avancée (quotas, compression)
@@ -719,7 +729,7 @@ GET  /api/v1/presence/batch           // Batch fetch statuses
 ### **Décision Finale : À Vous de Choisir**
 
 | Critère | Approche A (Backend-First) | Approche B (Frontend-First) | Gagnant |
-|---------|---------------------------|-----------------------------|---------| 
+|---------|---------------------------|-----------------------------|---------|
 | **Time to MVP** | 4-5 semaines | 3 semaines | 🅱️ |
 | **Architecture solide** | ✅ Complète | 🟡 Itérative | 🅰️ |
 | **Motivation dev** | 🟡 Retardée | ✅ Immédiate | 🅱️ |
@@ -736,6 +746,7 @@ Si vous voulez une architecture ultra-solide dès le début : Approche A.
 Si vous voulez un produit déployable rapidement : Approche B.
 
 ---
+
 - [MVP Structure](./MVP_STRUCTURE_MULTIPLATEFORME.md)
 
 **Quick start** :
@@ -753,4 +764,10 @@ Si vous voulez un produit déployable rapidement : Approche B.
 
 **Recommandation** : Approche B (Frontend-First) pour MVP déployable en 3 semaines vs 5 semaines.
 
-**Prochaine action** : Choisir approche → Configurer credentials → Démarrer implémentation
+**Prochaine action** : ✅ Approche B choisie → Voir PLAN_ACTION_FRONTEND_FIRST.md
+
+**Action IMMÉDIATE** 🔥 :
+
+1. Configurer credentials platform-core (15-20min) - BLOQUANT
+2. Commencer Jour 1 : CallIncoming Screen (mobile + web)
+3. Utiliser composants ui-kit existants (ChatBubble, UserAvatar, KawaiiButton, etc.)

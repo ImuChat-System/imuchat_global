@@ -1,19 +1,12 @@
 import MessageBubble from "@/components/MessageBubble";
 import MessageInput from "@/components/MessageInput";
+import { useChat } from "@/hooks/useChat";
 import { useTheme } from "@/providers/ThemeProvider";
 import { initiateCall } from "@/services/call-signaling";
-import {
-  getMessages,
-  markConversationAsRead,
-  Message,
-  sendMessage,
-  subscribeToConversation,
-} from "@/services/messaging";
 import { createStreamCall } from "@/services/stream-video";
-import { supabase } from "@/services/supabase";
 import { Ionicons } from "@expo/vector-icons";
 import { Stack, useLocalSearchParams, useRouter } from "expo-router";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import {
   ActivityIndicator,
   FlatList,
@@ -29,100 +22,25 @@ export default function ChatRoomScreen() {
     id: string;
     recipientId?: string;
   }>();
-  const [messages, setMessages] = useState<Message[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [sending, setSending] = useState(false);
-  const [currentUserId, setCurrentUserId] = useState<string | null>(null);
+  const {
+    messages,
+    loading,
+    sending,
+    currentUserId,
+    sendMessage: handleSendMessage,
+  } = useChat({ conversationId: id, autoLoad: true });
   const flatListRef = useRef<FlatList>(null);
   const { theme } = useTheme();
   const router = useRouter();
 
+  // Auto-scroll to bottom when new messages arrive
   useEffect(() => {
-    // Get current user
-    supabase.auth.getUser().then(({ data: { user } }) => {
-      if (user) {
-        setCurrentUserId(user.id);
-      }
-    });
-  }, []);
-
-  useEffect(() => {
-    if (!id) return;
-
-    loadMessages();
-    markConversationAsRead(id);
-
-    // Subscribe to new messages
-    const unsubscribe = subscribeToConversation(id, (newMessage) => {
-      setMessages((prev) => [...prev, newMessage]);
-      // Scroll to bottom when new message arrives
+    if (messages.length > 0) {
       setTimeout(() => {
         flatListRef.current?.scrollToEnd({ animated: true });
       }, 100);
-    });
-
-    return () => {
-      unsubscribe();
-    };
-  }, [id]);
-
-  async function loadMessages() {
-    if (!id) return;
-
-    try {
-      const data = await getMessages(id);
-      setMessages(data);
-      // Scroll to bottom after loading
-      setTimeout(() => {
-        flatListRef.current?.scrollToEnd({ animated: false });
-      }, 100);
-    } catch (error) {
-      console.error("Error loading messages:", error);
-    } finally {
-      setLoading(false);
     }
-  }
-
-  async function handleSendMessage(content: string) {
-    if (!id || !content.trim()) return;
-
-    try {
-      setSending(true);
-
-      // Optimistic UI update
-      const tempMessage: Message = {
-        id: `temp-${Date.now()}`,
-        conversation_id: id,
-        sender_id: currentUserId || "",
-        content: content.trim(),
-        media_url: null,
-        media_type: null,
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString(),
-        deleted_at: null,
-        is_edited: false,
-      };
-
-      setMessages((prev) => [...prev, tempMessage]);
-
-      // Scroll to bottom
-      setTimeout(() => {
-        flatListRef.current?.scrollToEnd({ animated: true });
-      }, 100);
-
-      // Send to server
-      await sendMessage(id, content.trim());
-
-      // Remove temp message (real one will come via subscription)
-      setMessages((prev) => prev.filter((m) => m.id !== tempMessage.id));
-    } catch (error) {
-      console.error("Error sending message:", error);
-      // Remove temp message on error
-      setMessages((prev) => prev.filter((m) => !m.id.startsWith("temp-")));
-    } finally {
-      setSending(false);
-    }
-  }
+  }, [messages.length]);
 
   async function handleInitiateCall(callType: "audio" | "video") {
     if (!recipientId) {

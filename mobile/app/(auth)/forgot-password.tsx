@@ -1,27 +1,35 @@
 import { Stack } from "expo-router";
 import { useState } from "react";
-import { Alert, Button, StyleSheet, Text, TextInput, View } from "react-native";
+import {
+  ActivityIndicator,
+  Alert,
+  Button,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from "react-native";
 
+import { useAuth } from "@/hooks/useAuthV2";
 import { useTheme } from "@/providers/ThemeProvider";
-import { supabase } from "@/services/supabase";
 
 export default function ForgotPasswordScreen() {
   const [email, setEmail] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [sent, setSent] = useState(false);
   const { theme } = useTheme();
+  const { sendPasswordReset, loading } = useAuth();
 
   async function sendResetEmail() {
-    setLoading(true);
-    const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: "imuchat://reset-password", // Deep link to handle reset
-    });
-
-    if (error) {
-      Alert.alert("Error", error.message);
-    } else {
+    try {
+      await sendPasswordReset(email);
+      setSent(true);
       Alert.alert("Check your email", "We sent you a password reset link.");
+    } catch (error) {
+      Alert.alert(
+        "Error",
+        error instanceof Error ? error.message : "Failed to send reset email",
+      );
     }
-    setLoading(false);
   }
 
   return (
@@ -54,11 +62,15 @@ export default function ForgotPasswordScreen() {
       </View>
 
       <View style={[styles.verticallySpaced, styles.mt20]}>
-        <Button
-          title="Send Reset Link"
-          disabled={loading}
-          onPress={sendResetEmail}
-        />
+        {loading ? (
+          <ActivityIndicator size="large" color={theme.colors.primary} />
+        ) : (
+          <Button
+            title="Send Reset Link"
+            disabled={loading || sent}
+            onPress={sendResetEmail}
+          />
+        )}
       </View>
     </View>
   );

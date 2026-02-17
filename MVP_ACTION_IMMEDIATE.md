@@ -6,29 +6,28 @@
 
 ## 🚀 Quick Start - Ce qu'il faut faire MAINTENANT
 
-### ✅ Actions Jour 1-2 (Setup Infrastructure)
+### ✅ Actions Jour 1-2 (Setup Infrastructure) - **TERMINÉ** ✅
 
-#### 1. Supabase Project Setup
+#### 1. Supabase Project Setup - **FAIT** ✅
 
 ```bash
-# Créer projet Supabase (supabase.com)
-# Nom: imuchat-mvp
+# ✅ FAIT - Projet Supabase créé
+# Nom: imuchat-mvp  
 # Region: EU (RGPD compliance)
-# Tier: Pro ($25/mois)
+# URL: https://dsbhktfynanuwgbwejkm.supabase.co
 
-# Récupérer les credentials:
-SUPABASE_URL=https://xxx.supabase.co
-SUPABASE_ANON_KEY=eyJxxx...
-SUPABASE_SERVICE_KEY=eyJxxx... (SECRET!)
+# ✅ FAIT - Credentials configurés:
+SUPABASE_URL=https://dsbhktfynanuwgbwejkm.supabase.co
+SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 ```
 
 **Actions** :
 
-- [ ] Créer compte Supabase
-- [ ] Créer projet
-- [ ] Copier credentials dans `.env` (mobile + web)
-- [ ] Activer Email Auth
-- [ ] Configurer OAuth providers (Google, Apple)
+- [x] ✅ Créer compte Supabase
+- [x] ✅ Créer projet
+- [x] ✅ Copier credentials dans `.env` (mobile + web)
+- [ ] 🔄 Activer Email Auth (dans dashboard)
+- [ ] 🔄 Configurer OAuth providers (Google, Apple)
 
 ---
 

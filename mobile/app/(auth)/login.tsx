@@ -1,26 +1,42 @@
 import { Href, Stack, useRouter } from "expo-router";
-import { useState } from "react";
-import { Alert, Button, StyleSheet, Text, TextInput, View } from "react-native";
+import { useEffect, useState } from "react";
+import {
+  ActivityIndicator,
+  Alert,
+  Button,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from "react-native";
 
+import { useAuth } from "@/hooks/useAuthV2";
 import { useTheme } from "@/providers/ThemeProvider";
-import { supabase } from "@/services/supabase";
 
 export default function LoginScreen() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
   const router = useRouter();
   const { theme } = useTheme();
+  const { signIn, loading, user } = useAuth();
+
+  // Rediriger si déjà connecté
+  useEffect(() => {
+    if (user) {
+      router.replace("/(tabs)" as Href);
+    }
+  }, [user]);
 
   async function signInWithEmail() {
-    setLoading(true);
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
-
-    if (error) Alert.alert("Error", error.message);
-    setLoading(false);
+    try {
+      await signIn(email, password);
+      // La redirection se fera automatiquement via useEffect
+    } catch (error) {
+      Alert.alert(
+        "Error",
+        error instanceof Error ? error.message : "Login failed",
+      );
+    }
   }
 
   return (
@@ -56,7 +72,15 @@ export default function LoginScreen() {
         />
       </View>
       <View style={[styles.verticallySpaced, styles.mt20]}>
-        <Button title="Sign in" disabled={loading} onPress={signInWithEmail} />
+        {loading ? (
+          <ActivityIndicator size="large" color={theme.colors.primary} />
+        ) : (
+          <Button
+            title="Sign in"
+            disabled={loading}
+            onPress={signInWithEmail}
+          />
+        )}
       </View>
       <View style={styles.verticallySpaced}>
         <View style={styles.verticallySpaced}>

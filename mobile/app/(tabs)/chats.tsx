@@ -1,11 +1,7 @@
+import { useChat } from "@/hooks/useChat";
 import { useColors, useSpacing } from "@/providers/ThemeProvider";
-import {
-  Conversation,
-  getConversations,
-  subscribeToConversations,
-} from "@/services/messaging";
+import type { Conversation } from "@/services/messaging";
 import { Href, useRouter } from "expo-router";
-import { useEffect, useState } from "react";
 import {
   ActivityIndicator,
   FlatList,
@@ -16,35 +12,10 @@ import {
 } from "react-native";
 
 export default function ChatsScreen() {
-  const [conversations, setConversations] = useState<Conversation[]>([]);
-  const [loading, setLoading] = useState(true);
+  const { conversations, loading } = useChat({ autoLoad: true });
   const colors = useColors();
   const spacing = useSpacing();
   const router = useRouter();
-
-  useEffect(() => {
-    loadConversations();
-
-    // Subscribe to conversation updates
-    const unsubscribe = subscribeToConversations(() => {
-      loadConversations();
-    });
-
-    return () => {
-      unsubscribe();
-    };
-  }, []);
-
-  async function loadConversations() {
-    try {
-      const data = await getConversations();
-      setConversations(data);
-    } catch (error) {
-      console.error("Error loading conversations:", error);
-    } finally {
-      setLoading(false);
-    }
-  }
 
   const formatTime = (timestamp: string | null) => {
     if (!timestamp) return "";

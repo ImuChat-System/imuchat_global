@@ -22,6 +22,7 @@
     "@babel/runtime": "^7.28.6",
     "@expo/metro-runtime": "^6.1.2",
     "@expo/vector-icons": "^15.0.3",
+    "@imuchat/platform-core": "workspace:*",
     "@imuchat/shared-types": "workspace:*",
     "@imuchat/ui-kit": "workspace:*",
     "@react-native-async-storage/async-storage": "^2.1.0",

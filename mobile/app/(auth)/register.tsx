@@ -1,35 +1,47 @@
 import { Stack, useRouter } from "expo-router";
 import { useState } from "react";
-import { Alert, Button, StyleSheet, Text, TextInput, View } from "react-native";
+import {
+  ActivityIndicator,
+  Alert,
+  Button,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from "react-native";
 
+import { useAuth } from "@/hooks/useAuthV2";
 import { useTheme } from "@/providers/ThemeProvider";
-import { supabase } from "@/services/supabase";
 
 export default function RegisterScreen() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
   const router = useRouter();
   const { theme } = useTheme();
+  const { signUp, loading } = useAuth();
 
   async function signUpWithEmail() {
-    setLoading(true);
-    const { error } = await supabase.auth.signUp({
-      email,
-      password,
-    });
+    try {
+      await signUp(email, password, {
+        displayName: email.split("@")[0], // Utilise la partie email comme nom par défaut
+      });
 
-    if (error) {
-      Alert.alert("Error", error.message);
-    } else {
       Alert.alert(
         "Registration successful!",
         "Please check your inbox for verification.",
+        [
+          {
+            text: "OK",
+            onPress: () => router.back(),
+          },
+        ],
       );
-      router.back(); // Go back to login
+    } catch (error) {
+      Alert.alert(
+        "Error",
+        error instanceof Error ? error.message : "Registration failed",
+      );
     }
-
-    setLoading(false);
   }
 
   return (
@@ -72,11 +84,15 @@ export default function RegisterScreen() {
         />
       </View>
       <View style={[styles.verticallySpaced, styles.mt20]}>
-        <Button
-          title="Create account"
-          disabled={loading}
-          onPress={signUpWithEmail}
-        />
+        {loading ? (
+          <ActivityIndicator size="large" color={theme.colors.primary} />
+        ) : (
+          <Button
+            title="Create account"
+            disabled={loading}
+            onPress={signUpWithEmail}
+          />
+        )}
       </View>
 
       <View style={styles.verticallySpaced}>

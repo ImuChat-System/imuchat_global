@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "524860706727",
+    "firebase_url": "https://imuchat-378ad-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "imuchat-378ad",
+    "storage_bucket": "imuchat-378ad.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:524860706727:android:a372a09fc9364a0ac93082",
+        "android_client_info": {
+          "package_name": "com.imuchat.imuchat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "524860706727-ptgga6oec3lstcprptttd2n68c63e5g2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDk426lM8sTIAlVJzsmtXZrvMOoOKNRb-k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "524860706727-ptgga6oec3lstcprptttd2n68c63e5g2.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "524860706727-jrobgoann7e2l44fvvb4tt6qh7fm42gf.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.imu.chat"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

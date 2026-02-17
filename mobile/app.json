@@ -15,12 +15,16 @@
     },
     "ios": {
       "supportsTablet": true,
+      "bundleIdentifier": "com.imuchat.imuchat",
+      "googleServicesFile": "./GoogleService-Info.plist",
       "infoPlist": {
         "NSCameraUsageDescription": "This app needs access to your camera for video calls.",
         "NSMicrophoneUsageDescription": "This app needs access to your microphone for audio and video calls."
       }
     },
     "android": {
+      "package": "com.imuchat.imuchat",
+      "googleServicesFile": "./google-services.json",
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"

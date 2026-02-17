@@ -26,73 +26,92 @@ SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 - [x] ✅ Créer compte Supabase
 - [x] ✅ Créer projet
 - [x] ✅ Copier credentials dans `.env` (mobile + web)
+- [x] ✅ Schema SQL déployé (tables + policies + triggers)
 - [ ] 🔄 Activer Email Auth (dans dashboard)
 - [ ] 🔄 Configurer OAuth providers (Google, Apple)
 
 ---
 
-#### 2. Stream Video Setup
+#### 2. Stream Video Setup - **FAIT** ✅
 
 ```bash
-# Créer compte Stream (getstream.io)
+# ✅ FAIT - Compte Stream créé (getstream.io)
 # Plan: Free tier (10K mins/mois)
 
-# Créer application "ImuChat Video"
-# Récupérer:
-STREAM_API_KEY=xxx
-STREAM_API_SECRET=xxx (SECRET!)
+# ✅ FAIT - Application "ImuChat Video" créée
+# Credentials configurés:
+STREAM_API_KEY=z57h7zb5875r
+STREAM_SECRET_KEY=mkhjusvzgddz2srcwhru7yr35nc8kepqtdr6d4q6ub4vcszcjc2vmbzjgedbc4qe
 ```
 
 **Actions** :
 
-- [ ] Créer compte Stream.io
-- [ ] Créer app Video
-- [ ] Copier credentials `.env`
-- [ ] Tester connexion avec SDK
+- [x] ✅ Créer compte Stream.io
+- [x] ✅ Créer app Video
+- [x] ✅ Copier credentials `.env` (mobile + web)
+- [ ] 🔄 Tester connexion avec SDK
 
 ---
 
-#### 3. Firebase Cloud Messaging
+#### 3. Firebase Cloud Messaging - **FAIT** ✅
 
 ```bash
-# Console Firebase (console.firebase.google.com)
-# Créer projet "ImuChat"
+# ✅ FAIT - Console Firebase (console.firebase.google.com)
+# Projet: imuchat-378ad
 
-# Ajouter app iOS + Android
-# Télécharger:
-- google-services.json (Android)
-- GoogleService-Info.plist (iOS)
+# ✅ FAIT - Apps iOS + Android ajoutées
+# Bundle ID: com.imuchat.imuchat
 
-# Générer VAPID keys (web push)
+# ✅ FAIT - Fichiers de configuration téléchargés:
+# - google-services.json (Android) ✅
+# - GoogleService-Info.plist (iOS) ✅
 ```
+
+**Fichiers ajoutés** :
+
+- [x] ✅ `mobile/google-services.json` - Config Firebase Android
+- [x] ✅ `mobile/GoogleService-Info.plist` - Config Firebase iOS
+- [x] ✅ `mobile/app.json` - Références vers les fichiers Firebase
+- [x] ✅ Credentials Stream ajoutés dans `.env` files
+
+**Credentials Firebase** :
+- ✅ Sender ID: `524860706727`
+- ✅ VAPID Public Key: `BCXX6GoVcGhNusdAJZcAT3YtmH9kmFtuadig5pOKW_UY...`
+- ✅ VAPID Private Key: Configurée dans `.env` files
 
 **Actions** :
 
-- [ ] Créer projet Firebase
-- [ ] Setup iOS + Android apps
-- [ ] Download config files
-- [ ] Générer VAPID keys
-- [ ] Ajouter credentials dans repos
+- [x] ✅ Créer projet Firebase
+- [x] ✅ Setup iOS + Android apps
+- [x] ✅ Download config files
+- [x] ✅ Ajouter config files dans mobile/
+- [x] ✅ Générer VAPID keys (web push)
+- [x] ✅ Credentials Firebase ajoutées dans `.env` files
+- [ ] 🔄 Installer Firebase SDK (si nécessaire pour notifications)
 
 ---
 
-### ✅ Actions Jour 3-5 (Repos & Environnements)
+### ✅ Actions Jour 3-5 (Repos & Environnements) - **EN COURS** 🔄
 
-#### 4. Configuration Repos
+#### 4. Configuration Repos - **PARTIELLEMENT FAIT** ✅
 
 **Mobile** :
 
 ```bash
 cd mobile/
-cp .env.example .env
 
-# Éditer .env:
-SUPABASE_URL=xxx
-SUPABASE_ANON_KEY=xxx
-STREAM_API_KEY=xxx
+# ✅ FAIT - .env configuré:
+EXPO_PUBLIC_SUPABASE_URL=https://dsbhktfynanuwgbwejkm.supabase.co
+EXPO_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+EXPO_PUBLIC_STREAM_API_KEY=z57h7zb5875r
+STREAM_SECRET_KEY=mkhjusvzgddz2srcwhru7yr35nc8kepqtdr6d4q6ub4vcszcjc2vmbzjgedbc4qe
 
-# Installer dépendances
+# ✅ FAIT - Installer dépendances
 pnpm install
+
+# ✅ FAIT - Firebase config files ajoutés
+# - google-services.json (Android)
+# - GoogleService-Info.plist (iOS)
 
 # Lancer dev
 pnpm start
@@ -102,15 +121,14 @@ pnpm start
 
 ```bash
 cd web-app/
-cp .env.example .env.local
 
-# Éditer .env.local:
-NEXT_PUBLIC_SUPABASE_URL=xxx
-NEXT_PUBLIC_SUPABASE_ANON_KEY=xxx
-NEXT_PUBLIC_STREAM_API_KEY=xxx
-SUPABASE_SERVICE_ROLE_KEY=xxx (server-side)
+# ✅ FAIT - .env.local configuré:
+NEXT_PUBLIC_SUPABASE_URL=https://dsbhktfynanuwgbwejkm.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+NEXT_PUBLIC_STREAM_API_KEY=z57h7zb5875r
+STREAM_SECRET_KEY=mkhjusvzgddz2srcwhru7yr35nc8kepqtdr6d4q6ub4vcszcjc2vmbzjgedbc4qe
 
-# Installer
+# ✅ FAIT - Installer
 pnpm install
 
 # Dev
@@ -119,164 +137,43 @@ pnpm dev
 
 **Actions** :
 
-- [ ] Cloner tous les repos si nécessaire
-- [ ] Setup .env files (NE PAS COMMIT)
-- [ ] Install dependencies
-- [ ] Test apps lancent sans erreur
-- [ ] Config linter + prettier
+- [x] ✅ Cloner tous les repos
+- [x] ✅ Setup .env files (mobile + web)
+- [x] ✅ Install dependencies
+- [x] ✅ Firebase config files ajoutés
+- [ ] 🔄 Test apps lancent sans erreur
+- [ ] 🔄 Config linter + prettier
 
 ---
 
-#### 5. Database Schema Initial
+#### 5. Database Schema Initial - **FAIT** ✅
 
-**Créer les tables Supabase** :
+**✅ FAIT - Schema Supabase déployé** :
 
-```sql
--- SQL à exécuter dans Supabase SQL Editor
+Toutes les tables ont été créées et configurées dans Supabase SQL Editor. Voir [supabase_schema.sql](./supabase_schema.sql) pour le schema complet.
 
--- Table Users (étendue auth.users)
-CREATE TABLE public.profiles (
-  id UUID REFERENCES auth.users(id) PRIMARY KEY,
-  username TEXT UNIQUE,
-  display_name TEXT,
-  avatar_url TEXT,
-  bio TEXT,
-  status TEXT,
-  is_online BOOLEAN DEFAULT false,
-  last_seen TIMESTAMP WITH TIME ZONE,
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-);
+**Tables créées** :
+- ✅ `public.profiles` - Profils utilisateurs (étendue de auth.users)
+- ✅ `public.conversations` - Conversations (direct + group)
+- ✅ `public.conversation_members` - Participants aux conversations
+- ✅ `public.messages` - Messages avec support media
+- ✅ `public.message_reactions` - Réactions emoji aux messages
+- ✅ `public.contacts` - Demandes d'amis
+- ✅ `public.call_logs` - Historique des appels audio/vidéo
 
--- Enable RLS
-ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
-
--- Policy: Users can read all profiles
-CREATE POLICY "Profiles are viewable by everyone"
-  ON public.profiles FOR SELECT
-  USING (true);
-
--- Policy: Users can update their own profile
-CREATE POLICY "Users can update own profile"
-  ON public.profiles FOR UPDATE
-  USING (auth.uid() = id);
-
--- Table Conversations
-CREATE TABLE public.conversations (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  type TEXT NOT NULL CHECK (type IN ('direct', 'group')),
-  name TEXT,
-  avatar_url TEXT,
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-);
-
-ALTER TABLE public.conversations ENABLE ROW LEVEL SECURITY;
-
--- Table Conversation Members
-CREATE TABLE public.conversation_members (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  conversation_id UUID REFERENCES public.conversations(id) ON DELETE CASCADE,
-  user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
-  role TEXT DEFAULT 'member' CHECK (role IN ('owner', 'admin', 'member')),
-  joined_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-  UNIQUE(conversation_id, user_id)
-);
-
-ALTER TABLE public.conversation_members ENABLE ROW LEVEL SECURITY;
-
--- Policy: Users can see conversations they're member of
-CREATE POLICY "Users can view their conversations"
-  ON public.conversations FOR SELECT
-  USING (
-    EXISTS (
-      SELECT 1 FROM public.conversation_members
-      WHERE conversation_id = conversations.id
-      AND user_id = auth.uid()
-    )
-  );
-
--- Table Messages
-CREATE TABLE public.messages (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  conversation_id UUID REFERENCES public.conversations(id) ON DELETE CASCADE,
-  sender_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
-  content TEXT,
-  type TEXT DEFAULT 'text' CHECK (type IN ('text', 'image', 'video', 'audio', 'file')),
-  media_url TEXT,
-  metadata JSONB,
-  edited_at TIMESTAMP WITH TIME ZONE,
-  deleted_at TIMESTAMP WITH TIME ZONE,
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-);
-
--- Index for performance
-CREATE INDEX messages_conversation_id_idx ON public.messages(conversation_id);
-CREATE INDEX messages_created_at_idx ON public.messages(created_at DESC);
-
-ALTER TABLE public.messages ENABLE ROW LEVEL SECURITY;
-
--- Policy: Users can read messages from their conversations
-CREATE POLICY "Users can view conversation messages"
-  ON public.messages FOR SELECT
-  USING (
-    EXISTS (
-      SELECT 1 FROM public.conversation_members
-      WHERE conversation_id = messages.conversation_id
-      AND user_id = auth.uid()
-    )
-  );
-
--- Policy: Users can insert messages in their conversations
-CREATE POLICY "Users can send messages"
-  ON public.messages FOR INSERT
-  WITH CHECK (
-    sender_id = auth.uid()
-    AND EXISTS (
-      SELECT 1 FROM public.conversation_members
-      WHERE conversation_id = messages.conversation_id
-      AND user_id = auth.uid()
-    )
-  );
-
--- Table Contacts
-CREATE TABLE public.contacts (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
-  contact_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
-  status TEXT DEFAULT 'pending' CHECK (status IN ('pending', 'accepted', 'blocked')),
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-  UNIQUE(user_id, contact_id)
-);
-
-ALTER TABLE public.contacts ENABLE ROW LEVEL SECURITY;
-
--- Function: Auto-create profile on signup
-CREATE OR REPLACE FUNCTION public.handle_new_user()
-RETURNS TRIGGER AS $$
-BEGIN
-  INSERT INTO public.profiles (id, username, display_name)
-  VALUES (
-    NEW.id,
-    NEW.email,
-    COALESCE(NEW.raw_user_meta_data->>'name', NEW.email)
-  );
-  RETURN NEW;
-END;
-$$ LANGUAGE plpgsql SECURITY DEFINER;
-
--- Trigger: Create profile on user signup
-CREATE TRIGGER on_auth_user_created
-  AFTER INSERT ON auth.users
-  FOR EACH ROW EXECUTE FUNCTION public.handle_new_user();
-```
+**Features configurées** :
+- ✅ Row Level Security (RLS) activée sur toutes les tables
+- ✅ Policies créées pour la sécurité
+- ✅ Triggers pour auto-création de profile
+- ✅ Indexes pour performance
+- ✅ Storage buckets configurés (avatars, messages-media, voice-notes)
 
 **Actions** :
 
-- [ ] Exécuter schema SQL dans Supabase
-- [ ] Vérifier tables créées (Table Editor)
-- [ ] Tester policies avec test user
-- [ ] Backup schema (SQL dump)
+- [x] ✅ Exécuter schema SQL dans Supabase
+- [x] ✅ Vérifier tables créées (Table Editor)
+- [x] ✅ Tester policies avec test user
+- [x] ✅ Backup schema ([supabase_schema.sql](./supabase_schema.sql))
 
 ---
 

@@ -7,6 +7,32 @@
 import { usePlatform } from '@/services/platform';
 import { useCallback, useEffect, useState } from 'react';
 
+// ==========================================
+// DEV MODE - Admin Bypass Configuration
+// ==========================================
+const DEV_BYPASS_AUTH = process.env.EXPO_PUBLIC_DEV_BYPASS_AUTH === 'true';
+const DEV_ADMIN_EMAIL = process.env.EXPO_PUBLIC_DEV_ADMIN_EMAIL || 'admin@imuchat.dev';
+const DEV_ADMIN_USERNAME = process.env.EXPO_PUBLIC_DEV_ADMIN_USERNAME || 'AdminDev';
+
+const DEV_ADMIN_USER: AuthUser = {
+    id: 'dev-admin-user-id-12345',
+    email: DEV_ADMIN_EMAIL,
+    username: DEV_ADMIN_USERNAME,
+    displayName: 'Admin Développement',
+    avatarUrl: undefined,
+    emailVerified: true,
+    createdAt: new Date().toISOString(),
+    lastSignInAt: new Date().toISOString(),
+};
+
+const DEV_ADMIN_SESSION: AuthSession = {
+    accessToken: 'dev-access-token-bypass',
+    refreshToken: 'dev-refresh-token-bypass',
+    user: DEV_ADMIN_USER,
+    expiresAt: Date.now() + 30 * 24 * 60 * 60 * 1000, // 30 jours
+};
+// ==========================================
+
 interface AuthUser {
     id: string;
     email: string;
@@ -41,19 +67,40 @@ interface AuthActions {
     sendPasswordReset: (email: string) => Promise<void>;
     sendEmailVerification: () => Promise<void>;
     refreshSession: () => Promise<void>;
+    isDevBypass: boolean; // Pour indiquer si on est en mode bypass
 }
 
 export function useAuth(): AuthState & AuthActions {
     const platform = usePlatform();
-    const [state, setState] = useState<AuthState>({
-        user: null,
-        session: null,
-        loading: true,
-        initialized: false,
-    });
 
-    // Initialiser platform au premier appel
+    // Si DEV_BYPASS_AUTH est activé, retourner immédiatement l'admin mock
+    const initialState: AuthState = DEV_BYPASS_AUTH
+        ? {
+            user: DEV_ADMIN_USER,
+            session: DEV_ADMIN_SESSION,
+            loading: false,
+            initialized: true,
+        }
+        : {
+            user: null,
+            session: null,
+            loading: true,
+            initialized: false,
+        };
+
+    const [state, setState] = useState<AuthState>(initialState);
+
+    // Log dev mode
     useEffect(() => {
+        if (DEV_BYPASS_AUTH) {
+            console.log('🔓 [DEV MODE] Auth bypass activé - Connecté en tant que:', DEV_ADMIN_EMAIL);
+        }
+    }, []);
+
+    // Initialiser platform au premier appel (skip si bypass)
+    useEffect(() => {
+        if (DEV_BYPASS_AUTH) return; // Skip en mode dev bypass
+
         let mounted = true;
 
         async function initializePlatform() {
@@ -83,8 +130,9 @@ export function useAuth(): AuthState & AuthActions {
         };
     }, [platform]);
 
-    // Charger session initiale
+    // Charger session initiale (skip si bypass)
     useEffect(() => {
+        if (DEV_BYPASS_AUTH) return; // Skip en mode dev bypass
         if (!state.initialized) return;
 
         let mounted = true;
@@ -119,8 +167,9 @@ export function useAuth(): AuthState & AuthActions {
         };
     }, [state.initialized, platform.auth]);
 
-    // Écouter les changements d'auth
+    // Écouter les changements d'auth (skip si bypass)
     useEffect(() => {
+        if (DEV_BYPASS_AUTH) return; // Skip en mode dev bypass
         if (!state.initialized) return;
 
         const subscription = platform.events.subscribe(
@@ -232,10 +281,12 @@ export function useAuth(): AuthState & AuthActions {
     }, [platform.auth]);
 
     const sendEmailVerification = useCallback(async () => {
+        if (DEV_BYPASS_AUTH) return; // No-op en mode bypass
         await platform.auth.sendEmailVerification();
     }, [platform.auth]);
 
     const refreshSession = useCallback(async () => {
+        if (DEV_BYPASS_AUTH) return; // No-op en mode bypass
         if (!state.session?.refreshToken) {
             throw new Error('No refresh token available');
         }
@@ -255,6 +306,9 @@ export function useAuth(): AuthState & AuthActions {
         session: state.session,
         loading: state.loading,
         initialized: state.initialized,
+
+        // Dev flag
+        isDevBypass: DEV_BYPASS_AUTH,
 
         // Actions
         signUp,

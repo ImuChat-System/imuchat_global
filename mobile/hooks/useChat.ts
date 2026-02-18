@@ -86,9 +86,12 @@ export function useChat(options: UseChatOptions = {}) {
 
     // Send message
     const sendMessage = useCallback(
-        async (content: string, targetConvId?: string) => {
+        async (content: string, mediaUrl?: string, mediaType?: string, targetConvId?: string) => {
             const convId = targetConvId || conversationId;
-            if (!convId || !content.trim()) {
+            const hasContent = content && content.trim().length > 0;
+            const hasMedia = !!mediaUrl;
+
+            if (!convId || (!hasContent && !hasMedia)) {
                 return null;
             }
 
@@ -101,9 +104,9 @@ export function useChat(options: UseChatOptions = {}) {
                     id: `temp-${Date.now()}`,
                     conversation_id: convId,
                     sender_id: currentUserId || '',
-                    content: content.trim(),
-                    media_url: null,
-                    media_type: null,
+                    content: hasContent ? content.trim() : null,
+                    media_url: mediaUrl || null,
+                    media_type: mediaType || null,
                     created_at: new Date().toISOString(),
                     updated_at: new Date().toISOString(),
                     deleted_at: null,
@@ -113,7 +116,12 @@ export function useChat(options: UseChatOptions = {}) {
                 setMessages((prev) => [...prev, tempMessage]);
 
                 // Send to backend
-                const message = await sendMessageToDb(convId, content.trim());
+                const message = await sendMessageToDb(
+                    convId,
+                    hasContent ? content.trim() : '',
+                    mediaUrl,
+                    mediaType
+                );
 
                 // Replace temp message with real one
                 setMessages((prev) =>

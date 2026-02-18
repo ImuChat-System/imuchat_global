@@ -280,75 +280,53 @@ CREATE POLICY "Users can view their call logs"
 
 -- Function: Auto-create profile on user signup
 CREATE OR REPLACE FUNCTION public.handle_new_user()
-RETURNS TRIGGER AS $$
+RETURNS TRIGGER
+SECURITY DEFINER
+SET search_path = public
+AS $$
 DECLARE
   username_base TEXT;
   final_username TEXT;
   username_counter INTEGER := 0;
   display_name_value TEXT;
 BEGIN
-  -- Disable RLS for this function (SECURITY DEFINER allows this)
-  SET LOCAL row_security = off;
-
-  -- Validate NEW.id
-  IF NEW.id IS NULL THEN
-    RAISE EXCEPTION 'User ID is NULL';
-  END IF;
-
-  -- Validate NEW.email
-  IF NEW.email IS NULL OR NEW.email = '' THEN
-    RAISE EXCEPTION 'User email is NULL or empty';
-  END IF;
-
   -- Extract username from email (before @) and sanitize it
   username_base := LOWER(REGEXP_REPLACE(SPLIT_PART(NEW.email, '@', 1), '[^a-z0-9_]', '', 'g'));
   
   -- Ensure username is not empty
-  IF username_base = '' THEN
+  IF username_base = '' OR username_base IS NULL THEN
     username_base := 'user';
   END IF;
   
   final_username := username_base;
   
   -- Check if username exists and add counter if needed
-  WHILE EXISTS (SELECT 1 FROM public.profiles WHERE username = final_username) LOOP
+  WHILE EXISTS (SELECT 1 FROM profiles WHERE username = final_username) LOOP
     username_counter := username_counter + 1;
     final_username := username_base || username_counter::TEXT;
   END LOOP;
 
-  -- Prepare display_name
-  display_name_value := COALESCE(
-    NEW.raw_user_meta_data->>'displayName',
-    NEW.raw_user_meta_data->>'display_name', 
-    NEW.raw_user_meta_data->>'name',
-    SPLIT_PART(NEW.email, '@', 1)
-  );
-  
-  -- Log for debugging (visible in Supabase logs)
-  RAISE NOTICE 'Creating profile for user % with username % and display_name %', NEW.id, final_username, display_name_value;
-  
-  -- Insert profile with detailed error handling
-  BEGIN
-    INSERT INTO public.profiles (id, username, display_name)
-    VALUES (
-      NEW.id,
-      final_username,
-      display_name_value
+  -- Prepare display_name safely
+  IF NEW.raw_user_meta_data IS NOT NULL THEN
+    display_name_value := COALESCE(
+      NEW.raw_user_meta_data->>'displayName',
+      NEW.raw_user_meta_data->>'display_name', 
+      NEW.raw_user_meta_data->>'name'
     );
-  EXCEPTION
-    WHEN unique_violation THEN
-      RAISE EXCEPTION 'Username conflict: % already exists (id: %, email: %)', final_username, NEW.id, NEW.email;
-    WHEN foreign_key_violation THEN
-      RAISE EXCEPTION 'Foreign key error for user % (email: %): User does not exist in auth.users', NEW.id, NEW.email;
-    WHEN not_null_violation THEN
-      RAISE EXCEPTION 'NULL value error for user % (email: %): %', NEW.id, NEW.email, SQLERRM;
-    WHEN OTHERS THEN
-      RAISE EXCEPTION 'Database error saving new user % (email: %): [%] %', NEW.id, NEW.email, SQLSTATE, SQLERRM;
-  END;
+  END IF;
+  
+  -- Fallback to email prefix
+  IF display_name_value IS NULL OR display_name_value = '' THEN
+    display_name_value := SPLIT_PART(NEW.email, '@', 1);
+  END IF;
+  
+  -- Insert profile
+  INSERT INTO profiles (id, username, display_name)
+  VALUES (NEW.id, final_username, display_name_value);
   
   RETURN NEW;
 END;
-$$ LANGUAGE plpgsql SECURITY DEFINER;
+$$ LANGUAGE plpgsql;
 
 -- Trigger: Create profile on user signup
 DROP TRIGGER IF EXISTS on_auth_user_created ON auth.users;

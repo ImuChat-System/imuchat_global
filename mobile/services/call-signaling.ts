@@ -1,4 +1,4 @@
-import { supabase } from "./supabase";
+import { getCurrentUser, supabase } from "./supabase";
 
 export type CallType = "audio" | "video";
 export type CallStatus = "ringing" | "accepted" | "rejected" | "ended" | "missed";
@@ -35,9 +35,7 @@ export async function initiateCall(
     callType: CallType,
     streamCallId: string
 ): Promise<CallEvent> {
-    const {
-        data: { user },
-    } = await supabase.auth.getUser();
+    const user = await getCurrentUser();
 
     if (!user) {
         throw new Error("No authenticated user");
@@ -116,9 +114,17 @@ export async function markCallAsMissed(callId: string): Promise<void> {
 /**
  * Subscribe to incoming calls for the current user
  */
-export function subscribeToIncomingCalls(
+export async function subscribeToIncomingCalls(
     onCall: (call: CallEvent) => void
-): () => void {
+): Promise<() => void> {
+    const user = await getCurrentUser();
+    const userId = user?.id;
+
+    if (!userId) {
+        console.warn('[subscribeToIncomingCalls] No authenticated user');
+        return () => { };
+    }
+
     const channel = supabase
         .channel("incoming_calls")
         .on(
@@ -127,7 +133,7 @@ export function subscribeToIncomingCalls(
                 event: "INSERT",
                 schema: "public",
                 table: "call_events",
-                filter: `callee_id=eq.${supabase.auth.getUser().then((r) => r.data.user?.id)}`,
+                filter: `callee_id=eq.${userId}`,
             },
             async (payload) => {
                 // Fetch full call details with profiles
@@ -202,9 +208,7 @@ export function subscribeToCallUpdates(
  * Get call history for the current user
  */
 export async function getCallHistory(limit = 50): Promise<CallEvent[]> {
-    const {
-        data: { user },
-    } = await supabase.auth.getUser();
+    const user = await getCurrentUser();
 
     if (!user) {
         throw new Error("No authenticated user");

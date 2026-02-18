@@ -1,11 +1,12 @@
 import MessageBubble from "@/components/MessageBubble";
 import MessageInput from "@/components/MessageInput";
 import { useChat } from "@/hooks/useChat";
+import { useReactions } from "@/hooks/useReactions";
 import { useTheme } from "@/providers/ThemeProvider";
 import { initiateCall } from "@/services/call-signaling";
 import { Ionicons } from "@expo/vector-icons";
 import { Stack, useLocalSearchParams, useRouter } from "expo-router";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   ActivityIndicator,
   Alert,
@@ -32,10 +33,28 @@ export default function ChatRoomScreen() {
     sendMessage: handleSendMessage,
     sendTypingIndicator,
   } = useChat({ conversationId: id, autoLoad: true });
+
+  // Extraire les IDs des messages pour les réactions
+  const messageIds = useMemo(() => messages.map((m) => m.id), [messages]);
+
+  // Hook pour les réactions
+  const { reactionsByMessage, toggle: toggleReaction } = useReactions({
+    conversationId: id || "",
+    messageIds,
+  });
+
   const flatListRef = useRef<FlatList>(null);
   const { theme } = useTheme();
   const router = useRouter();
   const [initiatingCall, setInitiatingCall] = useState(false);
+
+  // Callback pour toggle une réaction sur un message
+  const handleReactionToggle = useCallback(
+    (messageId: string) => (emoji: string) => {
+      toggleReaction(messageId, emoji);
+    },
+    [toggleReaction],
+  );
 
   // Auto-scroll to bottom when new messages arrive
   useEffect(() => {
@@ -147,6 +166,8 @@ export default function ChatRoomScreen() {
           <MessageBubble
             message={item}
             isOwnMessage={item.sender_id === currentUserId}
+            reactions={reactionsByMessage[item.id] || []}
+            onReactionToggle={handleReactionToggle(item.id)}
           />
         )}
         keyExtractor={(item) => item.id}
@@ -166,7 +187,9 @@ export default function ChatRoomScreen() {
       )}
 
       <MessageInput
-        onSend={handleSendMessage}
+        onSend={(message, mediaUrl, mediaType) =>
+          handleSendMessage(message, mediaUrl, mediaType)
+        }
         onTyping={sendTypingIndicator}
         disabled={sending}
       />

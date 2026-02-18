@@ -33,13 +33,17 @@ export function useCallManager() {
       });
 
     // Subscribe to incoming calls
-    const unsubscribe = subscribeToIncomingCalls((call) => {
+    let unsubscribeRef: (() => void) | null = null;
+
+    subscribeToIncomingCalls((call) => {
       setIncomingCall(call);
       setShowIncomingCallModal(true);
+    }).then((unsub) => {
+      unsubscribeRef = unsub;
     });
 
     return () => {
-      unsubscribe();
+      unsubscribeRef?.();
     };
   }, []);
 

@@ -1,10 +1,13 @@
+import { useMediaUpload } from "@/hooks/useMediaUpload";
 import { useColors } from "@/providers/ThemeProvider";
+import { UploadResult } from "@/services/media-upload";
 import { Ionicons } from "@expo/vector-icons";
 import { useState } from "react";
 import { StyleSheet, TextInput, TouchableOpacity, View } from "react-native";
+import { MediaPreview, UploadProgress } from "./MediaComponents";
 
 interface MessageInputProps {
-  onSend: (message: string) => void;
+  onSend: (message: string, mediaUrl?: string, mediaType?: string) => void;
   onTyping?: () => void;
   disabled?: boolean;
 }
@@ -17,11 +20,38 @@ export default function MessageInput({
   const [message, setMessage] = useState("");
   const colors = useColors();
 
-  const handleSend = () => {
-    if (message.trim()) {
-      onSend(message.trim());
-      setMessage("");
+  const {
+    isUploading,
+    uploadProgress,
+    selectedMedia,
+    showMediaOptions,
+    uploadSelected,
+    clear: clearMedia,
+  } = useMediaUpload();
+
+  const handleSend = async () => {
+    const hasMessage = message.trim().length > 0;
+    const hasMedia = !!selectedMedia;
+
+    if (!hasMessage && !hasMedia) return;
+    if (disabled || isUploading) return;
+
+    let mediaResult: UploadResult | null = null;
+
+    // Upload media if selected
+    if (selectedMedia) {
+      mediaResult = await uploadSelected(selectedMedia);
+      if (!mediaResult) {
+        // Upload failed, don't send
+        return;
+      }
     }
+
+    // Send message with optional media
+    onSend(message.trim() || "", mediaResult?.url, mediaResult?.mimeType);
+
+    setMessage("");
+    clearMedia();
   };
 
   const handleChangeText = (text: string) => {
@@ -32,52 +62,105 @@ export default function MessageInput({
     }
   };
 
+  const canSend = (message.trim().length > 0 || selectedMedia) && !isUploading;
+
   return (
     <View
-      style={[
-        styles.container,
-        { backgroundColor: colors.surface, borderTopColor: colors.border },
-      ]}
+      style={{
+        backgroundColor: colors.surface,
+        borderTopColor: colors.border,
+        borderTopWidth: 1,
+      }}
     >
-      <TextInput
-        style={[
-          styles.input,
-          { color: colors.text, backgroundColor: colors.background },
-        ]}
-        placeholder="Type a message..."
-        placeholderTextColor={colors.textMuted}
-        value={message}
-        onChangeText={handleChangeText}
-        multiline
-        maxLength={1000}
-        editable={!disabled}
-      />
+      {/* Selected media preview */}
+      {selectedMedia && (
+        <View style={styles.previewContainer}>
+          <MediaPreview
+            uri={selectedMedia.uri}
+            type={selectedMedia.type}
+            thumbnailSize={80}
+            showRemove={!isUploading}
+            onRemove={clearMedia}
+          />
+        </View>
+      )}
 
-      <TouchableOpacity
-        style={[
-          styles.sendButton,
-          { backgroundColor: message.trim() ? colors.primary : colors.border },
-        ]}
-        onPress={handleSend}
-        disabled={!message.trim() || disabled}
-      >
-        <Ionicons
-          name="send"
-          size={20}
-          color={message.trim() ? "#FFFFFF" : colors.textMuted}
+      {/* Upload progress */}
+      {isUploading && (
+        <View style={styles.progressContainer}>
+          <UploadProgress progress={uploadProgress} />
+        </View>
+      )}
+
+      {/* Input row */}
+      <View style={styles.inputRow}>
+        {/* Attach button */}
+        <TouchableOpacity
+          style={styles.attachButton}
+          onPress={showMediaOptions}
+          disabled={disabled || isUploading}
+        >
+          <Ionicons
+            name="attach"
+            size={24}
+            color={isUploading ? colors.textMuted : colors.primary}
+          />
+        </TouchableOpacity>
+
+        <TextInput
+          style={[
+            styles.input,
+            { color: colors.text, backgroundColor: colors.background },
+          ]}
+          placeholder="Type a message..."
+          placeholderTextColor={colors.textMuted}
+          value={message}
+          onChangeText={handleChangeText}
+          multiline
+          maxLength={1000}
+          editable={!disabled && !isUploading}
         />
-      </TouchableOpacity>
+
+        <TouchableOpacity
+          style={[
+            styles.sendButton,
+            { backgroundColor: canSend ? colors.primary : colors.border },
+          ]}
+          onPress={handleSend}
+          disabled={!canSend}
+        >
+          <Ionicons
+            name="send"
+            size={20}
+            color={canSend ? "#FFFFFF" : colors.textMuted}
+          />
+        </TouchableOpacity>
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  inputRow: {
     flexDirection: "row",
     alignItems: "flex-end",
-    paddingHorizontal: 12,
+    paddingHorizontal: 8,
     paddingVertical: 8,
-    borderTopWidth: 1,
+  },
+  previewContainer: {
+    paddingHorizontal: 16,
+    paddingTop: 12,
+    paddingBottom: 4,
+  },
+  progressContainer: {
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+  },
+  attachButton: {
+    width: 40,
+    height: 40,
+    justifyContent: "center",
+    alignItems: "center",
   },
   input: {
     flex: 1,

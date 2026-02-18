@@ -1,4 +1,4 @@
-import { supabase } from "./supabase";
+import { getCurrentUser, supabase } from "./supabase";
 
 // Types
 export interface Message {
@@ -51,7 +51,7 @@ export interface ConversationParticipant {
  * Fetch all conversations for the current user
  */
 export async function getConversations() {
-    const { data: { user } } = await supabase.auth.getUser();
+    const user = await getCurrentUser();
 
     if (!user) {
         throw new Error("No authenticated user");
@@ -61,16 +61,17 @@ export async function getConversations() {
         .from("conversations")
         .select(`
       *,
-      participants:conversation_participants(
-        *,
-        profile:profiles(id, username, avatar_url, full_name)
+      conversation_participants(
+        user_id,
+        last_read_at,
+        profiles(id, username, avatar_url, full_name)
       ),
       messages(
         id,
         content,
         created_at,
         sender_id,
-        sender:profiles(id, username, avatar_url, full_name)
+        profiles(id, username, avatar_url, full_name)
       )
     `)
         .order("last_message_at", { ascending: false, nullsFirst: false });
@@ -125,7 +126,7 @@ export async function sendMessage(
     mediaUrl?: string,
     mediaType?: string
 ) {
-    const { data: { user } } = await supabase.auth.getUser();
+    const user = await getCurrentUser();
 
     if (!user) {
         throw new Error("No authenticated user");
@@ -161,7 +162,7 @@ export async function createConversation(
     isGroup = false,
     groupName?: string
 ) {
-    const { data: { user } } = await supabase.auth.getUser();
+    const user = await getCurrentUser();
 
     if (!user) {
         throw new Error("No authenticated user");
@@ -282,7 +283,7 @@ export function subscribeToConversations(
  * Mark conversation as read
  */
 export async function markConversationAsRead(conversationId: string) {
-    const { data: { user } } = await supabase.auth.getUser();
+    const user = await getCurrentUser();
 
     if (!user) {
         throw new Error("No authenticated user");
@@ -306,7 +307,7 @@ export async function sendTypingIndicator(
     conversationId: string,
     isTyping: boolean = true
 ) {
-    const { data: { user } } = await supabase.auth.getUser();
+    const user = await getCurrentUser();
 
     if (!user) {
         throw new Error("No authenticated user");

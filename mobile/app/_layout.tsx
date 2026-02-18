@@ -7,7 +7,7 @@ import {
 import { useFonts } from "expo-font";
 import { Href, Stack, useRouter, useSegments } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import "react-native-reanimated";
 
 import { useColorScheme } from "@/components/useColorScheme";
@@ -61,20 +61,23 @@ function RootLayoutNav() {
   const { session, loading } = useAuth();
   const segments = useSegments();
   const router = useRouter();
+  const segmentsRef = useRef(segments);
+
+  // Keep segments ref in sync without triggering effect re-runs
+  segmentsRef.current = segments;
 
   useEffect(() => {
     if (loading) return;
 
-    const inAuthGroup = (segments[0] as string) === "(auth)";
+    const inAuthGroup = (segmentsRef.current[0] as string) === "(auth)";
 
     if (!session && !inAuthGroup) {
-      // Redirect to the sign-in page.
       router.replace("/login" as Href);
     } else if (session && inAuthGroup) {
-      // Redirect away from the sign-in page.
       router.replace("/(tabs)");
     }
-  }, [session, loading, segments]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [session, loading]);
 
   if (loading) {
     return null; // Or a splash screen

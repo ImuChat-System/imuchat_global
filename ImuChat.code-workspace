@@ -3,9 +3,6 @@
     {
       "path": ".",
       "name": "imuchat_global"
-    },
-    {
-      "path": "../ImuChat"
     }
   ],
   "settings": {
@@ -31,7 +28,18 @@
       "**/.expo": true
     },
     "editor.tabCompletion": "on",
-    "diffEditor.codeLens": true
+    "diffEditor.codeLens": true,
+    "i18n-ally.localesPaths": [
+      "site-vitrine/messages",
+      "ui-kit/coverage/i18n",
+      "ui-kit/src/i18n",
+      "site-vitrine/src/i18n",
+      "ui-kit/coverage/lcov-report/i18n",
+      "mobile/ios/Pods/ReactNativeDependencies/Headers/folly/lang",
+      "mobile/ios/Pods/Headers/Private/ReactNativeDependencies/folly/lang",
+      "mobile/ios/Pods/Headers/Public/ReactNativeDependencies/folly/lang",
+      "mobile/ios/Pods/ReactNativeDependencies/framework/packages/react-native/ReactNativeDependencies.xcframework/Headers/folly/lang"
+    ]
   },
   "extensions": {
     "recommendations": [

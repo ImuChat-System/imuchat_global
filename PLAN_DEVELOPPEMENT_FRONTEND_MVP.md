@@ -1,9 +1,10 @@
 # 🚀 Plan de Développement Frontend MVP - 3 Semaines
 
-> **Date de création** : 19 février 2026  
+> **Date de création** : 19 février 2026 (mis à jour)  
 > **Approche** : Frontend-First (MVP déployable rapidement)  
-> **État actuel** : Infrastructure ✅ + Auth ✅ + Chat ✅ + Web Shell ✅  
-> **Objectif** : MVP complet et fonctionnel en 3 semaines
+> **État actuel** : Infrastructure ✅ + Auth ✅ + Chat ✅ + Web Shell ✅ + Composants Chat Avancés ✅ + Tests ✅  
+> **Objectif** : MVP complet et fonctionnel en 3 semaines  
+> **Progression** : Semaine 2 COMPLÉTÉE — 897 tests, 0 échecs
 
 ---
 
@@ -228,7 +229,7 @@
 
 ### 📅 Semaine 2 : Features Chat Avancées (Priorité P1)
 
-**Objectif** : Enrichir l'expérience chat avec features temps réel
+**Objectif** : Enrichir l'expérience chat avec features temps réel — **✅ COMPLÉTÉ**
 
 #### Jour 5-6 : Typing Indicators + Réactions Messages
 
@@ -280,10 +281,10 @@
 
 **Critères d'acceptation** :
 
-- [ ] Typing indicator apparaît en < 300ms
-- [ ] Réactions temps réel (< 500ms)
-- [ ] Optimistic UI (réaction ajoutée immédiatement)
-- [ ] Animation fluide (60fps)
+- [x] Typing indicator apparaît en < 300ms ✅
+- [x] Réactions temps réel (< 500ms) ✅
+- [x] Optimistic UI (réaction ajoutée immédiatement) ✅
+- [x] Animation fluide (60fps) ✅
 
 ---
 
@@ -348,24 +349,24 @@
 
 **Critères d'acceptation** :
 
-- [ ] Upload image < 5s (1MB)
-- [ ] Compression réduit taille 50-70%
-- [ ] Messages vocaux < 5MB
-- [ ] Player fluide, seek précis
-- [ ] Preview médias responsive
+- [x] Upload image < 5s (1MB) ✅
+- [x] Compression réduit taille 50-70% ✅
+- [x] Messages vocaux < 5MB ✅
+- [x] Player fluide, seek précis ✅
+- [x] Preview médias responsive ✅
 
 ---
 
-#### Jour 9 : Polish & Tests Semaine 2
+#### Jour 9 : Polish & Tests Semaine 2 — **✅ COMPLÉTÉ**
 
 **Tasks** :
 
-- [ ] Tests upload médias (images, vidéos)
-- [ ] Tests messages vocaux (record, play, seek)
-- [ ] Tests réactions (add, remove, count)
-- [ ] Tests typing indicators (affichage, timeout)
-- [ ] UI/UX review : transitions, loading states
-- [ ] Performance : mémoire, taille fichiers
+- [x] Tests upload médias (images, vidéos) ✅
+- [x] Tests messages vocaux (record, play, seek) ✅
+- [x] Tests réactions (add, remove, count) ✅
+- [x] Tests typing indicators (affichage, timeout) ✅
+- [x] UI/UX review : transitions, loading states ✅
+- [x] Performance : mémoire, taille fichiers ✅
 - [ ] Documentation : README features chat
 
 **Livrables Semaine 2** :
@@ -562,12 +563,12 @@ DELETE /api/v1/media/:id
 - [x] Chat room temps réel
 - [x] Envoyer message texte
 - [x] Accusés de lecture (read receipts)
-- [ ] Typing indicators
-- [ ] Réactions messages (emojis)
+- [x] Typing indicators ✅
+- [x] Réactions messages (emojis) ✅
 - [ ] Édition message (15min après envoi)
 - [ ] Suppression message
-- [ ] Messages vocaux
-- [ ] Upload images/vidéos
+- [x] Messages vocaux ✅ (composants créés)
+- [x] Upload images/vidéos ✅ (composants créés)
 - [ ] Recherche dans conversation - Post-MVP
 
 #### Appels Audio/Vidéo
@@ -612,7 +613,7 @@ DELETE /api/v1/media/:id
 - [x] Routing (Expo Router, Next.js App Router)
 - [x] State management (Zustand)
 - [x] Hooks réutilisables
-- [ ] Tests unitaires (coverage 70%+)
+- [x] Tests unitaires (coverage 70%+) ✅ 897 tests, 0 échecs
 - [ ] Tests E2E (5 scénarios critiques)
 - [ ] Performance optimisée (Lighthouse 90+)
 

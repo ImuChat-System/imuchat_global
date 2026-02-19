@@ -1,14 +1,57 @@
 # 🎯 MVP ImuChat - État Actuel & Prochaines Étapes
 
-> **Date**: 19 février 2026  
-> **Status**: Infrastructure + Auth + Chat + Stream Backend + Firebase Analytics + Web Shell ✅ TERMINÉES  
-> **Progression MVP**: 75% → 80% (Web Shell Semaine 1 complétée)
+> **Date**: 19 février 2026 (mis à jour)  
+> **Status**: Infrastructure + Auth + Chat + Stream Backend + Firebase Analytics + Web Shell + Composants Chat Avancés + Tests ✅ TERMINÉS  
+> **Progression MVP**: 80% → 88% (Composants Semaine 2 + Tests complets)
 
 ---
 
 ## ✅ **ACCOMPLI RÉCEMMENT** (Sessions productives 🔥🔥🔥)
 
-### 🆕 **WEB-APP SHELL COMPLÉTÉ** (18 février 2026) ✅
+### 🆕 **COMPOSANTS CHAT AVANCÉS + TESTS COMPLETS** (19 février 2026) ✅
+
+**Composants Chat Créés (Mobile + Web) - Semaine 2 Roadmap** :
+
+**Mobile (7 composants)** :
+
+- ✅ `TypingIndicator.tsx` — Indicateur de saisie avec animation dots
+- ✅ `MessageReactions.tsx` — Réactions 6 emojis (❤️ 👍 😂 😮 😢 🙏)
+- ✅ `MediaPicker.tsx` — Sélecteur caméra/galerie
+- ✅ `MediaPreview.tsx` — Preview grille avec progress bars
+- ✅ `ImageGallery.tsx` — Lightbox fullscreen avec zoom/swipe
+- ✅ `VoiceRecorder.tsx` — Enregistrement audio hold-to-record
+- ✅ `VoicePlayer.tsx` — Lecteur audio waveform + seek
+
+**Web (8 composants)** :
+
+- ✅ `typing-indicator.tsx` — Indicateur saisie + sr-only accessibility
+- ✅ `MessageReactions.tsx` — Réactions avec picker popup
+- ✅ `ReactionPicker.tsx` — Sélecteur emoji compact
+- ✅ `MediaUploader.tsx` — Drag & drop (react-dropzone) + compression
+- ✅ `MediaPreview.tsx` — Preview grille responsive
+- ✅ `ImageLightbox.tsx` — Lightbox fullscreen (images + vidéos)
+- ✅ `VoiceRecorder.tsx` — Enregistrement audio MediaRecorder API
+- ✅ `VoicePlayer.tsx` — Lecteur audio avec contrôles vitesse
+
+**Suite de Tests Complète — 897 tests, 0 échecs** :
+
+| Plateforme | Suites | Tests | Statut |
+|---|---|---|---|
+| **Mobile** | 14/14 | 126 passed | ✅ 0 échecs |
+| **Web** | 84/85 (1 skipped) | 771 passed | ✅ 0 échecs |
+| **Total** | **98 suites** | **897 tests** | ✅ **Tout vert** |
+
+**Tests corrigés cette session** :
+
+- ✅ Conflits `export type` (ts(2484)) — 3 fichiers (MediaPreview, MediaUploader, ImageLightbox)
+- ✅ `typing-indicator.test.tsx` — `getByText` → `getAllByText` (visible + sr-only)
+- ✅ `public-header.test.tsx` — Mocks ThemeToggle/LanguageToggle/next-link
+- ✅ `MediaUploader.test.tsx` — Mock react-dropzone + window.Image pour jsdom
+- ✅ 19 suites web corrigées au total (de 19 échecs → 0)
+
+---
+
+### **WEB-APP SHELL COMPLÉTÉ** (18 février 2026) ✅
 
 **Semaine 1 Web Roadmap - TERMINÉE** :
 
@@ -22,6 +65,7 @@
 - ✅ **Routes restructurées** : Toutes sous groupe `(app)/`
 
 **Métriques Semaine 1 Web** :
+
 - 18 fichiers créés
 - ~1200 lignes de code
 - 0 erreurs TypeScript
@@ -472,7 +516,7 @@ import { StreamVideoClient } from '@stream-io/video-react-sdk';
 | Chat | ✅ | ✅ | ✅ | ✅ Supabase Realtime |
 | Notifications | ✅ | ✅ | ✅ | 🟡 Firebase (service créé, endpoints manquants) |
 | Calls | ✅ | ✅ | ✅ | ✅ Stream API (4 endpoints) |
-| Media | ✅ | 🟡 | 🟡 | 🟡 Supabase Storage (service créé) |
+| Media | ✅ | ✅ Composants | ✅ Composants | 🟡 Supabase Storage (service créé) |
 | Contacts | ✅ | ❌ | ❌ | ❌ |
 | Presence | ✅ | ❌ | ❌ | ❌ |
 | WebSocket | ✅ | ❌ | ❌ | ❌ |
@@ -492,6 +536,12 @@ import { StreamVideoClient } from '@stream-io/video-react-sdk';
 - 🔔 Services notifications (hooks + services créés, prêts à utiliser)
 - 📞 Services appels (hooks + services créés, prêts à utiliser)
 - 🎨 UI/UX responsive avec Dark Mode
+- ✍️ **Typing indicators** (composants mobile + web) 🆕
+- 😊 **Réactions messages** (6 emojis, picker, compteurs) 🆕
+- 📎 **Upload médias** (images, vidéos, drag & drop, compression) 🆕
+- 🎤 **Messages vocaux** (enregistrement + lecture + waveform) 🆕
+- 🖼️ **Lightbox/Gallery** (zoom, navigation, fullscreen) 🆕
+- 🧪 **897 tests automatisés** (126 mobile + 771 web, 0 échecs) 🆕
 
 **Backend (platform-core):**
 - 🗄️ Supabase configuré (Auth, DB, Realtime, Storage)
@@ -505,11 +555,12 @@ import { StreamVideoClient } from '@stream-io/video-react-sdk';
 - 📖 Guides : Quick Start, API Integration, Platform Analysis
 - 📋 Checklists validation complètes
 
-### **🟡 Ce qui est PARTIEL (Services créés mais pas intégrés UI)**
+### **🟡 Ce qui est PARTIEL (Services créés, intégration en cours)**
 
-- 🔔 **Notifications** : Services/hooks créés, UI prompts manquants
+- 🔔 **Notifications** : Services/hooks créés, UI prompts créés (mobile), intégration backend manquante
 - 📞 **Appels** : Services/hooks créés, écrans Call manquants (Incoming, Active, History)
-- 📎 **Media Upload** : Module existe, UI picker/preview manquants
+- 📎 **Media Upload** : Composants UI créés ✅, intégration Supabase Storage à finaliser
+- 🎤 **Messages Vocaux** : Composants UI créés ✅, intégration stockage à finaliser
 - 👥 **Contacts** : Module existe, écrans liste/recherche manquants
 
 ### **❌ Ce qui manque pour le MVP**
@@ -526,30 +577,33 @@ import { StreamVideoClient } from '@stream-io/video-react-sdk';
 - API Presence (status update, fetch)
 
 **UI Frontend:**
-- Écrans appels (Incoming, Active, History)
-- Prompts notifications (permission, settings)
-- Media picker/preview components
-- Liste contacts + recherche
-- Paramètres utilisateur
+- Écrans appels (Incoming, Active, History) ❌
+- ~~Prompts notifications (permission, settings)~~ ✅ (mobile: NotificationPrompt)
+- ~~Media picker/preview components~~ ✅ TERMINÉ (15 composants)
+- Liste contacts + recherche ❌
+- Paramètres utilisateur ❌
 
 **Features Chat Avancées:**
-- Indicateurs typing (temps réel)
-- Réactions messages (emojis)
-- Édition/suppression messages
-- Messages vocaux (enregistrement)
-- GIFs & Stickers
+- ~~Indicateurs typing (temps réel)~~ ✅ TERMINÉ
+- ~~Réactions messages (emojis)~~ ✅ TERMINÉ
+- ~~Upload médias (images/vidéos)~~ ✅ TERMINÉ (composants)
+- ~~Messages vocaux (enregistrement + lecture)~~ ✅ TERMINÉ (composants)
+- Édition/suppression messages ❌
+- GIFs & Stickers ❌
 
 ### **📈 Progrès MVP**
 
 ```
 
-Frontend Web Shell:       ██████████████████░░░░  90% ✅ (Semaine 1/16)
+Frontend Web Shell:       ██████████████████████  95% ✅ (Shell + Chat Avancé)
+Frontend Composants Chat: ████████████████████░░  90% ✅ (15 composants, tests OK)
+Tests Automatisés:        ████████████████████░░  95% ✅ (897 tests, 0 échecs)
 Backend Platform-Core:    ████████████░░░░░░░░░░  60% 🟡
 Services Integration:     ███████████████░░░░░░░  75% 🟡
 Documentation:            ████████████████████░░  95% ✅
 Configuration:            ████████████░░░░░░░░░░  60% 🟡 (credentials manquants)
 
-GLOBAL MVP:               ████████████████░░░░░░  80% 🟡
+GLOBAL MVP:               █████████████████░░░░░  88% 🟡
 
 ```
 

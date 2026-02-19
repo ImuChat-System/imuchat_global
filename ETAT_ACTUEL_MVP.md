@@ -1,11 +1,37 @@
 # 🎯 MVP ImuChat - État Actuel & Prochaines Étapes
 
-> **Date**: 17 février 2026, 11h00  
-> **Status**: Infrastructure + Auth + Chat + Stream Backend + Firebase Analytics ✅ TERMINÉES  
+> **Date**: 19 février 2026  
+> **Status**: Infrastructure + Auth + Chat + Stream Backend + Firebase Analytics + Web Shell ✅ TERMINÉES  
+> **Progression MVP**: 75% → 80% (Web Shell Semaine 1 complétée)
 
 ---
 
-## ✅ **ACCOMPLI AUJOURD'HUI** (Session ultra-productive 🔥🔥🔥)
+## ✅ **ACCOMPLI RÉCEMMENT** (Sessions productives 🔥🔥🔥)
+
+### 🆕 **WEB-APP SHELL COMPLÉTÉ** (18 février 2026) ✅
+
+**Semaine 1 Web Roadmap - TERMINÉE** :
+
+- ✅ **Layout 3 colonnes** : AppShell, Sidebar (240px/64px responsive), TopBar, RightPanel (320px)
+- ✅ **Navigation complète** : 8 pages créées (Dashboard, Chats, Calls, Social, Watch, Store, Profile, Settings)
+- ✅ **Sidebar navigation** : 8 items avec active state highlighting
+- ✅ **TopBar features** : Search global, Notifications badge (count: 5), Profile dropdown, Theme toggle
+- ✅ **Dashboard** : Stats cards (messages, appels, notifications), Recent conversations, Quick actions
+- ✅ **Composants UI** : Button (6 variants × 4 sizes), Badge, Avatar, Separator
+- ✅ **Responsive design** : Sidebar collapse < 1024px
+- ✅ **Routes restructurées** : Toutes sous groupe `(app)/`
+
+**Métriques Semaine 1 Web** :
+- 18 fichiers créés
+- ~1200 lignes de code
+- 0 erreurs TypeScript
+- Progression web-app : 6.25% (1/16 semaines)
+
+**Détails complets** : Voir [web-app/PROGRESS.md](web-app/PROGRESS.md) et [web-app/ROADMAP.md](web-app/ROADMAP.md)
+
+---
+
+## ✅ **ACCOMPLI PRÉCÉDEMMENT** (17 février 2026)
 
 ### 1. **Infrastructure Supabase** ✅
 
@@ -462,6 +488,7 @@ import { StreamVideoClient } from '@stream-io/video-react-sdk';
 **Frontend (Mobile + Web):**
 - 🔐 Authentification complète (login, signup, forgot password)
 - 💬 Chat temps réel (liste conversations, chat room, envoi messages)
+- 🌐 **Web-App Shell complet** : Layout 3 colonnes, Navigation, Dashboard, 8 pages
 - 🔔 Services notifications (hooks + services créés, prêts à utiliser)
 - 📞 Services appels (hooks + services créés, prêts à utiliser)
 - 🎨 UI/UX responsive avec Dark Mode
@@ -516,16 +543,19 @@ import { StreamVideoClient } from '@stream-io/video-react-sdk';
 
 ```
 
-Frontend Auth + Chat:     ████████████████████░░  85% ✅
+Frontend Web Shell:       ██████████████████░░░░  90% ✅ (Semaine 1/16)
 Backend Platform-Core:    ████████████░░░░░░░░░░  60% 🟡
 Services Integration:     ███████████████░░░░░░░  75% 🟡
 Documentation:            ████████████████████░░  95% ✅
 Configuration:            ████████████░░░░░░░░░░  60% 🟡 (credentials manquants)
 
-GLOBAL MVP:               ████████████░░░░░░░░░░  75% 🟡
+GLOBAL MVP:               ████████████████░░░░░░  80% 🟡
 
 ```
 
+**Estimation temps restant MVP complet:** 3 semaines (Frontend-First approach)
+
+**Roadmap détaillée** : Voir [PLAN_DEVELOPPEMENT_FRONTEND_MVP.md](PLAN_DEVELOPPEMENT_FRONTEND_MVP.md
 **Estimation temps restant MVP complet:** 2-3 semaines (si choix stratégique clair)
 
 ---

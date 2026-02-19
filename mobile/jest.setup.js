@@ -1,5 +1,3 @@
-import "@testing-library/react-native/extend-expect";
-
 // Mock Supabase
 jest.mock("./services/supabase", () => ({
   supabase: {

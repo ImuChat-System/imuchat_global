@@ -33,17 +33,23 @@
 
 ### 🚀 MVP Multi-Plateforme
 
-| Document | Description | Audience | Temps lecture |
-|----------|-------------|----------|---------------|
-| [MVP_STRUCTURE_MULTIPLATEFORME.md](MVP_STRUCTURE_MULTIPLATEFORME.md) | Spécification complète MVP (Mobile + Web + Desktop) | Toute l'équipe | 60min |
-| [MVP_ACTION_IMMEDIATE.md](MVP_ACTION_IMMEDIATE.md) | Sprint 1 - Setup infrastructure + Auth | Dev, DevOps | 30min |
-| [MVP_ROADMAP_FEATURES.md](MVP_ROADMAP_FEATURES.md) | Roadmap visuelle feature par feature (12 semaines) | PM, Dev, Design | 40min |
+| Document | Description | Audience | Temps lecture | Statut |
+|----------|-------------|----------|---------------|--------|
+| [MVP_STATUS_19_FEV_2026.md](MVP_STATUS_19_FEV_2026.md) ⭐ | **État actuel MVP (80% complété)** | Tous | 10min | 🆕 |
+| [PLAN_DEVELOPPEMENT_FRONTEND_MVP.md](PLAN_DEVELOPPEMENT_FRONTEND_MVP.md) ⭐ | **Plan de développement frontend 3 semaines** | Dev | 40min | 🆕 |
+| [ETAT_ACTUEL_MVP.md](ETAT_ACTUEL_MVP.md) | État complet + recommandations stratégiques | PM, Dev | 30min | ✅ MIS À JOUR |
+| [MVP_STRUCTURE_MULTIPLATEFORME.md](MVP_STRUCTURE_MULTIPLATEFORME.md) | Spécification complète MVP (Mobile + Web + Desktop) | Toute l'équipe | 60min | ✅ |
+| [MVP_ACTION_IMMEDIATE.md](MVP_ACTION_IMMEDIATE.md) | Sprint 1 - Setup infrastructure + Auth | Dev, DevOps | 30min | ✅ |
+| [MVP_ROADMAP_FEATURES.md](MVP_ROADMAP_FEATURES.md) | Roadmap visuelle feature par feature (12 semaines) | PM, Dev, Design | 40min | ✅ |
+| [MVP_ARCHITECTURE_VISUELLE.md](MVP_ARCHITECTURE_VISUELLE.md) | Diagrammes architecturaux Mermaid | Dev, Archi | 30min | ✅ |
 
-**Objectif** : Développer et lancer le MVP en 12 semaines.
+**⭐ Documents Prioritaires** : Commencez par MVP_STATUS puis PLAN_DEVELOPPEMENT
 
-**Scope** : 15 features core (sur 50 totales) - Messagerie, Appels, Profils
+**Objectif** : Développer et lancer le MVP en 3 semaines (approche Frontend-First).
 
-**Budget** : €10k-15k (optimisé) ou €280k (équipe full-time)
+**État** : 80% complété - Infrastructure ✅, Auth ✅, Chat ✅, Web Shell ✅
+
+**Prochaine étape** : Écrans Appels Vidéo + Notifications (Semaine 1)
 
 ---
 
@@ -58,11 +64,14 @@
 
 ### 🌐 Web App (Next.js)
 
-| Document | Description | Localisation |
-|----------|-------------|--------------|
-| MVP Spec | Auth, Chat 1:1, Groupes, Attachments | [web-app/docs/MVP_SPEC.md](web-app/docs/MVP_SPEC.md) |
-| Sitemap Complet | Architecture pages web | [web-app/Sitemap_web_complet.md](web-app/Sitemap_web_complet.md) |
-| Web Roadmap | Planning développement | [web-app/web-roadmap.md](web-app/web-roadmap.md) |
+| Document | Description | Localisation | Statut |
+|----------|-------------|--------------|--------|
+| Roadmap 16 Semaines | Roadmap complète web-app | [web-app/ROADMAP.md](web-app/ROADMAP.md) | ✅ |
+| Progress Tracking | Suivi progression détaillé | [web-app/PROGRESS.md](web-app/PROGRESS.md) | ✅ MIS À JOUR |
+| MVP Spec | Auth, Chat 1:1, Groupes, Attachments | [web-app/docs/MVP_SPEC.md](web-app/docs/MVP_SPEC.md) | ✅ |
+| Sitemap Complet | Architecture pages web | [web-app/Sitemap_web_complet.md](web-app/Sitemap_web_complet.md) | ✅ |
+
+**État actuel** : Semaine 1/16 complétée (6.25%) - App Shell ✅, Navigation ✅, Dashboard ✅
 
 ---
 
@@ -106,16 +115,16 @@
 
 ## 🗺️ Parcours par Rôle
 
-### 👨‍💻 Développeur (Nouveau)
-
-1. [DEVELOPER_ONBOARDING.md](DEVELOPER_ONBOARDING.md) ← **Commencez ici**
-2. [MVP_ACTION_IMMEDIATE.md](MVP_ACTION_IMMEDIATE.md) - Setup environnement
-3. [MVP_ROADMAP_FEATURES.md](MVP_ROADMAP_FEATURES.md) - Voir ce que vous allez coder
+### 👨‍STATUS_19_FEV_2026.md](MVP_STATUS_19_FEV_2026.md) ← **État actuel (80% complété)**
+3. [PLAN_DEVELOPPEMENT_FRONTEND_MVP.md](PLAN_DEVELOPPEMENT_FRONTEND_MVP.md) ← **Plan d'action 3 semaines**
 4. Docs techniques spécifiques (mobile/web/desktop)
 
 ### 📊 Product Manager
 
-1. [MVP_STRUCTURE_MULTIPLATEFORME.md](MVP_STRUCTURE_MULTIPLATEFORME.md) ← **Vision complète**
+1. [MVP_STATUS_19_FEV_2026.md](MVP_STATUS_19_FEV_2026.md) ← **Vue d'ensemble rapide**
+2. [PLAN_DEVELOPPEMENT_FRONTEND_MVP.md](PLAN_DEVELOPPEMENT_FRONTEND_MVP.md) ← **Roadmap 3 semaines**
+3. [MVP_STRUCTURE_MULTIPLATEFORME.md](MVP_STRUCTURE_MULTIPLATEFORME.md) - Vision complète
+4. [FUNCTIONNALITIES_LIST.md](docs/FUNCTIONNALITIES_LIST.md) - Toutes les feature
 2. [MVP_ROADMAP_FEATURES.md](MVP_ROADMAP_FEATURES.md) - Timeline détaillée
 3. [FUNCTIONNALITIES_LIST.md](docs/FUNCTIONNALITIES_LIST.md) - Toutes les features
 4. [site-vitrine/ACTION_PLAN_PRIORITAIRE.md](site-vitrine/ACTION_PLAN_PRIORITAIRE.md) - Marketing actions
@@ -172,11 +181,17 @@
 
 ## 🎯 Quick Links par Objectif
 
+### Je veux... comprendre l'état actuel du projet
+→ [MVP_STATUS_19_FEV_2026.md](MVP_STATUS_19_FEV_2026.md) ⭐ **COMMENCEZ ICI**
+
+### Je veux... savoir quoi développer maintenant
+→ [PLAN_DEVELOPPEMENT_FRONTEND_MVP.md](PLAN_DEVELOPPEMENT_FRONTEND_MVP.md) ⭐ **PLAN D'ACTION**
+
 ### Je veux... comprendre la vision globale
 → [README.md](README.md) + [MVP_STRUCTURE_MULTIPLATEFORME.md](MVP_STRUCTURE_MULTIPLATEFORME.md)
 
 ### Je veux... coder maintenant
-→ [MVP_ACTION_IMMEDIATE.md](MVP_ACTION_IMMEDIATE.md) - Section "Week 1 Sprint"
+→ [PLAN_DEVELOPPEMENT_FRONTEND_MVP.md](PLAN_DEVELOPPEMENT_FRONTEND_MVP.md) - Section "Prochaine Action Immédiate"
 
 ### Je veux... voir toutes les features
 → [MVP_ROADMAP_FEATURES.md](MVP_ROADMAP_FEATURES.md) (détaillé) ou [FUNCTIONNALITIES_LIST.md](docs/FUNCTIONNALITIES_LIST.md) (complet)

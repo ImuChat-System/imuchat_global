@@ -1,14 +1,141 @@
 # 🎯 MVP ImuChat - État Actuel & Prochaines Étapes
 
 > **Date**: 19 février 2026 (mis à jour)  
-> **Status**: Infrastructure + Auth + Chat + Stream Backend + Firebase Analytics + Web Shell + Composants Chat Avancés + Tests ✅ TERMINÉS  
-> **Progression MVP**: 80% → 88% (Composants Semaine 2 + Tests complets)
+> **Status**: Infrastructure + Auth + Chat + Stream Video Web + Notifications + Media Upload + Profil Web + Contacts/Amis + Settings Mobile + **Parité Mobile/Web** + Tests ✅ TERMINÉS  
+> **Progression MVP**: 97% → **99%** (Parité Mobile/Web — 6 écrans réécrits)
 
 ---
 
 ## ✅ **ACCOMPLI RÉCEMMENT** (Sessions productives 🔥🔥🔥)
 
-### 🆕 **COMPOSANTS CHAT AVANCÉS + TESTS COMPLETS** (19 février 2026) ✅
+### 🆕 **PARITÉ MOBILE / WEB** (19 février 2026) ✅
+
+**Chantier 7 : Réécriture complète des 5 écrans principaux + enrichissement Settings** :
+
+- ✅ `mobile/app/(tabs)/settings.tsx` — Enrichi : Account edit (username/email), Password change, Language (FR/EN/JA), Stories (visibility/replies/archive)
+- ✅ `mobile/app/(tabs)/index.tsx` — Réécriture complète : HeroCarousel (auto-scroll), StoryCarousel, FriendsCard (données réelles Supabase), ExplorerGrid (6 cartes), PodcastWidget
+- ✅ `mobile/app/(tabs)/social.tsx` — Réécriture complète : StoryCarousel (7 users), FeedFilters (Mixte/News/Stories), Feed (5 posts avec like/comment/share), FAB créer story
+- ✅ `mobile/app/(tabs)/watch.tsx` — Réécriture complète : FeaturedCarousel, CategoryFilter (5 catégories), WatchPartyCards (5 parties), UpcomingSection, CTA créer party
+- ✅ `mobile/app/(tabs)/store.tsx` — Réécriture complète : DynamicHero, SearchBar, 5 Tabs, SortBar, MixedContentGrid (10 items), PurchaseModal
+- ✅ FlatList mock amélioré (`__mocks__/react-native.js`) — rend data+renderItem
+
+**Suite de Tests — 1163 tests, 0 échecs** :
+
+| Plateforme | Suites | Tests | Statut |
+|---|---|---|---|
+| **Mobile** | 21/21 | 258 passed | ✅ 0 échecs |
+| **Web** | 95/96 (1 skipped) | 905 passed | ✅ 0 échecs |
+| **Total** | **116 suites** | **1163 tests** | ✅ **Tout vert** |
+
+**Tests créés/réécrits cette session (+85 mobile)** :
+
+- ✅ `settings.test.tsx` (26 tests) — Account, Password, Language, Stories, Appearance, Notifications, Privacy, Supabase, Sign-out, Delete
+- ✅ `home.test.tsx` (21 tests) — Loading, Hero carousel+dots, Story carousel, Friends conversations, Explorer grid, Podcasts, Error handling
+- ✅ `social.test.tsx` (14 tests) — Story carousel, Filters, News/Stories filter, Feed posts, Actions, News badge, FAB
+- ✅ `watch.test.tsx` (18 tests) — Featured carousel, Category filter, Party filtering, Upcoming, CTA
+- ✅ `store.test.tsx` (22 tests) — Hero, Search+clear, Tabs, Sort, Grid 10 items, Prices, Purchase modal, Combined filters
+
+---
+
+### SETTINGS MOBILE (19 février 2026) ✅
+
+**Chantier 6 : Écran Paramètres Mobile — Parité web** :
+
+- ✅ `mobile/app/(tabs)/settings.tsx` — Écran complet : Compte, Apparence, Notifications, Confidentialité, À propos, Déconnexion, Supprimer compte
+- ✅ `mobile/app/(tabs)/_layout.tsx` — Onglet Paramètres ajouté (icône cog)
+- ✅ Chargement settings depuis Supabase `profiles` (notification_prefs, privacy_*)
+- ✅ Persistance auto sur Switch change (notifications + confidentialité)
+- ✅ Toggle thème sombre/clair via `useTheme()`
+- ✅ Alertes de confirmation pour déconnexion / suppression compte
+
+---
+
+### **PROFIL WEB SUPABASE + CONTACTS/AMIS** (19 février 2026) ✅
+
+**Chantier 4 : Profil Web — Câblage Supabase (suppression de tous les MOCK)** :
+
+- ✅ `web-app/src/hooks/use-profile.ts` — Hook `useProfile()` complet : fetch, update, uploadAvatar, removeAvatar, refresh + `getProfileByUsername()` helper
+- ✅ `profile-form.tsx` — Reçoit profil réel, upload avatar via Supabase Storage, auto-save onBlur
+- ✅ `social-links-form.tsx` — Réseaux sociaux réels → Supabase sur onBlur
+- ✅ `account-settings-form.tsx` — Email + provider réels via `useAuth()`
+- ✅ `privacy-settings-form.tsx` — Paramètres vie privée → Supabase sur switch change
+- ✅ `profile/edit/page.tsx` — Converti server→client component, utilise `useProfile()`, loading/saving states
+- ✅ `profile/[username]/page.tsx` — Profil réel Supabase, support `/profile/me`, suppression MOCK_MEMBERS
+
+**Chantier 5 : Contacts/Amis (API + UI Web + Mobile)** :
+
+- ✅ `platform-core/migrations/contacts_tables.sql` — Table contacts avec RLS policies (pending/accepted/blocked)
+- ✅ `web-app/src/services/contacts-api.ts` — 9 fonctions : searchUsers, sendFriendRequest, accept/reject, removeFriend, blockUser, getFriends, getPending/SentRequests
+- ✅ `web-app/src/hooks/use-contacts.ts` — Hook avec state + actions + Supabase Realtime subscription
+- ✅ `web-app/src/app/[locale]/contacts/page.tsx` — Page 3 onglets (Amis, Demandes, Recherche)
+- ✅ `mobile/app/(tabs)/contacts.tsx` — Écran contacts mobile avec FlatList
+- ✅ `mobile/app/(tabs)/_layout.tsx` — Onglet Contacts ajouté à la navigation
+
+**Suite de Tests — 1063 tests, 0 échecs** :
+
+| Plateforme | Suites | Tests | Statut |
+|---|---|---|---|
+| **Mobile** | 16/16 | 158 passed | ✅ 0 échecs |
+| **Web** | 95/96 (1 skipped) | 905 passed | ✅ 0 échecs |
+| **Total** | **111 suites** | **1063 tests** | ✅ **Tout vert** |
+
+**Tests créés cette session (44 nouveaux)** :
+
+- ✅ `use-profile.test.ts` (11 tests) — Load, update, avatar upload/remove, getByUsername
+- ✅ `contacts-api.test.ts` (18 tests) — Search, friend requests, block, remove
+- ✅ `use-contacts.test.ts` (15 tests) — Hook state, realtime, error handling
+
+---
+
+### **STREAM VIDEO WEB + NOTIFICATIONS + MEDIA UPLOAD** (20 février 2026) ✅
+
+**Chantier 1 : Stream Video Web — Intégration complète** :
+
+- ✅ `@stream-io/video-react-sdk` installé dans web-app
+- ✅ `web-app/src/services/stream-token.ts` — Génération tokens via platform-core
+- ✅ `web-app/src/services/stream-calls.ts` — Gestion appels Stream (init, create, join, leave, end, toggles)
+- ✅ `web-app/src/hooks/use-calls.ts` — Hook React complet pour appels (participants, état, contrôles)
+- ✅ `web-app/src/hooks/use-call-history.ts` — Historique appels avec Supabase Realtime
+- ✅ `web-app/src/providers/stream-video-provider.tsx` — Provider app-level avec auto-init token
+- ✅ `web-app/src/contexts/call-context.tsx` — Mis à jour : intègre `useCalls` + expose `stream`
+- ✅ `web-app/src/app/[locale]/providers.tsx` — `StreamVideoProvider` ajouté dans l'arbre providers
+
+**Chantier 2 : Notifications (Web + Mobile)** :
+
+- ✅ `web-app/src/services/notification-api.ts` — Service API notifications (~267 lignes)
+- ✅ `web-app/src/hooks/use-push-notifications.ts` — Hook push lifecycle FCM (~129 lignes)
+- ✅ `mobile/services/notification-api.ts` — Service API notifications mobile (~288 lignes)
+
+**Chantier 3 : Media Upload (Web + Mobile)** :
+
+- ✅ `web-app/src/services/media-api.ts` — Upload avec XHR progress, signed URLs, thumbnails (~310 lignes)
+- ✅ `web-app/src/hooks/use-media-upload-api.ts` — Hook upload avec retry exponentiel (~224 lignes)
+- ✅ `mobile/services/media-api.ts` — Upload via expo-file-system (~408 lignes)
+
+**Suite de Tests — 1019 tests, 0 échecs** :
+
+| Plateforme | Suites | Tests | Statut |
+|---|---|---|---|
+| **Mobile** | 16/16 | 158 passed | ✅ 0 échecs |
+| **Web** | 92/93 (1 skipped) | 861 passed | ✅ 0 échecs |
+| **Total** | **108 suites** | **1019 tests** | ✅ **Tout vert** |
+
+**Tests créés cette session (122 nouveaux)** :
+
+- ✅ `stream-token.test.ts` (6 tests) — Token generation, validation, expiry
+- ✅ `stream-calls.test.ts` (15 tests) — Client init, call CRUD, toggles, participants
+- ✅ `use-calls.test.ts` (8 tests) — Hook state, initiate/join/leave/end, toggles
+- ✅ `use-call-history.test.ts` (6 tests) — Loading, history, delete, missedCount
+- ✅ `notification-api.test.ts` web (12 tests) — API calls, error handling
+- ✅ `use-push-notifications.test.ts` (10 tests) — Permission, token, lifecycle
+- ✅ `media-api.test.ts` web (18 tests) — Upload, progress, thumbnails, errors
+- ✅ `use-media-upload-api.test.ts` (9 tests) — Retry logic, progress, cancel
+- ✅ `notification-api.test.ts` mobile (14 tests) — API calls mobile
+- ✅ `media-api.test.ts` mobile (18 tests) — Upload URI, thumbnails, confirm
+
+---
+
+### **COMPOSANTS CHAT AVANCÉS + TESTS COMPLETS** (19 février 2026) ✅
 
 **Composants Chat Créés (Mobile + Web) - Semaine 2 Roadmap** :
 

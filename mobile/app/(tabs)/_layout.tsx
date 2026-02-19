@@ -67,6 +67,17 @@ export default function TabLayout() {
         }}
       />
 
+      {/* Contacts Tab */}
+      <Tabs.Screen
+        name="contacts"
+        options={{
+          title: "Contacts",
+          tabBarIcon: ({ color }) => (
+            <TabBarIcon name="address-book" color={color} />
+          ),
+        }}
+      />
+
       {/* Social Tab */}
       <Tabs.Screen
         name="social"
@@ -94,12 +105,23 @@ export default function TabLayout() {
         }}
       />
 
-      {/* Profile Tab */}
+      {/* Settings Tab */}
+      <Tabs.Screen
+        name="settings"
+        options={{
+          tabBarTestID: "tab-settings",
+          title: "Paramètres",
+          tabBarIcon: ({ color }) => <TabBarIcon name="cog" color={color} />,
+        }}
+      />
+
+      {/* Profile Tab - caché de la tab bar */}
       <Tabs.Screen
         name="profile"
         options={{
           tabBarTestID: "tab-profile",
           title: "Profil",
+          href: null,
           tabBarIcon: ({ color }) => <TabBarIcon name="user" color={color} />,
         }}
       />

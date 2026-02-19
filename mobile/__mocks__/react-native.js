@@ -18,7 +18,23 @@ const Text = createMockComponent("Text");
 const TouchableOpacity = createMockComponent("TouchableOpacity");
 const Pressable = createMockComponent("Pressable");
 const ScrollView = createMockComponent("ScrollView");
-const FlatList = createMockComponent("FlatList");
+
+// FlatList mock that actually renders items via data + renderItem
+const FlatList = ({ data, renderItem, keyExtractor, children, ...props }) => {
+  const items =
+    data && renderItem
+      ? data.map((item, index) => {
+          const key = keyExtractor ? keyExtractor(item, index) : String(index);
+          return React.createElement(
+            React.Fragment,
+            { key },
+            renderItem({ item, index, separators: {} }),
+          );
+        })
+      : children;
+  return React.createElement("FlatList", props, items);
+};
+FlatList.displayName = "FlatList";
 const Image = createMockComponent("Image");
 const TextInput = createMockComponent("TextInput");
 const ActivityIndicator = createMockComponent("ActivityIndicator");

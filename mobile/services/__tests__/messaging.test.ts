@@ -7,8 +7,15 @@ import {
 } from "../messaging";
 import { supabase } from "../supabase";
 
-// Mock the supabase module
-jest.mock("../supabase");
+// Mock the supabase module with explicit getCurrentUser
+const mockGetCurrentUser = jest.fn();
+jest.mock("../supabase", () => ({
+    supabase: {
+        from: jest.fn(),
+        auth: { getUser: jest.fn() },
+    },
+    getCurrentUser: (...args: any[]) => mockGetCurrentUser(...args),
+}));
 
 describe("Messaging Service", () => {
     beforeEach(() => {
@@ -38,9 +45,7 @@ describe("Messaging Service", () => {
                 },
             ];
 
-            (supabase.auth.getUser as jest.Mock).mockResolvedValue({
-                data: { user: { id: "user-1" } },
-            });
+            mockGetCurrentUser.mockResolvedValue({ id: "user-1" } as any);
 
             (supabase.from as jest.Mock).mockReturnValue({
                 select: jest.fn().mockReturnThis(),
@@ -59,9 +64,7 @@ describe("Messaging Service", () => {
         });
 
         it("should throw error when user is not authenticated", async () => {
-            (supabase.auth.getUser as jest.Mock).mockResolvedValue({
-                data: { user: null },
-            });
+            mockGetCurrentUser.mockResolvedValue(null);
 
             await expect(getConversations()).rejects.toThrow(
                 "No authenticated user"
@@ -69,9 +72,7 @@ describe("Messaging Service", () => {
         });
 
         it("should throw error when database query fails", async () => {
-            (supabase.auth.getUser as jest.Mock).mockResolvedValue({
-                data: { user: { id: "user-1" } },
-            });
+            mockGetCurrentUser.mockResolvedValue({ id: "user-1" } as any);
 
             (supabase.from as jest.Mock).mockReturnValue({
                 select: jest.fn().mockReturnThis(),
@@ -144,9 +145,7 @@ describe("Messaging Service", () => {
                 created_at: "2024-01-01T00:00:00Z",
             };
 
-            (supabase.auth.getUser as jest.Mock).mockResolvedValue({
-                data: { user: { id: "user-1" } },
-            });
+            mockGetCurrentUser.mockResolvedValue({ id: "user-1" } as any);
 
             (supabase.from as jest.Mock).mockReturnValue({
                 insert: jest.fn().mockReturnThis(),
@@ -164,9 +163,7 @@ describe("Messaging Service", () => {
         });
 
         it("should throw error when user is not authenticated", async () => {
-            (supabase.auth.getUser as jest.Mock).mockResolvedValue({
-                data: { user: null },
-            });
+            mockGetCurrentUser.mockResolvedValue(null);
 
             await expect(sendMessage("conv-1", "Test")).rejects.toThrow(
                 "No authenticated user"
@@ -182,9 +179,7 @@ describe("Messaging Service", () => {
                 group_name: null,
             };
 
-            (supabase.auth.getUser as jest.Mock).mockResolvedValue({
-                data: { user: { id: "user-1" } },
-            });
+            mockGetCurrentUser.mockResolvedValue({ id: "user-1" } as any);
 
             (supabase.from as jest.Mock)
                 .mockReturnValueOnce({
@@ -211,9 +206,7 @@ describe("Messaging Service", () => {
 
     describe("markConversationAsRead", () => {
         it("should mark conversation as read", async () => {
-            (supabase.auth.getUser as jest.Mock).mockResolvedValue({
-                data: { user: { id: "user-1" } },
-            });
+            mockGetCurrentUser.mockResolvedValue({ id: "user-1" } as any);
 
             (supabase.from as jest.Mock).mockReturnValue({
                 update: jest.fn().mockReturnThis(),

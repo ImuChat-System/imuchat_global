@@ -23,6 +23,9 @@ module.exports = {
     "^lottie-react-native$": "<rootDir>/__mocks__/lottie-react-native.js",
     "^react-native-reanimated$":
       "<rootDir>/__mocks__/react-native-reanimated.js",
+    "^react-native-gesture-handler$":
+      "<rootDir>/__mocks__/react-native-gesture-handler.js",
+    "^expo-image-manipulator$": "<rootDir>/__mocks__/expo-image-manipulator.js",
     "^expo-av$": "<rootDir>/__mocks__/expo-av.js",
     "^expo-file-system/legacy$":
       "<rootDir>/__mocks__/expo-file-system/legacy.js",
@@ -49,5 +52,9 @@ module.exports = {
   testMatch: [
     "**/__tests__/**/*.test.[jt]s?(x)",
     "**/?(*.)+(spec|test).[jt]s?(x)",
+  ],
+  testPathIgnorePatterns: [
+    "/node_modules/",
+    "/e2e/", // E2E tests use separate config
   ],
 };

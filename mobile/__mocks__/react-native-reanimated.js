@@ -20,21 +20,43 @@ const Animated = {
   createAnimatedComponent,
 };
 
-// Animation presets
-const SlideInDown = { duration: 300 };
-const SlideOutDown = { duration: 300 };
-const SlideInUp = { duration: 300 };
-const SlideOutUp = { duration: 300 };
-const FadeIn = { duration: 300 };
-const FadeOut = { duration: 300 };
-const FadeInDown = { duration: 300 };
-const FadeOutUp = { duration: 300 };
-const ZoomIn = { duration: 300 };
-const ZoomOut = { duration: 300 };
-const BounceIn = { duration: 300 };
-const BounceOut = { duration: 300 };
-const Layout = {};
-const LinearTransition = {};
+// Helper to create chainable animation presets
+const createAnimationPreset = (name) => {
+  const preset = {
+    duration: (ms) => preset,
+    delay: (ms) => preset,
+    springify: () => preset,
+    damping: (value) => preset,
+    stiffness: (value) => preset,
+    overshootClamping: (value) => preset,
+    restDisplacementThreshold: (value) => preset,
+    restSpeedThreshold: (value) => preset,
+    withInitialValues: (values) => preset,
+    withCallback: (callback) => preset,
+    build: () => preset,
+  };
+  return preset;
+};
+
+// Animation presets with chainable API
+const SlideInDown = createAnimationPreset("SlideInDown");
+const SlideOutDown = createAnimationPreset("SlideOutDown");
+const SlideInUp = createAnimationPreset("SlideInUp");
+const SlideOutUp = createAnimationPreset("SlideOutUp");
+const SlideInRight = createAnimationPreset("SlideInRight");
+const SlideOutRight = createAnimationPreset("SlideOutRight");
+const SlideInLeft = createAnimationPreset("SlideInLeft");
+const SlideOutLeft = createAnimationPreset("SlideOutLeft");
+const FadeIn = createAnimationPreset("FadeIn");
+const FadeOut = createAnimationPreset("FadeOut");
+const FadeInDown = createAnimationPreset("FadeInDown");
+const FadeOutUp = createAnimationPreset("FadeOutUp");
+const ZoomIn = createAnimationPreset("ZoomIn");
+const ZoomOut = createAnimationPreset("ZoomOut");
+const BounceIn = createAnimationPreset("BounceIn");
+const BounceOut = createAnimationPreset("BounceOut");
+const Layout = createAnimationPreset("Layout");
+const LinearTransition = createAnimationPreset("LinearTransition");
 
 // Shared value mock
 const useSharedValue = (initialValue) => {
@@ -132,6 +154,10 @@ module.exports = {
   SlideOutDown,
   SlideInUp,
   SlideOutUp,
+  SlideInRight,
+  SlideOutRight,
+  SlideInLeft,
+  SlideOutLeft,
   FadeIn,
   FadeOut,
   FadeInDown,

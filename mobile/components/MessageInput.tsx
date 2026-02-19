@@ -96,6 +96,7 @@ export default function MessageInput({
       <View style={styles.inputRow}>
         {/* Attach button */}
         <TouchableOpacity
+          testID="attach-button"
           style={styles.attachButton}
           onPress={showMediaOptions}
           disabled={disabled || isUploading}
@@ -108,6 +109,7 @@ export default function MessageInput({
         </TouchableOpacity>
 
         <TextInput
+          testID="message-input"
           style={[
             styles.input,
             { color: colors.text, backgroundColor: colors.background },
@@ -122,6 +124,7 @@ export default function MessageInput({
         />
 
         <TouchableOpacity
+          testID="send-button"
           style={[
             styles.sendButton,
             { backgroundColor: canSend ? colors.primary : colors.border },

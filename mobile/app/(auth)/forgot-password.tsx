@@ -49,6 +49,7 @@ export default function ForgotPasswordScreen() {
 
       <View style={styles.verticallySpaced}>
         <TextInput
+          testID="forgot-password-email-input"
           onChangeText={(text) => setEmail(text)}
           value={email}
           placeholder="email@address.com"
@@ -63,9 +64,14 @@ export default function ForgotPasswordScreen() {
 
       <View style={[styles.verticallySpaced, styles.mt20]}>
         {loading ? (
-          <ActivityIndicator size="large" color={theme.colors.primary} />
+          <ActivityIndicator
+            testID="forgot-password-loading"
+            size="large"
+            color={theme.colors.primary}
+          />
         ) : (
           <Button
+            testID="forgot-password-submit-button"
             title="Send Reset Link"
             disabled={loading || sent}
             onPress={sendResetEmail}

@@ -158,6 +158,22 @@ const Animated = {
   createAnimatedComponent: (Component) => Component,
 };
 
+// PanResponder mock
+const PanResponder = {
+  create: (config) => ({
+    panHandlers: {
+      onStartShouldSetResponder: () => true,
+      onMoveShouldSetResponder: () => true,
+      onResponderGrant: () => {},
+      onResponderMove: () => {},
+      onResponderRelease: () => {},
+      onResponderTerminate: () => {},
+      onStartShouldSetResponderCapture: () => true,
+      onMoveShouldSetResponderCapture: () => true,
+    },
+  }),
+};
+
 // AppState mock
 const AppState = {
   currentState: "active",
@@ -288,6 +304,7 @@ module.exports = {
   Platform,
   Dimensions,
   Animated,
+  PanResponder,
   AppState,
   Linking,
   Alert,

@@ -58,6 +58,7 @@ export default function RegisterScreen() {
 
       <View style={[styles.verticallySpaced, styles.mt20]}>
         <TextInput
+          testID="signup-email-input"
           onChangeText={(text) => setEmail(text)}
           value={email}
           placeholder="email@address.com"
@@ -71,6 +72,7 @@ export default function RegisterScreen() {
       </View>
       <View style={styles.verticallySpaced}>
         <TextInput
+          testID="signup-password-input"
           onChangeText={(text) => setPassword(text)}
           value={password}
           secureTextEntry={true}
@@ -85,9 +87,14 @@ export default function RegisterScreen() {
       </View>
       <View style={[styles.verticallySpaced, styles.mt20]}>
         {loading ? (
-          <ActivityIndicator size="large" color={theme.colors.primary} />
+          <ActivityIndicator
+            testID="signup-loading"
+            size="large"
+            color={theme.colors.primary}
+          />
         ) : (
           <Button
+            testID="signup-submit-button"
             title="Create account"
             disabled={loading}
             onPress={signUpWithEmail}

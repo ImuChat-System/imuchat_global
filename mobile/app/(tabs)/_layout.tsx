@@ -13,6 +13,7 @@ function TabBarIcon(props: {
 export default function TabLayout() {
   return (
     <Tabs
+      testID="tabs-container"
       screenOptions={{
         tabBarActiveTintColor: "#ec4899", // ImuChat primary color
         tabBarInactiveTintColor: "rgba(255,255,255,0.4)",
@@ -48,6 +49,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="chats"
         options={{
+          tabBarTestID: "tab-chats",
           title: "Messages",
           tabBarIcon: ({ color }) => (
             <TabBarIcon name="comments" color={color} />
@@ -96,6 +98,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="profile"
         options={{
+          tabBarTestID: "tab-profile",
           title: "Profil",
           tabBarIcon: ({ color }) => <TabBarIcon name="user" color={color} />,
         }}

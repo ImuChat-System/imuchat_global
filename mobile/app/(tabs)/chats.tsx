@@ -55,12 +55,13 @@ export default function ChatsScreen() {
     );
   };
 
-  const renderConversation = ({ item }: { item: Conversation }) => (
+  const renderConversation = ({ item, index }: { item: Conversation; index: number }) => (
     <TouchableOpacity
+      testID={`conversation-item-${index}`}
       style={[styles.conversationItem, { borderBottomColor: colors.border }]}
       onPress={() => router.push(`/chat/${item.id}` as Href)}
     >
-      <View style={[styles.avatar, { backgroundColor: colors.primary }]}>
+      <View testID={`conversation-avatar-${index}`} style={[styles.avatar, { backgroundColor: colors.primary }]}>
         <Text style={styles.avatarText}>
           {getConversationName(item).charAt(0).toUpperCase()}
         </Text>
@@ -68,7 +69,7 @@ export default function ChatsScreen() {
 
       <View style={styles.conversationContent}>
         <View style={styles.conversationHeader}>
-          <Text style={[styles.conversationName, { color: colors.text }]}>
+          <Text testID={`conversation-name-${index}`} style={[styles.conversationName, { color: colors.text }]}>
             {getConversationName(item)}
           </Text>
           <Text style={[styles.timestamp, { color: colors.textMuted }]}>
@@ -77,6 +78,7 @@ export default function ChatsScreen() {
         </View>
 
         <Text
+          testID={`conversation-last-message-${index}`}
           style={[styles.lastMessage, { color: colors.textMuted }]}
           numberOfLines={1}
         >
@@ -113,6 +115,7 @@ export default function ChatsScreen() {
         </View>
       ) : (
         <FlatList
+          testID="conversations-list"
           data={conversations}
           renderItem={renderConversation}
           keyExtractor={(item) => item.id}

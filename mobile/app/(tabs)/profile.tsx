@@ -212,6 +212,7 @@ export default function ProfileScreen() {
 
       <View style={styles.verticallySpaced}>
         <Button
+          testID="logout-button"
           title="Sign Out"
           onPress={() => supabase.auth.signOut()}
           color={theme.colors.error}

@@ -135,6 +135,7 @@ export default function ChatRoomScreen() {
 
   return (
     <KeyboardAvoidingView
+      testID="chat-room-container"
       style={[styles.container, { backgroundColor: theme.colors.background }]}
       behavior={Platform.OS === "ios" ? "padding" : undefined}
       keyboardVerticalOffset={Platform.OS === "ios" ? 90 : 0}
@@ -143,11 +144,11 @@ export default function ChatRoomScreen() {
         options={{
           title: "Chat",
           headerRight: () => (
-            <View style={{ flexDirection: "row", gap: 16, marginRight: 8 }}>
-              <TouchableOpacity onPress={() => handleInitiateCall("audio")}>
+            <View testID="channel-header" style={{ flexDirection: "row", gap: 16, marginRight: 8 }}>
+              <TouchableOpacity testID="call-button" onPress={() => handleInitiateCall("audio")}>
                 <Ionicons name="call" size={24} color={theme.colors.primary} />
               </TouchableOpacity>
-              <TouchableOpacity onPress={() => handleInitiateCall("video")}>
+              <TouchableOpacity testID="video-call-button" onPress={() => handleInitiateCall("video")}>
                 <Ionicons
                   name="videocam"
                   size={24}
@@ -160,6 +161,7 @@ export default function ChatRoomScreen() {
       />
 
       <FlatList
+        testID="message-list"
         ref={flatListRef}
         data={messages}
         renderItem={({ item }) => (
@@ -179,7 +181,7 @@ export default function ChatRoomScreen() {
 
       {/* Typing indicator */}
       {typingUsers.size > 0 && (
-        <View style={styles.typingContainer}>
+        <View testID="typing-indicator-container" style={styles.typingContainer}>
           <Text style={[styles.typingText, { color: theme.colors.textMuted }]}>
             Someone is typing...
           </Text>

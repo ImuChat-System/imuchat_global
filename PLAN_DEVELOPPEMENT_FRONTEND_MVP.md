@@ -37,12 +37,14 @@
 ### ✅ Frontend Complété
 
 #### Mobile (React Native / Expo)
+
 - **Auth screens** : Login, Signup, Forgot Password
 - **Chat screens** : Conversations list, Chat room
 - **UI structure** : 6 tabs (Home, Chats, Social, Watch, Store, Profile)
 - **Hooks** : useAuth, useChat, useNotifications, useCalls
 
 #### Web-App (Next.js)
+
 - **App Shell** : Layout 3 colonnes (Sidebar, Main, RightPanel)
 - **Navigation** : Sidebar avec 8 routes, TopBar responsive
 - **Auth pages** : Login, Signup, Forgot Password
@@ -81,6 +83,7 @@
 #### Jour 1-2 : Écrans Appels (Mobile + Web)
 
 ##### Mobile (React Native)
+
 ```typescript
 // Fichiers à créer :
 ✅ mobile/app/call/incoming.tsx        // Écran appel entrant
@@ -96,6 +99,7 @@
 ```
 
 **Fonctionnalités** :
+
 - ✅ Appel entrant avec sonnerie + accepter/refuser
 - ✅ Appel sortant avec statut "en attente"
 - ✅ Appel actif avec contrôles (mute, vidéo on/off, hang up)
@@ -104,6 +108,7 @@
 - ✅ Gestion reconnexion automatique
 
 ##### Web (Next.js)
+
 ```typescript
 // Fichiers à créer :
 ✅ web-app/src/app/(app)/calls/incoming/page.tsx
@@ -120,6 +125,7 @@
 ```
 
 **Fonctionnalités** :
+
 - ✅ Appel entrant avec notification desktop
 - ✅ Appel sortant avec modal
 - ✅ Appel actif en plein écran
@@ -128,6 +134,7 @@
 - ✅ Picture-in-Picture natif
 
 **Critères d'acceptation** :
+
 - [ ] Appel établi en < 3 secondes
 - [ ] Qualité vidéo adaptative (360p-1080p)
 - [ ] Reconnexion automatique si déconnexion < 5s
@@ -139,6 +146,7 @@
 #### Jour 3 : Notifications Push (Mobile + Web)
 
 ##### Mobile (React Native)
+
 ```typescript
 // Fichiers à créer :
 ✅ mobile/components/NotificationPrompt.tsx  // Permission prompt
@@ -154,6 +162,7 @@
 ```
 
 **Fonctionnalités** :
+
 - ✅ Permission prompt au premier lancement
 - ✅ Notifications foreground (in-app)
 - ✅ Notifications background (push natif)
@@ -162,6 +171,7 @@
 - ✅ Sons personnalisés (optionnel)
 
 ##### Web (Next.js)
+
 ```typescript
 // Fichiers à créer :
 ✅ web-app/src/components/NotificationPermissionPrompt.tsx
@@ -179,6 +189,7 @@
 ```
 
 **Fonctionnalités** :
+
 - ✅ Permission prompt (modal élégante)
 - ✅ Notifications desktop avec actions
 - ✅ NotificationCenter dans TopBar
@@ -187,6 +198,7 @@
 - ✅ Filtres : All, Unread, Mentions
 
 **Critères d'acceptation** :
+
 - [ ] Permission prompt s'affiche au bon moment (pas intrusif)
 - [ ] Notifications reçues en < 1 seconde (FCM)
 - [ ] Tap notification ouvre bonne route
@@ -198,6 +210,7 @@
 #### Jour 4 : Polish & Tests Semaine 1
 
 **Tasks** :
+
 - [ ] Tests unitaires composants appels (10+ tests)
 - [ ] Tests notifications (permission, affichage, tap)
 - [ ] Tests E2E : Initier appel, recevoir appel, accepter, raccrocher
@@ -220,6 +233,7 @@
 #### Jour 5-6 : Typing Indicators + Réactions Messages
 
 ##### Typing Indicators (Temps Réel)
+
 ```typescript
 // Mobile
 ✅ mobile/components/chat/TypingIndicator.tsx
@@ -235,6 +249,7 @@
 ```
 
 **Fonctionnalités** :
+
 - ✅ Détecter saisie utilisateur (debounce 300ms)
 - ✅ Broadcast typing event via Supabase Realtime
 - ✅ Afficher "Alice est en train d'écrire..."
@@ -242,6 +257,7 @@
 - ✅ Timeout automatique après 5s
 
 ##### Réactions Messages
+
 ```typescript
 // Mobile
 ✅ mobile/components/chat/MessageReactions.tsx
@@ -255,6 +271,7 @@
 ```
 
 **Fonctionnalités** :
+
 - ✅ Long press message → Reaction picker
 - ✅ 6 réactions rapides : ❤️ 👍 😂 😮 😢 🙏
 - ✅ Compteur réactions par emoji
@@ -262,6 +279,7 @@
 - ✅ Ajouter/retirer réaction temps réel
 
 **Critères d'acceptation** :
+
 - [ ] Typing indicator apparaît en < 300ms
 - [ ] Réactions temps réel (< 500ms)
 - [ ] Optimistic UI (réaction ajoutée immédiatement)
@@ -272,6 +290,7 @@
 #### Jour 7-8 : Upload Médias + Messages Vocaux
 
 ##### Upload Images/Vidéos
+
 ```typescript
 // Mobile
 ✅ mobile/components/chat/MediaPicker.tsx
@@ -290,6 +309,7 @@
 ```
 
 **Fonctionnalités** :
+
 - ✅ Picker caméra/galerie (mobile)
 - ✅ Drag & drop (web)
 - ✅ Preview avant envoi
@@ -300,6 +320,7 @@
 - ✅ Lightbox fullscreen (tap pour agrandir)
 
 ##### Messages Vocaux
+
 ```typescript
 // Mobile
 ✅ mobile/components/chat/VoiceRecorder.tsx
@@ -316,6 +337,7 @@
 ```
 
 **Fonctionnalités** :
+
 - ✅ Hold to record (mobile)
 - ✅ Click to record (web)
 - ✅ Waveform animation pendant enregistrement
@@ -325,6 +347,7 @@
 - ✅ Vitesse lecture (1x, 1.5x, 2x)
 
 **Critères d'acceptation** :
+
 - [ ] Upload image < 5s (1MB)
 - [ ] Compression réduit taille 50-70%
 - [ ] Messages vocaux < 5MB
@@ -336,6 +359,7 @@
 #### Jour 9 : Polish & Tests Semaine 2
 
 **Tasks** :
+
 - [ ] Tests upload médias (images, vidéos)
 - [ ] Tests messages vocaux (record, play, seek)
 - [ ] Tests réactions (add, remove, count)
@@ -361,6 +385,7 @@
 #### Jour 10-11 : Backend Endpoints Notifications & Media
 
 ##### Notifications API (platform-core)
+
 ```typescript
 // Fichier à créer :
 ✅ platform-core/src/routes/notifications.ts
@@ -382,6 +407,7 @@ GET /api/v1/notifications/history
 ```
 
 ##### Media API (platform-core)
+
 ```typescript
 // Fichier à créer :
 ✅ platform-core/src/routes/media.ts
@@ -405,6 +431,7 @@ DELETE /api/v1/media/:id
 ```
 
 **Critères d'acceptation** :
+
 - [ ] Endpoints testés avec curl/Postman
 - [ ] Auth middleware (Firebase Admin)
 - [ ] Error handling complet
@@ -417,6 +444,7 @@ DELETE /api/v1/media/:id
 #### Jour 12 : Intégration Backend Endpoints dans Frontend
 
 **Mobile** :
+
 ```typescript
 // Modifier :
 ✅ mobile/services/notifications.ts
@@ -429,6 +457,7 @@ DELETE /api/v1/media/:id
 ```
 
 **Web** :
+
 ```typescript
 // Modifier :
 ✅ web-app/src/lib/notifications.ts
@@ -441,6 +470,7 @@ DELETE /api/v1/media/:id
 ```
 
 **Tests** :
+
 - [ ] Upload image via API endpoint
 - [ ] Envoyer notification depuis backend
 - [ ] Recevoir notification sur mobile + web
@@ -451,6 +481,7 @@ DELETE /api/v1/media/:id
 #### Jour 13-14 : Polish Final + Tests E2E
 
 ##### Polish UI/UX
+
 - [ ] Animations transitions (framer-motion web, reanimated mobile)
 - [ ] Loading states partout (skeleton screens)
 - [ ] Error boundaries (affichage erreurs gracieux)
@@ -459,6 +490,7 @@ DELETE /api/v1/media/:id
 - [ ] Responsive final check (mobile, tablet, desktop)
 
 ##### Tests E2E Complets
+
 ```typescript
 // Scénarios critiques :
 ✅ E2E 1: Auth flow complet
@@ -484,6 +516,7 @@ DELETE /api/v1/media/:id
 ```
 
 ##### Performance Optimization
+
 - [ ] Lighthouse score > 90 (web)
 - [ ] Bundle size < 500KB (initial load)
 - [ ] Images lazy loading
@@ -492,6 +525,7 @@ DELETE /api/v1/media/:id
 - [ ] Virtual scrolling conversations (react-window)
 
 ##### Documentation Finale
+
 - [ ] README.md global mis à jour
 - [ ] API documentation (Swagger)
 - [ ] User guide (captures écran)
@@ -514,6 +548,7 @@ DELETE /api/v1/media/:id
 ### Features Essentielles
 
 #### Authentification
+
 - [x] Signup avec email/password
 - [x] Login avec email/password
 - [x] Forgot password / Reset password
@@ -522,6 +557,7 @@ DELETE /api/v1/media/:id
 - [ ] OAuth (Google, Apple) - Post-MVP
 
 #### Messagerie
+
 - [x] Liste conversations
 - [x] Chat room temps réel
 - [x] Envoyer message texte
@@ -535,6 +571,7 @@ DELETE /api/v1/media/:id
 - [ ] Recherche dans conversation - Post-MVP
 
 #### Appels Audio/Vidéo
+
 - [ ] Appel audio 1-to-1
 - [ ] Appel vidéo 1-to-1
 - [ ] Écran appel entrant
@@ -546,6 +583,7 @@ DELETE /api/v1/media/:id
 - [ ] Appels groupe (3+) - Post-MVP
 
 #### Notifications
+
 - [ ] Permission prompt
 - [ ] Push notifications (background)
 - [ ] Foreground notifications (in-app)
@@ -555,6 +593,7 @@ DELETE /api/v1/media/:id
 - [ ] Notifications personnalisées (sons, vibration) - Post-MVP
 
 #### Profil & Paramètres
+
 - [x] Profil utilisateur (nom, avatar, bio)
 - [ ] Modifier profil
 - [ ] Changer avatar
@@ -567,6 +606,7 @@ DELETE /api/v1/media/:id
 ### Architecture & Technique
 
 #### Frontend
+
 - [x] Layout responsive (mobile, web)
 - [x] Dark mode
 - [x] Routing (Expo Router, Next.js App Router)
@@ -577,6 +617,7 @@ DELETE /api/v1/media/:id
 - [ ] Performance optimisée (Lighthouse 90+)
 
 #### Backend
+
 - [x] Supabase Auth
 - [x] Supabase Realtime (messages, typing, presence)
 - [x] Supabase Storage (médias)
@@ -588,6 +629,7 @@ DELETE /api/v1/media/:id
 - [ ] Health checks
 
 #### DevOps
+
 - [ ] CI/CD (GitHub Actions)
 - [ ] Tests automatisés (Jest, Cypress)
 - [ ] Deployment web (Vercel/Firebase)
@@ -600,6 +642,7 @@ DELETE /api/v1/media/:id
 ## 🎯 Objectifs Mesurables MVP
 
 ### Performance
+
 - [ ] Latence message < 500ms (90% cas)
 - [ ] Appel établi < 3s
 - [ ] Upload image < 5s (1MB)
@@ -607,6 +650,7 @@ DELETE /api/v1/media/:id
 - [ ] FPS > 55 (mobile)
 
 ### Qualité
+
 - [ ] Zero crash en production
 - [ ] Tests coverage > 70%
 - [ ] Accessibilité (a11y) score > 85
@@ -614,6 +658,7 @@ DELETE /api/v1/media/:id
 - [ ] Linting 0 errors ✅
 
 ### UX
+
 - [ ] Onboarding < 2 minutes
 - [ ] Time to first message < 30s
 - [ ] Dark mode complet
@@ -638,6 +683,7 @@ DELETE /api/v1/media/:id
 ### Hooks & Services Disponibles
 
 #### Mobile
+
 ```typescript
 ✅ useAuth()          // mobile/hooks/useAuth.ts
 ✅ useChat()          // mobile/hooks/useChat.ts
@@ -649,6 +695,7 @@ DELETE /api/v1/media/:id
 ```
 
 #### Web
+
 ```typescript
 ✅ useAuth()          // web-app/src/hooks/useAuth.ts
 ✅ useChat()          // web-app/src/hooks/useChat.ts
@@ -757,6 +804,7 @@ pnpm dev
 ### Problèmes Fréquents
 
 **Q1 : Erreur "Cannot find module '@imuchat/ui-kit'"**
+
 ```bash
 # Rebuilder packages workspace
 pnpm install
@@ -764,12 +812,14 @@ pnpm --filter @imuchat/ui-kit build
 ```
 
 **Q2 : Expo Metro bundler stuck**
+
 ```bash
 cd mobile
 pnpm start --clear
 ```
 
 **Q3 : Next.js build errors**
+
 ```bash
 cd web-app
 rm -rf .next
@@ -777,6 +827,7 @@ pnpm dev
 ```
 
 **Q4 : Platform-core ne démarre pas**
+
 ```bash
 cd platform-core
 # Vérifier .env (Firebase credentials, Supabase URL, Stream API key)
@@ -827,4 +878,3 @@ pnpm dev
 **NEXT ACTION** : Commencer Jour 1 - Écrans Appels Mobile 📱
 
 ---
-

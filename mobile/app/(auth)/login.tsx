@@ -46,6 +46,7 @@ export default function LoginScreen() {
       <Stack.Screen options={{ title: "Login", headerShown: false }} />
       <View style={[styles.verticallySpaced, styles.mt20]}>
         <TextInput
+          testID="login-email-input"
           onChangeText={(text) => setEmail(text)}
           value={email}
           placeholder="email@address.com"
@@ -59,6 +60,7 @@ export default function LoginScreen() {
       </View>
       <View style={styles.verticallySpaced}>
         <TextInput
+          testID="login-password-input"
           onChangeText={(text) => setPassword(text)}
           value={password}
           secureTextEntry={true}
@@ -73,9 +75,14 @@ export default function LoginScreen() {
       </View>
       <View style={[styles.verticallySpaced, styles.mt20]}>
         {loading ? (
-          <ActivityIndicator size="large" color={theme.colors.primary} />
+          <ActivityIndicator
+            testID="login-loading"
+            size="large"
+            color={theme.colors.primary}
+          />
         ) : (
           <Button
+            testID="login-submit-button"
             title="Sign in"
             disabled={loading}
             onPress={signInWithEmail}

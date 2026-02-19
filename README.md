@@ -31,7 +31,7 @@ imuchat_global/           ← Ce dépôt (workspace pnpm)
 │   └── package.json
 │
 ├── mobile/           ← 📱 Application Mobile (Expo/React Native)
-│   ├── App.tsx
+│   ├── src/              # Code source React Native
 │   └── package.json
 │
 ├── desktop-app/          ← 🖥️ Application Desktop (Electron)

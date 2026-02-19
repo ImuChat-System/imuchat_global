@@ -210,8 +210,10 @@ describe("Messaging Service", () => {
 
             (supabase.from as jest.Mock).mockReturnValue({
                 update: jest.fn().mockReturnThis(),
-                eq: jest.fn().mockResolvedValue({
-                    error: null,
+                eq: jest.fn().mockReturnValue({
+                    eq: jest.fn().mockResolvedValue({
+                        error: null,
+                    }),
                 }),
             });
 

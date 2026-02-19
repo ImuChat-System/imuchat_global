@@ -109,7 +109,7 @@ describe("ImageGallery", () => {
   });
 
   it("shows video indicator for video items", () => {
-    const media = [createMockMedia({ type: "video" })];
+    const media = [createMockMedia({ type: "video" }), createMockMedia()];
 
     const { getByLabelText } = render(<ImageGallery media={media} />);
 

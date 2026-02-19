@@ -301,6 +301,9 @@ importers:
       '@babel/preset-typescript':
         specifier: ^7.28.5
         version: 7.28.5(@babel/core@7.29.0)
+      '@react-native/jest-preset':
+        specifier: 0.85.0-nightly-20260219-44901aaf9
+        version: 0.85.0-nightly-20260219-44901aaf9(@babel/core@7.29.0)(react@19.1.0)
       '@testing-library/jest-native':
         specifier: ^5.4.3
         version: 5.4.3(react-native@0.81.5(@babel/core@7.29.0)(@react-native-community/cli@12.1.1)(@types/react@19.1.17)(react@19.1.0))(react-test-renderer@19.1.0(react@19.1.0))(react@19.1.0)
@@ -5161,6 +5164,12 @@ packages:
     resolution: {integrity: sha512-hORRlNBj+ReNMLo9jme3yQ6JQf4GZpVEBLxmTXGGlIL78MAezDZr5/uq9dwElSbcGmLEgeiax6e174Fie6qPLg==}
     engines: {node: '>= 20.19.4'}
 
+  '@react-native/jest-preset@0.85.0-nightly-20260219-44901aaf9':
+    resolution: {integrity: sha512-XIJHiI8l88V1qK0nDYdCvDGz6FaVffYxU9XhapjinsqzYw/u0eGYwc023YzCMVXMHg1grClsa+XKlnyOFyyFYw==}
+    engines: {node: '>= 20.19.4'}
+    peerDependencies:
+      react: ^19.2.3
+
   '@react-native/js-polyfills@0.73.1':
     resolution: {integrity: sha512-ewMwGcumrilnF87H4jjrnvGZEaPFCAC4ebraEK+CurDDmwST/bIicI4hrOAv+0Z0F7DEK4O4H7r8q9vH7IbN4g==}
     engines: {node: '>=18'}
@@ -5168,6 +5177,10 @@ packages:
   '@react-native/js-polyfills@0.81.5':
     resolution: {integrity: sha512-fB7M1CMOCIUudTRuj7kzxIBTVw2KXnsgbQ6+4cbqSxo8NmRRhA0Ul4ZUzZj3rFd3VznTL4Brmocv1oiN0bWZ8w==}
     engines: {node: '>= 20.19.4'}
+
+  '@react-native/js-polyfills@0.85.0-nightly-20260219-44901aaf9':
+    resolution: {integrity: sha512-ibP9Kxq8xlcP3UjujtigHhcz60oidEo79c9d0kfi0AWo7EIqW6r37l97q2KL2dxCj0gXBAVGv5Wd7iWdSHgjvA==}
+    engines: {node: ^20.19.4 || ^22.13.0 || ^24.3.0 || >= 25.0.0}
 
   '@react-native/metro-babel-transformer@0.73.15':
     resolution: {integrity: sha512-LlkSGaXCz+xdxc9819plmpsl4P4gZndoFtpjN3GMBIu6f7TBV0GVbyJAU4GE8fuAWPVSVL5ArOcdkWKSbI1klw==}
@@ -17156,7 +17169,7 @@ snapshots:
     dependencies:
       '@types/istanbul-lib-coverage': 2.0.6
       '@types/istanbul-reports': 3.0.4
-      '@types/node': 24.10.13
+      '@types/node': 20.19.33
       '@types/yargs': 15.0.20
       chalk: 4.1.2
 
@@ -20033,9 +20046,23 @@ snapshots:
 
   '@react-native/gradle-plugin@0.81.5': {}
 
+  '@react-native/jest-preset@0.85.0-nightly-20260219-44901aaf9(@babel/core@7.29.0)(react@19.1.0)':
+    dependencies:
+      '@jest/create-cache-key-function': 29.7.0
+      '@react-native/js-polyfills': 0.85.0-nightly-20260219-44901aaf9
+      babel-jest: 29.7.0(@babel/core@7.29.0)
+      jest-environment-node: 29.7.0
+      react: 19.1.0
+      regenerator-runtime: 0.13.11
+    transitivePeerDependencies:
+      - '@babel/core'
+      - supports-color
+
   '@react-native/js-polyfills@0.73.1': {}
 
   '@react-native/js-polyfills@0.81.5': {}
+
+  '@react-native/js-polyfills@0.85.0-nightly-20260219-44901aaf9': {}
 
   '@react-native/metro-babel-transformer@0.73.15(@babel/core@7.29.0)(@babel/preset-env@7.29.0(@babel/core@7.29.0))':
     dependencies:
@@ -20877,7 +20904,7 @@ snapshots:
 
   '@types/cors@2.8.19':
     dependencies:
-      '@types/node': 24.10.13
+      '@types/node': 20.19.33
 
   '@types/d3-array@3.2.2': {}
 
@@ -21076,7 +21103,7 @@ snapshots:
   '@types/request@2.48.13':
     dependencies:
       '@types/caseless': 0.12.5
-      '@types/node': 24.10.13
+      '@types/node': 20.19.33
       '@types/tough-cookie': 4.0.5
       form-data: 2.5.5
 
@@ -28150,7 +28177,7 @@ snapshots:
       '@protobufjs/path': 1.1.2
       '@protobufjs/pool': 1.1.0
       '@protobufjs/utf8': 1.1.0
-      '@types/node': 24.10.13
+      '@types/node': 20.19.33
       long: 5.3.2
 
   proxy-addr@2.0.7:

@@ -2,10 +2,21 @@
  * Tests unitaires pour ParticipantView
  */
 
+import { ThemeProvider } from "@/providers/ThemeProvider";
 import type { CallParticipant } from "@/services/calls";
-import { render } from "@testing-library/react-native";
-import React from "react";
+import { render, type RenderOptions } from "@testing-library/react-native";
+import React, { type ReactElement } from "react";
 import { ParticipantView } from "../ParticipantView";
+
+// Wrapper avec ThemeProvider requis pour Avatar
+const AllTheProviders = ({ children }: { children: React.ReactNode }) => {
+  return <ThemeProvider>{children}</ThemeProvider>;
+};
+
+const customRender = (
+  ui: ReactElement,
+  options?: Omit<RenderOptions, "wrapper">,
+) => render(ui, { wrapper: AllTheProviders, ...options });
 
 describe("ParticipantView", () => {
   const mockParticipant: CallParticipant = {
@@ -17,14 +28,14 @@ describe("ParticipantView", () => {
   };
 
   it("should render participant name", () => {
-    const { getByText } = render(
+    const { getByText } = customRender(
       <ParticipantView participant={mockParticipant} />,
     );
     expect(getByText("John Doe")).toBeTruthy();
   });
 
   it("should show video placeholder when video is enabled", () => {
-    const { getByTestId } = render(
+    const { getByTestId } = customRender(
       <ParticipantView participant={mockParticipant} />,
     );
     expect(getByTestId("video-placeholder")).toBeTruthy();
@@ -36,7 +47,7 @@ describe("ParticipantView", () => {
       isVideoEnabled: false,
     };
 
-    const { getByTestId } = render(
+    const { getByTestId } = customRender(
       <ParticipantView participant={participantWithoutVideo} />,
     );
     expect(getByTestId("participant-avatar")).toBeTruthy();
@@ -48,7 +59,7 @@ describe("ParticipantView", () => {
       isAudioEnabled: false,
     };
 
-    const { getByText } = render(
+    const { getByText } = customRender(
       <ParticipantView participant={participantMuted} />,
     );
     expect(getByText("🔇")).toBeTruthy();
@@ -60,7 +71,7 @@ describe("ParticipantView", () => {
       isVideoEnabled: false,
     };
 
-    const { getByText } = render(
+    const { getByText } = customRender(
       <ParticipantView participant={participantNoCamera} />,
     );
     expect(getByText("🚫")).toBeTruthy();
@@ -73,7 +84,7 @@ describe("ParticipantView", () => {
       isVideoEnabled: false,
     };
 
-    const { getByText } = render(
+    const { getByText } = customRender(
       <ParticipantView participant={participantNoMedias} />,
     );
     expect(getByText("🔇")).toBeTruthy();
@@ -81,7 +92,7 @@ describe("ParticipantView", () => {
   });
 
   it("should not show indicators when both audio and video are enabled", () => {
-    const { queryByText } = render(
+    const { queryByText } = customRender(
       <ParticipantView participant={mockParticipant} />,
     );
     expect(queryByText("🔇")).toBeNull();
@@ -90,7 +101,7 @@ describe("ParticipantView", () => {
 
   it("should render with custom style prop", () => {
     const customStyle = { width: 200, height: 200 };
-    const { getByTestId } = render(
+    const { getByTestId } = customRender(
       <ParticipantView participant={mockParticipant} style={customStyle} />,
     );
     const container = getByTestId("participant-container");
@@ -105,7 +116,7 @@ describe("ParticipantView", () => {
       isVideoEnabled: false,
     };
 
-    const { getByTestId, getByText } = render(
+    const { getByTestId, getByText } = customRender(
       <ParticipantView participant={participantNoName} />,
     );
     expect(getByTestId("participant-avatar")).toBeTruthy();
@@ -113,7 +124,7 @@ describe("ParticipantView", () => {
   });
 
   it("should render overlay with participant info", () => {
-    const { getByTestId, getByText } = render(
+    const { getByTestId, getByText } = customRender(
       <ParticipantView participant={mockParticipant} />,
     );
 

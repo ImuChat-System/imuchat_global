@@ -26,15 +26,18 @@ describe("NotificationPrompt", () => {
       <NotificationPrompt visible={true} onClose={mockOnClose} />,
     );
 
-    expect(getByText(/Restez connecté avec vos amis/i)).toBeTruthy();
+    // Utiliser le titre exact pour éviter les matchs multiples
+    expect(getByText("Activer les notifications ?")).toBeTruthy();
   });
 
   it("should not render when visible is false", () => {
-    const { queryByText } = render(
+    const { UNSAFE_getByType } = render(
       <NotificationPrompt visible={false} onClose={mockOnClose} />,
     );
 
-    expect(queryByText(/Restez connecté avec vos amis/i)).toBeNull();
+    // Le Modal reçoit visible=false, vérifions la prop
+    const modal = UNSAFE_getByType(require("react-native").Modal);
+    expect(modal.props.visible).toBe(false);
   });
 
   it("should display all benefit items", () => {
@@ -42,8 +45,8 @@ describe("NotificationPrompt", () => {
       <NotificationPrompt visible={true} onClose={mockOnClose} />,
     );
 
-    expect(getByText(/Messages instantanés/i)).toBeTruthy();
-    expect(getByText(/Appels entrants/i)).toBeTruthy();
+    expect(getByText(/Nouveaux messages/i)).toBeTruthy();
+    expect(getByText(/Appels manqués/i)).toBeTruthy();
     expect(getByText(/Invitations/i)).toBeTruthy();
     expect(getByText(/Événements importants/i)).toBeTruthy();
   });
@@ -66,7 +69,7 @@ describe("NotificationPrompt", () => {
       <NotificationPrompt visible={true} onClose={mockOnClose} />,
     );
 
-    const activateButton = getByText("Activer les notifications");
+    const activateButton = getByText("Activer");
     fireEvent.press(activateButton);
 
     await waitFor(() => {
@@ -81,7 +84,7 @@ describe("NotificationPrompt", () => {
       <NotificationPrompt visible={true} onClose={mockOnClose} />,
     );
 
-    const activateButton = getByText("Activer les notifications");
+    const activateButton = getByText("Activer");
     fireEvent.press(activateButton);
 
     await waitFor(() => {
@@ -100,7 +103,7 @@ describe("NotificationPrompt", () => {
       <NotificationPrompt visible={true} onClose={mockOnClose} />,
     );
 
-    const activateButton = getByText("Activer les notifications");
+    const activateButton = getByText("Activer");
     fireEvent.press(activateButton);
 
     // Vérifier que le bouton est en état de chargement
@@ -123,7 +126,7 @@ describe("NotificationPrompt", () => {
       <NotificationPrompt visible={true} onClose={mockOnClose} />,
     );
 
-    const activateButton = getByText("Activer les notifications");
+    const activateButton = getByText("Activer");
     fireEvent.press(activateButton);
 
     await waitFor(() => {

@@ -599,9 +599,9 @@
 **Features Livrées** :
 13. ✅ **Notifications push** — Les 2 plateformes + backend complet
 14. ✅ **Thèmes clair/sombre** — Web excellent (8 thèmes), Mobile partiel
-15. ❌ **Recherche conversations** — 0/10 les 2 plateformes
-16. ❌ **Mode hors-ligne** — 0/10 les 2 plateformes
-17. ❌ **Onboarding** — 0/10 les 2 plateformes
+15. ✅ **Recherche conversations** — Web 10/10 (SearchDialog 537 lignes), Mobile 0/10
+16. ⚠️ **Mode hors-ligne** — Web ✅ (SW + IndexedDB), Mobile 0/10
+17. ⚠️ **Onboarding** — Web ✅ (3 slides animés), Mobile 0/10
 
 #### Feature 13 : Notifications Push
 
@@ -716,18 +716,18 @@
 
 **Mobile & Web** :
 
-- [ ] Welcome screens (3 slides) — ❌ 0/10 — Entièrement absent
-  - [ ] 1. Communication sécurisée
-  - [ ] 2. Appels vidéo HD
-  - [ ] 3. Privacy-first
-- [ ] Skip button — ❌ Non implémenté
+- [x] Welcome screens (3 slides) — ✅ Web complète (OnboardingFlow)
+  - [x] 1. Communication sécurisée — ✅ Web
+  - [x] 2. Appels vidéo HD — ✅ Web
+  - [x] 3. Privacy-first — ✅ Web
+- [x] Skip button — ✅ Web implémenté
 - [ ] Tutorial interactif (optionnel) — ❌ Non implémenté
   - [ ] Highlight features first use
 
 **Tests** :
 
-- [ ] First-time user voit onboarding
-- [ ] Returning user : skippé
+- [x] First-time user voit onboarding — ✅ Web via localStorage
+- [x] Returning user : skippé — ✅
 
 **Livrable** : App polie, prête beta testing ✅
 
@@ -1096,9 +1096,9 @@
 | 12 | Screen Sharing | 3/10 | 8/10 | 8/10 | ⚠️ Web seul |
 | 13 | Notifications Push | 10/10 | 8/10 | 10/10 | ✅ Excellent |
 | 14 | Thèmes | 7/10 | 9/10 | N/A | ✅ Solide |
-| 15 | Recherche | 0/10 | 0/10 | 1/10 stub | ❌ Non fait |
-| 16 | Mode Hors-ligne | 0/10 | 0/10 | N/A | ❌ Non fait |
-| 17 | Onboarding | 0/10 | 0/10 | N/A | ❌ Non fait |
+| 15 | Recherche | 0/10 | 10/10 | 1/10 stub | ✅ Web fait |
+| 16 | Mode Hors-ligne | 0/10 | 10/10 | N/A | ⚠️ Web fait |
+| 17 | Onboarding | 0/10 | 10/10 | N/A | ⚠️ Web fait |
 | 18 | Desktop Setup | N/A | N/A | N/A | ⚠️ Structure OK |
 | 19 | Desktop Core Features | N/A | N/A | N/A | ⚠️ Basique |
 | 20 | Video Desktop | N/A | N/A | N/A | ❌ Non démarré |

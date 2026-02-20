@@ -101,7 +101,7 @@
 - [x] Page `/login`
 - [x] Page `/signup` (+ OAuth Google/Discord)
 - [x] Page `/forgot-password` — ✅ Créée (formulaire email + resetPassword + i18n fr/en/ja)
-- [ ] Middleware auth protection — ❌ Middleware = i18n seulement
+- [x] Middleware auth protection — ✅ Réécrit avec `@supabase/ssr`, protection SSR sur `/chat`, `/app`, `/settings`, `/profile`
 - [x] Session cookies (SSR) — client-side
 - [x] Redirect si authenticated
 
@@ -187,7 +187,7 @@
 
 **Web** :
 
-- [x] Sidebar conversations — ⚠️ MOCK_DATA uniquement
+- [x] Sidebar conversations — ✅ Connectée à `useConversations()` (API REST + fallback mock)
 - [x] Search bar (filtre local seulement)
 - [x] Même UI que mobile (responsive)
 
@@ -237,8 +237,8 @@
 
 **Web** :
 
-- [x] Main chat area — ⚠️ UI riche mais 100% MOCK_DATA
-- [x] Même features que mobile — ⚠️ 100% MOCK_DATA
+- [x] Main chat area — ✅ Connecté à `useMessages()` (API REST + Socket.IO temps réel + pagination)
+- [x] Même features que mobile — ✅ Hooks connectés, fallback mock si API indisponible
 - [ ] Raccourcis clavier :
   - [x] Enter → Send
   - [x] Shift+Enter → New line

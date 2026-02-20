@@ -87,21 +87,35 @@ export default function TabLayout() {
         }}
       />
 
-      {/* Watch Tab - caché de la tab bar */}
+      {/* Notifications Tab */}
+      <Tabs.Screen
+        name="notifications"
+        options={{
+          tabBarTestID: "tab-notifications",
+          title: "Notifs",
+          tabBarIcon: ({ color }) => <TabBarIcon name="bell" color={color} />,
+        }}
+      />
+
+      {/* Watch Tab */}
       <Tabs.Screen
         name="watch"
         options={{
           title: "Watch",
-          href: null,
+          tabBarIcon: ({ color }) => (
+            <TabBarIcon name="play-circle" color={color} />
+          ),
         }}
       />
 
-      {/* Store Tab - caché de la tab bar */}
+      {/* Store Tab */}
       <Tabs.Screen
         name="store"
         options={{
           title: "Store",
-          href: null,
+          tabBarIcon: ({ color }) => (
+            <TabBarIcon name="shopping-bag" color={color} />
+          ),
         }}
       />
 

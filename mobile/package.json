@@ -30,6 +30,7 @@
     "@imuchat/platform-core": "workspace:*",
     "@imuchat/shared-types": "workspace:*",
     "@imuchat/ui-kit": "workspace:*",
+    "@lottiefiles/dotlottie-react": "^0.18.1",
     "@react-native-async-storage/async-storage": "^2.1.0",
     "@react-navigation/core": "^7.14.0",
     "@react-navigation/native": "^7.1.8",

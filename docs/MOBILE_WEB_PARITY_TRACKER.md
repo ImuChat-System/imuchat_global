@@ -139,17 +139,23 @@
 
 ---
 
-## 7. Notification Center ⏳
+## 7. Notification Center ✅
 
 **Gap identifié** : Backend push prêt (`notification-api.ts`, `notifications.ts`) mais aucune UI in-app pour voir l'historique.
 
 **Implémentation mobile** :
 
-- [ ] Écran liste notifications (FlatList)
-- [ ] Types : message, appel manqué, mention, événement
-- [ ] Mark as read / Mark all read
-- [ ] Badge count dans tab bar
-- [ ] Tests unitaires
+- [x] Écran `notifications.tsx` (~550 lignes) — Centre complet
+- [x] 5 catégories (Tout, Messages, Appels, Social, Système)
+- [x] Recherche textuelle avec clear
+- [x] Filtre lu/non-lu/tous
+- [x] Mark as read (individuel, optimistic update)
+- [x] Mark all read (global, optimistic update)
+- [x] Badge count non-lues dans header
+- [x] Onglet Notifications ajouté dans la tab bar (bell icon)
+- [x] Onglets Watch et Store activés (plus masqués)
+- [x] Fallback mock data quand API indisponible
+- [x] Tests unitaires (+23 tests — notifications.test.tsx)
 
 ---
 
@@ -165,4 +171,6 @@
 | 19/02/2026 | Watch screen réécriture complète (Featured+Parties+Upcoming) | +18 |
 | 19/02/2026 | Store screen réécriture complète (Tabs+Search+Sort+Modal) | +22 |
 | 19/02/2026 | FlatList mock amélioré (rend data+renderItem) | — |
-| 19/02/2026 | **Total mobile : 258 tests, 21 suites, 0 échecs** | **+85 net** |
+| 19/02/2026 | Notifications screen créé + onglet ajouté | +23 |
+| 19/02/2026 | Desktop-app réécrit (sidebar + Home + Messages panels) | — |
+| 19/02/2026 | **Total mobile : 281 tests, 22 suites, 0 échecs** | **+108 net** |

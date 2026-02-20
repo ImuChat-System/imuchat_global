@@ -1,12 +1,27 @@
 # 🎯 MVP ImuChat - État Actuel & Prochaines Étapes
 
 > **Date**: 19 février 2026 (mis à jour)  
-> **Status**: Infrastructure + Auth + Chat + Stream Video Web + Notifications + Media Upload + Profil Web + Contacts/Amis + Settings Mobile + **Parité Mobile/Web** + Tests ✅ TERMINÉS  
-> **Progression MVP**: 97% → **99%** (Parité Mobile/Web — 6 écrans réécrits)
+> **Status**: Infrastructure + Auth + Chat + Stream Video Web + Notifications + Media Upload + Profil Web + Contacts/Amis + Settings Mobile + **Parité Mobile/Web 7/7** + Desktop-App + Tests ✅ TERMINÉS  
+> **Progression MVP**: 97% → 99% → **100%** (Notification Center + Desktop-App réécrit)
 
 ---
 
 ## ✅ **ACCOMPLI RÉCEMMENT** (Sessions productives 🔥🔥🔥)
+
+### 🆕 **NOTIFICATION CENTER + DESKTOP-APP** (19 février 2026) ✅
+
+**Chantier 8 : Notification Center mobile (parité 7/7)** :
+
+- ✅ `mobile/app/(tabs)/notifications.tsx` (~550 lignes) — Centre de notifications complet : 5 catégories, recherche, filtre lu/non-lu, mark read, mark all read, badge non-lues, fallback mock
+- ✅ `mobile/app/(tabs)/_layout.tsx` — Onglet Notifications (bell), Watch & Store activés (plus masqués)
+- ✅ `mobile/__tests__/notifications.test.tsx` (23 tests) — Loading, header, search, 5 catégories, filtres combinés, mark read, mark all, API integration
+
+**Chantier 9 : Desktop-App réécrit** :
+
+- ✅ `desktop-app/src/App.tsx` — Application complète : sidebar nav (9 items + badges), Home (hero + quick actions + stats + conversations), Messages (split panel : liste + chat), placeholder pages pour toutes les sections
+- ✅ `desktop-app/src/App.css` — UI complète : dark theme ImuChat, sidebar, avatars avec online indicator, chat bubbles, search, responsive panels
+- ✅ `desktop-app/src/index.css` — Thème global ImuChat (CSS variables, scrollbar, selection)
+- ✅ `desktop-app/index.html` — Titre mis à jour "ImuChat Desktop"
 
 ### 🆕 **PARITÉ MOBILE / WEB** (19 février 2026) ✅
 
@@ -19,21 +34,22 @@
 - ✅ `mobile/app/(tabs)/store.tsx` — Réécriture complète : DynamicHero, SearchBar, 5 Tabs, SortBar, MixedContentGrid (10 items), PurchaseModal
 - ✅ FlatList mock amélioré (`__mocks__/react-native.js`) — rend data+renderItem
 
-**Suite de Tests — 1163 tests, 0 échecs** :
+**Suite de Tests — 1186 tests, 0 échecs** :
 
 | Plateforme | Suites | Tests | Statut |
 |---|---|---|---|
-| **Mobile** | 21/21 | 258 passed | ✅ 0 échecs |
+| **Mobile** | 22/22 | 281 passed | ✅ 0 échecs |
 | **Web** | 95/96 (1 skipped) | 905 passed | ✅ 0 échecs |
-| **Total** | **116 suites** | **1163 tests** | ✅ **Tout vert** |
+| **Total** | **117 suites** | **1186 tests** | ✅ **Tout vert** |
 
-**Tests créés/réécrits cette session (+85 mobile)** :
+**Tests créés/réécrits cette session (+108 mobile)** :
 
 - ✅ `settings.test.tsx` (26 tests) — Account, Password, Language, Stories, Appearance, Notifications, Privacy, Supabase, Sign-out, Delete
 - ✅ `home.test.tsx` (21 tests) — Loading, Hero carousel+dots, Story carousel, Friends conversations, Explorer grid, Podcasts, Error handling
 - ✅ `social.test.tsx` (14 tests) — Story carousel, Filters, News/Stories filter, Feed posts, Actions, News badge, FAB
 - ✅ `watch.test.tsx` (18 tests) — Featured carousel, Category filter, Party filtering, Upcoming, CTA
 - ✅ `store.test.tsx` (22 tests) — Hero, Search+clear, Tabs, Sort, Grid 10 items, Prices, Purchase modal, Combined filters
+- ✅ `notifications.test.tsx` (23 tests) — Loading, header, search, 5 catégories, filtres, mark read, mark all, API integration
 
 ---
 

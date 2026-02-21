@@ -3,6 +3,7 @@
  * Sections : FeaturedCarousel, CategoryFilter, WatchPartyCards, UpcomingSection, CTA
  */
 
+import { useI18n } from "@/providers/I18nProvider";
 import { useColors, useSpacing } from "@/providers/ThemeProvider";
 import React, { useState } from "react";
 import {
@@ -142,11 +143,11 @@ const UPCOMING_PARTIES: UpcomingParty[] = [
 ];
 
 const CATEGORIES: { key: WatchCategory; label: string; icon: string }[] = [
-  { key: "all", label: "Tout", icon: "🎬" },
-  { key: "anime", label: "Anime", icon: "⛩️" },
-  { key: "movie", label: "Films", icon: "🎥" },
-  { key: "series", label: "Séries", icon: "📺" },
-  { key: "documentary", label: "Docu", icon: "🌍" },
+  { key: "all", label: "watch.all", icon: "🎨" },
+  { key: "anime", label: "watch.anime", icon: "⛩️" },
+  { key: "movie", label: "watch.movies", icon: "🎥" },
+  { key: "series", label: "watch.series", icon: "📺" },
+  { key: "documentary", label: "watch.documentary", icon: "🌍" },
 ];
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
@@ -155,6 +156,7 @@ const { width: SCREEN_WIDTH } = Dimensions.get("window");
 export default function WatchScreen() {
   const colors = useColors();
   const spacing = useSpacing();
+  const { t } = useI18n();
   const [category, setCategory] = useState<WatchCategory>("all");
 
   const filteredParties =
@@ -193,7 +195,7 @@ export default function WatchScreen() {
         testID={`join-featured-${item.id}`}
         style={[styles.joinBtn, { backgroundColor: colors.primary }]}
       >
-        <Text style={styles.joinBtnText}>Rejoindre</Text>
+        <Text style={styles.joinBtnText}>{t("watch.join")}</Text>
       </TouchableOpacity>
     </TouchableOpacity>
   );
@@ -234,7 +236,7 @@ export default function WatchScreen() {
           style={[styles.partyJoin, { borderColor: colors.primary }]}
         >
           <Text style={[styles.partyJoinText, { color: colors.primary }]}>
-            Rejoindre
+            {t("watch.join")}
           </Text>
         </TouchableOpacity>
       </View>
@@ -248,10 +250,10 @@ export default function WatchScreen() {
     const dayDiff = Math.floor((date.getTime() - Date.now()) / (24 * 3600000));
     const dayLabel =
       dayDiff === 0
-        ? "Aujourd'hui"
+        ? t("common.today")
         : dayDiff === 1
-          ? "Demain"
-          : `Dans ${dayDiff}j`;
+          ? t("common.tomorrow")
+          : t("common.inDays", { count: dayDiff });
 
     return (
       <TouchableOpacity
@@ -278,7 +280,7 @@ export default function WatchScreen() {
             {u.title}
           </Text>
           <Text style={[styles.upcomingHost, { color: colors.textMuted }]}>
-            👤 {u.host} · {u.attendees} inscrits
+            👤 {u.host} · {u.attendees} {t("watch.registered")}
           </Text>
         </View>
       </TouchableOpacity>
@@ -295,9 +297,11 @@ export default function WatchScreen() {
     >
       <View style={[styles.content, { padding: spacing.lg }]}>
         {/* Header */}
-        <Text style={[styles.title, { color: colors.text }]}>📺 Watch</Text>
+        <Text style={[styles.title, { color: colors.text }]}>
+          {t("watch.title")}
+        </Text>
         <Text style={[styles.subtitle, { color: colors.textMuted }]}>
-          VOD et Watch Party
+          {t("watch.subtitle")}
         </Text>
 
         {/* ── Featured Carousel ───────────────────────────────── */}
@@ -336,7 +340,7 @@ export default function WatchScreen() {
                     { color: active ? "#fff" : colors.textMuted },
                   ]}
                 >
-                  {c.label}
+                  {t(c.label)}
                 </Text>
               </TouchableOpacity>
             );
@@ -345,7 +349,7 @@ export default function WatchScreen() {
 
         {/* ── Watch Parties ───────────────────────────────────── */}
         <Text style={[styles.sectionTitle, { color: colors.text }]}>
-          🔴 En direct
+          {t("watch.live")}
         </Text>
         <View testID="parties-list">
           {filteredParties.length === 0 ? (
@@ -353,7 +357,7 @@ export default function WatchScreen() {
               testID="no-parties"
               style={[styles.emptyText, { color: colors.textMuted }]}
             >
-              Aucune party dans cette catégorie
+              {t("watch.noParties")}
             </Text>
           ) : (
             filteredParties.map(renderParty)
@@ -362,7 +366,7 @@ export default function WatchScreen() {
 
         {/* ── Upcoming ────────────────────────────────────────── */}
         <Text style={[styles.sectionTitle, { color: colors.text }]}>
-          📅 À venir
+          {t("watch.upcoming")}
         </Text>
         <View testID="upcoming-list">
           {UPCOMING_PARTIES.map(renderUpcoming)}
@@ -373,7 +377,7 @@ export default function WatchScreen() {
           testID="btn-create-party"
           style={[styles.createBtn, { backgroundColor: colors.primary }]}
         >
-          <Text style={styles.createBtnText}>🎉 Créer une Watch Party</Text>
+          <Text style={styles.createBtnText}>{t("watch.createParty")}</Text>
         </TouchableOpacity>
 
         <View style={{ height: 40 }} />

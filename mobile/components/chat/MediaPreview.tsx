@@ -3,6 +3,7 @@
  * Affiche preview des médias avant envoi avec progress bar
  */
 
+import { useI18n } from "@/providers/I18nProvider";
 import { useColors } from "@/providers/ThemeProvider";
 import { Ionicons } from "@expo/vector-icons";
 import { ResizeMode, Video } from "expo-av";
@@ -116,6 +117,7 @@ function PreviewItem({
   primaryColor?: string;
 }) {
   const colors = useColors();
+  const { t } = useI18n();
   const videoRef = useRef<Video>(null);
 
   const handleRemove = useCallback(() => {
@@ -177,7 +179,7 @@ function PreviewItem({
           {isError && (
             <TouchableOpacity onPress={handleRetry} style={styles.retryButton}>
               <Ionicons name="refresh" size={20} color="#FFFFFF" />
-              <Text style={styles.retryText}>Retry</Text>
+              <Text style={styles.retryText}>{t("common.retry")}</Text>
             </TouchableOpacity>
           )}
         </Animated.View>
@@ -195,7 +197,7 @@ function PreviewItem({
         onPress={handleRemove}
         style={[styles.removeButton, { backgroundColor: colors.background }]}
         hitSlop={{ top: 10, right: 10, bottom: 10, left: 10 }}
-        accessibilityLabel="Supprimer"
+        accessibilityLabel={t("common.delete")}
         accessibilityRole="button"
       >
         <Ionicons name="close" size={14} color={colors.text} />
@@ -223,6 +225,7 @@ export function MediaPreview({
   primaryColor = PRIMARY_COLOR,
 }: MediaPreviewProps) {
   const colors = useColors();
+  const { t } = useI18n();
 
   if (!media.length) return null;
 
@@ -238,10 +241,10 @@ export function MediaPreview({
       {/* Header avec compteur */}
       <View style={styles.header}>
         <Text style={[styles.headerText, { color: colors.secondary }]}>
-          {media.length} média{media.length > 1 ? "s" : ""}
-          {uploadingCount > 0 && ` • ${uploadingCount} en cours`}
-          {errorCount > 0 &&
-            ` • ${errorCount} erreur${errorCount > 1 ? "s" : ""}`}
+          {t("components.mediaCount", { count: media.length })}
+          {uploadingCount > 0 &&
+            ` • ${uploadingCount} ${t("components.inProgress")}`}
+          {errorCount > 0 && ` • ${errorCount} ${t("components.errorsLabel")}`}
         </Text>
       </View>
 
@@ -362,5 +365,3 @@ const styles = StyleSheet.create({
     padding: 4,
   },
 });
-
-export type { MediaPreviewProps };

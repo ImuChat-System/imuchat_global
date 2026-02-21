@@ -1,8 +1,10 @@
+import { useI18n } from "@/providers/I18nProvider";
 import { useColors } from "@/providers/ThemeProvider";
 import { Message } from "@/services/messaging";
 import { ReactionGroup } from "@/services/reactions";
 import { useCallback, useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
+import { MessageContextMenu } from "./chat/MessageContextMenu";
 import { MediaPreview, MediaViewer } from "./MediaComponents";
 import { ReactionBar, ReactionPicker } from "./ReactionPicker";
 
@@ -13,6 +15,16 @@ interface MessageBubbleProps {
   reactions?: ReactionGroup[];
   /** Callback lors d'un toggle de réaction */
   onReactionToggle?: (emoji: string) => void;
+  /** Callback for reply action */
+  onReply?: (messageId: string, messageText: string) => void;
+  /** Callback for copy action */
+  onCopy?: (messageText: string) => void;
+  /** Callback for edit action */
+  onEdit?: (messageId: string, currentText: string) => void;
+  /** Callback for delete action */
+  onDelete?: (messageId: string) => void;
+  /** Callback for forward action */
+  onForward?: (messageId: string, messageText: string) => void;
 }
 
 export default function MessageBubble({
@@ -20,10 +32,22 @@ export default function MessageBubble({
   isOwnMessage,
   reactions = [],
   onReactionToggle,
+  onReply,
+  onCopy,
+  onEdit,
+  onDelete,
+  onForward,
 }: MessageBubbleProps) {
   const colors = useColors();
+  const { t } = useI18n();
   const [showPicker, setShowPicker] = useState(false);
   const [showMediaViewer, setShowMediaViewer] = useState(false);
+  const [showContextMenu, setShowContextMenu] = useState(false);
+
+  // Check if message is deleted
+  const isDeleted = Boolean(message.deleted_at);
+  // Check if message is edited
+  const isEdited = Boolean(message.is_edited);
 
   const formatTime = (timestamp: string) => {
     const date = new Date(timestamp);
@@ -31,6 +55,11 @@ export default function MessageBubble({
   };
 
   const handleLongPress = useCallback(() => {
+    // Show context menu for message actions
+    setShowContextMenu(true);
+  }, []);
+
+  const handleReactionPickerOpen = useCallback(() => {
     setShowPicker(true);
   }, []);
 
@@ -73,7 +102,9 @@ export default function MessageBubble({
     >
       {!isOwnMessage && message.sender && (
         <Text style={[styles.senderName, { color: colors.primary }]}>
-          {message.sender.username || message.sender.full_name || "Unknown"}
+          {message.sender.username ||
+            message.sender.full_name ||
+            t("common.unknown")}
         </Text>
       )}
 
@@ -87,6 +118,50 @@ export default function MessageBubble({
             hasMedia && !hasText && styles.mediaBubble,
           ]}
         >
+          {/* Reply quote - show the message being replied to */}
+          {message.replied_message && !isDeleted && (
+            <View
+              style={[
+                styles.replyQuote,
+                {
+                  backgroundColor: isOwnMessage
+                    ? "rgba(255,255,255,0.15)"
+                    : colors.background,
+                  borderLeftColor: colors.primary,
+                },
+              ]}
+            >
+              <Text
+                style={[
+                  styles.replyAuthor,
+                  {
+                    color: isOwnMessage
+                      ? "rgba(255,255,255,0.9)"
+                      : colors.primary,
+                  },
+                ]}
+                numberOfLines={1}
+              >
+                {message.replied_message.sender?.username ||
+                  message.replied_message.sender?.full_name ||
+                  t("common.unknownUser")}
+              </Text>
+              <Text
+                style={[
+                  styles.replyContent,
+                  {
+                    color: isOwnMessage
+                      ? "rgba(255,255,255,0.7)"
+                      : colors.textMuted,
+                  },
+                ]}
+                numberOfLines={2}
+              >
+                {message.replied_message.content || t("chat.mediaAttachment")}
+              </Text>
+            </View>
+          )}
+
           {/* Média */}
           {hasMedia && message.media_url && (
             <MediaPreview
@@ -102,8 +177,22 @@ export default function MessageBubble({
             />
           )}
 
-          {/* Texte */}
-          {hasText && (
+          {/* Texte - Show deleted message or regular content */}
+          {isDeleted ? (
+            <Text
+              style={[
+                styles.messageText,
+                styles.deletedText,
+                {
+                  color: isOwnMessage
+                    ? "rgba(255,255,255,0.6)"
+                    : colors.textMuted,
+                },
+              ]}
+            >
+              {t("chat.messageDeleted")}
+            </Text>
+          ) : hasText ? (
             <Text
               style={[
                 styles.messageText,
@@ -112,20 +201,37 @@ export default function MessageBubble({
             >
               {message.content}
             </Text>
-          )}
+          ) : null}
 
-          <Text
-            style={[
-              styles.timestamp,
-              {
-                color: isOwnMessage
-                  ? "rgba(255,255,255,0.7)"
-                  : colors.textMuted,
-              },
-            ]}
-          >
-            {formatTime(message.created_at)}
-          </Text>
+          {/* Timestamp + edited indicator */}
+          <View style={styles.timestampRow}>
+            {isEdited && !isDeleted && (
+              <Text
+                style={[
+                  styles.editedText,
+                  {
+                    color: isOwnMessage
+                      ? "rgba(255,255,255,0.6)"
+                      : colors.textMuted,
+                  },
+                ]}
+              >
+                {t("chat.messageEdited")} •{" "}
+              </Text>
+            )}
+            <Text
+              style={[
+                styles.timestamp,
+                {
+                  color: isOwnMessage
+                    ? "rgba(255,255,255,0.7)"
+                    : colors.textMuted,
+                },
+              ]}
+            >
+              {formatTime(message.created_at)}
+            </Text>
+          </View>
         </View>
       </Pressable>
 
@@ -141,12 +247,12 @@ export default function MessageBubble({
           />
         )}
 
-      {/* Réactions */}
-      {(reactions.length > 0 || onReactionToggle) && (
+      {/* Réactions - hide for deleted messages */}
+      {!isDeleted && (reactions.length > 0 || onReactionToggle) && (
         <ReactionBar
           reactions={reactions}
           onReactionPress={handleReactionPress}
-          onAddPress={() => setShowPicker(true)}
+          onAddPress={handleReactionPickerOpen}
         />
       )}
 
@@ -155,6 +261,22 @@ export default function MessageBubble({
         visible={showPicker}
         onClose={() => setShowPicker(false)}
         onSelect={handleReactionSelect}
+      />
+
+      {/* Context menu for message actions */}
+      <MessageContextMenu
+        visible={showContextMenu}
+        onClose={() => setShowContextMenu(false)}
+        messageId={message.id}
+        messageText={message.content}
+        isOwnMessage={isOwnMessage}
+        messageCreatedAt={message.created_at}
+        isDeleted={isDeleted}
+        onReply={onReply}
+        onCopy={onCopy}
+        onEdit={onEdit}
+        onDelete={onDelete}
+        onForward={onForward}
       />
     </View>
   );
@@ -195,9 +317,37 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 20,
   },
+  deletedText: {
+    fontStyle: "italic",
+  },
+  replyQuote: {
+    borderLeftWidth: 2,
+    paddingLeft: 8,
+    paddingVertical: 4,
+    marginBottom: 8,
+    borderRadius: 4,
+    paddingRight: 8,
+  },
+  replyAuthor: {
+    fontSize: 12,
+    fontWeight: "600",
+    marginBottom: 2,
+  },
+  replyContent: {
+    fontSize: 13,
+    lineHeight: 16,
+  },
+  timestampRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "flex-end",
+    marginTop: 4,
+  },
+  editedText: {
+    fontSize: 11,
+    fontStyle: "italic",
+  },
   timestamp: {
     fontSize: 11,
-    marginTop: 4,
-    alignSelf: "flex-end",
   },
 });

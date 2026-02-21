@@ -4,6 +4,7 @@
  * Zoom pinch-to-zoom et swipe entre images
  */
 
+import { useI18n } from "@/providers/I18nProvider";
 import { useColors } from "@/providers/ThemeProvider";
 import { Ionicons } from "@expo/vector-icons";
 import { ResizeMode, Video } from "expo-av";
@@ -75,6 +76,7 @@ function GridItem({
   size: number;
 }) {
   const colors = useColors();
+  const { t } = useI18n();
   const isVideo = media.type === "video";
 
   return (
@@ -82,7 +84,9 @@ function GridItem({
       onPress={onPress}
       activeOpacity={0.8}
       style={[styles.gridItem, { width: size, height: size }]}
-      accessibilityLabel={`Voir ${isVideo ? "vidéo" : "image"}`}
+      accessibilityLabel={
+        isVideo ? t("components.viewVideo") : t("components.viewImage")
+      }
       accessibilityRole="button"
     >
       <Image
@@ -116,6 +120,7 @@ function FullscreenViewer({
   primaryColor?: string;
 }) {
   const colors = useColors();
+  const { t } = useI18n();
   const insets = useSafeAreaInsets();
   const [currentIndex, setCurrentIndex] = useState(initialIndex);
 
@@ -153,7 +158,7 @@ function FullscreenViewer({
 
   // Pinch gesture for zoom
   const pinchGesture = Gesture.Pinch()
-    .onUpdate((event) => {
+    .onUpdate((event: any) => {
       scale.value = Math.max(1, Math.min(savedScale.value * event.scale, 5));
     })
     .onEnd(() => {
@@ -170,7 +175,7 @@ function FullscreenViewer({
 
   // Pan gesture for moving
   const panGesture = Gesture.Pan()
-    .onUpdate((event) => {
+    .onUpdate((event: any) => {
       if (scale.value > 1) {
         translateX.value = savedTranslateX.value + event.translationX;
         translateY.value = savedTranslateY.value + event.translationY;
@@ -276,7 +281,7 @@ function FullscreenViewer({
             <TouchableOpacity
               onPress={handleClose}
               style={styles.fullscreenCloseButton}
-              accessibilityLabel="Fermer"
+              accessibilityLabel={t("common.close")}
               accessibilityRole="button"
             >
               <Ionicons name="close" size={28} color="#FFFFFF" />
@@ -574,5 +579,3 @@ const styles = StyleSheet.create({
     borderRadius: 4,
   },
 });
-
-export type { GalleryMedia, ImageGalleryProps };

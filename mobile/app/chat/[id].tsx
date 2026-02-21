@@ -1,12 +1,15 @@
 import MessageBubble from "@/components/MessageBubble";
 import MessageInput from "@/components/MessageInput";
+import ConversationPickerModal from "@/components/chat/ConversationPickerModal";
 import { useChat } from "@/hooks/useChat";
 import { useReactions } from "@/hooks/useReactions";
 import { useTheme } from "@/providers/ThemeProvider";
 import { initiateCall } from "@/services/call-signaling";
+import { forwardMessage } from "@/services/messaging";
 import { Ionicons } from "@expo/vector-icons";
 import { Stack, useLocalSearchParams, useRouter } from "expo-router";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   ActivityIndicator,
   Alert,
@@ -46,7 +49,46 @@ export default function ChatRoomScreen() {
   const flatListRef = useRef<FlatList>(null);
   const { theme } = useTheme();
   const router = useRouter();
+  const { t } = useTranslation();
   const [initiatingCall, setInitiatingCall] = useState(false);
+
+  // Forward message state
+  const [forwardModalVisible, setForwardModalVisible] = useState(false);
+  const [messageToForward, setMessageToForward] = useState<{
+    id: string;
+    text: string;
+  } | null>(null);
+
+  // Handle forward action from MessageBubble
+  const handleForward = useCallback(
+    (messageId: string, messageText: string) => {
+      setMessageToForward({ id: messageId, text: messageText });
+      setForwardModalVisible(true);
+    },
+    [],
+  );
+
+  // Confirm forward to selected conversation
+  const handleForwardConfirm = useCallback(
+    async (targetConversation: { id: string }) => {
+      if (!messageToForward) return;
+
+      try {
+        await forwardMessage(
+          targetConversation.id,
+          messageToForward.text,
+          messageToForward.id,
+        );
+        setForwardModalVisible(false);
+        setMessageToForward(null);
+        Alert.alert(t("common.success"), t("chat.messageForwarded"));
+      } catch (error) {
+        console.error("Error forwarding message:", error);
+        Alert.alert(t("common.error"), t("common.genericError"));
+      }
+    },
+    [messageToForward, t],
+  );
 
   // Callback pour toggle une réaction sur un message
   const handleReactionToggle = useCallback(
@@ -144,11 +186,20 @@ export default function ChatRoomScreen() {
         options={{
           title: "Chat",
           headerRight: () => (
-            <View testID="channel-header" style={{ flexDirection: "row", gap: 16, marginRight: 8 }}>
-              <TouchableOpacity testID="call-button" onPress={() => handleInitiateCall("audio")}>
+            <View
+              testID="channel-header"
+              style={{ flexDirection: "row", gap: 16, marginRight: 8 }}
+            >
+              <TouchableOpacity
+                testID="call-button"
+                onPress={() => handleInitiateCall("audio")}
+              >
                 <Ionicons name="call" size={24} color={theme.colors.primary} />
               </TouchableOpacity>
-              <TouchableOpacity testID="video-call-button" onPress={() => handleInitiateCall("video")}>
+              <TouchableOpacity
+                testID="video-call-button"
+                onPress={() => handleInitiateCall("video")}
+              >
                 <Ionicons
                   name="videocam"
                   size={24}
@@ -170,6 +221,7 @@ export default function ChatRoomScreen() {
             isOwnMessage={item.sender_id === currentUserId}
             reactions={reactionsByMessage[item.id] || []}
             onReactionToggle={handleReactionToggle(item.id)}
+            onForward={handleForward}
           />
         )}
         keyExtractor={(item) => item.id}
@@ -181,7 +233,10 @@ export default function ChatRoomScreen() {
 
       {/* Typing indicator */}
       {typingUsers.size > 0 && (
-        <View testID="typing-indicator-container" style={styles.typingContainer}>
+        <View
+          testID="typing-indicator-container"
+          style={styles.typingContainer}
+        >
           <Text style={[styles.typingText, { color: theme.colors.textMuted }]}>
             Someone is typing...
           </Text>
@@ -194,6 +249,17 @@ export default function ChatRoomScreen() {
         }
         onTyping={sendTypingIndicator}
         disabled={sending}
+      />
+
+      {/* Forward message modal */}
+      <ConversationPickerModal
+        visible={forwardModalVisible}
+        onClose={() => {
+          setForwardModalVisible(false);
+          setMessageToForward(null);
+        }}
+        onSelect={handleForwardConfirm}
+        excludeConversationId={id}
       />
     </KeyboardAvoidingView>
   );

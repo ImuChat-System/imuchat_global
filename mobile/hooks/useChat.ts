@@ -1,20 +1,34 @@
 /**
  * useChat Hook - Mobile
  * Hook React pour gérer les conversations et messages avec Supabase Realtime
+ * Includes offline support with message queue
  */
 
+import { useNetworkState } from '@/hooks/useNetworkState';
 import {
     Conversation,
-    Message,
+    copyMessageToClipboard,
+    deleteMessage as deleteMessageInDb,
+    editMessage as editMessageInDb,
     getConversations as fetchConversations,
     getMessages as fetchMessages,
+    forwardMessage as forwardMessageInDb,
     markConversationAsRead,
+    Message,
     sendMessage as sendMessageToDb,
     sendTypingIndicator as sendTypingIndicatorToServer,
     subscribeToConversation,
     subscribeToConversations,
     subscribeToTypingIndicators,
 } from '@/services/messaging';
+import {
+    addPendingMessage,
+    cleanExpiredMessages,
+    getPendingCount,
+    getPendingMessagesForConversation,
+    PendingMessage,
+    removePendingMessage,
+} from '@/services/offline-queue';
 import { supabase } from '@/services/supabase';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
@@ -26,6 +40,10 @@ export interface UseChatOptions {
 export function useChat(options: UseChatOptions = {}) {
     const { conversationId, autoLoad = true } = options;
 
+    // Network state
+    const { isConnected, isInternetReachable } = useNetworkState();
+    const isOnline = isConnected !== false && isInternetReachable !== false;
+
     // State
     const [conversations, setConversations] = useState<Conversation[]>([]);
     const [messages, setMessages] = useState<Message[]>([]);
@@ -34,9 +52,12 @@ export function useChat(options: UseChatOptions = {}) {
     const [error, setError] = useState<string | null>(null);
     const [currentUserId, setCurrentUserId] = useState<string | null>(null);
     const [typingUsers, setTypingUsers] = useState<Set<string>>(new Set());
+    const [replyToMessage, setReplyToMessage] = useState<Message | null>(null);
+    const [pendingMessagesCount, setPendingMessagesCount] = useState(0);
 
     // Ref for typing timeout
-    const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+    const typingTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+    const wasOfflineRef = useRef(false);
 
     // Get current user
     useEffect(() => {
@@ -84,7 +105,7 @@ export function useChat(options: UseChatOptions = {}) {
         [conversationId]
     );
 
-    // Send message
+    // Send message (with offline queue support)
     const sendMessage = useCallback(
         async (content: string, mediaUrl?: string, mediaType?: string, targetConvId?: string) => {
             const convId = targetConvId || conversationId;
@@ -95,32 +116,72 @@ export function useChat(options: UseChatOptions = {}) {
                 return null;
             }
 
+            // Get reply info before clearing
+            const replyingTo = replyToMessage;
+
+            // Clear reply state
+            setReplyToMessage(null);
+
+            // Create temp/optimistic message
+            const tempId = `temp-${Date.now()}`;
+            const tempMessage: Message = {
+                id: tempId,
+                conversation_id: convId,
+                sender_id: currentUserId || '',
+                content: hasContent ? content.trim() : null,
+                media_url: mediaUrl || null,
+                media_type: mediaType || null,
+                created_at: new Date().toISOString(),
+                updated_at: new Date().toISOString(),
+                deleted_at: null,
+                is_edited: false,
+                reply_to_id: replyingTo?.id || null,
+                replied_message: replyingTo ? {
+                    id: replyingTo.id,
+                    content: replyingTo.content,
+                    sender_id: replyingTo.sender_id,
+                    sender: replyingTo.sender ? {
+                        username: replyingTo.sender.username,
+                        full_name: replyingTo.sender.full_name,
+                    } : undefined,
+                } : null,
+            };
+
+            // Add optimistic message
+            setMessages((prev) => [...prev, tempMessage]);
+
+            // If offline, queue the message
+            if (!isOnline) {
+                console.log('[useChat] Offline - queuing message');
+                const pendingMsg: PendingMessage = {
+                    id: tempId,
+                    content: hasContent ? content.trim() : '',
+                    senderId: currentUserId || '',
+                    senderName: '', // Will be filled by sender info
+                    conversationId: convId,
+                    type: mediaType?.startsWith('image') ? 'image' : mediaType ? 'file' : 'text',
+                    replyToId: replyingTo?.id,
+                    mediaUrl,
+                    mediaType: mediaType || undefined,
+                    queuedAt: Date.now(),
+                };
+                await addPendingMessage(pendingMsg);
+                const count = await getPendingCount();
+                setPendingMessagesCount(count);
+                return tempMessage; // Return optimistic message
+            }
+
+            // Online - send normally
             try {
                 setSending(true);
                 setError(null);
 
-                // Optimistic update
-                const tempMessage: Message = {
-                    id: `temp-${Date.now()}`,
-                    conversation_id: convId,
-                    sender_id: currentUserId || '',
-                    content: hasContent ? content.trim() : null,
-                    media_url: mediaUrl || null,
-                    media_type: mediaType || null,
-                    created_at: new Date().toISOString(),
-                    updated_at: new Date().toISOString(),
-                    deleted_at: null,
-                    is_edited: false,
-                };
-
-                setMessages((prev) => [...prev, tempMessage]);
-
-                // Send to backend
                 const message = await sendMessageToDb(
                     convId,
                     hasContent ? content.trim() : '',
                     mediaUrl,
-                    mediaType
+                    mediaType,
+                    replyingTo?.id
                 );
 
                 // Replace temp message with real one
@@ -141,7 +202,7 @@ export function useChat(options: UseChatOptions = {}) {
                 setSending(false);
             }
         },
-        [conversationId, currentUserId]
+        [conversationId, currentUserId, isOnline, replyToMessage]
     );
 
     // Auto-load conversations on mount
@@ -241,6 +302,140 @@ export function useChat(options: UseChatOptions = {}) {
         }, 3000);
     }, [conversationId]);
 
+    // Edit message
+    const editMessage = useCallback(
+        async (messageId: string, newContent: string): Promise<boolean> => {
+            try {
+                setError(null);
+                const updatedMessage = await editMessageInDb(messageId, newContent);
+
+                // Update optimistically in local state
+                setMessages((prev) =>
+                    prev.map((m) =>
+                        m.id === messageId
+                            ? { ...m, content: updatedMessage.content, is_edited: true }
+                            : m
+                    )
+                );
+
+                return true;
+            } catch (err) {
+                setError(err instanceof Error ? err.message : 'Failed to edit message');
+                console.error('Error editing message:', err);
+                return false;
+            }
+        },
+        []
+    );
+
+    // Delete message
+    const deleteMessage = useCallback(
+        async (messageId: string): Promise<boolean> => {
+            try {
+                setError(null);
+                await deleteMessageInDb(messageId);
+
+                // Update optimistically in local state (soft delete state)
+                setMessages((prev) =>
+                    prev.map((m) =>
+                        m.id === messageId
+                            ? { ...m, deleted_at: new Date().toISOString(), content: null }
+                            : m
+                    )
+                );
+
+                return true;
+            } catch (err) {
+                setError(err instanceof Error ? err.message : 'Failed to delete message');
+                console.error('Error deleting message:', err);
+                return false;
+            }
+        },
+        []
+    );
+
+    // Copy message to clipboard
+    const copyMessage = useCallback(async (content: string): Promise<boolean> => {
+        try {
+            await copyMessageToClipboard(content);
+            return true;
+        } catch (err) {
+            console.error('Error copying message:', err);
+            return false;
+        }
+    }, []);
+
+    // Forward message to another conversation
+    const forwardMessage = useCallback(async (
+        targetConversationId: string,
+        messageText: string,
+        originalMessageId: string
+    ): Promise<Message | null> => {
+        try {
+            setSending(true);
+            setError(null);
+            const message = await forwardMessageInDb(
+                targetConversationId,
+                messageText,
+                originalMessageId
+            );
+            return message;
+        } catch (err) {
+            setError(err instanceof Error ? err.message : 'Failed to forward message');
+            console.error('Error forwarding message:', err);
+            return null;
+        } finally {
+            setSending(false);
+        }
+    }, []);
+
+    // Flush pending messages when coming back online
+    const flushPendingMessages = useCallback(async () => {
+        if (!conversationId) return;
+
+        const pending = await getPendingMessagesForConversation(conversationId);
+        console.log(`[useChat] Flushing ${pending.length} pending messages`);
+
+        for (const msg of pending) {
+            try {
+                const sentMessage = await sendMessageToDb(
+                    msg.conversationId,
+                    msg.content,
+                    msg.mediaUrl,
+                    msg.mediaType,
+                    msg.replyToId
+                );
+
+                // Replace temp message with real one
+                setMessages((prev) =>
+                    prev.map((m) => (m.id === msg.id ? sentMessage : m))
+                );
+
+                await removePendingMessage(msg.id);
+            } catch (err) {
+                console.error('[useChat] Failed to send queued message:', msg.id, err);
+            }
+        }
+
+        const count = await getPendingCount();
+        setPendingMessagesCount(count);
+    }, [conversationId]);
+
+    // Watch for reconnection
+    useEffect(() => {
+        if (isOnline && wasOfflineRef.current) {
+            console.log('[useChat] Back online - flushing queue');
+            flushPendingMessages();
+        }
+        wasOfflineRef.current = !isOnline;
+    }, [isOnline, flushPendingMessages]);
+
+    // Clean expired messages on mount
+    useEffect(() => {
+        cleanExpiredMessages();
+        getPendingCount().then(setPendingMessagesCount);
+    }, []);
+
     return {
         // State
         conversations,
@@ -250,6 +445,11 @@ export function useChat(options: UseChatOptions = {}) {
         error,
         currentUserId,
         typingUsers,
+        replyToMessage,
+
+        // Offline state
+        isOnline,
+        pendingMessagesCount,
 
         // Actions
         loadConversations,
@@ -257,6 +457,12 @@ export function useChat(options: UseChatOptions = {}) {
         sendMessage,
         markAsRead: markConversationAsRead,
         sendTypingIndicator,
+        editMessage,
+        deleteMessage,
+        copyMessage,
+        forwardMessage,
+        setReplyToMessage,
+        flushPendingMessages,
 
         // Utils
         setConversations,

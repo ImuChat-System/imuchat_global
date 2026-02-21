@@ -37,9 +37,9 @@ const mockMarkRead = jest.fn().mockResolvedValue(undefined);
 const mockMarkAllRead = jest.fn().mockResolvedValue(undefined);
 
 jest.mock("@/services/notification-api", () => ({
-  getNotificationHistory: (...a) => mockGetHistory(...a),
-  markNotificationAsRead: (...a) => mockMarkRead(...a),
-  markAllNotificationsAsRead: (...a) => mockMarkAllRead(...a),
+  getNotificationHistory: (...a: any[]) => mockGetHistory(...a),
+  markNotificationAsRead: (...a: any[]) => mockMarkRead(...a),
+  markAllNotificationsAsRead: (...a: any[]) => mockMarkAllRead(...a),
 }));
 
 import NotificationsScreen from "@/app/(tabs)/notifications";

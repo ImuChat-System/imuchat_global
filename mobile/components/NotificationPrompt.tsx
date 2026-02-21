@@ -12,6 +12,7 @@
  */
 
 import { useNotifications } from "@/hooks/useNotifications";
+import { useI18n } from "@/providers/I18nProvider";
 import { KawaiiButton } from "@imuchat/ui-kit/native";
 import React from "react";
 import { Modal, StyleSheet, Text, View } from "react-native";
@@ -28,6 +29,7 @@ export const NotificationPrompt: React.FC<NotificationPromptProps> = ({
   onClose,
 }) => {
   const { requestPermission } = useNotifications();
+  const { t } = useI18n();
   const [isRequesting, setIsRequesting] = React.useState(false);
 
   const handleAccept = async () => {
@@ -64,26 +66,25 @@ export const NotificationPrompt: React.FC<NotificationPromptProps> = ({
           </View>
 
           {/* Titre */}
-          <Text style={styles.title}>Activer les notifications ?</Text>
+          <Text style={styles.title}>
+            {t("components.enableNotifications")}
+          </Text>
 
           {/* Description */}
           <Text style={styles.description}>
-            Recevez des notifications pour :
+            {t("components.notificationDescription")}
           </Text>
 
           {/* Liste bénéfices */}
           <View style={styles.benefitsList}>
-            <BenefitItem icon="💬" text="Nouveaux messages" />
-            <BenefitItem icon="📞" text="Appels manqués" />
-            <BenefitItem icon="👥" text="Invitations" />
-            <BenefitItem icon="🎉" text="Événements importants" />
+            <BenefitItem icon="💬" text={t("components.newMessages")} />
+            <BenefitItem icon="📞" text={t("components.missedCalls")} />
+            <BenefitItem icon="👥" text={t("components.invitations")} />
+            <BenefitItem icon="🎉" text={t("components.importantEvents")} />
           </View>
 
           {/* Note confidentialité */}
-          <Text style={styles.privacyNote}>
-            Vos données restent privées. Vous pouvez désactiver les
-            notifications à tout moment dans les paramètres.
-          </Text>
+          <Text style={styles.privacyNote}>{t("components.privacyNote")}</Text>
 
           {/* Boutons */}
           <View style={styles.buttons}>
@@ -93,7 +94,7 @@ export const NotificationPrompt: React.FC<NotificationPromptProps> = ({
               disabled={isRequesting}
               style={styles.declineButton}
             >
-              Plus tard
+              {t("components.later")}
             </KawaiiButton>
 
             <KawaiiButton
@@ -104,7 +105,7 @@ export const NotificationPrompt: React.FC<NotificationPromptProps> = ({
               disabled={isRequesting}
               style={styles.acceptButton}
             >
-              Activer
+              {t("components.enable")}
             </KawaiiButton>
           </View>
         </View>

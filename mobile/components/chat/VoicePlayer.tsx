@@ -4,6 +4,7 @@
  * Style kawaii avec couleurs violet/rose
  */
 
+import { useI18n } from "@/providers/I18nProvider";
 import { useColors } from "@/providers/ThemeProvider";
 import { Ionicons } from "@expo/vector-icons";
 import { Audio, AVPlaybackStatus } from "expo-av";
@@ -56,6 +57,7 @@ export function VoicePlayer({
   transcription,
 }: VoicePlayerProps) {
   const colors = useColors();
+  const { t } = useI18n();
   const [isPlaying, setIsPlaying] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [currentPosition, setCurrentPosition] = useState(0);
@@ -110,7 +112,7 @@ export function VoicePlayer({
       return sound;
     } catch (err) {
       console.error("Error loading sound:", err);
-      setError("Impossible de charger l&apos;audio");
+      setError(t("components.cannotLoadAudio"));
       setIsLoading(false);
       return null;
     }
@@ -119,7 +121,7 @@ export function VoicePlayer({
   const onPlaybackStatusUpdate = useCallback((status: AVPlaybackStatus) => {
     if (!status.isLoaded) {
       if (status.error) {
-        setError("Erreur de lecture");
+        setError(t("components.playbackError"));
       }
       return;
     }
@@ -159,7 +161,7 @@ export function VoicePlayer({
       }
     } catch (err) {
       console.error("Error toggling playback:", err);
-      setError("Erreur de lecture");
+      setError(t("components.playbackError"));
     }
   }, [loadSound]);
 
@@ -324,7 +326,9 @@ export function VoicePlayer({
               { color: colors.textMuted },
             ]}
           >
-            {showTranscription ? "Masquer" : "Transcription"}
+            {showTranscription
+              ? t("components.hide")
+              : t("components.transcription")}
           </Text>
         </Pressable>
       )}

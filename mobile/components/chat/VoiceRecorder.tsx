@@ -5,6 +5,7 @@
  */
 
 import { useVoiceRecording } from "@/hooks/useVoiceRecording";
+import { useI18n } from "@/providers/I18nProvider";
 import { useColors } from "@/providers/ThemeProvider";
 import { Ionicons } from "@expo/vector-icons";
 import React, { useCallback, useEffect, useRef } from "react";
@@ -94,6 +95,7 @@ export function VoiceRecorder({
   primaryColor = "#8B5CF6",
 }: VoiceRecorderProps) {
   const colors = useColors();
+  const { t } = useI18n();
   const {
     status,
     duration,
@@ -262,7 +264,7 @@ export function VoiceRecorder({
         <View style={styles.permissionContainer}>
           <Ionicons name="mic-off" size={24} color={colors.textMuted} />
           <Text style={[styles.permissionText, { color: colors.textMuted }]}>
-            Autorisation microphone requise
+            {t("components.micPermissionRequired")}
           </Text>
         </View>
       </View>
@@ -281,7 +283,7 @@ export function VoiceRecorder({
         ]}
       >
         <Ionicons name="close-circle" size={24} color="#EF4444" />
-        <Text style={styles.cancelText}>Relâcher pour annuler</Text>
+        <Text style={styles.cancelText}>{t("components.releaseToCancel")}</Text>
       </Animated.View>
 
       {/* Main content */}
@@ -313,7 +315,9 @@ export function VoiceRecorder({
               </Text>
               {showWarning && (
                 <Text style={styles.warningText}>
-                  ({remainingSeconds}s restantes)
+                  {t("components.remainingSeconds", {
+                    count: remainingSeconds,
+                  })}
                 </Text>
               )}
             </View>
@@ -326,13 +330,13 @@ export function VoiceRecorder({
                 color={colors.textMuted}
               />
               <Text style={[styles.swipeHintText, { color: colors.textMuted }]}>
-                Glisser pour annuler
+                {t("components.slideToCancel")}
               </Text>
             </View>
           </>
         ) : (
           <Text style={[styles.instructionText, { color: colors.textMuted }]}>
-            Maintenir pour enregistrer
+            {t("components.holdToRecord")}
           </Text>
         )}
 

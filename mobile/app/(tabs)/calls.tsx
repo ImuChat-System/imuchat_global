@@ -1,4 +1,5 @@
 import { CallHistoryItem, useCallHistory } from "@/hooks/useCallHistory";
+import { useI18n } from "@/providers/I18nProvider";
 import { useColors, useSpacing } from "@/providers/ThemeProvider";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
@@ -14,6 +15,7 @@ import {
 
 export default function CallsScreen() {
   const { calls, loading, error, refresh, deleteCall } = useCallHistory();
+  const { t } = useI18n();
   const colors = useColors();
   const spacing = useSpacing();
   const router = useRouter();
@@ -80,7 +82,7 @@ export default function CallsScreen() {
             >
               {item.otherUser.full_name ||
                 item.otherUser.username ||
-                "Utilisateur inconnu"}
+                t("common.unknownUser")}
             </Text>
             <Text style={[styles.timestamp, { color: colors.textMuted }]}>
               {item.formattedTime}
@@ -101,11 +103,11 @@ export default function CallsScreen() {
               style={styles.typeIcon}
             />
             <Text style={[styles.callStatus, { color: colors.textMuted }]}>
-              {item.status === "missed" && "Appel manqué"}
-              {item.status === "rejected" && "Appel refusé"}
+              {item.status === "missed" && t("calls.missedCall")}
+              {item.status === "rejected" && t("calls.rejectedCall")}
               {item.status === "ended" && item.formattedDuration}
-              {item.status === "accepted" && "En cours..."}
-              {item.status === "ringing" && "Sonnerie..."}
+              {item.status === "accepted" && t("calls.ongoing")}
+              {item.status === "ringing" && t("calls.ringing")}
             </Text>
           </View>
         </View>
@@ -125,10 +127,10 @@ export default function CallsScreen() {
     <View style={styles.emptyContainer}>
       <Ionicons name="call-outline" size={64} color={colors.textMuted} />
       <Text style={[styles.emptyTitle, { color: colors.text }]}>
-        Aucun appel
+        {t("calls.noCalls")}
       </Text>
       <Text style={[styles.emptySubtitle, { color: colors.textMuted }]}>
-        Votre historique d'appels apparaîtra ici
+        {t("calls.noCallsSubtext")}
       </Text>
     </View>
   );
@@ -154,7 +156,7 @@ export default function CallsScreen() {
           style={[styles.retryButton, { backgroundColor: colors.primary }]}
           onPress={refresh}
         >
-          <Text style={styles.retryText}>Réessayer</Text>
+          <Text style={styles.retryText}>{t("common.retry")}</Text>
         </TouchableOpacity>
       </View>
     );

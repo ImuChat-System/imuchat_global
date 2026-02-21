@@ -4,6 +4,7 @@
  *            SearchBar, StoreFilterBar, MixedContentGrid, PurchaseModal
  */
 
+import { useI18n } from "@/providers/I18nProvider";
 import { useColors, useSpacing } from "@/providers/ThemeProvider";
 import React, { useState } from "react";
 import {
@@ -34,18 +35,18 @@ interface StoreItem {
 }
 
 const STORE_TABS: { key: StoreTab; label: string; icon: string }[] = [
-  { key: "all", label: "Tout", icon: "🏪" },
-  { key: "apps", label: "Apps", icon: "📱" },
-  { key: "contents", label: "Contenus", icon: "🎨" },
-  { key: "services", label: "Services", icon: "⚡" },
-  { key: "bundles", label: "Bundles", icon: "📦" },
+  { key: "all", label: "store.all", icon: "🏪" },
+  { key: "apps", label: "store.apps", icon: "📱" },
+  { key: "contents", label: "store.contents", icon: "🎨" },
+  { key: "services", label: "store.services", icon: "⚡" },
+  { key: "bundles", label: "store.bundles", icon: "📦" },
 ];
 
 const SORT_OPTIONS: { key: SortOption; label: string }[] = [
-  { key: "popular", label: "Populaire" },
-  { key: "newest", label: "Récent" },
-  { key: "price-asc", label: "Prix ↑" },
-  { key: "price-desc", label: "Prix ↓" },
+  { key: "popular", label: "store.popular" },
+  { key: "newest", label: "store.newest" },
+  { key: "price-asc", label: "store.priceAsc" },
+  { key: "price-desc", label: "store.priceDesc" },
 ];
 
 // ─── Mock catalog (parité web fetchCatalogItems) ─────────────────
@@ -161,6 +162,7 @@ const { width: SCREEN_WIDTH } = Dimensions.get("window");
 export default function StoreScreen() {
   const colors = useColors();
   const spacing = useSpacing();
+  const { t } = useI18n();
 
   const [tab, setTab] = useState<StoreTab>("all");
   const [search, setSearch] = useState("");
@@ -243,7 +245,7 @@ export default function StoreScreen() {
             { color: item.price ? colors.text : colors.primary },
           ]}
         >
-          {item.price ? `${item.price.toFixed(2)}€` : "Gratuit"}
+          {item.price ? `${item.price.toFixed(2)}€` : t("common.free")}
         </Text>
       </View>
     </TouchableOpacity>
@@ -260,9 +262,11 @@ export default function StoreScreen() {
       <ScrollView style={{ flex: 1 }}>
         <View style={[styles.content, { padding: spacing.lg }]}>
           {/* Header */}
-          <Text style={[styles.title, { color: colors.text }]}>🛍️ Store</Text>
+          <Text style={[styles.title, { color: colors.text }]}>
+            {t("store.title")}
+          </Text>
           <Text style={[styles.subtitle, { color: colors.textMuted }]}>
-            Apps, thèmes et contenus
+            {t("store.subtitle")}
           </Text>
 
           {/* ── Hero Banner ───────────────────────────────────── */}
@@ -305,7 +309,7 @@ export default function StoreScreen() {
               testID="store-search"
               value={search}
               onChangeText={setSearch}
-              placeholder="Rechercher..."
+              placeholder={t("common.searchPlaceholder")}
               placeholderTextColor={colors.textMuted}
               style={[styles.searchInput, { color: colors.text }]}
             />
@@ -328,13 +332,13 @@ export default function StoreScreen() {
             showsHorizontalScrollIndicator={false}
             style={styles.tabRow}
           >
-            {STORE_TABS.map((t) => {
-              const active = tab === t.key;
+            {STORE_TABS.map((tabItem) => {
+              const active = tab === tabItem.key;
               return (
                 <TouchableOpacity
-                  key={t.key}
-                  testID={`tab-${t.key}`}
-                  onPress={() => setTab(t.key)}
+                  key={tabItem.key}
+                  testID={`tab-${tabItem.key}`}
+                  onPress={() => setTab(tabItem.key)}
                   style={[
                     styles.tabBtn,
                     {
@@ -343,14 +347,14 @@ export default function StoreScreen() {
                     },
                   ]}
                 >
-                  <Text style={styles.tabIcon}>{t.icon}</Text>
+                  <Text style={styles.tabIcon}>{tabItem.icon}</Text>
                   <Text
                     style={[
                       styles.tabLabel,
                       { color: active ? "#fff" : colors.textMuted },
                     ]}
                   >
-                    {t.label}
+                    {t(tabItem.label)}
                   </Text>
                 </TouchableOpacity>
               );
@@ -380,7 +384,7 @@ export default function StoreScreen() {
                     },
                   ]}
                 >
-                  {s.label}
+                  {t(s.label)}
                 </Text>
               </TouchableOpacity>
             ))}
@@ -393,7 +397,7 @@ export default function StoreScreen() {
                 testID="no-results"
                 style={[styles.emptyText, { color: colors.textMuted }]}
               >
-                Aucun résultat
+                {t("common.noResults")}
               </Text>
             ) : (
               filtered.map(renderItem)
@@ -432,7 +436,7 @@ export default function StoreScreen() {
                   <Text
                     style={[styles.modalDownloads, { color: colors.textMuted }]}
                   >
-                    ⬇ {selectedItem.downloads} téléchargements
+                    ⬇ {selectedItem.downloads} {t("store.downloads")}
                   </Text>
                 </View>
                 <TouchableOpacity
@@ -444,8 +448,8 @@ export default function StoreScreen() {
                 >
                   <Text style={styles.purchaseBtnText}>
                     {selectedItem.price
-                      ? `Acheter — ${selectedItem.price.toFixed(2)}€`
-                      : "Installer gratuitement"}
+                      ? t("store.buy", { price: selectedItem.price.toFixed(2) })
+                      : t("store.installFree")}
                   </Text>
                 </TouchableOpacity>
               </>
@@ -456,7 +460,7 @@ export default function StoreScreen() {
               onPress={() => setShowPurchase(false)}
             >
               <Text style={[styles.closeBtnText, { color: colors.textMuted }]}>
-                Fermer
+                {t("common.close")}
               </Text>
             </TouchableOpacity>
           </View>

@@ -1,3 +1,4 @@
+import { useI18n } from "@/providers/I18nProvider";
 import { useColors, useSpacing } from "@/providers/ThemeProvider";
 import { CallEvent } from "@/services/call-signaling";
 import { Ionicons } from "@expo/vector-icons";
@@ -26,12 +27,14 @@ export default function IncomingCallModal({
 }: IncomingCallModalProps) {
   const colors = useColors();
   const spacing = useSpacing();
+  const { t } = useI18n();
 
   if (!call) return null;
 
   const callerName =
-    call.caller?.full_name || call.caller?.username || "Unknown";
-  const callTypeText = call.call_type === "video" ? "Video Call" : "Audio Call";
+    call.caller?.full_name || call.caller?.username || t("common.unknown");
+  const callTypeText =
+    call.call_type === "video" ? t("calls.videoCall") : t("calls.audioCall");
 
   return (
     <Modal
@@ -60,7 +63,7 @@ export default function IncomingCallModal({
             {callerName}
           </Text>
           <Text style={[styles.callType, { color: colors.textMuted }]}>
-            Incoming {callTypeText}...
+            {t("calls.incomingCall", { type: callTypeText })}
           </Text>
         </View>
 
@@ -72,7 +75,7 @@ export default function IncomingCallModal({
             onPress={onReject}
           >
             <Ionicons name="close" size={36} color="#FFFFFF" />
-            <Text style={styles.actionText}>Decline</Text>
+            <Text style={styles.actionText}>{t("calls.decline")}</Text>
           </TouchableOpacity>
 
           {/* Accept Button */}
@@ -85,7 +88,7 @@ export default function IncomingCallModal({
             onPress={onAccept}
           >
             <Ionicons name="call" size={36} color="#FFFFFF" />
-            <Text style={styles.actionText}>Accept</Text>
+            <Text style={styles.actionText}>{t("calls.acceptCall")}</Text>
           </TouchableOpacity>
         </View>
       </View>

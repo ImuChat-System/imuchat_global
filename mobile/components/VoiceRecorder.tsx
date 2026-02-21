@@ -3,6 +3,7 @@
  */
 
 import { useVoiceRecording } from "@/hooks/useVoiceRecording";
+import { useI18n } from "@/providers/I18nProvider";
 import { useColors } from "@/providers/ThemeProvider";
 import type { VoiceUploadResult } from "@/services/voice-recording";
 import { Ionicons } from "@expo/vector-icons";
@@ -30,6 +31,7 @@ export function VoiceRecorder({
   compact = false,
 }: VoiceRecorderProps) {
   const colors = useColors();
+  const { t } = useI18n();
   const {
     status,
     formattedDuration,
@@ -176,7 +178,7 @@ export function VoiceRecorder({
       {isUploading && (
         <View style={styles.uploadIndicator}>
           <Text style={[styles.uploadText, { color: colors.text }]}>
-            Envoi... {uploadProgress}%
+            {t("components.uploading", { progress: uploadProgress })}
           </Text>
           <View
             style={[styles.progressBar, { backgroundColor: colors.border }]}
@@ -242,7 +244,7 @@ export function VoiceRecorder({
       {/* Hint */}
       {status === "idle" && (
         <Text style={[styles.hintText, { color: colors.textMuted }]}>
-          Appuyez pour enregistrer
+          {t("components.holdToRecord")}
         </Text>
       )}
     </View>

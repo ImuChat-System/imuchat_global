@@ -8,6 +8,7 @@
  * - Raccrocher (end call)
  */
 
+import { useI18n } from "@/providers/I18nProvider";
 import { KawaiiButton } from "@imuchat/ui-kit/native";
 import React from "react";
 import { StyleSheet, View } from "react-native";
@@ -35,6 +36,7 @@ export const CallControls: React.FC<CallControlsProps> = ({
   onFlipCamera,
   onEndCall,
 }) => {
+  const { t } = useI18n();
   return (
     <View style={styles.container}>
       {/* Row 1: Micro + Caméra + Flip */}
@@ -46,7 +48,7 @@ export const CallControls: React.FC<CallControlsProps> = ({
           variant={isMicOn ? "secondary" : "outline"}
           style={styles.button}
         >
-          {isMicOn ? "Mute" : "Unmute"}
+          {isMicOn ? t("calls.mute") : t("calls.unmute")}
         </KawaiiButton>
 
         {/* Toggle Caméra */}
@@ -56,7 +58,7 @@ export const CallControls: React.FC<CallControlsProps> = ({
           variant={isCameraOn ? "secondary" : "outline"}
           style={styles.button}
         >
-          {isCameraOn ? "Caméra" : "Caméra Off"}
+          {isCameraOn ? t("calls.camera") : t("calls.cameraOff")}
         </KawaiiButton>
 
         {/* Flip Caméra */}
@@ -67,7 +69,7 @@ export const CallControls: React.FC<CallControlsProps> = ({
           style={styles.button}
           disabled={!isCameraOn}
         >
-          Flip
+          {t("calls.flip")}
         </KawaiiButton>
       </View>
 
@@ -79,7 +81,7 @@ export const CallControls: React.FC<CallControlsProps> = ({
           variant="primary"
           style={styles.endCallButton}
         >
-          Raccrocher
+          {t("calls.hangUp")}
         </KawaiiButton>
       </View>
     </View>

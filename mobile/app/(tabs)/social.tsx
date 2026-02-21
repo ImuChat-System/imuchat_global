@@ -4,11 +4,13 @@
  */
 
 import { useAuth } from "@/providers/AuthProvider";
+import { useI18n } from "@/providers/I18nProvider";
 import { useColors, useSpacing } from "@/providers/ThemeProvider";
 import React, { useCallback, useState } from "react";
 import {
   Dimensions,
   FlatList,
+  RefreshControl,
   ScrollView,
   StyleSheet,
   Text,
@@ -117,19 +119,32 @@ const { width: SCREEN_WIDTH } = Dimensions.get("window");
 export default function SocialScreen() {
   const colors = useColors();
   const spacing = useSpacing();
+  const { t } = useI18n();
   const { user } = useAuth();
 
   const [filter, setFilter] = useState<FeedFilter>("mixed");
+  const [refreshing, setRefreshing] = useState(false);
+
+  // Handle pull-to-refresh (mock for now - will integrate with real API later)
+  const handleRefresh = useCallback(async () => {
+    setRefreshing(true);
+    // Simulate network request
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    setRefreshing(false);
+  }, []);
 
   // ─── Helpers ──────────────────────────────────────────────────
-  const formatTimeAgo = useCallback((iso: string) => {
-    const mins = Math.floor((Date.now() - new Date(iso).getTime()) / 60000);
-    if (mins < 1) return "À l'instant";
-    if (mins < 60) return `Il y a ${mins} min`;
-    const hrs = Math.floor(mins / 60);
-    if (hrs < 24) return `Il y a ${hrs}h`;
-    return `Il y a ${Math.floor(hrs / 24)}j`;
-  }, []);
+  const formatTimeAgo = useCallback(
+    (iso: string) => {
+      const mins = Math.floor((Date.now() - new Date(iso).getTime()) / 60000);
+      if (mins < 1) return t("common.justNow");
+      if (mins < 60) return t("common.minutesAgo", { count: mins });
+      const hrs = Math.floor(mins / 60);
+      if (hrs < 24) return t("common.hoursAgo", { count: hrs });
+      return t("common.daysAgo", { count: Math.floor(hrs / 24) });
+    },
+    [t],
+  );
 
   const filteredFeed =
     filter === "mixed"
@@ -199,7 +214,7 @@ export default function SocialScreen() {
             ]}
           >
             <Text style={[styles.newsBadgeText, { color: colors.primary }]}>
-              📰 News
+              {t("social.newsBadge")}
             </Text>
           </View>
         )}
@@ -227,7 +242,7 @@ export default function SocialScreen() {
         </TouchableOpacity>
         <TouchableOpacity testID={`share-${item.id}`} style={styles.actionBtn}>
           <Text style={[styles.actionText, { color: colors.textMuted }]}>
-            🔗 Partager
+            {t("social.share")}
           </Text>
         </TouchableOpacity>
       </View>
@@ -241,12 +256,21 @@ export default function SocialScreen() {
     <ScrollView
       testID="social-screen"
       style={[styles.container, { backgroundColor: colors.background }]}
+      refreshControl={
+        <RefreshControl
+          refreshing={refreshing}
+          onRefresh={handleRefresh}
+          tintColor={colors.primary}
+        />
+      }
     >
       <View style={[styles.content, { padding: spacing.lg }]}>
         {/* Header */}
-        <Text style={[styles.title, { color: colors.text }]}>🌐 Social</Text>
+        <Text style={[styles.title, { color: colors.text }]}>
+          {t("social.title")}
+        </Text>
         <Text style={[styles.subtitle, { color: colors.textMuted }]}>
-          Stories, feed et mur social
+          {t("social.subtitle")}
         </Text>
 
         {/* ── Story Carousel ──────────────────────────────────── */}
@@ -264,9 +288,9 @@ export default function SocialScreen() {
         <View testID="feed-filters" style={styles.filterRow}>
           {(["mixed", "news", "stories"] as FeedFilter[]).map((f) => {
             const labels: Record<FeedFilter, string> = {
-              mixed: "Mixte",
-              news: "News",
-              stories: "Stories",
+              mixed: t("social.mixed"),
+              news: t("social.news"),
+              stories: t("social.stories"),
             };
             const active = filter === f;
             return (
@@ -305,7 +329,7 @@ export default function SocialScreen() {
               testID="empty-feed"
               style={[styles.emptyText, { color: colors.textMuted }]}
             >
-              Aucun post pour ce filtre
+              {t("social.emptyFeed")}
             </Text>
           )}
         </View>

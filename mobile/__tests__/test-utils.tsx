@@ -11,7 +11,7 @@ export function renderWithProviders(
     return <ThemeProvider>{children}</ThemeProvider>;
   }
 
-  return render(ui, { wrapper: Wrapper, ...options });
+  return render(ui as any, { wrapper: Wrapper, ...options });
 }
 
 // Mock data factories
@@ -26,6 +26,8 @@ export const createMockMessage = (overrides = {}) => ({
   updated_at: new Date().toISOString(),
   deleted_at: null,
   is_edited: false,
+  reply_to_id: null,
+  replied_message: null,
   sender: {
     id: "user-123",
     username: "testuser",

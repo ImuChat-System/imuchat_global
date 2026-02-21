@@ -7,16 +7,19 @@ import {
 import { useFonts } from "expo-font";
 import { Href, Stack, useRouter, useSegments } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
-import { useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import "react-native-reanimated";
 
 import { NotificationPrompt } from "@/components/NotificationPrompt";
 import { useColorScheme } from "@/components/useColorScheme";
 import { useCallManager } from "@/hooks/useCallManagerHook";
 import { AuthProvider, useAuth } from "@/providers/AuthProvider";
+import { I18nProvider } from "@/providers/I18nProvider";
 import { ThemeProvider } from "@/providers/ThemeProvider";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useState } from "react";
+
+const ONBOARDING_COMPLETED_KEY = "onboarding_completed";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -53,9 +56,11 @@ export default function RootLayout() {
   }
 
   return (
-    <AuthProvider>
-      <RootLayoutNav />
-    </AuthProvider>
+    <I18nProvider>
+      <AuthProvider>
+        <RootLayoutNav />
+      </AuthProvider>
+    </I18nProvider>
   );
 }
 
@@ -65,24 +70,51 @@ function RootLayoutNav() {
   const segments = useSegments();
   const router = useRouter();
   const segmentsRef = useRef(segments);
+  const [onboardingComplete, setOnboardingComplete] = useState<boolean | null>(
+    null,
+  );
 
   // Keep segments ref in sync without triggering effect re-runs
   segmentsRef.current = segments;
 
+  // Check onboarding status on mount
+  const checkOnboarding = useCallback(async () => {
+    try {
+      const completed = await AsyncStorage.getItem(ONBOARDING_COMPLETED_KEY);
+      setOnboardingComplete(completed === "true");
+    } catch (error) {
+      console.error("Error checking onboarding status:", error);
+      setOnboardingComplete(true); // Default to completed on error
+    }
+  }, []);
+
   useEffect(() => {
-    if (loading) return;
+    checkOnboarding();
+  }, [checkOnboarding]);
+
+  useEffect(() => {
+    if (loading || onboardingComplete === null) return;
 
     const inAuthGroup = (segmentsRef.current[0] as string) === "(auth)";
+    const inOnboardingGroup =
+      (segmentsRef.current[0] as string) === "(onboarding)";
 
-    if (!session && !inAuthGroup) {
+    // First check: if onboarding not completed, redirect there
+    if (!onboardingComplete && !inOnboardingGroup) {
+      router.replace("/(onboarding)" as Href);
+      return;
+    }
+
+    // Then normal auth flow
+    if (!session && !inAuthGroup && onboardingComplete) {
       router.replace("/login" as Href);
     } else if (session && inAuthGroup) {
       router.replace("/(tabs)");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [session, loading]);
+  }, [session, loading, onboardingComplete]);
 
-  if (loading) {
+  if (loading || onboardingComplete === null) {
     return null; // Or a splash screen
   }
 
@@ -92,6 +124,7 @@ function RootLayoutNav() {
         value={colorScheme === "dark" ? DarkTheme : DefaultTheme}
       >
         <Stack>
+          <Stack.Screen name="(onboarding)" options={{ headerShown: false }} />
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
           <Stack.Screen name="(auth)/login" options={{ headerShown: false }} />
           <Stack.Screen name="modal" options={{ presentation: "modal" }} />
@@ -106,50 +139,51 @@ function RootLayoutNav() {
 }
 
 /**
- * Separate component for call manager to ensure it's within ThemeProvider context
+ * Manages notification permission prompt - shows once on first app launch
  */
-function CallManagerProvider() {
-  /**
-   * Manages notification permission prompt - shows once on first app launch
-   */
-  function NotificationPromptManager() {
-    const { session } = useAuth();
-    const [showPrompt, setShowPrompt] = useState(false);
-    const STORAGE_KEY = "notification-permission-prompted";
+function NotificationPromptManager() {
+  const { session } = useAuth();
+  const [showPrompt, setShowPrompt] = useState(false);
+  const STORAGE_KEY = "notification-permission-prompted";
 
-    useEffect(() => {
-      // Only show when user is logged in and hasn't been prompted before
-      const checkAndShowPrompt = async () => {
-        if (!session) return;
+  useEffect(() => {
+    // Only show when user is logged in and hasn't been prompted before
+    const checkAndShowPrompt = async () => {
+      if (!session) return;
 
-        try {
-          const hasBeenPrompted = await AsyncStorage.getItem(STORAGE_KEY);
-          if (!hasBeenPrompted) {
-            // Delay 3 seconds after login to let user settle
-            setTimeout(() => {
-              setShowPrompt(true);
-            }, 3000);
-          }
-        } catch (error) {
-          console.error("Error checking notification prompt status:", error);
-        }
-      };
-
-      checkAndShowPrompt();
-    }, [session]);
-
-    const handleClose = async () => {
-      setShowPrompt(false);
-      // Mark as prompted so we don't show again
       try {
-        await AsyncStorage.setItem(STORAGE_KEY, "true");
+        const hasBeenPrompted = await AsyncStorage.getItem(STORAGE_KEY);
+        if (!hasBeenPrompted) {
+          // Delay 3 seconds after login to let user settle
+          setTimeout(() => {
+            setShowPrompt(true);
+          }, 3000);
+        }
       } catch (error) {
-        console.error("Error saving notification prompt status:", error);
+        console.error("Error checking notification prompt status:", error);
       }
     };
 
-    return <NotificationPrompt visible={showPrompt} onClose={handleClose} />;
-  }
+    checkAndShowPrompt();
+  }, [session]);
+
+  const handleClose = async () => {
+    setShowPrompt(false);
+    // Mark as prompted so we don't show again
+    try {
+      await AsyncStorage.setItem(STORAGE_KEY, "true");
+    } catch (error) {
+      console.error("Error saving notification prompt status:", error);
+    }
+  };
+
+  return <NotificationPrompt visible={showPrompt} onClose={handleClose} />;
+}
+
+/**
+ * Separate component for call manager to ensure it's within ThemeProvider context
+ */
+function CallManagerProvider() {
   const { IncomingCallModal } = useCallManager();
   return <IncomingCallModal />;
 }

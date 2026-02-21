@@ -1,3 +1,4 @@
+import { useI18n } from "@/providers/I18nProvider";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { Tabs } from "expo-router";
 import React from "react";
@@ -11,9 +12,10 @@ function TabBarIcon(props: {
 }
 
 export default function TabLayout() {
+  const { t } = useI18n();
+
   return (
     <Tabs
-      testID="tabs-container"
       screenOptions={{
         tabBarActiveTintColor: "#ec4899", // ImuChat primary color
         tabBarInactiveTintColor: "rgba(255,255,255,0.4)",
@@ -40,7 +42,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: "Accueil",
+          title: t("tabs.home"),
           tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} />,
         }}
       />
@@ -49,8 +51,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="chats"
         options={{
-          tabBarTestID: "tab-chats",
-          title: "Messages",
+          title: t("tabs.messages"),
           tabBarIcon: ({ color }) => (
             <TabBarIcon name="comments" color={color} />
           ),
@@ -62,7 +63,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="calls"
         options={{
-          title: "Appels",
+          title: t("tabs.calls"),
           tabBarIcon: ({ color }) => <TabBarIcon name="phone" color={color} />,
         }}
       />
@@ -71,7 +72,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="contacts"
         options={{
-          title: "Contacts",
+          title: t("tabs.contacts"),
           tabBarIcon: ({ color }) => (
             <TabBarIcon name="address-book" color={color} />
           ),
@@ -82,7 +83,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="social"
         options={{
-          title: "Social",
+          title: t("tabs.social"),
           tabBarIcon: ({ color }) => <TabBarIcon name="users" color={color} />,
         }}
       />
@@ -91,8 +92,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="notifications"
         options={{
-          tabBarTestID: "tab-notifications",
-          title: "Notifs",
+          title: t("tabs.notifications"),
           tabBarIcon: ({ color }) => <TabBarIcon name="bell" color={color} />,
         }}
       />
@@ -101,7 +101,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="watch"
         options={{
-          title: "Watch",
+          title: t("tabs.watch"),
           tabBarIcon: ({ color }) => (
             <TabBarIcon name="play-circle" color={color} />
           ),
@@ -112,7 +112,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="store"
         options={{
-          title: "Store",
+          title: t("tabs.store"),
           tabBarIcon: ({ color }) => (
             <TabBarIcon name="shopping-bag" color={color} />
           ),
@@ -123,8 +123,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="settings"
         options={{
-          tabBarTestID: "tab-settings",
-          title: "Paramètres",
+          title: t("tabs.settings"),
           tabBarIcon: ({ color }) => <TabBarIcon name="cog" color={color} />,
         }}
       />
@@ -133,8 +132,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="profile"
         options={{
-          tabBarTestID: "tab-profile",
-          title: "Profil",
+          title: t("tabs.profile"),
           href: null,
           tabBarIcon: ({ color }) => <TabBarIcon name="user" color={color} />,
         }}

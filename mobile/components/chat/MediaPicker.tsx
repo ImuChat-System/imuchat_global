@@ -4,6 +4,7 @@
  * Support sélection multiple (max 5 images)
  */
 
+import { useI18n } from "@/providers/I18nProvider";
 import { useColors, useSpacing } from "@/providers/ThemeProvider";
 import {
   requestCameraPermissions,
@@ -90,6 +91,7 @@ export function MediaPicker({
 }: MediaPickerProps) {
   const colors = useColors();
   const spacing = useSpacing();
+  const { t } = useI18n();
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -114,8 +116,8 @@ export function MediaPicker({
       const hasPermission = await requestMediaPermissions();
       if (!hasPermission) {
         Alert.alert(
-          "Permission refusée",
-          "Veuillez autoriser l'accès à la galerie.",
+          t("components.permissionDenied"),
+          t("components.allowGalleryAccess"),
         );
         return;
       }
@@ -165,7 +167,7 @@ export function MediaPicker({
       onMediaSelected(mediaFiles);
     } catch (error) {
       console.error("Error selecting images:", error);
-      Alert.alert("Erreur", "Impossible de sélectionner les images.");
+      Alert.alert(t("common.error"), t("components.cannotSelectImages"));
     } finally {
       setIsLoading(false);
     }
@@ -182,8 +184,8 @@ export function MediaPicker({
       const hasPermission = await requestCameraPermissions();
       if (!hasPermission) {
         Alert.alert(
-          "Permission refusée",
-          "Veuillez autoriser l'accès à la caméra.",
+          t("components.permissionDenied"),
+          t("components.allowCameraAccess"),
         );
         return;
       }
@@ -215,7 +217,7 @@ export function MediaPicker({
       onMediaSelected([mediaFile]);
     } catch (error) {
       console.error("Error taking photo:", error);
-      Alert.alert("Erreur", "Impossible de prendre la photo.");
+      Alert.alert(t("common.error"), t("components.cannotTakePhoto"));
     } finally {
       setIsLoading(false);
     }
@@ -232,8 +234,8 @@ export function MediaPicker({
       const hasPermission = await requestCameraPermissions();
       if (!hasPermission) {
         Alert.alert(
-          "Permission refusée",
-          "Veuillez autoriser l'accès à la caméra.",
+          t("components.permissionDenied"),
+          t("components.allowCameraAccess"),
         );
         return;
       }
@@ -265,7 +267,7 @@ export function MediaPicker({
       onMediaSelected([mediaFile]);
     } catch (error) {
       console.error("Error recording video:", error);
-      Alert.alert("Erreur", "Impossible d'enregistrer la vidéo.");
+      Alert.alert(t("common.error"), t("components.cannotRecordVideo"));
     } finally {
       setIsLoading(false);
     }
@@ -283,7 +285,7 @@ export function MediaPicker({
           disabled && styles.buttonDisabled,
           { backgroundColor: iconOnly ? "transparent" : `${primaryColor}15` },
         ]}
-        accessibilityLabel="Ajouter un média"
+        accessibilityLabel={t("components.addMedia")}
         accessibilityRole="button"
       >
         {isLoading ? (
@@ -297,7 +299,7 @@ export function MediaPicker({
             />
             {!iconOnly && (
               <Text style={[styles.buttonText, { color: primaryColor }]}>
-                Média
+                {t("components.media")}
               </Text>
             )}
           </>
@@ -322,7 +324,7 @@ export function MediaPicker({
           >
             <View style={styles.modalHeader}>
               <Text style={[styles.modalTitle, { color: colors.text }]}>
-                Ajouter un média
+                {t("components.addMedia")}
               </Text>
               <TouchableOpacity onPress={closeModal} style={styles.closeButton}>
                 <Ionicons name="close" size={24} color={colors.secondary} />
@@ -344,10 +346,10 @@ export function MediaPicker({
                   <Ionicons name="images" size={28} color="#FFFFFF" />
                 </View>
                 <Text style={[styles.optionText, { color: colors.text }]}>
-                  Galerie
+                  {t("components.gallery")}
                 </Text>
                 <Text style={[styles.optionHint, { color: colors.secondary }]}>
-                  Max {maxImages} images
+                  {t("components.maxImages", { count: maxImages })}
                 </Text>
               </TouchableOpacity>
 
@@ -365,10 +367,10 @@ export function MediaPicker({
                   <Ionicons name="camera" size={28} color="#FFFFFF" />
                 </View>
                 <Text style={[styles.optionText, { color: colors.text }]}>
-                  Photo
+                  {t("components.photo")}
                 </Text>
                 <Text style={[styles.optionHint, { color: colors.secondary }]}>
-                  Appareil photo
+                  {t("components.cameraDevice")}
                 </Text>
               </TouchableOpacity>
 
@@ -387,12 +389,12 @@ export function MediaPicker({
                     <Ionicons name="videocam" size={28} color="#FFFFFF" />
                   </View>
                   <Text style={[styles.optionText, { color: colors.text }]}>
-                    Vidéo
+                    {t("components.video")}
                   </Text>
                   <Text
                     style={[styles.optionHint, { color: colors.secondary }]}
                   >
-                    Max 60 secondes
+                    {t("components.maxDuration")}
                   </Text>
                 </TouchableOpacity>
               )}
@@ -477,5 +479,3 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
 });
-
-export type { MediaPickerProps };

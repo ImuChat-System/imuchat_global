@@ -1,3 +1,4 @@
+import { useI18n } from "@/providers/I18nProvider";
 import { Ionicons } from "@expo/vector-icons";
 import { ResizeMode, Video } from "expo-av";
 import React, { useState } from "react";
@@ -51,6 +52,7 @@ export function MediaPreview({
 }: MediaPreviewProps) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+  const { t } = useI18n();
 
   const renderContent = () => {
     if (type === "image") {
@@ -100,7 +102,7 @@ export function MediaPreview({
           style={[styles.voicePreview, { width: thumbnailSize, height: 50 }]}
         >
           <Ionicons name="mic" size={24} color="#8b5cf6" />
-          <Text style={styles.voiceText}>Message vocal</Text>
+          <Text style={styles.voiceText}>{t("components.voiceMessage")}</Text>
         </View>
       );
     }
@@ -115,7 +117,7 @@ export function MediaPreview({
       >
         <Ionicons name="document" size={40} color="#6b7280" />
         <Text style={styles.fileText} numberOfLines={1}>
-          Fichier
+          {t("components.file")}
         </Text>
       </View>
     );
@@ -149,7 +151,7 @@ export function MediaPreview({
           ]}
         >
           <Ionicons name="image-outline" size={30} color="#9ca3af" />
-          <Text style={styles.errorText}>Erreur</Text>
+          <Text style={styles.errorText}>{t("common.error")}</Text>
         </View>
       )}
 

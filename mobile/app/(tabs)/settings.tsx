@@ -7,6 +7,7 @@
  */
 
 import { useAuth } from "@/providers/AuthProvider";
+import { useI18n } from "@/providers/I18nProvider";
 import { useTheme } from "@/providers/ThemeProvider";
 import { supabase } from "@/services/supabase";
 import { useEffect, useState } from "react";
@@ -64,12 +65,24 @@ const LANGUAGES: LanguageOption[] = [
 
 const STORY_VISIBILITY_OPTIONS: {
   value: StoryVisibility;
-  label: string;
-  desc: string;
+  labelKey: string;
+  descKey: string;
 }[] = [
-  { value: "public", label: "Public", desc: "Tout le monde" },
-  { value: "friends", label: "Amis", desc: "Vos amis uniquement" },
-  { value: "private", label: "Privé", desc: "Vous seulement" },
+  {
+    value: "public",
+    labelKey: "settings.visibilityPublic",
+    descKey: "settings.visibilityPublicDesc",
+  },
+  {
+    value: "friends",
+    labelKey: "settings.visibilityFriends",
+    descKey: "settings.visibilityFriendsDesc",
+  },
+  {
+    value: "private",
+    labelKey: "settings.visibilityPrivate",
+    descKey: "settings.visibilityPrivateDesc",
+  },
 ];
 
 const DEFAULT_NOTIFICATION_PREFS: NotificationPrefs = {
@@ -99,6 +112,7 @@ const DEFAULT_STORIES_PREFS: StoriesPrefs = {
 export default function SettingsScreen() {
   const { user } = useAuth();
   const { theme, mode, toggleMode } = useTheme();
+  const { t, locale, setLocale } = useI18n();
 
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -230,9 +244,9 @@ export default function SettingsScreen() {
       }
 
       setAccountDirty(false);
-      Alert.alert("Succès", "Profil mis à jour avec succès.");
+      Alert.alert(t("common.success"), t("settings.profileUpdated"));
     } catch (err: any) {
-      Alert.alert("Erreur", err.message ?? "Impossible de sauvegarder.");
+      Alert.alert(t("common.error"), err.message ?? t("settings.cannotSave"));
     } finally {
       setSaving(false);
     }
@@ -244,10 +258,7 @@ export default function SettingsScreen() {
 
   async function handleChangePassword() {
     if (!newPassword || newPassword.length < 6) {
-      Alert.alert(
-        "Erreur",
-        "Le nouveau mot de passe doit faire au moins 6 caractères.",
-      );
+      Alert.alert(t("common.error"), t("settings.passwordMinLength"));
       return;
     }
     setSaving(true);
@@ -258,11 +269,11 @@ export default function SettingsScreen() {
       if (error) throw error;
       setCurrentPassword("");
       setNewPassword("");
-      Alert.alert("Succès", "Mot de passe mis à jour.");
+      Alert.alert(t("common.success"), t("settings.passwordUpdated"));
     } catch (err: any) {
       Alert.alert(
-        "Erreur",
-        err.message ?? "Impossible de changer le mot de passe.",
+        t("common.error"),
+        err.message ?? t("settings.cannotChangePassword"),
       );
     } finally {
       setSaving(false);
@@ -275,6 +286,7 @@ export default function SettingsScreen() {
 
   async function handleLanguageChange(code: LanguageCode) {
     setLanguage(code);
+    setLocale(code);
     if (!user) return;
     setSaving(true);
     try {
@@ -374,10 +386,10 @@ export default function SettingsScreen() {
   // -----------------------------------------------------------------------
 
   function handleSignOut() {
-    Alert.alert("Déconnexion", "Êtes-vous sûr de vouloir vous déconnecter ?", [
-      { text: "Annuler", style: "cancel" },
+    Alert.alert(t("settings.signOut"), t("settings.signOutConfirm"), [
+      { text: t("common.cancel"), style: "cancel" },
       {
-        text: "Déconnexion",
+        text: t("settings.signOut"),
         style: "destructive",
         onPress: () => supabase.auth.signOut(),
       },
@@ -386,17 +398,17 @@ export default function SettingsScreen() {
 
   function handleDeleteAccount() {
     Alert.alert(
-      "Supprimer le compte",
-      "Cette action est irréversible. Toutes vos données seront supprimées.",
+      t("settings.deleteAccount"),
+      t("settings.deleteAccountConfirm"),
       [
-        { text: "Annuler", style: "cancel" },
+        { text: t("common.cancel"), style: "cancel" },
         {
-          text: "Supprimer",
+          text: t("common.delete"),
           style: "destructive",
           onPress: () => {
             Alert.alert(
-              "Bientôt",
-              "Cette fonctionnalité sera disponible prochainement.",
+              t("settings.comingSoon"),
+              t("settings.comingSoonMessage"),
             );
           },
         },
@@ -427,23 +439,23 @@ export default function SettingsScreen() {
     >
       {/* ---- HEADER ---- */}
       <Text style={[styles.headerTitle, { color: theme.colors.text }]}>
-        Paramètres
+        {t("settings.title")}
       </Text>
 
       {saving && (
         <View testID="settings-saving" style={styles.savingBanner}>
           <ActivityIndicator size="small" color="#fff" />
-          <Text style={styles.savingText}>Enregistrement...</Text>
+          <Text style={styles.savingText}>{t("common.saving")}</Text>
         </View>
       )}
 
       {/* ===== ACCOUNT (editable) ===== */}
-      <SectionHeader title="Compte" color={theme.colors.text} />
+      <SectionHeader title={t("settings.account")} color={theme.colors.text} />
 
       <View style={[styles.card, { backgroundColor: theme.colors.surface }]}>
         <View style={styles.inputRow}>
           <Text style={[styles.inputLabel, { color: theme.colors.text }]}>
-            Identifiant
+            {t("settings.identifier")}
           </Text>
           <TextInput
             testID="input-username"
@@ -460,7 +472,7 @@ export default function SettingsScreen() {
               setUsername(t);
               setAccountDirty(true);
             }}
-            placeholder="Votre identifiant"
+            placeholder={t("settings.identifierPlaceholder")}
             placeholderTextColor={theme.colors.textMuted}
             autoCapitalize="none"
           />
@@ -470,7 +482,7 @@ export default function SettingsScreen() {
 
         <View style={styles.inputRow}>
           <Text style={[styles.inputLabel, { color: theme.colors.text }]}>
-            Email
+            {t("settings.email")}
           </Text>
           <TextInput
             testID="input-email"
@@ -487,7 +499,7 @@ export default function SettingsScreen() {
               setEmail(t);
               setAccountDirty(true);
             }}
-            placeholder="votre@email.com"
+            placeholder={t("settings.emailPlaceholder")}
             placeholderTextColor={theme.colors.textMuted}
             keyboardType="email-address"
             autoCapitalize="none"
@@ -500,18 +512,18 @@ export default function SettingsScreen() {
             style={[styles.saveBtn, { backgroundColor: theme.colors.primary }]}
             onPress={handleSaveAccount}
           >
-            <Text style={styles.saveBtnText}>Sauvegarder</Text>
+            <Text style={styles.saveBtnText}>{t("common.save")}</Text>
           </TouchableOpacity>
         )}
       </View>
 
       {/* ===== PASSWORD ===== */}
-      <SectionHeader title="Mot de passe" color={theme.colors.text} />
+      <SectionHeader title={t("settings.password")} color={theme.colors.text} />
 
       <View style={[styles.card, { backgroundColor: theme.colors.surface }]}>
         <View style={styles.inputRow}>
           <Text style={[styles.inputLabel, { color: theme.colors.text }]}>
-            Mot de passe actuel
+            {t("settings.currentPassword")}
           </Text>
           <TextInput
             testID="input-current-password"
@@ -525,7 +537,7 @@ export default function SettingsScreen() {
             ]}
             value={currentPassword}
             onChangeText={setCurrentPassword}
-            placeholder="••••••••"
+            placeholder={t("settings.currentPasswordPlaceholder")}
             placeholderTextColor={theme.colors.textMuted}
             secureTextEntry
           />
@@ -535,7 +547,7 @@ export default function SettingsScreen() {
 
         <View style={styles.inputRow}>
           <Text style={[styles.inputLabel, { color: theme.colors.text }]}>
-            Nouveau mot de passe
+            {t("settings.newPassword")}
           </Text>
           <TextInput
             testID="input-new-password"
@@ -549,7 +561,7 @@ export default function SettingsScreen() {
             ]}
             value={newPassword}
             onChangeText={setNewPassword}
-            placeholder="Min. 6 caractères"
+            placeholder={t("settings.newPasswordPlaceholder")}
             placeholderTextColor={theme.colors.textMuted}
             secureTextEntry
           />
@@ -569,15 +581,18 @@ export default function SettingsScreen() {
           onPress={handleChangePassword}
           disabled={newPassword.length < 6}
         >
-          <Text style={styles.saveBtnText}>Changer le mot de passe</Text>
+          <Text style={styles.saveBtnText}>{t("settings.changePassword")}</Text>
         </TouchableOpacity>
       </View>
 
       {/* ===== APPEARANCE ===== */}
-      <SectionHeader title="Apparence" color={theme.colors.text} />
+      <SectionHeader
+        title={t("settings.appearance")}
+        color={theme.colors.text}
+      />
 
       <View style={[styles.card, { backgroundColor: theme.colors.surface }]}>
-        <SettingRow label="Mode sombre" color={theme.colors.text}>
+        <SettingRow label={t("settings.darkMode")} color={theme.colors.text}>
           <Switch
             testID="switch-dark-mode"
             value={mode === "dark"}
@@ -589,7 +604,7 @@ export default function SettingsScreen() {
       </View>
 
       {/* ===== LANGUAGE ===== */}
-      <SectionHeader title="Langue" color={theme.colors.text} />
+      <SectionHeader title={t("settings.language")} color={theme.colors.text} />
 
       <View style={[styles.card, { backgroundColor: theme.colors.surface }]}>
         {LANGUAGES.map((lang, idx) => (
@@ -635,15 +650,18 @@ export default function SettingsScreen() {
       </View>
 
       {/* ===== NOTIFICATIONS ===== */}
-      <SectionHeader title="Notifications" color={theme.colors.text} />
+      <SectionHeader
+        title={t("settings.notifications")}
+        color={theme.colors.text}
+      />
 
       <View style={[styles.card, { backgroundColor: theme.colors.surface }]}>
         {(
           [
-            ["mentions", "Mentions"],
-            ["directMessages", "Messages directs"],
-            ["calls", "Appels"],
-            ["events", "Événements"],
+            ["mentions", t("settings.mentions")],
+            ["directMessages", t("settings.directMessages")],
+            ["calls", t("settings.settingsCalls")],
+            ["events", t("settings.events")],
           ] as const
         ).map(([key, label], idx, arr) => (
           <View key={key}>
@@ -664,12 +682,12 @@ export default function SettingsScreen() {
       </View>
 
       {/* ===== STORIES ===== */}
-      <SectionHeader title="Stories" color={theme.colors.text} />
+      <SectionHeader title={t("settings.stories")} color={theme.colors.text} />
 
       <View style={[styles.card, { backgroundColor: theme.colors.surface }]}>
         <View style={styles.inputRow}>
           <Text style={[styles.inputLabel, { color: theme.colors.text }]}>
-            Visibilité
+            {t("settings.visibility")}
           </Text>
           <View style={styles.visibilityGroup}>
             {STORY_VISIBILITY_OPTIONS.map((opt) => (
@@ -704,7 +722,7 @@ export default function SettingsScreen() {
                     },
                   ]}
                 >
-                  {opt.label}
+                  {t(opt.labelKey)}
                 </Text>
               </TouchableOpacity>
             ))}
@@ -713,7 +731,10 @@ export default function SettingsScreen() {
 
         <Divider color={theme.colors.border} />
 
-        <SettingRow label="Autoriser les réponses" color={theme.colors.text}>
+        <SettingRow
+          label={t("settings.allowReplies")}
+          color={theme.colors.text}
+        >
           <Switch
             testID="switch-stories-replies"
             value={storiesPrefs.allowReplies}
@@ -727,7 +748,7 @@ export default function SettingsScreen() {
 
         <Divider color={theme.colors.border} />
 
-        <SettingRow label="Archivage automatique" color={theme.colors.text}>
+        <SettingRow label={t("settings.autoArchive")} color={theme.colors.text}>
           <Switch
             testID="switch-stories-archive"
             value={storiesPrefs.autoArchive}
@@ -741,15 +762,15 @@ export default function SettingsScreen() {
       </View>
 
       {/* ===== PRIVACY ===== */}
-      <SectionHeader title="Confidentialité" color={theme.colors.text} />
+      <SectionHeader title={t("settings.privacy")} color={theme.colors.text} />
 
       <View style={[styles.card, { backgroundColor: theme.colors.surface }]}>
         {(
           [
-            ["showOnlineStatus", "Afficher statut en ligne"],
-            ["showLastSeen", "Afficher dernière connexion"],
-            ["showReadReceipts", "Confirmations de lecture"],
-            ["allowSearchByPhone", "Recherche par téléphone"],
+            ["showOnlineStatus", t("settings.showOnlineStatus")],
+            ["showLastSeen", t("settings.showLastSeen")],
+            ["showReadReceipts", t("settings.readReceipts")],
+            ["allowSearchByPhone", t("settings.searchByPhone")],
           ] as const
         ).map(([key, label], idx, arr) => (
           <View key={key}>
@@ -768,12 +789,12 @@ export default function SettingsScreen() {
       </View>
 
       {/* ===== ABOUT ===== */}
-      <SectionHeader title="À propos" color={theme.colors.text} />
+      <SectionHeader title={t("settings.about")} color={theme.colors.text} />
 
       <View style={[styles.card, { backgroundColor: theme.colors.surface }]}>
-        <SettingRow label="Version" color={theme.colors.text}>
+        <SettingRow label={t("settings.version")} color={theme.colors.text}>
           <Text style={[styles.valueText, { color: theme.colors.textMuted }]}>
-            1.0.0 (MVP)
+            {t("settings.versionValue")}
           </Text>
         </SettingRow>
       </View>
@@ -785,7 +806,7 @@ export default function SettingsScreen() {
         onPress={handleSignOut}
       >
         <Text style={[styles.actionBtnText, { color: theme.colors.error }]}>
-          Déconnexion
+          {t("settings.signOut")}
         </Text>
       </TouchableOpacity>
 
@@ -798,7 +819,7 @@ export default function SettingsScreen() {
         onPress={handleDeleteAccount}
       >
         <Text style={[styles.actionBtnText, { color: theme.colors.error }]}>
-          Supprimer le compte
+          {t("settings.deleteAccount")}
         </Text>
       </TouchableOpacity>
     </ScrollView>

@@ -11,6 +11,7 @@ import {
 } from "react-native";
 
 import { useAuth } from "@/hooks/useAuthV2";
+import { useI18n } from "@/providers/I18nProvider";
 import { useTheme } from "@/providers/ThemeProvider";
 
 export default function RegisterScreen() {
@@ -18,6 +19,7 @@ export default function RegisterScreen() {
   const [password, setPassword] = useState("");
   const router = useRouter();
   const { theme } = useTheme();
+  const { t } = useI18n();
   const { signUp, loading } = useAuth();
 
   async function signUpWithEmail() {
@@ -27,19 +29,19 @@ export default function RegisterScreen() {
       });
 
       Alert.alert(
-        "Registration successful!",
-        "Please check your inbox for verification.",
+        t("auth.registrationSuccessTitle"),
+        t("auth.registrationSuccessMessage"),
         [
           {
-            text: "OK",
+            text: t("common.ok"),
             onPress: () => router.back(),
           },
         ],
       );
     } catch (error) {
       Alert.alert(
-        "Error",
-        error instanceof Error ? error.message : "Registration failed",
+        t("auth.error"),
+        error instanceof Error ? error.message : t("auth.registrationFailed"),
       );
     }
   }
@@ -48,11 +50,13 @@ export default function RegisterScreen() {
     <View
       style={[styles.container, { backgroundColor: theme.colors.background }]}
     >
-      <Stack.Screen options={{ title: "Create Account", headerShown: true }} />
+      <Stack.Screen
+        options={{ title: t("auth.createAccountTitle"), headerShown: true }}
+      />
 
       <View style={styles.verticallySpaced}>
         <Text style={[styles.label, { color: theme.colors.text }]}>
-          Sign Up
+          {t("auth.signUp")}
         </Text>
       </View>
 
@@ -61,7 +65,7 @@ export default function RegisterScreen() {
           testID="signup-email-input"
           onChangeText={(text) => setEmail(text)}
           value={email}
-          placeholder="email@address.com"
+          placeholder={t("auth.emailPlaceholder")}
           autoCapitalize={"none"}
           style={[
             styles.input,
@@ -76,7 +80,7 @@ export default function RegisterScreen() {
           onChangeText={(text) => setPassword(text)}
           value={password}
           secureTextEntry={true}
-          placeholder="Password"
+          placeholder={t("auth.passwordPlaceholder")}
           autoCapitalize={"none"}
           style={[
             styles.input,
@@ -95,7 +99,7 @@ export default function RegisterScreen() {
         ) : (
           <Button
             testID="signup-submit-button"
-            title="Create account"
+            title={t("auth.createAccount")}
             disabled={loading}
             onPress={signUpWithEmail}
           />
@@ -107,7 +111,7 @@ export default function RegisterScreen() {
           style={[styles.link, { color: theme.colors.primary }]}
           onPress={() => router.back()}
         >
-          Already have an account? Sign in
+          {t("auth.hasAccountSignIn")}
         </Text>
       </View>
     </View>

@@ -1,4 +1,5 @@
 import Avatar from "@/components/Avatar";
+import { useI18n } from "@/providers/I18nProvider";
 import { useTheme } from "@/providers/ThemeProvider";
 import { supabase } from "@/services/supabase";
 import { Session } from "@supabase/supabase-js";
@@ -22,6 +23,7 @@ export default function ProfileScreen() {
   const [session, setSession] = useState<Session | null>(null);
 
   const { theme } = useTheme();
+  const { t } = useI18n();
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }: any) => {
@@ -40,7 +42,7 @@ export default function ProfileScreen() {
   async function getProfile() {
     try {
       setLoading(true);
-      if (!session?.user) throw new Error("No user on the session!");
+      if (!session?.user) throw new Error(t("profile.noSession"));
 
       const { data, error, status } = await supabase
         .from("profiles")
@@ -80,7 +82,7 @@ export default function ProfileScreen() {
   }) {
     try {
       setLoading(true);
-      if (!session?.user) throw new Error("No user on the session!");
+      if (!session?.user) throw new Error(t("profile.noSession"));
 
       const updates = {
         id: session?.user.id,
@@ -97,7 +99,7 @@ export default function ProfileScreen() {
         throw error;
       }
 
-      Alert.alert("Success", "Profile updated!");
+      Alert.alert(t("common.success"), t("profile.updated"));
     } catch (error) {
       if (error instanceof Error) {
         Alert.alert(error.message);
@@ -131,7 +133,9 @@ export default function ProfileScreen() {
       </View>
 
       <View style={[styles.verticallySpaced, styles.mt20]}>
-        <Text style={[styles.label, { color: theme.colors.text }]}>Email</Text>
+        <Text style={[styles.label, { color: theme.colors.text }]}>
+          {t("profile.email")}
+        </Text>
         <TextInput
           editable={false}
           value={session?.user?.email}
@@ -148,12 +152,12 @@ export default function ProfileScreen() {
 
       <View style={styles.verticallySpaced}>
         <Text style={[styles.label, { color: theme.colors.text }]}>
-          Full Name
+          {t("profile.fullName")}
         </Text>
         <TextInput
           onChangeText={(text) => setFullName(text)}
           value={fullName}
-          placeholder="John Doe"
+          placeholder={t("profile.fullNamePlaceholder")}
           style={[
             styles.input,
             { color: theme.colors.text, borderColor: theme.colors.border },
@@ -164,12 +168,12 @@ export default function ProfileScreen() {
 
       <View style={styles.verticallySpaced}>
         <Text style={[styles.label, { color: theme.colors.text }]}>
-          Username
+          {t("profile.username")}
         </Text>
         <TextInput
           onChangeText={(text) => setUsername(text)}
           value={username}
-          placeholder="johndoe"
+          placeholder={t("profile.usernamePlaceholder")}
           style={[
             styles.input,
             { color: theme.colors.text, borderColor: theme.colors.border },
@@ -180,12 +184,12 @@ export default function ProfileScreen() {
 
       <View style={styles.verticallySpaced}>
         <Text style={[styles.label, { color: theme.colors.text }]}>
-          Website
+          {t("profile.website")}
         </Text>
         <TextInput
           onChangeText={(text) => setWebsite(text)}
           value={website}
-          placeholder="https://example.com"
+          placeholder={t("profile.websitePlaceholder")}
           autoCapitalize="none"
           style={[
             styles.input,
@@ -197,7 +201,7 @@ export default function ProfileScreen() {
 
       <View style={[styles.verticallySpaced, styles.mt20]}>
         <Button
-          title={loading ? "Loading ..." : "Update"}
+          title={loading ? t("common.loading") : t("profile.update")}
           onPress={() =>
             updateProfile({
               username,
@@ -213,7 +217,7 @@ export default function ProfileScreen() {
       <View style={styles.verticallySpaced}>
         <Button
           testID="logout-button"
-          title="Sign Out"
+          title={t("profile.signOut")}
           onPress={() => supabase.auth.signOut()}
           color={theme.colors.error}
         />

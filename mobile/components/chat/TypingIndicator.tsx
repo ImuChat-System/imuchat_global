@@ -4,6 +4,7 @@
  * Style kawaii avec couleurs violet/rose
  */
 
+import { useI18n } from "@/providers/I18nProvider";
 import { useColors } from "@/providers/ThemeProvider";
 import React, { useEffect, useRef } from "react";
 import { Animated, StyleSheet, Text, View } from "react-native";
@@ -82,6 +83,7 @@ export function TypingIndicator({
   primaryColor = "#8B5CF6",
 }: TypingIndicatorProps) {
   const colors = useColors();
+  const { t } = useI18n();
 
   if (userNames.length === 0) {
     return null;
@@ -89,10 +91,13 @@ export function TypingIndicator({
 
   const displayText =
     userNames.length === 1
-      ? `${userNames[0]} est en train d'écrire...`
+      ? t("components.typing", { name: userNames[0] })
       : userNames.length === 2
-        ? `${userNames[0]} et ${userNames[1]} sont en train d'écrire...`
-        : `${userNames.length} personnes sont en train d'écrire...`;
+        ? t("components.twoTyping", {
+            name1: userNames[0],
+            name2: userNames[1],
+          })
+        : t("components.manyTyping", { count: userNames.length });
 
   return (
     <View style={styles.container}>

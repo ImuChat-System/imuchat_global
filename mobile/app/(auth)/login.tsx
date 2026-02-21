@@ -10,7 +10,9 @@ import {
   View,
 } from "react-native";
 
+import { SocialLoginButtons } from "@/components/auth/SocialLoginButtons";
 import { useAuth } from "@/hooks/useAuthV2";
+import { useI18n } from "@/providers/I18nProvider";
 import { useTheme } from "@/providers/ThemeProvider";
 
 export default function LoginScreen() {
@@ -18,7 +20,9 @@ export default function LoginScreen() {
   const [password, setPassword] = useState("");
   const router = useRouter();
   const { theme } = useTheme();
+  const { t } = useI18n();
   const { signIn, loading, user } = useAuth();
+  const [socialLoading, setSocialLoading] = useState(false);
 
   // Rediriger si déjà connecté
   useEffect(() => {
@@ -33,8 +37,8 @@ export default function LoginScreen() {
       // La redirection se fera automatiquement via useEffect
     } catch (error) {
       Alert.alert(
-        "Error",
-        error instanceof Error ? error.message : "Login failed",
+        t("auth.error"),
+        error instanceof Error ? error.message : t("auth.loginFailed"),
       );
     }
   }
@@ -43,13 +47,13 @@ export default function LoginScreen() {
     <View
       style={[styles.container, { backgroundColor: theme.colors.background }]}
     >
-      <Stack.Screen options={{ title: "Login", headerShown: false }} />
+      <Stack.Screen options={{ title: t("auth.login"), headerShown: false }} />
       <View style={[styles.verticallySpaced, styles.mt20]}>
         <TextInput
           testID="login-email-input"
           onChangeText={(text) => setEmail(text)}
           value={email}
-          placeholder="email@address.com"
+          placeholder={t("auth.emailPlaceholder")}
           autoCapitalize={"none"}
           style={[
             styles.input,
@@ -64,7 +68,7 @@ export default function LoginScreen() {
           onChangeText={(text) => setPassword(text)}
           value={password}
           secureTextEntry={true}
-          placeholder="Password"
+          placeholder={t("auth.passwordPlaceholder")}
           autoCapitalize={"none"}
           style={[
             styles.input,
@@ -74,7 +78,7 @@ export default function LoginScreen() {
         />
       </View>
       <View style={[styles.verticallySpaced, styles.mt20]}>
-        {loading ? (
+        {loading || socialLoading ? (
           <ActivityIndicator
             testID="login-loading"
             size="large"
@@ -83,12 +87,20 @@ export default function LoginScreen() {
         ) : (
           <Button
             testID="login-submit-button"
-            title="Sign in"
-            disabled={loading}
+            title={t("auth.signIn")}
+            disabled={loading || socialLoading}
             onPress={signInWithEmail}
           />
         )}
       </View>
+
+      {/* Social login buttons */}
+      <SocialLoginButtons
+        onLoginStart={() => setSocialLoading(true)}
+        onLoginEnd={() => setSocialLoading(false)}
+        disabled={loading}
+      />
+
       <View style={styles.verticallySpaced}>
         <View style={styles.verticallySpaced}>
           <Text
@@ -99,7 +111,7 @@ export default function LoginScreen() {
             }}
             onPress={() => router.push("/register" as Href)}
           >
-            Don't have an account? Sign up
+            {t("auth.noAccountSignUp")}
           </Text>
           <Text
             style={{
@@ -110,7 +122,7 @@ export default function LoginScreen() {
             }}
             onPress={() => router.push("/(auth)/forgot-password" as Href)}
           >
-            Forgot Password?
+            {t("auth.forgotPassword")}
           </Text>
         </View>
       </View>

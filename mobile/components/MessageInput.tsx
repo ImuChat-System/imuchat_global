@@ -1,24 +1,41 @@
 import { useMediaUpload } from "@/hooks/useMediaUpload";
+import { useI18n } from "@/providers/I18nProvider";
 import { useColors } from "@/providers/ThemeProvider";
 import { UploadResult } from "@/services/media-upload";
+import { Message } from "@/services/messaging";
 import { Ionicons } from "@expo/vector-icons";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { StyleSheet, TextInput, TouchableOpacity, View } from "react-native";
+import { EmojiPickerButton } from "./chat/EmojiPickerButton";
+import { GifButton, GifPicker } from "./chat/GifPicker";
+import { ReplyPreview } from "./chat/ReplyPreview";
 import { MediaPreview, UploadProgress } from "./MediaComponents";
 
 interface MessageInputProps {
   onSend: (message: string, mediaUrl?: string, mediaType?: string) => void;
   onTyping?: () => void;
   disabled?: boolean;
+  /** Message being replied to */
+  replyToMessage?: Message | null;
+  /** Cancel reply callback */
+  onCancelReply?: () => void;
+  /** Current user ID for reply preview */
+  currentUserId?: string | null;
 }
 
 export default function MessageInput({
   onSend,
   onTyping,
   disabled = false,
+  replyToMessage,
+  onCancelReply,
+  currentUserId,
 }: MessageInputProps) {
   const [message, setMessage] = useState("");
+  const [gifPickerVisible, setGifPickerVisible] = useState(false);
   const colors = useColors();
+  const { t } = useI18n();
+  const inputRef = useRef<TextInput>(null);
 
   const {
     isUploading,
@@ -62,6 +79,17 @@ export default function MessageInput({
     }
   };
 
+  const handleEmojiSelected = (emoji: string) => {
+    setMessage((prev) => prev + emoji);
+    // Focus the input after selecting an emoji
+    inputRef.current?.focus();
+  };
+
+  const handleGifSelected = (gif: { url: string; title: string }) => {
+    // Send GIF as a media attachment
+    onSend("", gif.url, "image/gif");
+  };
+
   const canSend = (message.trim().length > 0 || selectedMedia) && !isUploading;
 
   return (
@@ -72,6 +100,15 @@ export default function MessageInput({
         borderTopWidth: 1,
       }}
     >
+      {/* Reply preview */}
+      {replyToMessage && onCancelReply && (
+        <ReplyPreview
+          message={replyToMessage}
+          onCancel={onCancelReply}
+          currentUserId={currentUserId}
+        />
+      )}
+
       {/* Selected media preview */}
       {selectedMedia && (
         <View style={styles.previewContainer}>
@@ -108,13 +145,28 @@ export default function MessageInput({
           />
         </TouchableOpacity>
 
+        {/* Emoji picker button */}
+        <EmojiPickerButton
+          onEmojiSelected={handleEmojiSelected}
+          size={24}
+          color={colors.textMuted}
+        />
+
+        {/* GIF picker button */}
+        <GifButton
+          onPress={() => setGifPickerVisible(true)}
+          color={colors.textMuted}
+          size={24}
+        />
+
         <TextInput
+          ref={inputRef}
           testID="message-input"
           style={[
             styles.input,
             { color: colors.text, backgroundColor: colors.background },
           ]}
-          placeholder="Type a message..."
+          placeholder={t("chat.typeMessage")}
           placeholderTextColor={colors.textMuted}
           value={message}
           onChangeText={handleChangeText}
@@ -139,6 +191,13 @@ export default function MessageInput({
           />
         </TouchableOpacity>
       </View>
+
+      {/* GIF Picker Modal */}
+      <GifPicker
+        visible={gifPickerVisible}
+        onClose={() => setGifPickerVisible(false)}
+        onSelect={handleGifSelected}
+      />
     </View>
   );
 }

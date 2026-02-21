@@ -7,6 +7,7 @@
  * - Indicateur caméra (on/off)
  */
 
+import { useI18n } from "@/providers/I18nProvider";
 import type { CallParticipant } from "@/services/calls";
 import React from "react";
 import { StyleSheet, Text, View, type ViewStyle } from "react-native";
@@ -26,6 +27,7 @@ export const ParticipantView: React.FC<ParticipantViewProps> = ({
   style,
   isLocal = false,
 }) => {
+  const { t } = useI18n();
   const { userId, name, isAudioEnabled, isVideoEnabled } = participant;
 
   return (
@@ -41,7 +43,7 @@ export const ParticipantView: React.FC<ParticipantViewProps> = ({
         // Pour l'instant, placeholder
         <View style={styles.videoPlaceholder} testID="video-placeholder">
           <Text style={styles.videoPlaceholderText}>
-            📹 {isLocal ? "Vous" : name}
+            📹 {isLocal ? t("common.you") : name}
           </Text>
         </View>
       )}
@@ -51,7 +53,7 @@ export const ParticipantView: React.FC<ParticipantViewProps> = ({
         {/* Nom */}
         <View style={styles.nameContainer}>
           <Text style={styles.nameText} numberOfLines={1}>
-            {isLocal ? "Vous" : name || "User"}
+            {isLocal ? t("common.you") : name || t("common.user")}
           </Text>
         </View>
 

@@ -11,23 +11,25 @@ import {
 } from "react-native";
 
 import { useAuth } from "@/hooks/useAuthV2";
+import { useI18n } from "@/providers/I18nProvider";
 import { useTheme } from "@/providers/ThemeProvider";
 
 export default function ForgotPasswordScreen() {
   const [email, setEmail] = useState("");
   const [sent, setSent] = useState(false);
   const { theme } = useTheme();
+  const { t } = useI18n();
   const { sendPasswordReset, loading } = useAuth();
 
   async function sendResetEmail() {
     try {
       await sendPasswordReset(email);
       setSent(true);
-      Alert.alert("Check your email", "We sent you a password reset link.");
+      Alert.alert(t("auth.checkEmailTitle"), t("auth.checkEmailMessage"));
     } catch (error) {
       Alert.alert(
-        "Error",
-        error instanceof Error ? error.message : "Failed to send reset email",
+        t("auth.error"),
+        error instanceof Error ? error.message : t("auth.failedResetEmail"),
       );
     }
   }
@@ -36,14 +38,16 @@ export default function ForgotPasswordScreen() {
     <View
       style={[styles.container, { backgroundColor: theme.colors.background }]}
     >
-      <Stack.Screen options={{ title: "Reset Password", headerShown: true }} />
+      <Stack.Screen
+        options={{ title: t("auth.resetPasswordTitle"), headerShown: true }}
+      />
 
       <View style={styles.verticallySpaced}>
         <Text style={[styles.label, { color: theme.colors.text }]}>
-          Reset Password
+          {t("auth.resetPasswordTitle")}
         </Text>
         <Text style={{ color: theme.colors.secondary, marginBottom: 20 }}>
-          Enter your email to receive a reset link.
+          {t("auth.resetPasswordDescription")}
         </Text>
       </View>
 
@@ -52,7 +56,7 @@ export default function ForgotPasswordScreen() {
           testID="forgot-password-email-input"
           onChangeText={(text) => setEmail(text)}
           value={email}
-          placeholder="email@address.com"
+          placeholder={t("auth.emailPlaceholder")}
           autoCapitalize={"none"}
           style={[
             styles.input,
@@ -72,7 +76,7 @@ export default function ForgotPasswordScreen() {
         ) : (
           <Button
             testID="forgot-password-submit-button"
-            title="Send Reset Link"
+            title={t("auth.sendResetLink")}
             disabled={loading || sent}
             onPress={sendResetEmail}
           />

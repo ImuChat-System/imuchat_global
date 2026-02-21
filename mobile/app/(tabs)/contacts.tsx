@@ -1,10 +1,13 @@
 import { useAuth } from "@/hooks/useAuth";
+import { useI18n } from "@/providers/I18nProvider";
+import { useColors } from "@/providers/ThemeProvider";
 import { supabase } from "@/services/supabase";
 import { useCallback, useEffect, useState } from "react";
 import {
   ActivityIndicator,
   Alert,
   FlatList,
+  RefreshControl,
   StyleSheet,
   Text,
   TextInput,
@@ -49,6 +52,8 @@ type TabType = "friends" | "requests" | "search";
 
 export default function ContactsScreen() {
   const { user } = useAuth();
+  const { t } = useI18n();
+  const colors = useColors();
   const userId = user?.id;
 
   const [activeTab, setActiveTab] = useState<TabType>("friends");
@@ -58,90 +63,104 @@ export default function ContactsScreen() {
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState<UserSearchResult[]>([]);
   const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
   const [searchLoading, setSearchLoading] = useState(false);
 
   // === DATA LOADING ===
 
-  const loadContacts = useCallback(async () => {
-    if (!userId) return;
-    setLoading(true);
+  const loadContacts = useCallback(
+    async (isRefresh = false) => {
+      if (!userId) return;
+      if (isRefresh) {
+        setRefreshing(true);
+      } else {
+        setLoading(true);
+      }
 
-    try {
-      // Amis (sent direction)
-      const { data: sentContacts } = await supabase
-        .from("contacts")
-        .select(
-          `
+      try {
+        // Amis (sent direction)
+        const { data: sentContacts } = await supabase
+          .from("contacts")
+          .select(
+            `
           id, user_id, contact_id, status, created_at,
           profile:profiles!contacts_contact_id_fkey(id, username, display_name, avatar_url, bio, status, is_online)
         `,
-        )
-        .eq("user_id", userId)
-        .eq("status", "accepted");
+          )
+          .eq("user_id", userId)
+          .eq("status", "accepted");
 
-      // Amis (received direction)
-      const { data: receivedContacts } = await supabase
-        .from("contacts")
-        .select(
-          `
+        // Amis (received direction)
+        const { data: receivedContacts } = await supabase
+          .from("contacts")
+          .select(
+            `
           id, user_id, contact_id, status, created_at,
           profile:profiles!contacts_user_id_fkey(id, username, display_name, avatar_url, bio, status, is_online)
         `,
-        )
-        .eq("contact_id", userId)
-        .eq("status", "accepted");
+          )
+          .eq("contact_id", userId)
+          .eq("status", "accepted");
 
-      setFriends([
-        ...(sentContacts || []).map((c: any) => ({
-          ...c,
-          profile: c.profile || {},
-        })),
-        ...(receivedContacts || []).map((c: any) => ({
-          ...c,
-          profile: c.profile || {},
-        })),
-      ]);
+        setFriends([
+          ...(sentContacts || []).map((c: any) => ({
+            ...c,
+            profile: c.profile || {},
+          })),
+          ...(receivedContacts || []).map((c: any) => ({
+            ...c,
+            profile: c.profile || {},
+          })),
+        ]);
 
-      // Demandes reçues
-      const { data: pending } = await supabase
-        .from("contacts")
-        .select(
-          `
+        // Demandes reçues
+        const { data: pending } = await supabase
+          .from("contacts")
+          .select(
+            `
           id, user_id, contact_id, status, created_at,
           sender_profile:profiles!contacts_user_id_fkey(id, username, display_name, avatar_url, bio, status, is_online),
           receiver_profile:profiles!contacts_contact_id_fkey(id, username, display_name, avatar_url, bio, status, is_online)
         `,
-        )
-        .eq("contact_id", userId)
-        .eq("status", "pending")
-        .order("created_at", { ascending: false });
+          )
+          .eq("contact_id", userId)
+          .eq("status", "pending")
+          .order("created_at", { ascending: false });
 
-      setPendingRequests((pending || []) as any);
+        setPendingRequests((pending || []) as any);
 
-      // Demandes envoyées
-      const { data: sent } = await supabase
-        .from("contacts")
-        .select(
-          `
+        // Demandes envoyées
+        const { data: sent } = await supabase
+          .from("contacts")
+          .select(
+            `
           id, user_id, contact_id, status, created_at,
           sender_profile:profiles!contacts_user_id_fkey(id, username, display_name, avatar_url, bio, status, is_online),
           receiver_profile:profiles!contacts_contact_id_fkey(id, username, display_name, avatar_url, bio, status, is_online)
         `,
-        )
-        .eq("user_id", userId)
-        .eq("status", "pending")
-        .order("created_at", { ascending: false });
+          )
+          .eq("user_id", userId)
+          .eq("status", "pending")
+          .order("created_at", { ascending: false });
 
-      setSentRequests((sent || []) as any);
-    } catch (err) {
-      console.error("[Contacts] Failed to load:", err);
-    } finally {
-      setLoading(false);
-    }
-  }, [userId]);
+        setSentRequests((sent || []) as any);
+      } catch (err) {
+        console.error("[Contacts] Failed to load:", err);
+      } finally {
+        setLoading(false);
+        setRefreshing(false);
+      }
+    },
+    [userId],
+  );
 
   useEffect(() => {
     loadContacts();
+  }, [loadContacts]);
+
+  // Handle pull-to-refresh
+  const handleRefresh = useCallback(() => {
+    loadContacts(true);
   }, [loadContacts]);
 
   // === ACTIONS ===
@@ -161,7 +180,7 @@ export default function ContactsScreen() {
 
       setSearchResults((data || []).filter((u: any) => u.id !== userId));
     } catch (err) {
-      Alert.alert("Erreur", "La recherche a échoué");
+      Alert.alert(t("common.error"), t("contacts.searchFailed"));
     } finally {
       setSearchLoading(false);
     }
@@ -174,10 +193,13 @@ export default function ContactsScreen() {
         .insert({ contact_id: contactId, status: "pending" });
 
       if (error) throw error;
-      Alert.alert("Succès", "Demande envoyée !");
+      Alert.alert(t("common.success"), t("contacts.requestSent"));
       loadContacts();
     } catch (err: any) {
-      Alert.alert("Erreur", err?.message || "Impossible d'envoyer la demande");
+      Alert.alert(
+        t("common.error"),
+        err?.message || t("contacts.cannotSendRequest"),
+      );
     }
   };
 
@@ -189,7 +211,7 @@ export default function ContactsScreen() {
         .eq("id", requestId);
       loadContacts();
     } catch {
-      Alert.alert("Erreur", "Impossible d'accepter la demande");
+      Alert.alert(t("common.error"), t("contacts.cannotAccept"));
     }
   };
 
@@ -198,35 +220,39 @@ export default function ContactsScreen() {
       await supabase.from("contacts").delete().eq("id", requestId);
       loadContacts();
     } catch {
-      Alert.alert("Erreur", "Impossible de rejeter la demande");
+      Alert.alert(t("common.error"), t("contacts.cannotReject"));
     }
   };
 
   const handleRemoveFriend = async (contactId: string) => {
-    Alert.alert("Supprimer cet ami ?", "Cette action est irréversible.", [
-      { text: "Annuler", style: "cancel" },
-      {
-        text: "Supprimer",
-        style: "destructive",
-        onPress: async () => {
-          try {
-            await supabase
-              .from("contacts")
-              .delete()
-              .eq("user_id", userId!)
-              .eq("contact_id", contactId);
-            await supabase
-              .from("contacts")
-              .delete()
-              .eq("user_id", contactId)
-              .eq("contact_id", userId!);
-            loadContacts();
-          } catch {
-            Alert.alert("Erreur", "Impossible de supprimer l'ami");
-          }
+    Alert.alert(
+      t("contacts.removeFriendTitle"),
+      t("contacts.removeFriendMessage"),
+      [
+        { text: t("common.cancel"), style: "cancel" },
+        {
+          text: t("common.delete"),
+          style: "destructive",
+          onPress: async () => {
+            try {
+              await supabase
+                .from("contacts")
+                .delete()
+                .eq("user_id", userId!)
+                .eq("contact_id", contactId);
+              await supabase
+                .from("contacts")
+                .delete()
+                .eq("user_id", contactId)
+                .eq("contact_id", userId!);
+              loadContacts();
+            } catch {
+              Alert.alert(t("common.error"), t("contacts.cannotRemove"));
+            }
+          },
         },
-      },
-    ]);
+      ],
+    );
   };
 
   // === HELPERS ===
@@ -247,7 +273,9 @@ export default function ContactsScreen() {
       </View>
       <View style={styles.cardContent}>
         <Text style={styles.name}>
-          {item.profile.display_name || item.profile.username || "Utilisateur"}
+          {item.profile.display_name ||
+            item.profile.username ||
+            t("common.user")}
         </Text>
         {item.profile.username && (
           <Text style={styles.username}>@{item.profile.username}</Text>
@@ -259,7 +287,7 @@ export default function ContactsScreen() {
           ]}
         >
           <Text style={styles.statusText}>
-            {item.profile.is_online ? "En ligne" : "Hors ligne"}
+            {item.profile.is_online ? t("common.online") : t("common.offline")}
           </Text>
         </View>
       </View>
@@ -267,7 +295,7 @@ export default function ContactsScreen() {
         style={styles.removeBtn}
         onPress={() => handleRemoveFriend(item.contact_id)}
       >
-        <Text style={styles.removeBtnText}>Retirer</Text>
+        <Text style={styles.removeBtnText}>{t("contacts.remove")}</Text>
       </TouchableOpacity>
     </View>
   );
@@ -286,7 +314,7 @@ export default function ContactsScreen() {
         <Text style={styles.name}>
           {item.sender_profile.display_name ||
             item.sender_profile.username ||
-            "Utilisateur"}
+            t("common.user")}
         </Text>
         {item.sender_profile.username && (
           <Text style={styles.username}>@{item.sender_profile.username}</Text>
@@ -297,13 +325,13 @@ export default function ContactsScreen() {
           style={styles.acceptBtn}
           onPress={() => handleAccept(item.id)}
         >
-          <Text style={styles.acceptBtnText}>Accepter</Text>
+          <Text style={styles.acceptBtnText}>{t("contacts.accept")}</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.rejectBtn}
           onPress={() => handleReject(item.id)}
         >
-          <Text style={styles.rejectBtnText}>Refuser</Text>
+          <Text style={styles.rejectBtnText}>{t("contacts.reject")}</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -323,15 +351,15 @@ export default function ContactsScreen() {
         <Text style={styles.name}>
           {item.receiver_profile.display_name ||
             item.receiver_profile.username ||
-            "Utilisateur"}
+            t("common.user")}
         </Text>
-        <Text style={styles.pendingLabel}>En attente...</Text>
+        <Text style={styles.pendingLabel}>{t("contacts.pending")}</Text>
       </View>
       <TouchableOpacity
         style={styles.removeBtn}
         onPress={() => handleReject(item.id)}
       >
-        <Text style={styles.removeBtnText}>Annuler</Text>
+        <Text style={styles.removeBtnText}>{t("common.cancel")}</Text>
       </TouchableOpacity>
     </View>
   );
@@ -349,7 +377,7 @@ export default function ContactsScreen() {
         </View>
         <View style={styles.cardContent}>
           <Text style={styles.name}>
-            {item.display_name || item.username || "Utilisateur"}
+            {item.display_name || item.username || t("common.user")}
           </Text>
           {item.username && (
             <Text style={styles.username}>@{item.username}</Text>
@@ -357,18 +385,18 @@ export default function ContactsScreen() {
         </View>
         {isFriend ? (
           <View style={[styles.statusBadge, styles.online]}>
-            <Text style={styles.statusText}>Ami</Text>
+            <Text style={styles.statusText}>{t("contacts.friend")}</Text>
           </View>
         ) : isPending ? (
           <View style={[styles.statusBadge, styles.offline]}>
-            <Text style={styles.statusText}>Envoyé</Text>
+            <Text style={styles.statusText}>{t("contacts.sent")}</Text>
           </View>
         ) : (
           <TouchableOpacity
             style={styles.acceptBtn}
             onPress={() => handleSendRequest(item.id)}
           >
-            <Text style={styles.acceptBtnText}>Ajouter</Text>
+            <Text style={styles.acceptBtnText}>{t("contacts.add")}</Text>
           </TouchableOpacity>
         )}
       </View>
@@ -400,14 +428,14 @@ export default function ContactsScreen() {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.title}>👥 Contacts</Text>
+        <Text style={styles.title}>{t("contacts.title")}</Text>
       </View>
 
       {/* Tabs */}
       <View style={styles.tabBar}>
-        {renderTab("friends", "Amis", friends.length)}
-        {renderTab("requests", "Demandes", pendingRequests.length)}
-        {renderTab("search", "Rechercher")}
+        {renderTab("friends", t("contacts.friends"), friends.length)}
+        {renderTab("requests", t("contacts.requests"), pendingRequests.length)}
+        {renderTab("search", t("contacts.searchTab"))}
       </View>
 
       {/* Friends Tab */}
@@ -417,11 +445,18 @@ export default function ContactsScreen() {
           renderItem={renderFriend}
           keyExtractor={(item) => item.id}
           contentContainerStyle={styles.listContent}
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={handleRefresh}
+              tintColor={colors.primary}
+            />
+          }
           ListEmptyComponent={
             <View style={styles.emptyState}>
-              <Text style={styles.emptyText}>Aucun ami pour le moment</Text>
+              <Text style={styles.emptyText}>{t("contacts.noFriends")}</Text>
               <Text style={styles.emptySubtext}>
-                Recherchez des utilisateurs pour ajouter des amis
+                {t("contacts.noFriendsSubtext")}
               </Text>
             </View>
           }
@@ -445,9 +480,16 @@ export default function ContactsScreen() {
           }
           keyExtractor={(item) => item.id}
           contentContainerStyle={styles.listContent}
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={handleRefresh}
+              tintColor={colors.primary}
+            />
+          }
           ListEmptyComponent={
             <View style={styles.emptyState}>
-              <Text style={styles.emptyText}>Aucune demande</Text>
+              <Text style={styles.emptyText}>{t("contacts.noRequests")}</Text>
             </View>
           }
         />
@@ -459,7 +501,7 @@ export default function ContactsScreen() {
           <View style={styles.searchBar}>
             <TextInput
               style={styles.searchInput}
-              placeholder="Rechercher par nom ou pseudo..."
+              placeholder={t("contacts.searchPlaceholder")}
               placeholderTextColor="#888"
               value={searchQuery}
               onChangeText={setSearchQuery}
@@ -486,7 +528,7 @@ export default function ContactsScreen() {
               ListEmptyComponent={
                 <View style={styles.emptyState}>
                   <Text style={styles.emptyText}>
-                    Tapez un nom pour rechercher
+                    {t("contacts.searchHint")}
                   </Text>
                 </View>
               }

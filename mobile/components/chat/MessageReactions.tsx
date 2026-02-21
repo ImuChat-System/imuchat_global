@@ -3,6 +3,7 @@
  * Affiche les réactions sous un message avec modal pour voir les utilisateurs
  */
 
+import { useI18n } from "@/providers/I18nProvider";
 import { useColors, useSpacing } from "@/providers/ThemeProvider";
 import { ReactionGroup } from "@/services/reactions";
 import React, { useCallback, useState } from "react";
@@ -53,6 +54,7 @@ export function MessageReactions({
   users = {},
 }: MessageReactionsProps) {
   const colors = useColors();
+  const { t } = useI18n();
   const [selectedEmoji, setSelectedEmoji] = useState<string | null>(null);
   const [modalVisible, setModalVisible] = useState(false);
 
@@ -97,7 +99,7 @@ export function MessageReactions({
             { backgroundColor: colors.surface, borderColor: colors.border },
           ]}
           activeOpacity={0.7}
-          accessibilityLabel="Ajouter une réaction"
+          accessibilityLabel={t("components.addReaction")}
           accessibilityRole="button"
         >
           <Text style={[styles.addIcon, { color: colors.textMuted }]}>+</Text>
@@ -111,7 +113,7 @@ export function MessageReactions({
         emoji={selectedEmoji || ""}
         users={
           selectedReaction?.users?.map(
-            (userId) => users[userId] || { id: userId, name: "Utilisateur" },
+            (userId) => users[userId] || { id: userId, name: t("common.user") },
           ) || []
         }
         totalCount={selectedReaction?.count || 0}
@@ -136,6 +138,7 @@ function ReactionBadge({
   onLongPress,
 }: ReactionBadgeProps) {
   const colors = useColors();
+  const { t } = useI18n();
 
   return (
     <TouchableOpacity
@@ -150,9 +153,9 @@ function ReactionBadge({
         },
       ]}
       activeOpacity={0.7}
-      accessibilityLabel={`${emoji} ${count} réaction${count > 1 ? "s" : ""}`}
+      accessibilityLabel={`${emoji} ${t("components.reactionsCount", { count })}`}
       accessibilityRole="button"
-      accessibilityHint="Appuyez pour réagir, maintenez pour voir qui a réagi"
+      accessibilityHint={t("components.tapToReact")}
     >
       <Text style={styles.badgeEmoji}>{emoji}</Text>
       <Text
@@ -234,6 +237,7 @@ function ReactorsModal({
 }: ReactorsModalProps) {
   const colors = useColors();
   const spacing = useSpacing();
+  const { t } = useI18n();
 
   const renderUser = useCallback(
     ({ item }: { item: User }) => (
@@ -270,7 +274,7 @@ function ReactorsModal({
             <View style={styles.modalHeader}>
               <Text style={styles.modalEmoji}>{emoji}</Text>
               <Text style={[styles.modalTitle, { color: colors.text }]}>
-                {totalCount} réaction{totalCount > 1 ? "s" : ""}
+                {t("components.reactionsCount", { count: totalCount })}
               </Text>
             </View>
 
@@ -290,7 +294,7 @@ function ReactorsModal({
               onPress={onClose}
               style={[styles.closeButton, { backgroundColor: colors.primary }]}
             >
-              <Text style={styles.closeButtonText}>Fermer</Text>
+              <Text style={styles.closeButtonText}>{t("common.close")}</Text>
             </TouchableOpacity>
           </Pressable>
         </Animated.View>

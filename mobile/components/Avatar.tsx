@@ -1,3 +1,4 @@
+import { useI18n } from "@/providers/I18nProvider";
 import { useColors } from "@/providers/ThemeProvider";
 import { supabase } from "@/services/supabase";
 import * as ImagePicker from "expo-image-picker";
@@ -28,6 +29,7 @@ export default function Avatar({
   const [uploading, setUploading] = useState(false);
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
   const colors = useColors();
+  const { t } = useI18n();
 
   const avatarSize = { height: size, width: size };
 
@@ -77,7 +79,7 @@ export default function Avatar({
       const image = result.assets[0];
 
       if (!image.base64) {
-        throw new Error("No image data found.");
+        throw new Error(t("components.noImageData"));
       }
 
       const fileExt = image.uri.split(".").pop()?.toLowerCase() ?? "jpeg";
@@ -123,7 +125,7 @@ export default function Avatar({
         <Image
           source={{ uri: avatarUrl }}
           accessible={true}
-          accessibilityLabel="Avatar"
+          accessibilityLabel={t("components.avatar")}
           style={[avatarSize, styles.avatar, styles.image]}
         />
       ) : (
@@ -150,7 +152,7 @@ export default function Avatar({
               <Text
                 style={{ color: colors.text, fontSize: 12, fontWeight: "bold" }}
               >
-                EDIT
+                {t("components.edit")}
               </Text>
             </TouchableOpacity>
           )}

@@ -10,6 +10,7 @@
  */
 
 import { useAuth } from "@/providers/AuthProvider";
+import { useI18n } from "@/providers/I18nProvider";
 import { useColors, useSpacing } from "@/providers/ThemeProvider";
 import {
   getNotificationHistory,
@@ -33,11 +34,11 @@ type NotifCategory = "all" | "messages" | "calls" | "social" | "system";
 type ReadFilter = "all" | "unread" | "read";
 
 const CATEGORIES: { key: NotifCategory; label: string; icon: string }[] = [
-  { key: "all", label: "Tout", icon: "📋" },
-  { key: "messages", label: "Messages", icon: "💬" },
-  { key: "calls", label: "Appels", icon: "📞" },
-  { key: "social", label: "Social", icon: "🌐" },
-  { key: "system", label: "Système", icon: "⚙️" },
+  { key: "all", label: "notifications.all", icon: "📋" },
+  { key: "messages", label: "notifications.messages", icon: "💬" },
+  { key: "calls", label: "notifications.callsCategory", icon: "📞" },
+  { key: "social", label: "notifications.social", icon: "🌐" },
+  { key: "system", label: "notifications.system", icon: "⚙️" },
 ];
 
 // ─── Mock notifications for offline/demo ──────────────────────────
@@ -150,6 +151,7 @@ const MOCK_NOTIFICATIONS: NotificationHistoryItem[] = [
 export default function NotificationsScreen() {
   const colors = useColors();
   const spacing = useSpacing();
+  const { t } = useI18n();
   const { user } = useAuth();
 
   const [notifications, setNotifications] = useState<NotificationHistoryItem[]>(
@@ -224,14 +226,17 @@ export default function NotificationsScreen() {
   const unreadCount = notifications.filter((n) => !n.read).length;
 
   // ─── Time formatting ─────────────────────────────────────────
-  const formatTime = useCallback((iso: string) => {
-    const mins = Math.floor((Date.now() - new Date(iso).getTime()) / 60000);
-    if (mins < 1) return "À l'instant";
-    if (mins < 60) return `${mins} min`;
-    const hrs = Math.floor(mins / 60);
-    if (hrs < 24) return `${hrs}h`;
-    return `${Math.floor(hrs / 24)}j`;
-  }, []);
+  const formatTime = useCallback(
+    (iso: string) => {
+      const mins = Math.floor((Date.now() - new Date(iso).getTime()) / 60000);
+      if (mins < 1) return t("common.justNow");
+      if (mins < 60) return t("common.minutesAgo", { count: mins });
+      const hrs = Math.floor(mins / 60);
+      if (hrs < 24) return t("common.hoursAgo", { count: hrs });
+      return t("common.daysAgo", { count: Math.floor(hrs / 24) });
+    },
+    [t],
+  );
 
   const getNotifIcon = (type: string) => {
     switch (type) {
@@ -328,14 +333,14 @@ export default function NotificationsScreen() {
           <View style={styles.headerRow}>
             <View>
               <Text style={[styles.title, { color: colors.text }]}>
-                🔔 Notifications
+                {t("notifications.title")}
               </Text>
               {unreadCount > 0 && (
                 <Text
                   testID="unread-badge"
                   style={[styles.unreadBadge, { color: colors.primary }]}
                 >
-                  {unreadCount} non lue{unreadCount > 1 ? "s" : ""}
+                  {t("notifications.unreadCount", { count: unreadCount })}
                 </Text>
               )}
             </View>
@@ -346,7 +351,7 @@ export default function NotificationsScreen() {
                 style={[styles.markAllBtn, { borderColor: colors.primary }]}
               >
                 <Text style={[styles.markAllText, { color: colors.primary }]}>
-                  ✓ Tout marquer lu
+                  {t("notifications.markAllRead")}
                 </Text>
               </TouchableOpacity>
             )}
@@ -363,7 +368,7 @@ export default function NotificationsScreen() {
             <TextInput
               testID="notif-search"
               style={[styles.searchInput, { color: colors.text }]}
-              placeholder="Rechercher..."
+              placeholder={t("common.searchPlaceholder")}
               placeholderTextColor={colors.textMuted}
               value={search}
               onChangeText={setSearch}
@@ -409,7 +414,7 @@ export default function NotificationsScreen() {
                       { color: active ? "#fff" : colors.textMuted },
                     ]}
                   >
-                    {cat.label}
+                    {t(cat.label)}
                   </Text>
                 </TouchableOpacity>
               );
@@ -420,9 +425,9 @@ export default function NotificationsScreen() {
           <View testID="read-filter" style={styles.readFilterRow}>
             {(["all", "unread", "read"] as ReadFilter[]).map((rf) => {
               const labels: Record<ReadFilter, string> = {
-                all: "Toutes",
-                unread: "Non lues",
-                read: "Lues",
+                all: t("notifications.allFilter"),
+                unread: t("notifications.unread"),
+                read: t("notifications.read"),
               };
               const active = readFilter === rf;
               return (
@@ -464,7 +469,7 @@ export default function NotificationsScreen() {
               <View testID="empty-notif" style={styles.emptyContainer}>
                 <Text style={styles.emptyIcon}>🔕</Text>
                 <Text style={[styles.emptyText, { color: colors.textMuted }]}>
-                  Aucune notification
+                  {t("notifications.empty")}
                 </Text>
               </View>
             )}

@@ -4,6 +4,7 @@
  */
 
 import { useAuth } from "@/providers/AuthProvider";
+import { useI18n } from "@/providers/I18nProvider";
 import { useColors, useSpacing } from "@/providers/ThemeProvider";
 import { Conversation, getConversations } from "@/services/messaging";
 import React, { useCallback, useEffect, useRef, useState } from "react";
@@ -57,29 +58,29 @@ const HERO_SLIDES: HeroSlide[] = [
   {
     id: "h1",
     type: "world",
-    title: "Monde ImuVerse",
-    subtitle: "Explorez le monde virtuel communautaire",
-    badge: "🌍 Featured",
+    title: "home.worldTitle",
+    subtitle: "home.worldSubtitle",
+    badge: "home.worldBadge",
     image: "",
-    cta: "Explorer",
+    cta: "home.explore",
   },
   {
     id: "h2",
     type: "contest",
-    title: "Concours Créatif",
-    subtitle: "Participez et gagnez des récompenses",
-    badge: "🏆 En cours",
+    title: "home.contestTitle",
+    subtitle: "home.contestSubtitle",
+    badge: "home.contestBadge",
     image: "",
-    cta: "Participer",
+    cta: "home.participate",
   },
   {
     id: "h3",
     type: "promo",
-    title: "Nouveaux Thèmes",
-    subtitle: "Personnalisez votre expérience",
-    badge: "🎨 Store",
+    title: "home.themesTitle",
+    subtitle: "home.themesSubtitle",
+    badge: "home.themesBadge",
     image: "",
-    cta: "Voir",
+    cta: "home.see",
   },
 ];
 
@@ -96,43 +97,43 @@ const EXPLORER_ITEMS: ExplorerItem[] = [
   {
     id: "e1",
     icon: "🌍",
-    title: "Worlds",
-    description: "Mondes virtuels",
+    title: "home.worlds",
+    description: "home.worldsDesc",
     route: "worlds",
   },
   {
     id: "e2",
     icon: "🏆",
-    title: "Contests",
-    description: "Compétitions",
+    title: "home.contests",
+    description: "home.contestsDesc",
     route: "contests",
   },
   {
     id: "e3",
     icon: "🛒",
-    title: "Store",
-    description: "Apps & thèmes",
+    title: "home.storeLabel",
+    description: "home.storeDesc",
     route: "store",
   },
   {
     id: "e4",
     icon: "🎮",
-    title: "Games",
-    description: "Mini-jeux",
+    title: "home.games",
+    description: "home.gamesDesc",
     route: "games",
   },
   {
     id: "e5",
     icon: "🎵",
-    title: "Music",
-    description: "Playlists",
+    title: "home.music",
+    description: "home.musicDesc",
     route: "music",
   },
   {
     id: "e6",
     icon: "📚",
-    title: "Resources",
-    description: "Guides & tutos",
+    title: "home.resources",
+    description: "home.resourcesDesc",
     route: "resources",
   },
 ];
@@ -167,6 +168,7 @@ const { width: SCREEN_WIDTH } = Dimensions.get("window");
 export default function HomeScreen() {
   const colors = useColors();
   const spacing = useSpacing();
+  const { t } = useI18n();
   const { user } = useAuth();
 
   const [conversations, setConversations] = useState<Conversation[]>([]);
@@ -205,17 +207,17 @@ export default function HomeScreen() {
   }, []);
 
   // ─── Helpers ──────────────────────────────────────────────────
-  const formatTime = useCallback((iso: string | undefined) => {
+  const formatTime = useCallback((iso: string | null | undefined) => {
     if (!iso) return "";
     const d = new Date(iso);
     const now = new Date();
     const diff = now.getTime() - d.getTime();
     const mins = Math.floor(diff / 60000);
-    if (mins < 1) return "À l'instant";
-    if (mins < 60) return `Il y a ${mins} min`;
+    if (mins < 1) return t("common.justNow");
+    if (mins < 60) return t("common.minutesAgo", { count: mins });
     const hrs = Math.floor(mins / 60);
-    if (hrs < 24) return `Il y a ${hrs}h`;
-    return `Il y a ${Math.floor(hrs / 24)}j`;
+    if (hrs < 24) return t("common.hoursAgo", { count: hrs });
+    return t("common.daysAgo", { count: Math.floor(hrs / 24) });
   }, []);
 
   // ═══════════════════════════════════════════════════════════════
@@ -236,19 +238,19 @@ export default function HomeScreen() {
       ]}
     >
       <Text style={[styles.heroBadge, { color: colors.primary }]}>
-        {item.badge}
+        {t(item.badge)}
       </Text>
       <Text style={[styles.heroTitle, { color: colors.text }]}>
-        {item.title}
+        {t(item.title)}
       </Text>
       <Text style={[styles.heroSubtitle, { color: colors.textMuted }]}>
-        {item.subtitle}
+        {t(item.subtitle)}
       </Text>
       <TouchableOpacity
         testID={`hero-cta-${item.id}`}
         style={[styles.heroCta, { backgroundColor: colors.primary }]}
       >
-        <Text style={styles.heroCtaText}>{item.cta}</Text>
+        <Text style={styles.heroCtaText}>{t(item.cta)}</Text>
       </TouchableOpacity>
     </View>
   );
@@ -285,9 +287,9 @@ export default function HomeScreen() {
   // ─── Friends / Recent Conversations Card ──────────────────────
   const renderConversation = (conv: Conversation, idx: number) => {
     const name = conv.is_group
-      ? conv.group_name || "Groupe"
-      : conv.participants?.[0]?.profile?.username || "Utilisateur";
-    const lastMsg = conv.last_message?.content || "Pas de message";
+      ? conv.group_name || t("chat.group")
+      : conv.participants?.[0]?.profile?.username || t("common.user");
+    const lastMsg = conv.last_message?.content || t("chat.noMessage");
     const time = formatTime(conv.last_message_at);
     const unread = conv.unread_count || 0;
 
@@ -349,10 +351,10 @@ export default function HomeScreen() {
     >
       <Text style={styles.explorerIcon}>{item.icon}</Text>
       <Text style={[styles.explorerTitle, { color: colors.text }]}>
-        {item.title}
+        {t(item.title)}
       </Text>
       <Text style={[styles.explorerDesc, { color: colors.textMuted }]}>
-        {item.description}
+        {t(item.description)}
       </Text>
     </TouchableOpacity>
   );
@@ -414,13 +416,15 @@ export default function HomeScreen() {
     >
       <View style={[styles.content, { padding: spacing.lg }]}>
         {/* Header */}
-        <Text style={[styles.title, { color: colors.text }]}>🏠 Accueil</Text>
+        <Text style={[styles.title, { color: colors.text }]}>
+          {t("home.title")}
+        </Text>
         <Text style={[styles.subtitle, { color: colors.textMuted }]}>
-          Bienvenue
+          {t("home.welcome")}
           {user?.user_metadata?.username
             ? `, ${user.user_metadata.username}`
             : ""}{" "}
-          sur ImuChat
+          {t("home.welcomeSuffix")}
         </Text>
 
         {/* ── 1. Hero Carousel ───────────────────────────────── */}
@@ -462,7 +466,7 @@ export default function HomeScreen() {
 
         {/* ── 2. Stories Carousel ────────────────────────────── */}
         <Text style={[styles.sectionTitle, { color: colors.text }]}>
-          Stories
+          {t("home.stories")}
         </Text>
         <FlatList
           testID="story-carousel"
@@ -477,11 +481,11 @@ export default function HomeScreen() {
         {/* ── 3. Friends / Recent Conversations ─────────────── */}
         <View style={styles.sectionHeader}>
           <Text style={[styles.sectionTitle, { color: colors.text }]}>
-            Conversations récentes
+            {t("home.recentConversations")}
           </Text>
           <TouchableOpacity testID="btn-see-all-convs">
             <Text style={[styles.seeAll, { color: colors.primary }]}>
-              Voir tout
+              {t("home.seeAll")}
             </Text>
           </TouchableOpacity>
         </View>
@@ -497,7 +501,7 @@ export default function HomeScreen() {
               testID="no-conversations"
               style={[styles.emptyText, { color: colors.textMuted }]}
             >
-              Aucune conversation
+              {t("chat.noConversation")}
             </Text>
           ) : (
             conversations.map((c, i) => renderConversation(c, i))

@@ -73,7 +73,7 @@ const mockConversations = [
 const mockGetConversations = jest.fn().mockResolvedValue(mockConversations);
 
 jest.mock("@/services/messaging", () => ({
-  getConversations: (...a) => mockGetConversations(...a),
+  getConversations: (...a: any[]) => mockGetConversations(...a),
 }));
 
 import HomeScreen from "@/app/(tabs)/index";

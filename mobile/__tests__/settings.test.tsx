@@ -83,9 +83,9 @@ jest.mock("@/services/supabase", () => ({
   supabase: {
     auth: {
       signOut: jest.fn().mockResolvedValue({}),
-      updateUser: (...a) => mockUpdateUser(...a),
+      updateUser: (...a: any[]) => mockUpdateUser(...a),
     },
-    from: (...a) => mockFrom(...a),
+    from: (...a: any[]) => mockFrom.apply(null, a),
   },
 }));
 

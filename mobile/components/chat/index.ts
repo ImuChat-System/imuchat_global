@@ -23,3 +23,5 @@ export type { GalleryMedia, ImageGalleryProps } from "./ImageGallery";
 
 export { MessageReactions } from "./MessageReactions";
 
+export { SwipeableConversationItem } from "./SwipeableConversationItem";
+

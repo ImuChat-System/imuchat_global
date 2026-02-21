@@ -1,21 +1,103 @@
+import { SwipeableConversationItem } from "@/components/chat/SwipeableConversationItem";
 import { useChat } from "@/hooks/useChat";
+import { useI18n } from "@/providers/I18nProvider";
 import { useColors, useSpacing } from "@/providers/ThemeProvider";
-import type { Conversation } from "@/services/messaging";
+import {
+  archiveConversation,
+  deleteConversation,
+  muteConversation,
+  type Conversation,
+} from "@/services/messaging";
+import { Ionicons } from "@expo/vector-icons";
 import { Href, useRouter } from "expo-router";
+import { useCallback, useState } from "react";
 import {
   ActivityIndicator,
+  Alert,
   FlatList,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from "react-native";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 export default function ChatsScreen() {
-  const { conversations, loading } = useChat({ autoLoad: true });
+  const { conversations, loading, refresh } = useChat({ autoLoad: true });
+  const { t } = useI18n();
   const colors = useColors();
   const spacing = useSpacing();
   const router = useRouter();
+  const [mutedConversations, setMutedConversations] = useState<Set<string>>(
+    new Set(),
+  );
+
+  const handleSearchPress = () => {
+    router.push("/search" as Href);
+  };
+
+  // Swipe action handlers
+  const handleArchive = useCallback(
+    async (conversationId: string) => {
+      try {
+        await archiveConversation(conversationId);
+        refresh?.();
+        Alert.alert(t("common.success"), t("chat.conversationArchived"));
+      } catch (error) {
+        console.error("Archive error:", error);
+        Alert.alert(t("common.error"), t("common.genericError"));
+      }
+    },
+    [refresh, t],
+  );
+
+  const handleMute = useCallback(
+    async (conversationId: string) => {
+      const isMuted = mutedConversations.has(conversationId);
+      try {
+        await muteConversation(conversationId, !isMuted);
+        setMutedConversations((prev) => {
+          const next = new Set(prev);
+          if (isMuted) {
+            next.delete(conversationId);
+          } else {
+            next.add(conversationId);
+          }
+          return next;
+        });
+      } catch (error) {
+        console.error("Mute error:", error);
+        Alert.alert(t("common.error"), t("common.genericError"));
+      }
+    },
+    [mutedConversations, t],
+  );
+
+  const handleDelete = useCallback(
+    (conversationId: string, conversationName: string) => {
+      Alert.alert(
+        t("chat.deleteConversation"),
+        t("chat.deleteConversationConfirm", { name: conversationName }),
+        [
+          { text: t("common.cancel"), style: "cancel" },
+          {
+            text: t("common.delete"),
+            style: "destructive",
+            onPress: async () => {
+              try {
+                await deleteConversation(conversationId);
+                refresh?.();
+              } catch (error) {
+                console.error("Delete error:", error);
+                Alert.alert(t("common.error"), t("common.genericError"));
+              }
+            },
+          },
+        ],
+      );
+    },
+    [refresh, t],
+  );
 
   const formatTime = (timestamp: string | null) => {
     if (!timestamp) return "";
@@ -30,7 +112,7 @@ export default function ChatsScreen() {
         minute: "2-digit",
       });
     } else if (days === 1) {
-      return "Yesterday";
+      return t("common.yesterday");
     } else if (days < 7) {
       return date.toLocaleDateString([], { weekday: "short" });
     } else {
@@ -40,7 +122,7 @@ export default function ChatsScreen() {
 
   const getConversationName = (conversation: Conversation) => {
     if (conversation.is_group) {
-      return conversation.group_name || "Group Chat";
+      return conversation.group_name || t("chat.groupChat");
     }
 
     // For 1-on-1, show the other participant's name
@@ -51,42 +133,76 @@ export default function ChatsScreen() {
     return (
       otherParticipant?.profile?.username ||
       otherParticipant?.profile?.full_name ||
-      "Unknown User"
+      t("common.unknownUser")
     );
   };
 
-  const renderConversation = ({ item, index }: { item: Conversation; index: number }) => (
-    <TouchableOpacity
-      testID={`conversation-item-${index}`}
-      style={[styles.conversationItem, { borderBottomColor: colors.border }]}
-      onPress={() => router.push(`/chat/${item.id}` as Href)}
-    >
-      <View testID={`conversation-avatar-${index}`} style={[styles.avatar, { backgroundColor: colors.primary }]}>
-        <Text style={styles.avatarText}>
-          {getConversationName(item).charAt(0).toUpperCase()}
-        </Text>
-      </View>
+  const renderConversation = ({
+    item,
+    index,
+  }: {
+    item: Conversation;
+    index: number;
+  }) => {
+    const conversationName = getConversationName(item);
+    const isMuted = mutedConversations.has(item.id);
 
-      <View style={styles.conversationContent}>
-        <View style={styles.conversationHeader}>
-          <Text testID={`conversation-name-${index}`} style={[styles.conversationName, { color: colors.text }]}>
-            {getConversationName(item)}
-          </Text>
-          <Text style={[styles.timestamp, { color: colors.textMuted }]}>
-            {formatTime(item.last_message_at)}
-          </Text>
-        </View>
-
-        <Text
-          testID={`conversation-last-message-${index}`}
-          style={[styles.lastMessage, { color: colors.textMuted }]}
-          numberOfLines={1}
+    return (
+      <SwipeableConversationItem
+        onArchive={() => handleArchive(item.id)}
+        onMute={() => handleMute(item.id)}
+        onDelete={() => handleDelete(item.id, conversationName)}
+        isMuted={isMuted}
+      >
+        <TouchableOpacity
+          testID={`conversation-item-${index}`}
+          style={[styles.conversationItem, { borderBottomColor: colors.border }]}
+          onPress={() => router.push(`/chat/${item.id}` as Href)}
         >
-          {item.last_message?.content || "No messages yet"}
-        </Text>
-      </View>
-    </TouchableOpacity>
-  );
+          <View
+            testID={`conversation-avatar-${index}`}
+            style={[styles.avatar, { backgroundColor: colors.primary }]}
+          >
+            <Text style={styles.avatarText}>
+              {conversationName.charAt(0).toUpperCase()}
+            </Text>
+          </View>
+
+          <View style={styles.conversationContent}>
+            <View style={styles.conversationHeader}>
+              <View style={styles.nameContainer}>
+                <Text
+                  testID={`conversation-name-${index}`}
+                  style={[styles.conversationName, { color: colors.text }]}
+                >
+                  {conversationName}
+                </Text>
+                {isMuted && (
+                  <Ionicons
+                    name="notifications-off"
+                    size={14}
+                    color={colors.textMuted}
+                    style={styles.mutedIcon}
+                  />
+                )}
+              </View>
+              <Text style={[styles.timestamp, { color: colors.textMuted }]}>
+                {formatTime(item.last_message_at)}
+              </Text>
+            </View>
+
+            <Text
+              testID={`conversation-last-message-${index}`}
+              style={[styles.lastMessage, { color: colors.textMuted }]}
+              numberOfLines={1}
+            >
+              {item.last_message?.content || t("chat.noMessagesYet")}
+            </Text>
+          </View>
+        </TouchableOpacity>
+      </SwipeableConversationItem>
+    );
+  };
 
   if (loading) {
     return (
@@ -99,29 +215,41 @@ export default function ChatsScreen() {
   }
 
   return (
-    <View style={[styles.container, { backgroundColor: colors.background }]}>
-      <View style={[styles.header, { padding: spacing.lg }]}>
-        <Text style={[styles.title, { color: colors.text }]}>💬 Chats</Text>
-      </View>
-
-      {conversations.length === 0 ? (
-        <View style={styles.emptyState}>
-          <Text style={[styles.emptyText, { color: colors.textMuted }]}>
-            No conversations yet
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <View style={[styles.container, { backgroundColor: colors.background }]}>
+        <View style={[styles.header, { padding: spacing.lg }]}>
+          <Text style={[styles.title, { color: colors.text }]}>
+            {t("chat.title")}
           </Text>
-          <Text style={[styles.emptySubtext, { color: colors.textMuted }]}>
-            Start a new conversation to get started
-          </Text>
+          <TouchableOpacity
+            onPress={handleSearchPress}
+            style={styles.searchButton}
+            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+          >
+            <Ionicons name="search" size={24} color={colors.text} />
+          </TouchableOpacity>
         </View>
-      ) : (
-        <FlatList
-          testID="conversations-list"
-          data={conversations}
-          renderItem={renderConversation}
-          keyExtractor={(item) => item.id}
-          contentContainerStyle={styles.listContent}
-        />
-      )}
+
+        {conversations.length === 0 ? (
+          <View style={styles.emptyState}>
+            <Text style={[styles.emptyText, { color: colors.textMuted }]}>
+              {t("chat.noConversations")}
+            </Text>
+            <Text style={[styles.emptySubtext, { color: colors.textMuted }]}>
+              {t("chat.noConversationsSubtext")}
+            </Text>
+          </View>
+        ) : (
+          <FlatList
+            testID="conversations-list"
+            data={conversations}
+            renderItem={renderConversation}
+            keyExtractor={(item) => item.id}
+            contentContainerStyle={styles.listContent}
+          />
+        )}
+      </View>
+    </GestureHandlerRootView>
     </View>
   );
 }
@@ -136,12 +264,18 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   header: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     paddingTop: 60,
     paddingBottom: 16,
   },
   title: {
     fontSize: 32,
     fontWeight: "bold",
+  },
+  searchButton: {
+    padding: 8,
   },
   listContent: {
     paddingBottom: 20,
@@ -177,6 +311,14 @@ const styles = StyleSheet.create({
   conversationName: {
     fontSize: 16,
     fontWeight: "600",
+  },
+  nameContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    flex: 1,
+  },
+  mutedIcon: {
+    marginLeft: 6,
   },
   timestamp: {
     fontSize: 12,

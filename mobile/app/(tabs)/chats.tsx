@@ -1,3 +1,4 @@
+import { NewChatModal } from "@/components/chat/NewChatModal";
 import { SwipeableConversationItem } from "@/components/chat/SwipeableConversationItem";
 import { useChat } from "@/hooks/useChat";
 import { useI18n } from "@/providers/I18nProvider";
@@ -28,6 +29,7 @@ export default function ChatsScreen() {
   const colors = useColors();
   const spacing = useSpacing();
   const router = useRouter();
+  const [newChatModalVisible, setNewChatModalVisible] = useState(false);
   const [mutedConversations, setMutedConversations] = useState<Set<string>>(
     new Set(),
   );
@@ -248,8 +250,24 @@ export default function ChatsScreen() {
             contentContainerStyle={styles.listContent}
           />
         )}
+
+        {/* FAB - New Chat */}
+        <TouchableOpacity
+          testID="new-chat-fab"
+          style={[styles.fab, { backgroundColor: colors.primary }]}
+          onPress={() => setNewChatModalVisible(true)}
+          activeOpacity={0.8}
+        >
+          <Ionicons name="chatbubble-ellipses" size={24} color="#FFFFFF" />
+        </TouchableOpacity>
       </View>
     </GestureHandlerRootView>
+
+    {/* New Chat Modal */}
+    <NewChatModal
+      visible={newChatModalVisible}
+      onClose={() => setNewChatModalVisible(false)}
+    />
     </View>
   );
 }
@@ -340,5 +358,20 @@ const styles = StyleSheet.create({
   emptySubtext: {
     fontSize: 14,
     textAlign: "center",
+  },
+  fab: {
+    position: "absolute",
+    bottom: 24,
+    right: 24,
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    justifyContent: "center",
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    elevation: 8,
   },
 });

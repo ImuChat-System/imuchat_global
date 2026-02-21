@@ -117,11 +117,18 @@
         "selectConversation": "Select a conversation",
         "noConversations": "No conversations available",
         "messageForwarded": "Message forwarded",
+        "messageCopied": "Message copied",
+        "messageDeleted": "Message deleted",
+        "messageEdited": "Message edited",
         "selectGif": "Select GIF",
         "noGifsFound": "No GIFs found",
         "conversationArchived": "Conversation archived",
         "deleteConversation": "Delete conversation",
-        "deleteConversationConfirm": "Are you sure you want to delete the conversation with {{name}}?"
+        "deleteConversationConfirm": "Are you sure you want to delete the conversation with {{name}}?",
+        "newChat": "New conversation",
+        "createGroup": "Create group",
+        "selectedContacts": "{{count}} contact(s) selected",
+        "newGroupChat": "New group"
     },
     "settings": {
         "title": "Settings",

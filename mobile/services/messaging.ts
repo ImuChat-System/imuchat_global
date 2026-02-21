@@ -352,6 +352,35 @@ export async function markConversationAsRead(conversationId: string) {
 }
 
 /**
+ * Get the latest read timestamp from other participants in a conversation
+ * Used to determine if messages have been read by recipients
+ */
+export async function getOthersLastReadAt(conversationId: string): Promise<string | null> {
+    const user = await getCurrentUser();
+
+    if (!user) {
+        throw new Error("No authenticated user");
+    }
+
+    const { data, error } = await supabase
+        .from("conversation_participants")
+        .select("last_read_at")
+        .eq("conversation_id", conversationId)
+        .neq("user_id", user.id)
+        .order("last_read_at", { ascending: false, nullsFirst: false })
+        .limit(1)
+        .single();
+
+    if (error && error.code !== "PGRST116") {
+        // PGRST116 = no rows found
+        console.error("Error fetching others last read:", error);
+        return null;
+    }
+
+    return data?.last_read_at || null;
+}
+
+/**
  * Send typing indicator for a conversation
  */
 export async function sendTypingIndicator(

@@ -25,3 +25,5 @@ export { MessageReactions } from "./MessageReactions";
 
 export { SwipeableConversationItem } from "./SwipeableConversationItem";
 
+export { NewChatModal } from "./NewChatModal";
+

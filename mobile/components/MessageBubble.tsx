@@ -25,6 +25,8 @@ interface MessageBubbleProps {
   onDelete?: (messageId: string) => void;
   /** Callback for forward action */
   onForward?: (messageId: string, messageText: string) => void;
+  /** Read receipt status for own messages */
+  isRead?: boolean;
 }
 
 export default function MessageBubble({
@@ -37,6 +39,7 @@ export default function MessageBubble({
   onEdit,
   onDelete,
   onForward,
+  isRead,
 }: MessageBubbleProps) {
   const colors = useColors();
   const { t } = useI18n();
@@ -203,7 +206,7 @@ export default function MessageBubble({
             </Text>
           ) : null}
 
-          {/* Timestamp + edited indicator */}
+          {/* Timestamp + edited indicator + read receipt */}
           <View style={styles.timestampRow}>
             {isEdited && !isDeleted && (
               <Text
@@ -231,6 +234,21 @@ export default function MessageBubble({
             >
               {formatTime(message.created_at)}
             </Text>
+            {/* Read receipt indicator for own messages */}
+            {isOwnMessage && !isDeleted && (
+              <Text
+                style={[
+                  styles.readReceipt,
+                  {
+                    color: isRead
+                      ? "rgba(255,255,255,0.9)"
+                      : "rgba(255,255,255,0.5)",
+                  },
+                ]}
+              >
+                {isRead ? " ✓✓" : " ✓"}
+              </Text>
+            )}
           </View>
         </View>
       </Pressable>
@@ -349,5 +367,9 @@ const styles = StyleSheet.create({
   },
   timestamp: {
     fontSize: 11,
+  },
+  readReceipt: {
+    fontSize: 11,
+    fontWeight: "600",
   },
 });

@@ -117,11 +117,18 @@
         "selectConversation": "会話を選択",
         "noConversations": "利用可能な会話がありません",
         "messageForwarded": "メッセージを転送しました",
+        "messageCopied": "メッセージをコピーしました",
+        "messageDeleted": "メッセージを削除しました",
+        "messageEdited": "メッセージを編集しました",
         "selectGif": "GIFを選択",
         "noGifsFound": "GIFが見つかりません",
         "conversationArchived": "会話をアーカイブしました",
         "deleteConversation": "会話を削除",
-        "deleteConversationConfirm": "{{name}}との会話を削除してもよろしいですか？"
+        "deleteConversationConfirm": "{{name}}との会話を削除してもよろしいですか？",
+        "newChat": "新しい会話",
+        "createGroup": "グループを作成",
+        "selectedContacts": "{{count}}件の連絡先を選択中",
+        "newGroupChat": "新しいグループ"
     },
     "settings": {
         "title": "設定",

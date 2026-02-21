@@ -5,8 +5,13 @@ import { useChat } from "@/hooks/useChat";
 import { useReactions } from "@/hooks/useReactions";
 import { useTheme } from "@/providers/ThemeProvider";
 import { initiateCall } from "@/services/call-signaling";
-import { forwardMessage } from "@/services/messaging";
+import {
+  deleteMessage,
+  editMessage,
+  forwardMessage,
+} from "@/services/messaging";
 import { Ionicons } from "@expo/vector-icons";
+import * as Clipboard from "expo-clipboard";
 import { Stack, useLocalSearchParams, useRouter } from "expo-router";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -35,6 +40,7 @@ export default function ChatRoomScreen() {
     typingUsers,
     sendMessage: handleSendMessage,
     sendTypingIndicator,
+    isMessageRead,
   } = useChat({ conversationId: id, autoLoad: true });
 
   // Extraire les IDs des messages pour les réactions
@@ -58,6 +64,83 @@ export default function ChatRoomScreen() {
     id: string;
     text: string;
   } | null>(null);
+
+  // Edit message state
+  const [editingMessage, setEditingMessage] = useState<{
+    id: string;
+    text: string;
+  } | null>(null);
+
+  // Reply message state
+  const [replyingTo, setReplyingTo] = useState<{
+    id: string;
+    text: string;
+    senderName: string;
+  } | null>(null);
+
+  // Handle reply action
+  const handleReply = useCallback(
+    (messageId: string, messageText: string, senderName: string) => {
+      setReplyingTo({ id: messageId, text: messageText, senderName });
+    },
+    [],
+  );
+
+  // Cancel reply
+  const handleCancelReply = useCallback(() => {
+    setReplyingTo(null);
+  }, []);
+
+  // Handle copy action
+  const handleCopy = useCallback(
+    async (messageText: string) => {
+      await Clipboard.setStringAsync(messageText);
+      Alert.alert(
+        t("common.success"),
+        t("chat.messageCopied") || "Message copied",
+      );
+    },
+    [t],
+  );
+
+  // Handle edit action - enter edit mode
+  const handleEdit = useCallback((messageId: string, messageText: string) => {
+    setEditingMessage({ id: messageId, text: messageText });
+  }, []);
+
+  // Cancel edit mode
+  const handleCancelEdit = useCallback(() => {
+    setEditingMessage(null);
+  }, []);
+
+  // Confirm edit with new text
+  const handleConfirmEdit = useCallback(
+    async (newText: string) => {
+      if (!editingMessage) return;
+
+      try {
+        await editMessage(editingMessage.id, newText);
+        setEditingMessage(null);
+      } catch (error) {
+        console.error("Error editing message:", error);
+        Alert.alert(t("common.error"), t("common.genericError"));
+      }
+    },
+    [editingMessage, t],
+  );
+
+  // Handle delete action
+  const handleDelete = useCallback(
+    async (messageId: string) => {
+      try {
+        await deleteMessage(messageId);
+      } catch (error) {
+        console.error("Error deleting message:", error);
+        Alert.alert(t("common.error"), t("common.genericError"));
+      }
+    },
+    [t],
+  );
 
   // Handle forward action from MessageBubble
   const handleForward = useCallback(
@@ -222,6 +305,13 @@ export default function ChatRoomScreen() {
             reactions={reactionsByMessage[item.id] || []}
             onReactionToggle={handleReactionToggle(item.id)}
             onForward={handleForward}
+            onReply={(messageId, text) =>
+              handleReply(messageId, text, item.sender?.username || "User")
+            }
+            onCopy={handleCopy}
+            onEdit={handleEdit}
+            onDelete={handleDelete}
+            isRead={isMessageRead(item)}
           />
         )}
         keyExtractor={(item) => item.id}

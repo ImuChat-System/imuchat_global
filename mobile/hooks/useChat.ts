@@ -13,6 +13,7 @@ import {
     getConversations as fetchConversations,
     getMessages as fetchMessages,
     forwardMessage as forwardMessageInDb,
+    getOthersLastReadAt,
     markConversationAsRead,
     Message,
     sendMessage as sendMessageToDb,
@@ -54,6 +55,7 @@ export function useChat(options: UseChatOptions = {}) {
     const [typingUsers, setTypingUsers] = useState<Set<string>>(new Set());
     const [replyToMessage, setReplyToMessage] = useState<Message | null>(null);
     const [pendingMessagesCount, setPendingMessagesCount] = useState(0);
+    const [othersLastReadAt, setOthersLastReadAt] = useState<string | null>(null);
 
     // Ref for typing timeout
     const typingTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -95,6 +97,9 @@ export function useChat(options: UseChatOptions = {}) {
                 const data = await fetchMessages(targetConvId);
                 setMessages(data);
                 await markConversationAsRead(targetConvId);
+                // Load read receipts from other participants
+                const lastRead = await getOthersLastReadAt(targetConvId);
+                setOthersLastReadAt(lastRead);
             } catch (err) {
                 setError(err instanceof Error ? err.message : 'Failed to load messages');
                 console.error('Error loading messages:', err);
@@ -436,6 +441,15 @@ export function useChat(options: UseChatOptions = {}) {
         getPendingCount().then(setPendingMessagesCount);
     }, []);
 
+    // Helper function to check if a message has been read by recipients
+    const isMessageRead = useCallback(
+        (message: Message): boolean => {
+            if (!othersLastReadAt) return false;
+            return new Date(message.created_at) <= new Date(othersLastReadAt);
+        },
+        [othersLastReadAt]
+    );
+
     return {
         // State
         conversations,
@@ -446,6 +460,7 @@ export function useChat(options: UseChatOptions = {}) {
         currentUserId,
         typingUsers,
         replyToMessage,
+        othersLastReadAt,
 
         // Offline state
         isOnline,
@@ -467,5 +482,6 @@ export function useChat(options: UseChatOptions = {}) {
         // Utils
         setConversations,
         setMessages,
+        isMessageRead,
     };
 }

@@ -16,6 +16,7 @@ import {
   ActivityIndicator,
   Alert,
   FlatList,
+  RefreshControl,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -30,9 +31,19 @@ export default function ChatsScreen() {
   const spacing = useSpacing();
   const router = useRouter();
   const [newChatModalVisible, setNewChatModalVisible] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
   const [mutedConversations, setMutedConversations] = useState<Set<string>>(
     new Set(),
   );
+
+  const handleRefresh = useCallback(async () => {
+    setRefreshing(true);
+    try {
+      await refresh?.();
+    } finally {
+      setRefreshing(false);
+    }
+  }, [refresh]);
 
   const handleSearchPress = () => {
     router.push("/search" as Href);
@@ -248,6 +259,14 @@ export default function ChatsScreen() {
             renderItem={renderConversation}
             keyExtractor={(item) => item.id}
             contentContainerStyle={styles.listContent}
+            refreshControl={
+              <RefreshControl
+                refreshing={refreshing}
+                onRefresh={handleRefresh}
+                tintColor={colors.primary}
+                colors={[colors.primary]}
+              />
+            }
           />
         )}
 

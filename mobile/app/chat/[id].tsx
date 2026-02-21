@@ -21,6 +21,7 @@ import {
   FlatList,
   KeyboardAvoidingView,
   Platform,
+  RefreshControl,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -38,6 +39,7 @@ export default function ChatRoomScreen() {
     sending,
     currentUserId,
     typingUsers,
+    loadMessages,
     sendMessage: handleSendMessage,
     sendTypingIndicator,
     isMessageRead,
@@ -57,6 +59,17 @@ export default function ChatRoomScreen() {
   const router = useRouter();
   const { t } = useTranslation();
   const [initiatingCall, setInitiatingCall] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
+
+  // Pull-to-refresh handler
+  const handleRefresh = useCallback(async () => {
+    setRefreshing(true);
+    try {
+      await loadMessages?.();
+    } finally {
+      setRefreshing(false);
+    }
+  }, [loadMessages]);
 
   // Forward message state
   const [forwardModalVisible, setForwardModalVisible] = useState(false);
@@ -318,6 +331,14 @@ export default function ChatRoomScreen() {
         contentContainerStyle={styles.messagesList}
         onContentSizeChange={() =>
           flatListRef.current?.scrollToEnd({ animated: true })
+        }
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={handleRefresh}
+            tintColor={theme.colors.primary}
+            colors={[theme.colors.primary]}
+          />
         }
       />
 

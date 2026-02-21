@@ -2,8 +2,13 @@ import { useI18n } from "@/providers/I18nProvider";
 import { useColors } from "@/providers/ThemeProvider";
 import { Message } from "@/services/messaging";
 import { ReactionGroup } from "@/services/reactions";
-import { useCallback, useState } from "react";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import {
+  hasMarkdown,
+  parseMarkdown,
+  type TextSegment,
+} from "@/utils/markdown-parser";
+import { useCallback, useMemo, useState } from "react";
+import { Linking, Pressable, StyleSheet, Text, View } from "react-native";
 import { MessageContextMenu } from "./chat/MessageContextMenu";
 import { MediaPreview, MediaViewer } from "./MediaComponents";
 import { ReactionBar, ReactionPicker } from "./ReactionPicker";
@@ -95,6 +100,85 @@ export default function MessageBubble({
   const hasMedia = message.media_url && message.media_type;
   const mediaType = getMediaType(message.media_type);
   const hasText = message.content && message.content.trim().length > 0;
+
+  // Parse markdown segments (memoized)
+  const markdownSegments = useMemo<TextSegment[] | null>(() => {
+    if (!hasText || isDeleted) return null;
+    if (!hasMarkdown(message.content)) return null;
+    return parseMarkdown(message.content);
+  }, [message.content, hasText, isDeleted]);
+
+  /** Renders message content with Markdown formatting */
+  const renderContent = () => {
+    const textColor = isOwnMessage ? "#FFFFFF" : colors.text;
+    const codeColor = isOwnMessage ? "rgba(255,255,255,0.85)" : colors.text;
+    const codeBg = isOwnMessage ? "rgba(255,255,255,0.15)" : colors.background;
+    const linkColor = isOwnMessage ? "rgba(200,230,255,1)" : colors.primary;
+
+    if (!markdownSegments) {
+      // Plain text — no markdown
+      return (
+        <Text style={[styles.messageText, { color: textColor }]}>
+          {message.content}
+        </Text>
+      );
+    }
+
+    return (
+      <Text style={[styles.messageText, { color: textColor }]}>
+        {markdownSegments.map((seg, i) => {
+          switch (seg.type) {
+            case "bold":
+              return (
+                <Text key={i} style={{ fontWeight: "700" }}>
+                  {seg.content}
+                </Text>
+              );
+            case "italic":
+              return (
+                <Text key={i} style={{ fontStyle: "italic" }}>
+                  {seg.content}
+                </Text>
+              );
+            case "code":
+              return (
+                <Text
+                  key={i}
+                  style={{
+                    fontFamily: "monospace",
+                    backgroundColor: codeBg,
+                    color: codeColor,
+                    paddingHorizontal: 4,
+                    borderRadius: 3,
+                    fontSize: 14,
+                  }}
+                >
+                  {seg.content}
+                </Text>
+              );
+            case "strikethrough":
+              return (
+                <Text key={i} style={{ textDecorationLine: "line-through" }}>
+                  {seg.content}
+                </Text>
+              );
+            case "link":
+              return (
+                <Text
+                  key={i}
+                  style={{ color: linkColor, textDecorationLine: "underline" }}
+                  onPress={() => seg.url && Linking.openURL(seg.url)}
+                >
+                  {seg.content}
+                </Text>
+              );
+            default:
+              return <Text key={i}>{seg.content}</Text>;
+          }
+        })}
+      </Text>
+    );
+  };
 
   return (
     <View
@@ -196,14 +280,7 @@ export default function MessageBubble({
               {t("chat.messageDeleted")}
             </Text>
           ) : hasText ? (
-            <Text
-              style={[
-                styles.messageText,
-                { color: isOwnMessage ? "#FFFFFF" : colors.text },
-              ]}
-            >
-              {message.content}
-            </Text>
+            renderContent()
           ) : null}
 
           {/* Timestamp + edited indicator + read receipt */}

@@ -1,17 +1,34 @@
 /**
- * Hook React pour les notifications push sur mobile
- * 
+ * Hook React pour les notifications push — Bridge unifié
+ *
+ * Connecte trois couches :
+ *  1. services/notifications.ts   — Expo Notifications (permissions, token, listeners)
+ *  2. services/notification-api.ts — REST client vers platform-core
+ *  3. stores/notifications-store.ts — Zustand (état global persisté)
+ *
  * Usage:
  * ```tsx
- * const { 
- *   hasPermission, 
- *   requestPermission, 
- *   badge, 
- *   setBadge 
+ * const {
+ *   hasPermission,
+ *   requestPermission,
+ *   notifications,
+ *   unreadCount,
+ *   markAsRead,
+ *   markAllAsRead,
+ *   refreshHistory,
+ *   setBadge,
  * } = useNotifications();
  * ```
  */
 
+import { createLogger } from '@/services/logger';
+import {
+    markAllNotificationsAsRead as apiMarkAllRead,
+    markNotificationAsRead as apiMarkRead,
+    registerToken as apiRegisterToken,
+    unregisterToken as apiUnregisterToken,
+    getNotificationHistory,
+} from '@/services/notification-api';
 import {
     addNotificationReceivedListener,
     addNotificationResponseListener,
@@ -23,9 +40,16 @@ import {
     unregisterDeviceToken,
     type NotificationResponse,
 } from '@/services/notifications';
+import {
+    useNotificationsStore,
+    type AppNotification,
+} from '@/stores/notifications-store';
 import type { Notification } from 'expo-notifications';
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { Platform } from 'react-native';
 import { useAuth } from './useAuth';
+
+const logger = createLogger('useNotifications');
 
 export interface UseNotificationsReturn {
     /** Permission accordée */
@@ -36,152 +60,263 @@ export interface UseNotificationsReturn {
     lastNotification: Notification | null;
     /** Dernière interaction avec une notification */
     lastResponse: NotificationResponse | null;
-    /** Nombre de badge */
-    badge: number;
+    /** Nombre de notifications non lues */
+    unreadCount: number;
+    /** Liste des notifications */
+    notifications: AppNotification[];
     /** En cours d'initialisation */
     loading: boolean;
     /** Demander la permission */
     requestPermission: () => Promise<boolean>;
+    /** Marquer une notification comme lue (store + API) */
+    markAsRead: (notificationId: string) => Promise<void>;
+    /** Marquer toutes comme lues (store + API) */
+    markAllAsRead: () => Promise<void>;
     /** Définir le badge */
     setBadge: (count: number) => Promise<void>;
+    /** Rafraîchir l'historique depuis l'API */
+    refreshHistory: () => Promise<void>;
     /** Rafraîchir le badge depuis le système */
     refreshBadge: () => Promise<void>;
 }
 
 /**
- * Hook pour gérer les notifications push
+ * Hook pour gérer les notifications push — bridge unifié
  */
 export function useNotifications(): UseNotificationsReturn {
     const { user } = useAuth();
-    const [hasPermission, setHasPermission] = useState(false);
-    const [fcmToken, setFcmToken] = useState<string | null>(null);
+
+    // Zustand store
+    const store = useNotificationsStore();
+
+    // Local UI state (non persisté)
     const [lastNotification, setLastNotification] = useState<Notification | null>(null);
     const [lastResponse, setLastResponse] = useState<NotificationResponse | null>(null);
-    const [badge, setBadgeState] = useState(0);
     const [loading, setLoading] = useState(true);
     const subscriptionsRef = useRef<any[]>([]);
 
-    // Initialiser les notifications
+    // ─── Initialisation ──────────────────────────────────────────
     useEffect(() => {
         let mounted = true;
 
         async function init() {
             try {
-                // Initialiser le service
                 await initializeNotifications();
 
-                // Récupérer le badge actuel
                 const currentBadge = await getBadgeCount();
                 if (mounted) {
-                    setBadgeState(currentBadge);
+                    store.setUnreadCount(currentBadge);
                 }
-
-                setLoading(false);
             } catch (error) {
-                console.error('Erreur lors de l\'initialisation:', error);
-                if (mounted) {
-                    setLoading(false);
-                }
+                logger.error('Erreur initialisation notifications', error);
+            } finally {
+                if (mounted) setLoading(false);
             }
         }
 
         init();
-
-        return () => {
-            mounted = false;
-        };
+        return () => { mounted = false; };
     }, []);
 
-    // Demander la permission
+    // ─── Demander la permission ──────────────────────────────────
     const requestPermission = useCallback(async (): Promise<boolean> => {
         try {
             const token = await requestNotificationsPermissions();
+            if (!token) return false;
 
-            if (token) {
-                setFcmToken(token);
-                setHasPermission(true);
+            store.setPushToken(token);
+            store.setPermissionGranted(true);
 
-                // Enregistrer le token si l'utilisateur est connecté
-                if (user?.id) {
-                    await registerDeviceToken(user.id, token);
-                }
+            // Enregistrer le token dans Supabase (direct) ET via l'API backend
+            if (user?.id) {
+                await registerDeviceToken(user.id, token);
 
-                return true;
+                // Enregistrement parallèle côté platform-core (fire & forget)
+                const platform = Platform.OS === 'ios' ? 'ios' : 'android';
+                apiRegisterToken(token, platform).catch((err) =>
+                    logger.warn('API registerToken échoué (non bloquant)', err),
+                );
             }
 
-            return false;
+            return true;
         } catch (error) {
-            console.error('Erreur lors de la demande de permission:', error);
+            logger.error('Erreur demande permission', error);
             return false;
         }
-    }, [user]);
+    }, [user, store]);
 
-    // Écouter les notifications
+    // ─── Écouter les notifications ───────────────────────────────
     useEffect(() => {
-        // Listener pour les notifications reçues
-        const receivedSubscription = addNotificationReceivedListener((notification) => {
-            console.log('Notification reçue:', notification);
+        const receivedSub = addNotificationReceivedListener((notification) => {
+            logger.info('Notification reçue', notification.request.identifier);
             setLastNotification(notification);
+
+            // Ajouter dans le store Zustand
+            const data = notification.request.content.data as Record<string, unknown> | undefined;
+            const appNotification: AppNotification = {
+                id: notification.request.identifier,
+                title: notification.request.content.title || '',
+                body: notification.request.content.body || '',
+                type: inferNotificationType(data),
+                data,
+                read: false,
+                createdAt: new Date().toISOString(),
+            };
+            store.addNotification(appNotification);
+
+            // Mettre à jour le badge système
+            setBadgeCount(store.unreadCount + 1).catch(() => { /* noop */ });
         });
 
-        // Listener pour les interactions avec les notifications
-        const responseSubscription = addNotificationResponseListener((response) => {
-            console.log('Interaction avec notification:', response);
+        const responseSub = addNotificationResponseListener((response) => {
+            logger.info('Interaction notification', response.actionIdentifier);
             setLastResponse(response);
         });
 
-        subscriptionsRef.current = [receivedSubscription, responseSubscription];
+        subscriptionsRef.current = [receivedSub, responseSub];
 
         return () => {
-            subscriptionsRef.current.forEach(sub => sub.remove());
+            subscriptionsRef.current.forEach((sub) => sub.remove());
             subscriptionsRef.current = [];
         };
-    }, []);
+    }, [store]);
 
-    // Gérer l'enregistrement/désenregistrement du token
+    // ─── Token lifecycle ─────────────────────────────────────────
     useEffect(() => {
-        if (!user?.id || !fcmToken) return;
+        if (!user?.id || !store.pushToken) return;
 
-        // Enregistrer le token
-        registerDeviceToken(user.id, fcmToken);
+        registerDeviceToken(user.id, store.pushToken);
+
+        const platform = Platform.OS === 'ios' ? 'ios' : 'android';
+        apiRegisterToken(store.pushToken, platform).catch((err) =>
+            logger.warn('API registerToken échoué', err),
+        );
 
         return () => {
-            // Désenregistrer le token lors de la déconnexion
-            if (user?.id && fcmToken) {
+            if (user?.id && store.pushToken) {
                 unregisterDeviceToken(user.id);
+                apiUnregisterToken(store.pushToken).catch(() => { /* noop */ });
             }
         };
-    }, [user?.id, fcmToken]);
+    }, [user?.id, store.pushToken]);
 
-    // Définir le badge
-    const setBadge = useCallback(async (count: number) => {
+    // ─── Sync historique au montage ──────────────────────────────
+    useEffect(() => {
+        if (!user?.id) return;
+
+        refreshHistory().catch((err) =>
+            logger.warn('Sync historique initial échoué', err),
+        );
+    }, [user?.id]);
+
+    // ─── Actions bridge ──────────────────────────────────────────
+
+    /** Marquer comme lu : store Zustand + API backend + badge système */
+    const markAsRead = useCallback(
+        async (notificationId: string) => {
+            store.markAsRead(notificationId);
+
+            // Badge système
+            const newCount = Math.max(0, store.unreadCount - 1);
+            setBadgeCount(newCount).catch(() => { /* noop */ });
+
+            // API backend (fire & forget)
+            apiMarkRead(notificationId).catch((err) =>
+                logger.warn('API markRead échoué', err),
+            );
+        },
+        [store],
+    );
+
+    /** Marquer toutes comme lues */
+    const markAllAsRead = useCallback(async () => {
+        store.markAllAsRead();
+        setBadgeCount(0).catch(() => { /* noop */ });
+
+        apiMarkAllRead().catch((err) =>
+            logger.warn('API markAllRead échoué', err),
+        );
+    }, [store]);
+
+    /** Rafraîchir l'historique depuis platform-core */
+    const refreshHistory = useCallback(async () => {
         try {
-            await setBadgeCount(count);
-            setBadgeState(count);
-        } catch (error) {
-            console.error('Erreur lors de la définition du badge:', error);
-        }
-    }, []);
+            const { notifications: history } = await getNotificationHistory(50, 0);
 
-    // Rafraîchir le badge
+            // Réinitialiser la liste avec les données du backend
+            store.clearAll();
+            let unread = 0;
+
+            for (const item of history) {
+                const appNotif: AppNotification = {
+                    id: item.id,
+                    title: item.title,
+                    body: item.body,
+                    type: (item.type as AppNotification['type']) || 'system',
+                    data: item.data,
+                    read: item.read,
+                    createdAt: item.createdAt,
+                };
+                store.addNotification(appNotif);
+                if (!item.read) unread++;
+            }
+
+            store.setUnreadCount(unread);
+            await setBadgeCount(unread);
+        } catch (error) {
+            logger.warn('Erreur refreshHistory', error);
+        }
+    }, [store]);
+
+    /** Définir le badge */
+    const setBadge = useCallback(
+        async (count: number) => {
+            try {
+                await setBadgeCount(count);
+                store.setUnreadCount(count);
+            } catch (error) {
+                logger.error('Erreur setBadge', error);
+            }
+        },
+        [store],
+    );
+
+    /** Rafraîchir le badge depuis le système */
     const refreshBadge = useCallback(async () => {
         try {
-            const currentBadge = await getBadgeCount();
-            setBadgeState(currentBadge);
+            const current = await getBadgeCount();
+            store.setUnreadCount(current);
         } catch (error) {
-            console.error('Erreur lors du rafraîchissement du badge:', error);
+            logger.error('Erreur refreshBadge', error);
         }
-    }, []);
+    }, [store]);
 
     return {
-        hasPermission,
-        fcmToken,
+        hasPermission: store.permissionGranted,
+        fcmToken: store.pushToken,
         lastNotification,
         lastResponse,
-        badge,
+        unreadCount: store.unreadCount,
+        notifications: store.notifications,
         loading,
         requestPermission,
+        markAsRead,
+        markAllAsRead,
         setBadge,
+        refreshHistory,
         refreshBadge,
     };
+}
+
+// ─── Helpers ─────────────────────────────────────────────────────
+
+function inferNotificationType(
+    data?: Record<string, unknown>,
+): AppNotification['type'] {
+    if (!data) return 'system';
+    const t = data.type as string | undefined;
+    if (t === 'message' || t === 'call' || t === 'contact') return t;
+    if (data.conversationId || data.messageId) return 'message';
+    if (data.callId) return 'call';
+    return 'system';
 }

@@ -678,65 +678,82 @@ App → Slides onboarding (1ère fois) → Auth (login/signup)
 
 **Priorité** : P2 - Moyen  
 **Réf** : Groupe 5, Fonc. 2 — "Mur social type timeline"  
-**Statut** : 🔲 Mock UI
+**Statut** : ✅ Complété
 
 **État actuel** :
 
-- ✅ `app/(tabs)/social.tsx` — Filtres (Mixte/News/Stories), FlatList
-- ✅ `app/(tabs)/index.tsx` — ExplorerGrid, PodcastWidget (mock)
-- ➡️ **Tout en données MOCK**
+- ✅ `app/(tabs)/social.tsx` — Feed réel avec Supabase, likes, partage, infini scroll
+- ✅ `services/social-feed.ts` — Service complet CRUD posts + comments (~750 lignes)
+- ✅ `app/social/create-post.tsx` — Création de post (texte + images)
+- ✅ `app/social/comments/[postId].tsx` — Écran commentaires paginé
 
-**À implémenter** :
+**Implémenté** :
 
-- [ ] Table Supabase `posts` (user_id, content, media_urls, type, likes_count, comments_count)
-- [ ] Table `post_likes`, `post_comments`
-- [ ] Création de post (texte + media) — écran ou modal
-- [ ] Feed avec pagination (infinite scroll)
-- [ ] Like / Commentaire / Partage
-- [ ] Remplacer les données mock par requêtes Supabase
+- [x] Service `social-feed.ts` avec types Post, Comment, Author
+- [x] `fetchFeed()` avec pagination cursor-based et filtres (all/following/news)
+- [x] `createPost()`, `deletePost()` — CRUD posts
+- [x] `likePost()`, `unlikePost()`, `toggleLike()` — système de likes
+- [x] `fetchComments()`, `addComment()`, `deleteComment()` — commentaires
+- [x] `sharePost()` — compteur partages
+- [x] Écran social.tsx modifié pour utiliser données réelles
+- [x] Infinite scroll avec FlatList et onEndReached
+- [x] Écran création de post avec image picker
+- [x] Écran commentaires avec ajout/suppression
+- [x] i18n fr/en/ja (clés social.createPost._, social.comments._)
+- [x] Schema SQL fourni dans `FEED_SCHEMA_SQL` constant
 
-**Estimation** : 4-5 jours
+**Note** : Le schéma SQL pour les tables `posts`, `post_likes`, `post_comments`, `comment_likes` et les fonctions RPC est disponible dans `services/social-feed.ts` (constant `FEED_SCHEMA_SQL`)
 
 ---
 
-### DEV-013 : Événements
+### DEV-013 : Événements ✅
 
 **Priorité** : P3 - Mineur  
 **Réf** : Groupe 5, Fonc. 4 — "Événements (invites, inscriptions, rappels)"  
-**Statut** : 🔴 Non démarré
+**Statut** : ✅ **Implémenté**
 
-**À implémenter** :
+**Implémenté** :
 
-- [ ] Table Supabase `events` (title, description, date, location, creator_id, max_participants)
-- [ ] Table `event_participants` (event_id, user_id, status: invited/going/declined)
-- [ ] Écran liste événements
-- [ ] Écran détail événement + inscription
-- [ ] Création événement (modal ou écran dédié)
-- [ ] Rappels push via notifications
+- [x] Table Supabase `events` (title, description, start_time, end_time, location, creator_id, max_participants, is_public, is_cancelled)
+- [x] Table `event_participants` (event_id, user_id, status: going/interested/declined)
+- [x] Service `services/events.ts` — CRUD complet + RSVP + SQL schema inclus
+- [x] Écran liste événements (`app/events/index.tsx`) — filtres all/going/interested/past, pagination
+- [x] Écran détail événement (`app/events/[eventId].tsx`) — RSVP, participants, actions organisateur
+- [x] Création événement (`app/events/create.tsx`) — formulaire complet avec DateTimePicker
+- [x] Layout navigation (`app/events/_layout.tsx`)
+- [x] i18n traductions FR/EN/JA
+- [ ] Rappels push via notifications (Phase ultérieure)
 
-**Estimation** : 3-4 jours
+**SQL Schema** : Disponible dans `services/events.ts` (constant `EVENTS_SCHEMA_SQL`)
+
+**Temps réel** : 1 session
 
 ---
 
-### DEV-014 : Groupes Avancés / Serveurs
+### DEV-014 : Groupes Avancés / Serveurs ✅
 
 **Priorité** : P2 - Moyen  
 **Réf** : Groupe 5, Fonc. 5 + Écrans complémentaires §3 — Communautés/Serveurs  
-**Statut** : ⚠️ Groupes basiques existants
+**Statut** : ✅ **Phase 2C implémentée**
 
 **État actuel** :
 
 - ✅ Groupes de chat via `conversation_members` (multi-participants)
 - ✅ `NewChatModal` permet de créer des groupes
-- ❌ Pas de gestion de rôles, permissions, modération
+- ✅ Gestion de rôles, permissions, modération implémentée
 
-**À implémenter (Phase 2C)** :
+**Implémenté (Phase 2C)** :
 
-- [ ] Rôles dans les groupes (admin, moderator, member) — champ `role` dans `conversation_members`
-- [ ] Permissions admin (kick, ban, mute)
-- [ ] Invitations par lien unique
-- [ ] Description et règles du groupe
-- [ ] Avatar/bannière du groupe
+- [x] Service `services/groups.ts` — Gestion complète groupes avancés + SQL schema
+- [x] Rôles hiérarchisés (owner > admin > moderator > member) avec `ROLE_PRIORITY` map
+- [x] Permissions admin : kick, ban/unban, mute/unmute (avec durées)
+- [x] Invitations par lien unique — génération, copie, partage, révocation
+- [x] Description et règles du groupe — éditables
+- [x] Écran gestion groupe (`app/chat/group-settings/[conversationId].tsx`)
+- [x] Écran rejoindre groupe (`app/join-group.tsx`) — via code d'invitation
+- [x] Transfert de propriété
+- [x] i18n traductions FR/EN/JA
+- [ ] Avatar/bannière du groupe (image picker à ajouter)
 
 **À implémenter (Phase 3 — style Discord/Slack)** :
 
@@ -1317,7 +1334,7 @@ App → Slides onboarding (1ère fois) → Auth (login/signup)
 | **Chats**       | /chat     | Messages (texte, audio, image, vidéo, fichiers), réactions, réponses, citations, épingles, groupes, arrière-plans | ✅ 80%  | DEV-001, DEV-003           |
 | **Appels**      | /calls    | Audio/vidéo (3 formats), historique, appels programmés, rappels                                                   | ⚠️ 40%  | DEV-006, DEV-007, CRIT-001 |
 | **Contacts**    | /contacts | Carnet d'adresses, sync téléphone/réseaux sociaux, statuts/présence                                               | ✅ 90%  | Existant                   |
-| **Communautés** | /comms    | Groupes enrichis (familles, associations, PME, gamers), outils collaboratifs, espaces publics/privés              | ⚠️ 20%  | DEV-014                    |
+| **Communautés** | /comms    | Groupes enrichis (familles, associations, PME, gamers), outils collaboratifs, espaces publics/privés              | ✅ 70%  | DEV-014 ✅                 |
 | **Store**       | /store    | Marketplace + App Store fusionnés, thèmes, mini-apps, extensions IA                                               | 🔲 Mock | Groupe 10                  |
 | **Profil**      | /me       | Profil social, préférences (thèmes, privacy), comptes multiples                                                   | ✅ 70%  | DEV-008, DEV-009, DEV-010  |
 
@@ -1325,7 +1342,7 @@ App → Slides onboarding (1ère fois) → Auth (login/signup)
 
 | Module         | Route     | Description                                                                            | Statut  | Phase | Estimation   |
 | -------------- | --------- | -------------------------------------------------------------------------------------- | ------- | ----- | ------------ |
-| **Feed**       | /feed     | Vidéo/audio scroll type TikTok, "Pour Toi", Suivis, Découverte, interactions           | 🔲 Mock | 2C    | DEV-012      |
+| **Feed**       | /feed     | Vidéo/audio scroll type TikTok, "Pour Toi", Suivis, Découverte, interactions           | ✅ Done | 2C    | DEV-012 ✅   |
 | **News**       | /news     | Articles, tendances, filtres thématiques, lecteur interne, sauvegarde                  | 🔴      | 3     | 2-3 semaines |
 | **Podcasts**   | /podcasts | Recherche, abonnements, playlists, vitesse variable, chapitres                         | 🔴      | 3     | 2-3 semaines |
 | **Dating**     | /dating   | Profil séparé (confidentialité), matching par préférences/algorithme, freemium/premium | 🔴      | 4     | 4-6 semaines |
@@ -1350,12 +1367,12 @@ App → Slides onboarding (1ère fois) → Auth (login/signup)
 
 ### 5. ORGANISATION & PRO — Modules optionnels
 
-| Module                   | Route   | Description                                                                        | Statut | Phase | Estimation   |
-| ------------------------ | ------- | ---------------------------------------------------------------------------------- | ------ | ----- | ------------ |
-| **Tasks / Productivity** | /tasks  | To-do lists, projets, rappels, intégration groupes & boards                        | 🔴     | 3     | Groupe 6     |
-| **Events**               | /events | Agenda partagé, RSVP, tickets, rappels                                             | 🔴     | 2C    | DEV-013      |
-| **Docs & Storage**       | /files  | Drive cloud intégré, versionning & partage                                         | 🔴     | 3     | 2-3 semaines |
-| **Organizations**        | /orgs   | ONG, associations, écoles, formations, garderies, églises, PME, centres de loisirs | 🔴     | 4     | 4-6 semaines |
+| Module                   | Route   | Description                                                                        | Statut  | Phase | Estimation   |
+| ------------------------ | ------- | ---------------------------------------------------------------------------------- | ------- | ----- | ------------ |
+| **Tasks / Productivity** | /tasks  | To-do lists, projets, rappels, intégration groupes & boards                        | 🔴      | 3     | Groupe 6     |
+| **Events**               | /events | Agenda partagé, RSVP, tickets, rappels                                             | ✅ Done | 2C    | DEV-013 ✅   |
+| **Docs & Storage**       | /files  | Drive cloud intégré, versionning & partage                                         | 🔴      | 3     | 2-3 semaines |
+| **Organizations**        | /orgs   | ONG, associations, écoles, formations, garderies, églises, PME, centres de loisirs | 🔴      | 4     | 4-6 semaines |
 
 ### 6. IA & ASSISTANCE — Transversal
 
@@ -1535,16 +1552,16 @@ Phase 4  (Vie quotidienne) ░░░░░░░░░░░░░░  ~0%  (DEV
 | 9   | Profils avancés (visibilité) | DEV-008 | P2       | ✅     | ✅ Phase 2B    |
 | 10  | Thèmes étendus (4-6)         | DEV-009 | P3       | ✅     | ✅ Phase 2B    |
 | 11  | Sécurité avancée (2FA/bio)   | DEV-016 | P2       | ✅     | ✅ 22 fév      |
-| 12  | Centre RGPD                  | DEV-017 | P2       | 🔴     | 2-3 jours      |
+| 12  | Centre RGPD                  | DEV-017 | P2       | ✅     | ✅ Terminé     |
 
 ### Sprint 3 — Phase 2C (Social réel)
 
 | #   | Tâche                   | Réf     | Priorité | Statut | Estimation |
 | --- | ----------------------- | ------- | -------- | ------ | ---------- |
 | 13  | ~~Stories réelles~~     | DEV-011 | P1       | ✅     | -          |
-| 14  | Feed social / timeline  | DEV-012 | P2       | 🔴     | 4-5 jours  |
-| 15  | Groupes avancés (rôles) | DEV-014 | P2       | 🔴     | 3-5 jours  |
-| 16  | Événements              | DEV-013 | P3       | 🔴     | 3-4 jours  |
+| 14  | Feed social / timeline  | DEV-012 | P2       | ✅     | ✅ Terminé |
+| 15  | Groupes avancés (rôles) | DEV-014 | P2       | ✅     | ✅ Terminé |
+| 16  | Événements              | DEV-013 | P3       | ✅     | ✅ Terminé |
 
 ### Backlog infrastructure
 
@@ -1573,19 +1590,19 @@ Phase 4  (Vie quotidienne) ░░░░░░░░░░░░░░  ~0%  (DEV
 
 ### Couverture des 50 fonctionnalités
 
-| Groupe    | Nom                        | Phase | Fonc. couvertes | Progression | Réf Tracker                           |
-| --------- | -------------------------- | ----- | --------------- | ----------- | ------------------------------------- |
-| 1         | Messagerie & Communication | 2A    | 5/5 ✅          | 100%        | DEV-001, DEV-002, DEV-003, DEV-004    |
-| 2         | Appels Audio & Vidéo       | 2A    | 2/5 ⚠️          | 40%         | DEV-006, DEV-007, CRIT-001            |
-| 3         | Profils & Identité         | 2B    | 3/5 ✅          | 60%         | DEV-008, DEV-010                      |
-| 4         | Personnalisation avancée   | 2B    | 2/5 ⚠️          | 40%         | DEV-009                               |
-| 5         | Mini-apps sociales natives | 2C    | 2/5 ⚠️          | 40%         | DEV-011 ✅, DEV-012, DEV-013, DEV-014 |
-| 6         | Modules avancés            | 3     | 0/5 🔴          | 0%          | DEV-018, DEV-019, DEV-020             |
-| 7         | Services utilitaires       | 3     | 0/5 🔴          | 0%          | DEV-021                               |
-| 8         | Divertissement & Création  | 3     | 0/5 🔴          | 0%          | DEV-022, DEV-023, DEV-034             |
-| 9         | IA intégrée                | 3     | 0/5 🔴          | 0%          | DEV-024, DEV-025, DEV-026             |
-| 10        | App Store & Écosystème     | 3     | 0/5 🔲          | 0% (mock)   | DEV-027, DEV-028                      |
-| **Total** |                            |       | **14/50**       | **28%**     |                                       |
+| Groupe    | Nom                        | Phase | Fonc. couvertes | Progression | Réf Tracker                                    |
+| --------- | -------------------------- | ----- | --------------- | ----------- | ---------------------------------------------- |
+| 1         | Messagerie & Communication | 2A    | 5/5 ✅          | 100%        | DEV-001, DEV-002, DEV-003, DEV-004             |
+| 2         | Appels Audio & Vidéo       | 2A    | 2/5 ⚠️          | 40%         | DEV-006, DEV-007, CRIT-001                     |
+| 3         | Profils & Identité         | 2B    | 3/5 ✅          | 60%         | DEV-008, DEV-010                               |
+| 4         | Personnalisation avancée   | 2B    | 2/5 ⚠️          | 40%         | DEV-009                                        |
+| 5         | Mini-apps sociales natives | 2C    | 5/5 ✅          | 100%        | DEV-011 ✅, DEV-012 ✅, DEV-013 ✅, DEV-014 ✅ |
+| 6         | Modules avancés            | 3     | 0/5 🔴          | 0%          | DEV-018, DEV-019, DEV-020                      |
+| 7         | Services utilitaires       | 3     | 0/5 🔴          | 0%          | DEV-021                                        |
+| 8         | Divertissement & Création  | 3     | 0/5 🔴          | 0%          | DEV-022, DEV-023, DEV-034                      |
+| 9         | IA intégrée                | 3     | 0/5 🔴          | 0%          | DEV-024, DEV-025, DEV-026                      |
+| 10        | App Store & Écosystème     | 3     | 0/5 🔲          | 0% (mock)   | DEV-027, DEV-028                               |
+| **Total** |                            |       | **16/50**       | **32%**     |                                                |
 
 ### Modules additionnels (hors 50 fonctionnalités)
 

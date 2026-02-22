@@ -1114,6 +1114,8 @@
 - **⚠️ Partielles (5/24)** : Edit/Delete (web seulement), GIFs/Emojis (web seulement), Screen Sharing (web seulement), Desktop base (18-19), Accessibilité (en cours)
 - **❌ Non faites (5/24)** : Desktop avancé (20-21), Feature Parity (22), Performance Opt (23)
 
+> **Note** : Mock-data migration complète (22/02/2026) — 334 fichiers migrés vers `@/lib/types/` + `@/lib/data/`, 0 erreur TS, mock-data.ts réduit à bridge deprecated (110 lignes).
+
 ### Problèmes Critiques Transversaux
 
 1. ~~**Web-app : 100% MOCK_DATA pour le chat**~~ ✅ Résolu — Chat connecté Socket.IO temps réel (11 events : message:new, typing, presence, reactions, edit, delete)
@@ -1122,8 +1124,8 @@
 4. **Schéma Drizzle désynchronisé** du SQL Supabase (table `users` vs `profiles`)
 5. ~~**Forgot Password web CASSÉ**~~ ✅ Résolu (BUG-003 auth corrigé)
 6. **Middleware web = i18n seulement** — Pas de SSR auth guard (TODO)
-7. **Socket.IO hardcodé localhost** — Non prêt pour production
-8. **334 fichiers** importent encore `mock-data.ts` — Modules secondaires (smart-home, worlds, contests, events, news, sports, stories, etc.) non migrés
+7. ~~**Socket.IO hardcodé localhost**~~ ✅ Résolu — Configuration production avec transport polling/websocket, reconnection, CORS dynamique
+8. ~~**334 fichiers** importent encore `mock-data.ts`~~ ✅ Résolu — Architecture mock-data.ts démantelée : types dans `@/lib/types/` (10 fichiers), données seed dans `@/lib/data/` (10 fichiers), 0 import mock-data restant
 
 ### Tests
 
@@ -1139,7 +1141,7 @@
 ### Vision Complète
 
 **Semaine 1** → Setup ✅  
-**Semaine 8** → Beta Ready ⚠️ (en cours, ~70% features complètes côté web)
+**Semaine 8** → Beta Ready ⚠️ (en cours, ~80% features complètes côté web)
 **Semaine 12** → Launch Public 🚀
 
 **MVP ImuChat** = 24 features essentielles pour une messagerie moderne, sécurisée et multi-plateforme.
@@ -1155,7 +1157,7 @@
 7. 🔴 **P0 : Ajouter persistance DB** aux modules backend (ChatEngine en mémoire)
 8. ✅ ~~**P1 : Edit/Delete, Search, Offline**~~ — Tous implémentés sur web (context menu, Socket.IO, SearchDialog 536L, offline-queue IndexedDB)
 9. ✅ ~~**P1 : Fixer Forgot Password + auth**~~ — BUG-003 résolu (refresh token, 401 retry, error state)
-10. 🟡 **P1 : Migrer MOCK_DATA modules secondaires** (334 fichiers encore mock)
+10. ✅ ~~**P1 : Migrer MOCK_DATA modules secondaires**~~ — 334 fichiers migrés, mock-data.ts éliminé (types → `@/lib/types/`, données → `@/lib/data/`)
 11. 🟡 **P1 : Tests WebSocket + coverage** (OPT-002, BUG-004)
 12. 🟢 **P2 : Desktop packaging + features avancées**
 13. 🟢 **P2 : Feature Parity, Performance, Accessibilité AA**
@@ -1168,6 +1170,6 @@
 
 ---
 
-*🗓️ ~70% du MVP web est implémenté. Priorité : migrer les modules secondaires (mock → réel) et ajouter persistance DB backend.*
+*🗓️ ~80% du MVP web est implémenté. Priorité : connecter les modules secondaires à de vraies API Supabase et ajouter persistance DB backend.*
 
-> **Dernière mise à jour** : 28 février 2026 — Audit code réel automatisé
+> **Dernière mise à jour** : 22 février 2026 — Migration mock→real complète (334 fichiers), 0 erreurs TS

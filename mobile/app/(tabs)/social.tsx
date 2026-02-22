@@ -2,21 +2,23 @@
  * SocialScreen — Parité web stories module
  * Sections : StoryCarousel, StoryGrid, CreateStoryFAB, filtres (Mixte/News/Stories)
  * DEV-011: Intégration stories réelles avec Supabase
+ * DEV-012: Feed social réel avec Supabase (posts, likes, commentaires)
  */
 
 import { useAuth } from "@/providers/AuthProvider";
 import { useI18n } from "@/providers/I18nProvider";
 import { useColors, useSpacing } from "@/providers/ThemeProvider";
+import { Post, fetchFeed, sharePost, toggleLike } from "@/services/social-feed";
 import { StoryUserGroup } from "@/services/stories-api";
 import { useStoriesStore } from "@/stores/stories-store";
 import { useRouter } from "expo-router";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
+  ActivityIndicator,
   Dimensions,
   FlatList,
   Image,
   RefreshControl,
-  ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -24,82 +26,7 @@ import {
 } from "react-native";
 
 // ─── Types ────────────────────────────────────────────────────────
-type FeedFilter = "mixed" | "news" | "stories";
-
-interface StoryPost {
-  id: string;
-  authorId: string;
-  authorName: string;
-  content: string;
-  imageUrl: string | null;
-  createdAt: string;
-  likes: number;
-  comments: number;
-  type: "story" | "news";
-}
-
-// ─── Mock feed data (stories carousel uses real data) ─────────────
-const MOCK_FEED: StoryPost[] = [
-  {
-    id: "fp-1",
-    authorId: "su-1",
-    authorName: "Alice",
-    content: "Nouveau monde créé dans ImuVerse ! Venez explorer 🌍",
-    imageUrl: null,
-    createdAt: new Date(Date.now() - 15 * 60000).toISOString(),
-    likes: 12,
-    comments: 3,
-    type: "story",
-  },
-  {
-    id: "fp-2",
-    authorId: "su-2",
-    authorName: "Bob",
-    content:
-      "Le concours créatif est maintenant ouvert. Participez avant vendredi !",
-    imageUrl: null,
-    createdAt: new Date(Date.now() - 2 * 3600000).toISOString(),
-    likes: 34,
-    comments: 8,
-    type: "news",
-  },
-  {
-    id: "fp-3",
-    authorId: "su-4",
-    authorName: "David",
-    content:
-      "Watch party ce soir à 21h — on regarde le dernier épisode ensemble 🎬",
-    imageUrl: null,
-    createdAt: new Date(Date.now() - 5 * 3600000).toISOString(),
-    likes: 22,
-    comments: 15,
-    type: "story",
-  },
-  {
-    id: "fp-4",
-    authorId: "su-5",
-    authorName: "Emma",
-    content:
-      "J'ai publié un nouveau thème sombre dans le Store — dites-moi ce que vous en pensez !",
-    imageUrl: null,
-    createdAt: new Date(Date.now() - 24 * 3600000).toISOString(),
-    likes: 45,
-    comments: 7,
-    type: "story",
-  },
-  {
-    id: "fp-5",
-    authorId: "su-3",
-    authorName: "Chloé",
-    content:
-      "Mise à jour : les appels vidéo de groupe supportent maintenant jusqu'à 8 participants 📹",
-    imageUrl: null,
-    createdAt: new Date(Date.now() - 48 * 3600000).toISOString(),
-    likes: 89,
-    comments: 21,
-    type: "news",
-  },
-];
+type FeedFilter = "mixed" | "news" | "following";
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
 
@@ -120,8 +47,53 @@ export default function SocialScreen() {
     openViewer,
   } = useStoriesStore();
 
+  // Feed state
   const [filter, setFilter] = useState<FeedFilter>("mixed");
   const [refreshing, setRefreshing] = useState(false);
+  const [posts, setPosts] = useState<Post[]>([]);
+  const [isLoadingFeed, setIsLoadingFeed] = useState(true);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
+  const [nextCursor, setNextCursor] = useState<string | null>(null);
+  const [hasMore, setHasMore] = useState(true);
+  const flatListRef = useRef<FlatList>(null);
+
+  // Map filter to API filter
+  const getApiFilter = (f: FeedFilter): "all" | "following" | "news" => {
+    if (f === "news") return "news";
+    if (f === "following") return "following";
+    return "all";
+  };
+
+  // Fetch feed
+  const loadFeed = useCallback(
+    async (reset = false) => {
+      if (reset) {
+        setIsLoadingFeed(true);
+        setPosts([]);
+        setNextCursor(null);
+        setHasMore(true);
+      }
+
+      try {
+        const result = await fetchFeed(
+          reset ? undefined : (nextCursor ?? undefined),
+          getApiFilter(filter),
+        );
+        setPosts((prev) => (reset ? result.posts : [...prev, ...result.posts]));
+        setNextCursor(result.nextCursor);
+        setHasMore(result.hasMore);
+      } finally {
+        setIsLoadingFeed(false);
+        setIsLoadingMore(false);
+      }
+    },
+    [filter, nextCursor],
+  );
+
+  // Load feed on mount and filter change
+  useEffect(() => {
+    loadFeed(true);
+  }, [filter]);
 
   // Fetch stories on mount
   useEffect(() => {
@@ -131,9 +103,55 @@ export default function SocialScreen() {
   // Handle pull-to-refresh
   const handleRefresh = useCallback(async () => {
     setRefreshing(true);
-    await refreshStories();
+    await Promise.all([refreshStories(), loadFeed(true)]);
     setRefreshing(false);
-  }, [refreshStories]);
+  }, [refreshStories, loadFeed]);
+
+  // Handle load more (infinite scroll)
+  const handleLoadMore = useCallback(() => {
+    if (!isLoadingMore && hasMore && !isLoadingFeed) {
+      setIsLoadingMore(true);
+      loadFeed(false);
+    }
+  }, [isLoadingMore, hasMore, isLoadingFeed, loadFeed]);
+
+  // Handle like toggle
+  const handleToggleLike = useCallback(async (post: Post) => {
+    const newIsLiked = await toggleLike(post.id, post.isLiked);
+    if (newIsLiked !== null) {
+      setPosts((prev) =>
+        prev.map((p) =>
+          p.id === post.id
+            ? {
+                ...p,
+                isLiked: newIsLiked,
+                likesCount: newIsLiked ? p.likesCount + 1 : p.likesCount - 1,
+              }
+            : p,
+        ),
+      );
+    }
+  }, []);
+
+  // Handle share
+  const handleShare = useCallback(async (postId: string) => {
+    const success = await sharePost(postId);
+    if (success) {
+      setPosts((prev) =>
+        prev.map((p) =>
+          p.id === postId ? { ...p, sharesCount: p.sharesCount + 1 } : p,
+        ),
+      );
+    }
+  }, []);
+
+  // Navigate to comments
+  const handleCommentPress = useCallback(
+    (postId: string) => {
+      router.push(`/social/comments/${postId}`);
+    },
+    [router],
+  );
 
   // Handle story tap - open viewer at index
   const handleStoryTap = useCallback(
@@ -150,9 +168,9 @@ export default function SocialScreen() {
     [openViewer, router, storyGroups],
   );
 
-  // Handle FAB - create new story
-  const handleCreateStory = useCallback(() => {
-    router.push("/stories/create");
+  // Handle FAB - create new post
+  const handleCreatePost = useCallback(() => {
+    router.push("/social/create-post");
   }, [router]);
 
   // ─── Helpers ──────────────────────────────────────────────────
@@ -168,19 +186,17 @@ export default function SocialScreen() {
     [t],
   );
 
-  const filteredFeed =
-    filter === "mixed"
-      ? MOCK_FEED
-      : MOCK_FEED.filter(
-          (p) => p.type === (filter === "news" ? "news" : "story"),
-        );
-
   // ─── Story carousel ──────────────────────────────────────────
   // Build carousel data - add "Add Story" item at start for current user
   const storyCarouselData: (StoryUserGroup | { isAddStory: true })[] = [
     { isAddStory: true } as const,
     ...storyGroups,
   ];
+
+  // Handle create story from carousel
+  const handleCreateStory = useCallback(() => {
+    router.push("/stories/create");
+  }, [router]);
 
   const renderStoryUser = ({
     item,
@@ -258,177 +274,249 @@ export default function SocialScreen() {
   };
 
   // ─── Feed post ────────────────────────────────────────────────
-  const renderPost = ({ item }: { item: StoryPost }) => (
-    <View
-      testID={`feed-post-${item.id}`}
-      style={[
-        styles.postCard,
-        { backgroundColor: colors.surface, borderColor: colors.border },
-      ]}
-    >
-      {/* Author header */}
-      <View style={styles.postHeader}>
-        <View
-          style={[
-            styles.postAvatar,
-            { backgroundColor: colors.primary + "20" },
-          ]}
-        >
-          <Text style={[styles.postAvatarText, { color: colors.primary }]}>
-            {item.authorName.charAt(0)}
-          </Text>
-        </View>
-        <View style={styles.postHeaderInfo}>
-          <Text style={[styles.postAuthor, { color: colors.text }]}>
-            {item.authorName}
-          </Text>
-          <Text style={[styles.postTime, { color: colors.textMuted }]}>
-            {formatTimeAgo(item.createdAt)}
-          </Text>
-        </View>
-        {item.type === "news" && (
-          <View
-            style={[
-              styles.newsBadge,
-              { backgroundColor: colors.primary + "20" },
-            ]}
-          >
-            <Text style={[styles.newsBadgeText, { color: colors.primary }]}>
-              {t("social.newsBadge")}
+  const renderPost = ({ item }: { item: Post }) => {
+    const authorName =
+      item.author.displayName || item.author.username || "Anonyme";
+    const authorInitial = authorName.charAt(0).toUpperCase();
+
+    return (
+      <View
+        testID={`feed-post-${item.id}`}
+        style={[
+          styles.postCard,
+          { backgroundColor: colors.surface, borderColor: colors.border },
+        ]}
+      >
+        {/* Author header */}
+        <View style={styles.postHeader}>
+          {item.author.avatarUrl ? (
+            <Image
+              source={{ uri: item.author.avatarUrl }}
+              style={styles.postAvatarImage}
+            />
+          ) : (
+            <View
+              style={[
+                styles.postAvatar,
+                { backgroundColor: colors.primary + "20" },
+              ]}
+            >
+              <Text style={[styles.postAvatarText, { color: colors.primary }]}>
+                {authorInitial}
+              </Text>
+            </View>
+          )}
+          <View style={styles.postHeaderInfo}>
+            <Text style={[styles.postAuthor, { color: colors.text }]}>
+              {authorName}
+            </Text>
+            <Text style={[styles.postTime, { color: colors.textMuted }]}>
+              {formatTimeAgo(item.createdAt)}
             </Text>
           </View>
+          {(item.type === "news" || item.type === "announcement") && (
+            <View
+              style={[
+                styles.newsBadge,
+                { backgroundColor: colors.primary + "20" },
+              ]}
+            >
+              <Text style={[styles.newsBadgeText, { color: colors.primary }]}>
+                {t("social.newsBadge")}
+              </Text>
+            </View>
+          )}
+        </View>
+
+        {/* Media */}
+        {item.mediaUrls && item.mediaUrls.length > 0 && (
+          <Image
+            source={{ uri: item.mediaUrls[0] }}
+            style={styles.postImage}
+            resizeMode="cover"
+          />
         )}
-      </View>
 
-      {/* Content */}
-      <Text style={[styles.postContent, { color: colors.text }]}>
-        {item.content}
-      </Text>
+        {/* Content */}
+        <Text style={[styles.postContent, { color: colors.text }]}>
+          {item.content}
+        </Text>
 
-      {/* Actions */}
-      <View style={[styles.postActions, { borderTopColor: colors.border }]}>
-        <TouchableOpacity testID={`like-${item.id}`} style={styles.actionBtn}>
-          <Text style={[styles.actionText, { color: colors.textMuted }]}>
-            ❤️ {item.likes}
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          testID={`comment-${item.id}`}
-          style={styles.actionBtn}
-        >
-          <Text style={[styles.actionText, { color: colors.textMuted }]}>
-            💬 {item.comments}
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity testID={`share-${item.id}`} style={styles.actionBtn}>
-          <Text style={[styles.actionText, { color: colors.textMuted }]}>
-            {t("social.share")}
-          </Text>
-        </TouchableOpacity>
+        {/* Actions */}
+        <View style={[styles.postActions, { borderTopColor: colors.border }]}>
+          <TouchableOpacity
+            testID={`like-${item.id}`}
+            style={styles.actionBtn}
+            onPress={() => handleToggleLike(item)}
+          >
+            <Text
+              style={[
+                styles.actionText,
+                { color: item.isLiked ? colors.primary : colors.textMuted },
+              ]}
+            >
+              {item.isLiked ? "❤️" : "🤍"} {item.likesCount}
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            testID={`comment-${item.id}`}
+            style={styles.actionBtn}
+            onPress={() => handleCommentPress(item.id)}
+          >
+            <Text style={[styles.actionText, { color: colors.textMuted }]}>
+              💬 {item.commentsCount}
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            testID={`share-${item.id}`}
+            style={styles.actionBtn}
+            onPress={() => handleShare(item.id)}
+          >
+            <Text style={[styles.actionText, { color: colors.textMuted }]}>
+              🔗 {item.sharesCount > 0 ? item.sharesCount : t("social.share")}
+            </Text>
+          </TouchableOpacity>
+        </View>
       </View>
-    </View>
-  );
+    );
+  };
+
+  // Footer loader for infinite scroll
+  const renderFooter = () => {
+    if (!isLoadingMore) return null;
+    return (
+      <View style={styles.footerLoader}>
+        <ActivityIndicator color={colors.primary} />
+      </View>
+    );
+  };
 
   // ═══════════════════════════════════════════════════════════════
   // RENDER
   // ═══════════════════════════════════════════════════════════════
-  return (
-    <ScrollView
-      testID="social-screen"
-      style={[styles.container, { backgroundColor: colors.background }]}
-      refreshControl={
-        <RefreshControl
-          refreshing={refreshing}
-          onRefresh={handleRefresh}
-          tintColor={colors.primary}
-        />
-      }
-    >
-      <View style={[styles.content, { padding: spacing.lg }]}>
-        {/* Header */}
-        <Text style={[styles.title, { color: colors.text }]}>
-          {t("social.title")}
-        </Text>
-        <Text style={[styles.subtitle, { color: colors.textMuted }]}>
-          {t("social.subtitle")}
-        </Text>
 
-        {/* ── Story Carousel ──────────────────────────────────── */}
-        <FlatList
-          testID="social-story-carousel"
-          data={storyCarouselData}
-          renderItem={renderStoryUser}
-          keyExtractor={(item, index) =>
-            "isAddStory" in item ? "add-story" : item.user.id
-          }
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          style={styles.storyCarousel}
-        />
+  // Header component for FlatList
+  const ListHeader = () => (
+    <View style={[styles.content, { paddingHorizontal: spacing.lg }]}>
+      {/* Header */}
+      <Text style={[styles.title, { color: colors.text }]}>
+        {t("social.title")}
+      </Text>
+      <Text style={[styles.subtitle, { color: colors.textMuted }]}>
+        {t("social.subtitle")}
+      </Text>
 
-        {/* ── Filters ─────────────────────────────────────────── */}
-        <View testID="feed-filters" style={styles.filterRow}>
-          {(["mixed", "news", "stories"] as FeedFilter[]).map((f) => {
-            const labels: Record<FeedFilter, string> = {
-              mixed: t("social.mixed"),
-              news: t("social.news"),
-              stories: t("social.stories"),
-            };
-            const active = filter === f;
-            return (
-              <TouchableOpacity
-                key={f}
-                testID={`filter-${f}`}
-                onPress={() => setFilter(f)}
+      {/* ── Story Carousel ──────────────────────────────────── */}
+      <FlatList
+        testID="social-story-carousel"
+        data={storyCarouselData}
+        renderItem={renderStoryUser}
+        keyExtractor={(item, _index) =>
+          "isAddStory" in item ? "add-story" : item.user.id
+        }
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        style={styles.storyCarousel}
+      />
+
+      {/* ── Filters ─────────────────────────────────────────── */}
+      <View testID="feed-filters" style={styles.filterRow}>
+        {(["mixed", "news", "following"] as FeedFilter[]).map((f) => {
+          const labels: Record<FeedFilter, string> = {
+            mixed: t("social.mixed"),
+            news: t("social.news"),
+            following: t("social.following"),
+          };
+          const active = filter === f;
+          return (
+            <TouchableOpacity
+              key={f}
+              testID={`filter-${f}`}
+              onPress={() => setFilter(f)}
+              style={[
+                styles.filterBtn,
+                {
+                  backgroundColor: active ? colors.primary : colors.surface,
+                  borderColor: active ? colors.primary : colors.border,
+                },
+              ]}
+            >
+              <Text
                 style={[
-                  styles.filterBtn,
-                  {
-                    backgroundColor: active ? colors.primary : colors.surface,
-                    borderColor: active ? colors.primary : colors.border,
-                  },
+                  styles.filterText,
+                  { color: active ? "#fff" : colors.textMuted },
                 ]}
               >
-                <Text
-                  style={[
-                    styles.filterText,
-                    { color: active ? "#fff" : colors.textMuted },
-                  ]}
-                >
-                  {labels[f]}
-                </Text>
-              </TouchableOpacity>
-            );
-          })}
-        </View>
-
-        {/* ── Feed ────────────────────────────────────────────── */}
-        <View testID="social-feed">
-          {filteredFeed.map((post) => (
-            <View key={post.id}>{renderPost({ item: post })}</View>
-          ))}
-          {filteredFeed.length === 0 && (
-            <Text
-              testID="empty-feed"
-              style={[styles.emptyText, { color: colors.textMuted }]}
-            >
-              {t("social.emptyFeed")}
-            </Text>
-          )}
-        </View>
-
-        {/* Bottom spacer */}
-        <View style={{ height: 80 }} />
+                {labels[f]}
+              </Text>
+            </TouchableOpacity>
+          );
+        })}
       </View>
 
-      {/* ── Create Story FAB ──────────────────────────────────── */}
+      {/* Loading indicator */}
+      {isLoadingFeed && posts.length === 0 && (
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color={colors.primary} />
+          <Text style={[styles.loadingText, { color: colors.textMuted }]}>
+            {t("common.loading")}
+          </Text>
+        </View>
+      )}
+    </View>
+  );
+
+  // Empty feed component
+  const ListEmpty = () => {
+    if (isLoadingFeed) return null;
+    return (
+      <Text
+        testID="empty-feed"
+        style={[styles.emptyText, { color: colors.textMuted }]}
+      >
+        {t("social.emptyFeed")}
+      </Text>
+    );
+  };
+
+  return (
+    <View
+      testID="social-screen"
+      style={[styles.container, { backgroundColor: colors.background }]}
+    >
+      <FlatList
+        ref={flatListRef}
+        testID="social-feed"
+        data={posts}
+        renderItem={renderPost}
+        keyExtractor={(item) => item.id}
+        ListHeaderComponent={ListHeader}
+        ListEmptyComponent={ListEmpty}
+        ListFooterComponent={renderFooter}
+        contentContainerStyle={{
+          paddingHorizontal: spacing.lg,
+          paddingBottom: 100,
+        }}
+        onEndReached={handleLoadMore}
+        onEndReachedThreshold={0.5}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={handleRefresh}
+            tintColor={colors.primary}
+          />
+        }
+      />
+
+      {/* ── Create Post FAB ──────────────────────────────────── */}
       <TouchableOpacity
-        testID="btn-create-story"
+        testID="btn-create-post"
         style={[styles.fab, { backgroundColor: colors.primary }]}
-        onPress={handleCreateStory}
+        onPress={handleCreatePost}
       >
         <Text style={styles.fabIcon}>✏️</Text>
       </TouchableOpacity>
-    </ScrollView>
+    </View>
   );
 }
 
@@ -477,6 +565,17 @@ const styles = StyleSheet.create({
   },
   filterText: { fontSize: 13, fontWeight: "500" },
 
+  // Loading
+  loadingContainer: {
+    alignItems: "center",
+    justifyContent: "center",
+    padding: 40,
+  },
+  loadingText: {
+    marginTop: 12,
+    fontSize: 14,
+  },
+
   // Post card
   postCard: {
     borderRadius: 12,
@@ -496,15 +595,24 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
+  postAvatarImage: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+  },
   postAvatarText: { fontSize: 16, fontWeight: "600" },
   postHeaderInfo: { flex: 1, marginLeft: 10 },
   postAuthor: { fontSize: 14, fontWeight: "600" },
   postTime: { fontSize: 12, marginTop: 2 },
   newsBadge: { paddingHorizontal: 8, paddingVertical: 4, borderRadius: 12 },
   newsBadgeText: { fontSize: 11, fontWeight: "600" },
+  postImage: {
+    width: "100%",
+    height: 200,
+  },
   postContent: {
     paddingHorizontal: 12,
-    paddingBottom: 12,
+    paddingVertical: 12,
     fontSize: 14,
     lineHeight: 20,
   },
@@ -518,6 +626,12 @@ const styles = StyleSheet.create({
 
   // Empty
   emptyText: { textAlign: "center", padding: 40, fontSize: 14 },
+
+  // Footer loader
+  footerLoader: {
+    padding: 16,
+    alignItems: "center",
+  },
 
   // FAB
   fab: {

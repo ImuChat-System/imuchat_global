@@ -1,60 +1,70 @@
-import { StreamVideoClient, User } from "@stream-io/video-react-native-sdk";
-import { supabase } from "./supabase";
+/**
+ * @deprecated Ce fichier est DÉPRÉCIÉ. Utilisez les services suivants à la place :
+ * - `@/services/calls.ts` — Service principal pour appels audio/vidéo (tokens réels du backend)
+ * - `@/services/calls-safe.ts` — Wrapper safe pour Expo Go
+ * - `@/services/stream-token.ts` — Gestion des tokens Stream depuis platform-core
+ *
+ * Ce fichier utilisait une clé API hardcodée et des tokens placeholder.
+ * Il est conservé uniquement pour référence. Toutes les fonctions redirigent
+ * vers le nouveau système.
+ */
 
-// Stream API Key - In production, this should come from environment variables
-const STREAM_API_KEY = "mmhfdzb5evj2"; // Replace with your Stream API key
+import { StreamVideoClient } from "@stream-io/video-react-native-sdk";
+
+// ⚠️ DÉPRÉCIÉ — Utiliser les env vars via calls.ts
+const STREAM_API_KEY = process.env.EXPO_PUBLIC_STREAM_API_KEY || '';
 
 let client: StreamVideoClient | null = null;
 
 /**
- * Initialize Stream Video client
+ * @deprecated Utiliser `initializeStreamClient()` de `@/services/calls.ts`
  */
 export async function initializeStreamVideo(): Promise<StreamVideoClient> {
-    const {
-        data: { user: supabaseUser },
-    } = await supabase.auth.getUser();
+    console.warn('[DEPRECATED] initializeStreamVideo() is deprecated. Use calls.ts instead.');
+    const { initializeStreamClient, getStreamClient } = await import('./calls');
+    const { generateStreamToken } = await import('./stream-token');
+    const { supabase } = await import('./supabase');
 
-    if (!supabaseUser) {
-        throw new Error("No authenticated user");
-    }
+    // Check if already initialized
+    const existing = getStreamClient();
+    if (existing) return existing;
 
-    // Fetch user profile
+    const { data: { user: supabaseUser } } = await supabase.auth.getUser();
+    if (!supabaseUser) throw new Error("No authenticated user");
+
     const { data: profile } = await supabase
         .from("profiles")
         .select("username, full_name, avatar_url")
         .eq("id", supabaseUser.id)
         .single();
 
-    const streamUser: User = {
-        id: supabaseUser.id,
-        name: profile?.full_name || profile?.username || "User",
-        image: profile?.avatar_url || undefined,
-    };
+    const userName = profile?.full_name || profile?.username || "User";
+    const userImage = profile?.avatar_url || undefined;
 
-    // Generate token (for MVP, using client-side token generation)
-    // In production, this should be done via a Supabase Edge Function
-    const token = generateClientToken(supabaseUser.id);
+    const tokenData = await generateStreamToken({
+        userId: supabaseUser.id,
+        userName,
+        userImage,
+    });
 
-    if (!client) {
-        client = new StreamVideoClient({
-            apiKey: STREAM_API_KEY,
-            user: streamUser,
-            token,
-        });
-    }
+    const newClient = await initializeStreamClient(
+        { id: supabaseUser.id, name: userName, image: userImage },
+        tokenData.token,
+    );
 
-    return client;
+    client = newClient;
+    return newClient;
 }
 
 /**
- * Get the current Stream Video client
+ * @deprecated Utiliser `getStreamClient()` de `@/services/calls.ts`
  */
 export function getStreamVideoClient(): StreamVideoClient | null {
     return client;
 }
 
 /**
- * Disconnect Stream Video client
+ * @deprecated Utiliser `disconnectStreamClient()` de `@/services/calls.ts`
  */
 export async function disconnectStreamVideo(): Promise<void> {
     if (client) {
@@ -64,57 +74,31 @@ export async function disconnectStreamVideo(): Promise<void> {
 }
 
 /**
- * Generate a client-side token (FOR DEVELOPMENT ONLY)
- * In production, use a Supabase Edge Function to generate tokens securely
- */
-function generateClientToken(userId: string): string {
-    // This is a placeholder. In a real app, you would:
-    // 1. Call a Supabase Edge Function
-    // 2. The Edge Function would use Stream's server-side SDK to generate a token
-    // 3. Return the token to the client
-
-    // For now, we'll use a development token
-    // You need to generate this from Stream Dashboard for testing
-    console.warn(
-        "Using client-side token generation. This is NOT secure for production!"
-    );
-
-    // TODO: Replace with actual token from Stream Dashboard or Edge Function
-    return "DEVELOPMENT_TOKEN_HERE";
-}
-
-/**
- * Create a call
+ * @deprecated Utiliser `createCall()` de `@/services/calls.ts`
  */
 export async function createStreamCall(
     callId: string,
     callType: "audio" | "video"
 ) {
-    const client = getStreamVideoClient();
-    if (!client) {
-        throw new Error("Stream Video client not initialized");
-    }
-
-    const call = client.call(callType === "video" ? "default" : "audio_room", callId);
-    await call.getOrCreate();
-
-    return call;
+    console.warn('[DEPRECATED] createStreamCall() is deprecated. Use calls.ts createCall() instead.');
+    const { createCall } = await import('./calls');
+    const streamCallType = callType === "video" ? "default" : "audio";
+    return createCall(callId, streamCallType, []);
 }
 
 /**
- * Join an existing call
+ * @deprecated Utiliser `joinCall()` ou `getCall()` de `@/services/calls.ts`
  */
 export async function joinStreamCall(
     callId: string,
     callType: "audio" | "video"
 ) {
-    const client = getStreamVideoClient();
-    if (!client) {
-        throw new Error("Stream Video client not initialized");
-    }
+    console.warn('[DEPRECATED] joinStreamCall() is deprecated. Use calls.ts instead.');
+    const { getStreamClient } = await import('./calls');
+    const streamClient = getStreamClient();
+    if (!streamClient) throw new Error("Stream Video client not initialized. Use calls.ts initializeStreamClient().");
 
-    const call = client.call(callType === "video" ? "default" : "audio_room", callId);
+    const call = streamClient.call(callType === "video" ? "default" : "audio_room", callId);
     await call.join();
-
     return call;
 }

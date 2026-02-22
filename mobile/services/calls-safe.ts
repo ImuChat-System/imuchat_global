@@ -250,3 +250,62 @@ export async function safeDisconnectStreamClient(): Promise<void> {
     }
     return module.disconnectStreamClient();
 }
+
+/**
+ * Ensure Stream client is initialized with a real backend token.
+ * Handles the full flow: check SDK availability → get token from backend → init client.
+ * Returns the StreamVideoClient instance or null if unavailable.
+ * 
+ * @param user User info (id, name, image)
+ * @returns StreamVideoClient or null
+ */
+export async function safeEnsureStreamClient(
+    user: CallUser,
+): Promise<any | null> {
+    const available = await isCallsAvailable();
+    if (!available) return null;
+
+    const module = await getCallsModule();
+    if (!module) return null;
+
+    // Check if already initialized
+    const existingClient = module.getStreamClient();
+    if (existingClient) return existingClient;
+
+    // Initialize with real token from platform-core backend
+    try {
+        const { generateStreamToken } = await import('./stream-token');
+        const tokenData = await generateStreamToken({
+            userId: user.id,
+            userName: user.name,
+            userImage: user.image,
+        });
+
+        return module.initializeStreamClient(user, tokenData.token);
+    } catch (error) {
+        console.error('[Calls] Failed to ensure Stream client:', error);
+        return null;
+    }
+}
+
+/**
+ * Get the current Stream Video client safely
+ * Returns null if SDK is not available or client not initialized
+ */
+export async function safeGetStreamClient(): Promise<any | null> {
+    const module = await getCallsModule();
+    if (!module) return null;
+    return module.getStreamClient();
+}
+
+/**
+ * Generate a unique call ID safely
+ */
+export async function safeGenerateCallId(): Promise<string> {
+    const module = await getCallsModule();
+    if (!module) {
+        // Fallback call ID generation
+        return `call-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`;
+    }
+    return module.generateCallId();
+}

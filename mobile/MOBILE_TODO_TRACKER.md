@@ -360,29 +360,54 @@ Le hook `useNotifications` a été refactoré en **bridge unifié** connectant l
 
 **Priorité** : P0 - Bloquant (dépend de CRIT-001)  
 **Réf** : Groupe 2 — Appels audio & vidéo (5 fonctionnalités)  
-**Statut** : ⚠️ Partiellement implémenté
+**Statut** : ✅ Infrastructure corrigée — Tests en attente (EAS Build)
 
 **État actuel** :
 
-| Fonctionnalité Groupe 2       | Statut | Détails                          |
-| ----------------------------- | ------ | -------------------------------- |
-| 1. Appels audio (1:1/groupe)  | ⚠️     | UI ✅, Token placeholder         |
-| 2. Appels vidéo HD            | ⚠️     | UI ✅, Token placeholder         |
-| 3. Mini-fenêtre flottante PiP | 🔴     | Non démarré                      |
-| 4. Partage d'écran            | 🔴     | Non démarré (expo limitation)    |
-| 5. Filtre beauté IA + flou    | 🔴     | Non démarré (Phase 3 recommandé) |
+| Fonctionnalité Groupe 2       | Statut | Détails                                |
+| ----------------------------- | ------ | -------------------------------------- |
+| 1. Appels audio (1:1/groupe)  | ✅     | Token réel backend, client unifié      |
+| 2. Appels vidéo HD            | ✅     | StreamVideo + StreamCall + CallContent |
+| 3. Mini-fenêtre flottante PiP | 🔴     | Non démarré                            |
+| 4. Partage d'écran            | 🔴     | Non démarré (expo limitation)          |
+| 5. Filtre beauté IA + flou    | 🔴     | Non démarré (Phase 3 recommandé)       |
+
+**Corrections apportées (Session DEV-006)** :
+
+- ✅ `CRIT-001` résolu — tokens Stream générés par platform-core backend
+- ✅ `active.tsx` — réécrit pour utiliser `calls.ts` + `stream-token.ts` (vrais tokens backend)
+- ✅ `active.tsx` — enveloppé avec `<StreamVideo client>` + `<StreamCall>` + `<CallContent>`
+- ✅ `useCallManagerHook.tsx` — migré de `stream-video-safe.ts` vers `calls-safe.ts`
+- ✅ `chat/[id].tsx` — migré vers `calls-safe.ts` avec `safeEnsureStreamClient()`
+- ✅ `calls-safe.ts` — ajout `safeEnsureStreamClient()`, `safeGetStreamClient()`, `safeGenerateCallId()`
+- ✅ `stream-video.ts` — DÉPRÉCIÉ, redirige vers nouveau système
+- ✅ `stream-video-safe.ts` — DÉPRÉCIÉ, redirige vers nouveau système
+- ✅ `EXPO_PUBLIC_STREAM_API_KEY` configuré dans `mobile/.env`
+- ✅ Clé API Stream corrigée (`z57h7zb5875r` au lieu de `mmhfdzb5evj2` hardcodé)
+
+**Architecture unifiée** :
+
+```
+stream-token.ts  →  Fetch token réel depuis platform-core backend
+calls.ts         →  Service principal (initializeStreamClient, createCall, joinCall, etc.)
+calls-safe.ts    →  Wrapper Expo Go safe + safeEnsureStreamClient()
+useCalls.ts      →  Hook React (utilise calls.ts + stream-token.ts)
+useCallsSafe.ts  →  Hook safe wrapper
+active.tsx       →  <StreamVideo> + <StreamCall> + <CallContent>
+```
 
 **Composants existants** :
 
 - ✅ `CallControls.tsx` — mute/cam/hang up
 - ✅ `IncomingCallModal.tsx` — modal appel entrant
-- ✅ `ParticipantView.tsx` — vue participant
+- ✅ `ParticipantView.tsx` — vue participant (placeholder vidéo)
 - ✅ `useCallManager.ts` / `useCallsSafe.ts` — hooks d'appels
 - ✅ `services/call-signaling.ts` — signaling Supabase Realtime
 
 **À implémenter (Phase 2A)** :
 
-- [ ] Résoudre CRIT-001 (Stream Video token)
+- [x] Résoudre CRIT-001 (Stream Video token)
+- [x] Unifier système d'appels (ancien vs nouveau)
 - [ ] Tester appels 1:1 réels avec EAS Build
 - [ ] Appels groupes
 - [ ] PiP avec `react-native-pip-android` + `AVPictureInPictureController` (iOS)
@@ -392,9 +417,9 @@ Le hook `useNotifications` a été refactoré en **bridge unifié** connectant l
 - [ ] Partage d'écran (nécessite native module)
 - [ ] Filtre beauté IA (dépend de vision long terme 3D/Live2D)
 
-**Prérequis** : CRIT-001 résolu
+**Prérequis** : ~~CRIT-001 résolu~~ ✅ Fait
 
-**Estimation** : 1; semaine (Phase 2A)
+**Estimation** : Tests EAS Build = 1-2 jours
 
 ---
 
@@ -632,24 +657,42 @@ Le hook `useNotifications` a été refactoré en **bridge unifié** connectant l
 
 **Priorité** : P1 - Important (inclut CRIT-002)  
 **Réf** : Écrans complémentaires §1 — "Auth multi-méthodes (email, téléphone, OAuth)"  
-**Statut** : ⚠️ Email seul
+**Statut** : ✅ OAuth Google/Apple configuré
 
 **État actuel** :
 
 - ✅ Login email/password (`app/(auth)/login.tsx`)
 - ✅ Register (`app/(auth)/register.tsx`)
 - ✅ Forgot password (`app/(auth)/forgot-password.tsx`)
-- ❌ OAuth Google / Apple
-- ❌ OTP par téléphone
+- ✅ OAuth Google Sign-In (expo-auth-session + Supabase signInWithIdToken)
+- ✅ OAuth Apple Sign-In (expo-apple-authentication + Supabase signInWithIdToken)
+- ❌ OTP par téléphone (Phase ultérieure)
 
-**À implémenter** :
+**Corrections appliquées** :
 
-- [ ] Google Sign-In via `expo-auth-session` + Supabase Auth provider
-- [ ] Apple Sign-In via `expo-apple-authentication`
-- [ ] Vérification OTP par SMS (Supabase Auth phone provider)
-- [ ] UI boutons sociaux sur login/register screens
+- [x] Fix scheme mismatch: `app.json` scheme changé de `"mobile"` à `"imuchat"` (redirect URI `imuchat://auth/callback`)
+- [x] Google OAuth Client IDs configurés dans `.env` (web, iOS, Android depuis Firebase `imuchat-378ad`)
+- [x] Plugin `expo-apple-authentication` ajouté dans `app.json` plugins (entitlement Sign in with Apple)
+- [x] REVERSED_CLIENT_ID ajouté comme CFBundleURLScheme iOS pour Google Sign-In natif
+- [x] SocialLoginButtons ajouté à l'écran register (était uniquement sur login)
+- [x] Validation des client IDs + logs debug en mode `__DEV__`
+- [x] UI boutons sociaux sur login + register screens
 
-**Estimation** : 2-3 jours
+**Fichiers modifiés** :
+
+- `app.json` — scheme, plugins, iOS infoPlist CFBundleURLTypes
+- `.env` — EXPO_PUBLIC_GOOGLE_CLIENT_ID, EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID, EXPO_PUBLIC_GOOGLE_ANDROID_CLIENT_ID
+- `components/auth/SocialLoginButtons.tsx` — validation config, redirect URI debug logs
+- `app/(auth)/register.tsx` — ajout SocialLoginButtons
+
+**Reste à faire (côté dashboard/serveur)** :
+
+- [ ] Configurer Google comme provider OAuth dans Supabase Dashboard (Auth → Providers → Google)
+- [ ] Configurer Apple comme provider OAuth dans Supabase Dashboard (Auth → Providers → Apple)
+- [ ] Vérifier que les Google OAuth Consent Screen est bien configuré dans Google Cloud Console
+- [ ] Vérification OTP par SMS (Supabase Auth phone provider — Phase ultérieure)
+
+**Estimation** : ✅ Côté mobile terminé | Reste config dashboard ~1h
 
 ---
 
@@ -912,14 +955,14 @@ Phase 3  (Modules/IA)      ░░░░░░░░░░░░░░  ~0%
 
 ### Sprint suivant — Phase 2B + 2D (Profils + Auth)
 
-| #   | Tâche                        | Réf     | Priorité | Statut | Estimation |
-| --- | ---------------------------- | ------- | -------- | ------ | ---------- |
-| 7   | OAuth Google/Apple           | DEV-015 | P1       | 🔴     | 2-3 jours  |
-| 8   | Onboarding flow complet      | DEV-010 | P2       | 🔴     | 1-2 jours  |
-| 9   | Profils avancés (visibilité) | DEV-008 | P2       | 🔴     | 3-4 jours  |
-| 10  | Thèmes étendus (4-6)         | DEV-009 | P3       | 🔴     | 2-3 jours  |
-| 11  | Sécurité avancée (2FA/bio)   | DEV-016 | P2       | 🔴     | 3-4 jours  |
-| 12  | Centre RGPD                  | DEV-017 | P2       | 🔴     | 2-3 jours  |
+| #   | Tâche                        | Réf     | Priorité | Statut | Estimation     |
+| --- | ---------------------------- | ------- | -------- | ------ | -------------- |
+| 7   | OAuth Google/Apple           | DEV-015 | P1       | ✅     | ✅ Mobile done |
+| 8   | Onboarding flow complet      | DEV-010 | P2       | 🔴     | 1-2 jours      |
+| 9   | Profils avancés (visibilité) | DEV-008 | P2       | 🔴     | 3-4 jours      |
+| 10  | Thèmes étendus (4-6)         | DEV-009 | P3       | 🔴     | 2-3 jours      |
+| 11  | Sécurité avancée (2FA/bio)   | DEV-016 | P2       | 🔴     | 3-4 jours      |
+| 12  | Centre RGPD                  | DEV-017 | P2       | 🔴     | 2-3 jours      |
 
 ### Sprint 3 — Phase 2C (Social réel)
 
@@ -1052,6 +1095,30 @@ mobile/
 ---
 
 ## 📝 Notes de Session
+
+### Session en cours — DEV-015 OAuth Google/Apple
+
+**Objectif** : Configurer OAuth Google + Apple Sign-In
+
+**Réalisations** :
+
+1. ✅ Analyse complète de l'état OAuth existant (SocialLoginButtons.tsx déjà implémenté, 310 lignes)
+2. ✅ Identification de 7 problèmes de configuration bloquants
+3. ✅ Fix scheme mismatch: `app.json` `"mobile"` → `"imuchat"`
+4. ✅ Google Client IDs décommentés et configurés dans `.env` (depuis Firebase imuchat-378ad)
+5. ✅ Plugin `expo-apple-authentication` ajouté à `app.json`
+6. ✅ REVERSED_CLIENT_ID iOS ajouté comme `CFBundleURLScheme`
+7. ✅ SocialLoginButtons ajouté à register.tsx (parité avec login.tsx)
+8. ✅ Validation client IDs + debug logs ajoutés à SocialLoginButtons.tsx
+
+**Fichiers modifiés** :
+
+- `app.json` — scheme, plugins, iOS infoPlist
+- `.env` — Google OAuth Client IDs (web, iOS, Android)
+- `components/auth/SocialLoginButtons.tsx` — validation, debug logs
+- `app/(auth)/register.tsx` — import + ajout SocialLoginButtons
+
+---
 
 ### Session du 21 février 2026
 

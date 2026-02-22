@@ -24,6 +24,19 @@ const GOOGLE_IOS_CLIENT_ID = process.env.EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID || "";
 const GOOGLE_ANDROID_CLIENT_ID =
   process.env.EXPO_PUBLIC_GOOGLE_ANDROID_CLIENT_ID || "";
 
+// Validate that at least one Google client ID is configured
+const isGoogleConfigured = !!(
+  GOOGLE_CLIENT_ID ||
+  GOOGLE_IOS_CLIENT_ID ||
+  GOOGLE_ANDROID_CLIENT_ID
+);
+
+if (__DEV__ && !isGoogleConfigured) {
+  console.warn(
+    "[SocialLoginButtons] Google OAuth not configured — set EXPO_PUBLIC_GOOGLE_CLIENT_ID in .env",
+  );
+}
+
 interface SocialLoginButtonsProps {
   onLoginStart?: () => void;
   onLoginEnd?: () => void;
@@ -60,15 +73,25 @@ export function SocialLoginButtons({
   };
 
   // Google Auth request
+  const redirectUri = AuthSession.makeRedirectUri({
+    scheme: "imuchat",
+    path: "auth/callback",
+  });
+
+  if (__DEV__) {
+    console.log("[SocialLoginButtons] Google OAuth redirect URI:", redirectUri);
+    console.log(
+      "[SocialLoginButtons] Google Client ID:",
+      getGoogleClientId() ? "configured" : "MISSING",
+    );
+  }
+
   const [googleRequest, googleResponse, googlePromptAsync] =
     AuthSession.useAuthRequest(
       {
         clientId: getGoogleClientId(),
         scopes: ["openid", "profile", "email"],
-        redirectUri: AuthSession.makeRedirectUri({
-          scheme: "imuchat",
-          path: "auth/callback",
-        }),
+        redirectUri,
       },
       discovery,
     );
@@ -111,6 +134,14 @@ export function SocialLoginButtons({
   };
 
   const handleGooglePress = useCallback(async () => {
+    if (!isGoogleConfigured) {
+      Alert.alert(
+        t("auth.error"),
+        "Google Sign-In is not configured. Please set up Google OAuth credentials.",
+      );
+      return;
+    }
+
     if (!googleRequest) {
       Alert.alert(
         t("auth.error"),

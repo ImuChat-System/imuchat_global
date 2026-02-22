@@ -5,7 +5,7 @@ import {
   rejectCall,
   subscribeToIncomingCalls,
 } from "@/services/call-signaling";
-import { safeInitializeStreamVideo } from "@/services/stream-video-safe";
+import { isCallsAvailable } from "@/services/calls-safe";
 import { Href, useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
 
@@ -16,12 +16,12 @@ export function useCallManager() {
   const router = useRouter();
 
   useEffect(() => {
-    // Initialize Stream Video client safely (won't crash in Expo Go)
-    safeInitializeStreamVideo()
-      .then((client) => {
-        if (client) {
-          setStreamAvailable(true);
-          console.log("[CallManager] Stream Video initialized successfully");
+    // Check Stream Video SDK availability (won't crash in Expo Go)
+    isCallsAvailable()
+      .then((available) => {
+        setStreamAvailable(available);
+        if (available) {
+          console.log("[CallManager] Stream Video SDK available");
         } else {
           console.warn(
             "[CallManager] Stream Video not available - calls disabled",
@@ -29,7 +29,7 @@ export function useCallManager() {
         }
       })
       .catch((error) => {
-        console.error("Error initializing Stream Video:", error);
+        console.error("Error checking Stream Video availability:", error);
       });
 
     // Subscribe to incoming calls

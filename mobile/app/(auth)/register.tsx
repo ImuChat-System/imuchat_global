@@ -10,6 +10,7 @@ import {
   View,
 } from "react-native";
 
+import { SocialLoginButtons } from "@/components/auth/SocialLoginButtons";
 import { useAuth } from "@/hooks/useAuthV2";
 import { useI18n } from "@/providers/I18nProvider";
 import { useTheme } from "@/providers/ThemeProvider";
@@ -105,6 +106,9 @@ export default function RegisterScreen() {
           />
         )}
       </View>
+
+      {/* Social Login (Google / Apple) */}
+      <SocialLoginButtons disabled={loading} />
 
       <View style={styles.verticallySpaced}>
         <Text

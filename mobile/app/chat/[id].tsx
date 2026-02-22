@@ -213,13 +213,13 @@ export default function ChatRoomScreen() {
     setInitiatingCall(true);
 
     try {
-      // Dynamically load Stream Video to avoid crash in Expo Go
-      const streamVideo = await import("@/services/stream-video").catch((e) => {
-        console.error("Stream Video not available:", e);
+      // Use safe calls module (handles Expo Go gracefully)
+      const callsSafe = await import("@/services/calls-safe").catch((e) => {
+        console.error("Calls service not available:", e);
         return null;
       });
 
-      if (!streamVideo) {
+      if (!callsSafe) {
         Alert.alert(
           "Appels non disponibles",
           "Les appels vidéo nécessitent un build de développement. Expo Go n'est pas supporté.",
@@ -228,11 +228,30 @@ export default function ChatRoomScreen() {
         return;
       }
 
-      // Generate unique call ID
-      const streamCallId = `call-${Date.now()}`;
+      // Ensure Stream client is initialized with real backend token
+      const client = await callsSafe.safeEnsureStreamClient({
+        id: currentUserId || "",
+        name: undefined,
+        image: undefined,
+      });
 
-      // Create Stream call
-      await streamVideo.createStreamCall(streamCallId, callType);
+      if (!client) {
+        Alert.alert(
+          "Appels non disponibles",
+          "Impossible d'initialiser le service d'appels. Vérifiez votre connexion.",
+        );
+        setInitiatingCall(false);
+        return;
+      }
+
+      // Generate unique call ID and create the Stream call
+      const streamCallId = await callsSafe.safeGenerateCallId();
+      const streamCallType = callType === "video" ? "default" : "audio";
+      await callsSafe.safeCreateCall(
+        streamCallId,
+        streamCallType as "audio" | "default",
+        [currentUserId || "", recipientId],
+      );
 
       // Create call event in Supabase
       const callEvent = await initiateCall(recipientId, callType, streamCallId);

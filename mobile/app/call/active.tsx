@@ -1,39 +1,15 @@
+import { useAuth } from "@/hooks/useAuth";
 import { useColors } from "@/providers/ThemeProvider";
 import { endCall } from "@/services/call-signaling";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
 
-// Lazy load Stream Video components to avoid crash in Expo Go
-let StreamVideoComponents: {
+// Types for dynamically loaded SDK components
+interface StreamSDKComponents {
+  StreamVideo: any;
   StreamCall: any;
   CallContent: any;
-  joinStreamCall: (callId: string, callType: "audio" | "video") => Promise<any>;
-} | null = null;
-
-let streamLoadError: Error | null = null;
-
-// Try to load Stream Video SDK dynamically
-async function loadStreamVideo() {
-  if (StreamVideoComponents) return StreamVideoComponents;
-  if (streamLoadError) throw streamLoadError;
-
-  try {
-    const [sdk, streamService] = await Promise.all([
-      import("@stream-io/video-react-native-sdk"),
-      import("@/services/stream-video"),
-    ]);
-
-    StreamVideoComponents = {
-      StreamCall: sdk.StreamCall,
-      CallContent: sdk.CallContent,
-      joinStreamCall: streamService.joinStreamCall,
-    };
-    return StreamVideoComponents;
-  } catch (error) {
-    streamLoadError = error as Error;
-    throw error;
-  }
 }
 
 export default function ActiveCallScreen() {
@@ -42,36 +18,76 @@ export default function ActiveCallScreen() {
     callEventId: string;
     callType: "audio" | "video";
   }>();
+  const { user } = useAuth();
   const [call, setCall] = useState<any>(null);
+  const [client, setClient] = useState<any>(null);
+  const [sdkComponents, setSdkComponents] =
+    useState<StreamSDKComponents | null>(null);
   const [loading, setLoading] = useState(true);
-  const [streamReady, setStreamReady] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const colors = useColors();
   const router = useRouter();
+  const callRef = useRef<any>(null);
 
   useEffect(() => {
-    if (!callId || !callType) return;
+    if (!callId || !callType || !user) return;
 
     initializeCall();
 
     return () => {
       // Cleanup on unmount
-      if (call) {
-        call.leave();
+      if (callRef.current) {
+        callRef.current.leave().catch(console.error);
       }
     };
-  }, [callId, callType]);
+  }, [callId, callType, user]);
 
   async function initializeCall() {
     try {
-      // First, try to load Stream Video SDK
-      const components = await loadStreamVideo();
-      if (!components) {
-        throw new Error("Stream Video SDK not available");
-      }
-      setStreamReady(true);
+      // Dynamic imports for Expo Go safety
+      const [sdk, callsModule, tokenModule] = await Promise.all([
+        import("@stream-io/video-react-native-sdk"),
+        import("@/services/calls"),
+        import("@/services/stream-token"),
+      ]);
 
-      const streamCall = await components.joinStreamCall(callId!, callType!);
+      setSdkComponents({
+        StreamVideo: sdk.StreamVideo,
+        StreamCall: sdk.StreamCall,
+        CallContent: sdk.CallContent,
+      });
+
+      // Get existing client or create new one with real backend token
+      let streamClient = callsModule.getStreamClient();
+      if (!streamClient && user) {
+        const userName =
+          user.user_metadata?.display_name || user.email || "Utilisateur";
+        const userImage = user.user_metadata?.avatar_url;
+
+        const tokenData = await tokenModule.generateStreamToken({
+          userId: user.id,
+          userName,
+          userImage,
+        });
+
+        streamClient = await callsModule.initializeStreamClient(
+          { id: user.id, name: userName, image: userImage },
+          tokenData.token,
+        );
+      }
+
+      if (!streamClient) {
+        throw new Error("Impossible d'initialiser le client Stream");
+      }
+
+      setClient(streamClient);
+
+      // Join the call
+      const streamCallType = callType === "video" ? "default" : "audio";
+      const streamCall = streamClient.call(streamCallType, callId);
+      await streamCall.join({ create: true });
+
+      callRef.current = streamCall;
       setCall(streamCall);
     } catch (error: any) {
       console.error("Error joining call:", error);
@@ -89,8 +105,9 @@ export default function ActiveCallScreen() {
 
   async function handleEndCall() {
     try {
-      if (call) {
-        await call.leave();
+      if (callRef.current) {
+        await callRef.current.leave();
+        callRef.current = null;
       }
 
       if (callEventId) {
@@ -139,18 +156,20 @@ export default function ActiveCallScreen() {
     );
   }
 
-  if (!call || !streamReady || !StreamVideoComponents) {
+  if (!call || !client || !sdkComponents) {
     return null;
   }
 
-  const { StreamCall, CallContent } = StreamVideoComponents;
+  const { StreamVideo, StreamCall, CallContent } = sdkComponents;
 
   return (
-    <StreamCall call={call}>
-      <View style={styles.container}>
-        <CallContent onHangupCallHandler={handleEndCall} />
-      </View>
-    </StreamCall>
+    <StreamVideo client={client}>
+      <StreamCall call={call}>
+        <View style={styles.container}>
+          <CallContent onHangupCallHandler={handleEndCall} />
+        </View>
+      </StreamCall>
+    </StreamVideo>
   );
 }
 

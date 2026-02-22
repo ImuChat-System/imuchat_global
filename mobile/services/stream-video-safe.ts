@@ -102,13 +102,13 @@ export async function safeInitializeStreamVideo(): Promise<StreamVideoClientInst
 
         const { data: profile } = await supabase
             .from("profiles")
-            .select("username, full_name, avatar_url")
+            .select("username, display_name, avatar_url")
             .eq("id", supabaseUser.id)
             .single();
 
         const client = await safeEnsureStreamClient({
             id: supabaseUser.id,
-            name: profile?.full_name || profile?.username || "User",
+            name: profile?.display_name || profile?.username || "User",
             image: profile?.avatar_url || undefined,
         });
 

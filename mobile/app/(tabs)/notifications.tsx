@@ -21,6 +21,7 @@ import {
 import React, { useCallback, useEffect, useState } from "react";
 import {
   ActivityIndicator,
+  RefreshControl,
   ScrollView,
   StyleSheet,
   Text,
@@ -327,7 +328,16 @@ export default function NotificationsScreen() {
       testID="notifications-screen"
       style={[styles.container, { backgroundColor: colors.background }]}
     >
-      <ScrollView style={styles.scrollContainer}>
+      <ScrollView
+        style={styles.scrollContainer}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={handleRefresh}
+            tintColor={colors.primary}
+          />
+        }
+      >
         <View style={[styles.content, { padding: spacing.lg }]}>
           {/* Header */}
           <View style={styles.headerRow}>

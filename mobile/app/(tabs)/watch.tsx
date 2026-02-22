@@ -5,10 +5,11 @@
 
 import { useI18n } from "@/providers/I18nProvider";
 import { useColors, useSpacing } from "@/providers/ThemeProvider";
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import {
   Dimensions,
   FlatList,
+  RefreshControl,
   ScrollView,
   StyleSheet,
   Text,
@@ -158,6 +159,15 @@ export default function WatchScreen() {
   const spacing = useSpacing();
   const { t } = useI18n();
   const [category, setCategory] = useState<WatchCategory>("all");
+  const [refreshing, setRefreshing] = useState(false);
+
+  // Pull-to-refresh handler
+  const handleRefresh = useCallback(async () => {
+    setRefreshing(true);
+    // TODO: Fetch live watch parties from API when available
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    setRefreshing(false);
+  }, []);
 
   const filteredParties =
     category === "all"
@@ -294,6 +304,13 @@ export default function WatchScreen() {
     <ScrollView
       testID="watch-screen"
       style={[styles.container, { backgroundColor: colors.background }]}
+      refreshControl={
+        <RefreshControl
+          refreshing={refreshing}
+          onRefresh={handleRefresh}
+          tintColor={colors.primary}
+        />
+      }
     >
       <View style={[styles.content, { padding: spacing.lg }]}>
         {/* Header */}

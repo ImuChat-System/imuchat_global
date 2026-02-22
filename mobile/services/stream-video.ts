@@ -34,11 +34,11 @@ export async function initializeStreamVideo(): Promise<StreamVideoClient> {
 
     const { data: profile } = await supabase
         .from("profiles")
-        .select("username, full_name, avatar_url")
+        .select("username, display_name, avatar_url")
         .eq("id", supabaseUser.id)
         .single();
 
-    const userName = profile?.full_name || profile?.username || "User";
+    const userName = profile?.display_name || profile?.username || "User";
     const userImage = profile?.avatar_url || undefined;
 
     const tokenData = await generateStreamToken({

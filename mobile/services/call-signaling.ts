@@ -16,13 +16,13 @@ export interface CallEvent {
     caller?: {
         id: string;
         username: string | null;
-        full_name: string | null;
+        display_name: string | null;
         avatar_url: string | null;
     };
     callee?: {
         id: string;
         username: string | null;
-        full_name: string | null;
+        display_name: string | null;
         avatar_url: string | null;
     };
 }
@@ -53,8 +53,8 @@ export async function initiateCall(
         .select(
             `
       *,
-      caller:profiles!caller_id(id, username, full_name, avatar_url),
-      callee:profiles!callee_id(id, username, full_name, avatar_url)
+      caller:profiles!caller_id(id, username, display_name, avatar_url),
+      callee:profiles!callee_id(id, username, display_name, avatar_url)
     `
         )
         .single();
@@ -142,8 +142,8 @@ export async function subscribeToIncomingCalls(
                     .select(
                         `
             *,
-            caller:profiles!caller_id(id, username, full_name, avatar_url),
-            callee:profiles!callee_id(id, username, full_name, avatar_url)
+            caller:profiles!caller_id(id, username, display_name, avatar_url),
+            callee:profiles!callee_id(id, username, display_name, avatar_url)
           `
                     )
                     .eq("id", payload.new.id)
@@ -185,8 +185,8 @@ export function subscribeToCallUpdates(
                     .select(
                         `
             *,
-            caller:profiles!caller_id(id, username, full_name, avatar_url),
-            callee:profiles!callee_id(id, username, full_name, avatar_url)
+            caller:profiles!caller_id(id, username, display_name, avatar_url),
+            callee:profiles!callee_id(id, username, display_name, avatar_url)
           `
                     )
                     .eq("id", callId)
@@ -219,8 +219,8 @@ export async function getCallHistory(limit = 50): Promise<CallEvent[]> {
         .select(
             `
       *,
-      caller:profiles!caller_id(id, username, full_name, avatar_url),
-      callee:profiles!callee_id(id, username, full_name, avatar_url)
+      caller:profiles!caller_id(id, username, display_name, avatar_url),
+      callee:profiles!callee_id(id, username, display_name, avatar_url)
     `
         )
         .or(`caller_id.eq.${user.id},callee_id.eq.${user.id}`)

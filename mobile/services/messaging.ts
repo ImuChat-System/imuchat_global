@@ -22,7 +22,7 @@ export interface Message {
         id: string;
         username: string;
         avatar_url: string;
-        full_name: string;
+        display_name: string;
     };
     replied_message?: {
         id: string;
@@ -30,7 +30,7 @@ export interface Message {
         sender_id: string;
         sender?: {
             username: string;
-            full_name: string;
+            display_name: string;
         };
     } | null;
 }
@@ -58,7 +58,7 @@ export interface ConversationParticipant {
         id: string;
         username: string;
         avatar_url: string;
-        full_name: string;
+        display_name: string;
     };
 }
 
@@ -79,14 +79,14 @@ export async function getConversations() {
       conversation_participants(
         user_id,
         last_read_at,
-        profiles(id, username, avatar_url, full_name)
+        profiles(id, username, avatar_url, display_name)
       ),
       messages(
         id,
         content,
         created_at,
         sender_id,
-        profiles(id, username, avatar_url, full_name)
+        profiles(id, username, avatar_url, display_name)
       )
     `)
         .order("last_message_at", { ascending: false, nullsFirst: false });
@@ -118,12 +118,12 @@ export async function getMessages(conversationId: string, limit = 50) {
         .from("messages")
         .select(`
       *,
-      sender:profiles(id, username, avatar_url, full_name),
+      sender:profiles(id, username, avatar_url, display_name),
       replied_message:messages!reply_to_id(
         id,
         content,
         sender_id,
-        sender:profiles(username, full_name)
+        sender:profiles(username, display_name)
       )
     `)
         .eq("conversation_id", conversationId)
@@ -170,12 +170,12 @@ export async function sendMessage(
         })
         .select(`
       *,
-      sender:profiles(id, username, avatar_url, full_name),
+      sender:profiles(id, username, avatar_url, display_name),
       replied_message:messages!reply_to_id(
         id,
         content,
         sender_id,
-        sender:profiles(username, full_name)
+        sender:profiles(username, display_name)
       )
     `)
         .single();
@@ -276,7 +276,7 @@ export function subscribeToConversation(
                     .from("messages")
                     .select(`
             *,
-            sender:profiles(id, username, avatar_url, full_name)
+            sender:profiles(id, username, avatar_url, display_name)
           `)
                     .eq("id", payload.new.id)
                     .single();
@@ -561,7 +561,7 @@ export async function searchConversations(
             conversation_participants!inner(
                 user_id,
                 last_read_at,
-                profiles(id, username, avatar_url, full_name)
+                profiles(id, username, avatar_url, display_name)
             )
         `)
         .or(`group_name.ilike.%${q}%`)
@@ -581,7 +581,7 @@ export async function searchConversations(
         const participants = conv.conversation_participants || [];
         return participants.some((p: any) =>
             p.profiles?.username?.toLowerCase().includes(q) ||
-            p.profiles?.full_name?.toLowerCase().includes(q)
+            p.profiles?.display_name?.toLowerCase().includes(q)
         );
     });
 
@@ -613,7 +613,7 @@ export async function searchMessages(
         .from("messages")
         .select(`
             *,
-            sender:profiles!messages_sender_id_fkey(id, username, avatar_url, full_name)
+            sender:profiles!messages_sender_id_fkey(id, username, avatar_url, display_name)
         `)
         .ilike("content", `%${q}%`)
         .is("deleted_at", null)

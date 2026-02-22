@@ -2,27 +2,45 @@
  * User Store (Zustand + AsyncStorage persist)
  *
  * Profil utilisateur courant et préférences :
- * - Profil Supabase (username, avatar, full_name)
+ * - Profil Supabase (username, avatar, display_name, bio, status)
+ * - Enriched status (emoji + text + expiration)
+ * - Visibility (public/private/anonymous)
  * - Préférences locales (langue, thème)
- * - Status en ligne
  */
 
+import { ThemePresetId } from "@/constants/theme-presets";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 
+export type ProfileVisibility = "public" | "private" | "anonymous";
+export type OnlineStatus = "online" | "offline" | "away" | "busy";
+
+// Theme preference: specific preset or "system" (auto light/dark)
+export type ThemePreference = ThemePresetId | "system";
+
 export interface UserProfile {
     id: string;
     username: string | null;
-    full_name: string | null;
+    display_name: string | null;
     avatar_url: string | null;
     bio: string | null;
-    status: "online" | "offline" | "away" | "busy";
+    website: string | null;
+    status: OnlineStatus;
+    // Enriched status
+    status_emoji: string | null;
+    status_expires_at: string | null;
+    // Visibility & verification
+    visibility: ProfileVisibility;
+    is_verified: boolean;
+    // Stats (denormalized cache)
+    contacts_count: number;
+    conversations_count: number;
 }
 
 interface UserPreferences {
     locale: "fr" | "en" | "ja";
-    theme: "light" | "dark" | "system";
+    theme: ThemePreference;
     notificationsEnabled: boolean;
     soundEnabled: boolean;
     hapticEnabled: boolean;

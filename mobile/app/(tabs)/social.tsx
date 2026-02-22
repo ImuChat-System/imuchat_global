@@ -1,15 +1,20 @@
 /**
  * SocialScreen — Parité web stories module
  * Sections : StoryCarousel, StoryGrid, CreateStoryFAB, filtres (Mixte/News/Stories)
+ * DEV-011: Intégration stories réelles avec Supabase
  */
 
 import { useAuth } from "@/providers/AuthProvider";
 import { useI18n } from "@/providers/I18nProvider";
 import { useColors, useSpacing } from "@/providers/ThemeProvider";
-import React, { useCallback, useState } from "react";
+import { StoryUserGroup } from "@/services/stories-api";
+import { useStoriesStore } from "@/stores/stories-store";
+import { useRouter } from "expo-router";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   Dimensions,
   FlatList,
+  Image,
   RefreshControl,
   ScrollView,
   StyleSheet,
@@ -20,13 +25,6 @@ import {
 
 // ─── Types ────────────────────────────────────────────────────────
 type FeedFilter = "mixed" | "news" | "stories";
-
-interface StoryUser {
-  id: string;
-  username: string;
-  avatar: string | null;
-  hasNew: boolean;
-}
 
 interface StoryPost {
   id: string;
@@ -40,17 +38,7 @@ interface StoryPost {
   type: "story" | "news";
 }
 
-// ─── Mock data (parité avec web MOCK_STORIES) ────────────────────
-const MOCK_STORY_USERS: StoryUser[] = [
-  { id: "su-me", username: "Vous", avatar: null, hasNew: false },
-  { id: "su-1", username: "Alice", avatar: null, hasNew: true },
-  { id: "su-2", username: "Bob", avatar: null, hasNew: true },
-  { id: "su-3", username: "Chloé", avatar: null, hasNew: false },
-  { id: "su-4", username: "David", avatar: null, hasNew: true },
-  { id: "su-5", username: "Emma", avatar: null, hasNew: true },
-  { id: "su-6", username: "François", avatar: null, hasNew: false },
-];
-
+// ─── Mock feed data (stories carousel uses real data) ─────────────
 const MOCK_FEED: StoryPost[] = [
   {
     id: "fp-1",
@@ -121,17 +109,51 @@ export default function SocialScreen() {
   const spacing = useSpacing();
   const { t } = useI18n();
   const { user } = useAuth();
+  const router = useRouter();
+
+  // Stories store
+  const {
+    storyGroups,
+    isLoading: storiesLoading,
+    fetchStories,
+    refreshStories,
+    openViewer,
+  } = useStoriesStore();
 
   const [filter, setFilter] = useState<FeedFilter>("mixed");
   const [refreshing, setRefreshing] = useState(false);
 
-  // Handle pull-to-refresh (mock for now - will integrate with real API later)
+  // Fetch stories on mount
+  useEffect(() => {
+    fetchStories();
+  }, [fetchStories]);
+
+  // Handle pull-to-refresh
   const handleRefresh = useCallback(async () => {
     setRefreshing(true);
-    // Simulate network request
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    await refreshStories();
     setRefreshing(false);
-  }, []);
+  }, [refreshStories]);
+
+  // Handle story tap - open viewer at index
+  const handleStoryTap = useCallback(
+    (index: number, isOwnStory: boolean) => {
+      if (isOwnStory && storyGroups[index]?.stories.length === 0) {
+        // Own story without content - navigate to create
+        router.push("/stories/create");
+      } else {
+        // Open viewer at this index
+        openViewer(index);
+        router.push("/stories/viewer");
+      }
+    },
+    [openViewer, router, storyGroups],
+  );
+
+  // Handle FAB - create new story
+  const handleCreateStory = useCallback(() => {
+    router.push("/stories/create");
+  }, [router]);
 
   // ─── Helpers ──────────────────────────────────────────────────
   const formatTimeAgo = useCallback(
@@ -154,28 +176,86 @@ export default function SocialScreen() {
         );
 
   // ─── Story carousel ──────────────────────────────────────────
-  const renderStoryUser = ({ item }: { item: StoryUser }) => (
-    <TouchableOpacity testID={`story-user-${item.id}`} style={styles.storyItem}>
-      <View
-        style={[
-          styles.storyRing,
-          { borderColor: item.hasNew ? colors.primary : colors.border },
-        ]}
-      >
-        <View style={[styles.storyAvatar, { backgroundColor: colors.surface }]}>
-          <Text style={styles.storyEmoji}>
-            {item.id === "su-me" ? "➕" : item.username.charAt(0)}
+  // Build carousel data - add "Add Story" item at start for current user
+  const storyCarouselData: (StoryUserGroup | { isAddStory: true })[] = [
+    { isAddStory: true } as const,
+    ...storyGroups,
+  ];
+
+  const renderStoryUser = ({
+    item,
+    index,
+  }: {
+    item: StoryUserGroup | { isAddStory: true };
+    index: number;
+  }) => {
+    // "Add Story" button for current user
+    if ("isAddStory" in item) {
+      return (
+        <TouchableOpacity
+          testID="story-add-btn"
+          style={styles.storyItem}
+          onPress={handleCreateStory}
+        >
+          <View style={[styles.storyRing, { borderColor: colors.border }]}>
+            <View
+              style={[styles.storyAvatar, { backgroundColor: colors.surface }]}
+            >
+              <Text style={styles.storyEmoji}>➕</Text>
+            </View>
+          </View>
+          <Text
+            style={[styles.storyUsername, { color: colors.textMuted }]}
+            numberOfLines={1}
+          >
+            {t("social.yourStory")}
           </Text>
-        </View>
-      </View>
-      <Text
-        style={[styles.storyUsername, { color: colors.textMuted }]}
-        numberOfLines={1}
+        </TouchableOpacity>
+      );
+    }
+
+    // Story group from other user
+    const hasAvatar = item.user.avatar_url;
+    const latestStory = item.stories[0];
+
+    return (
+      <TouchableOpacity
+        testID={`story-user-${item.user.id}`}
+        style={styles.storyItem}
+        onPress={() => handleStoryTap(index - 1, item.user.id === user?.id)}
       >
-        {item.username}
-      </Text>
-    </TouchableOpacity>
-  );
+        <View
+          style={[
+            styles.storyRing,
+            { borderColor: item.has_unread ? colors.primary : colors.border },
+          ]}
+        >
+          {hasAvatar ? (
+            <Image
+              source={{ uri: item.user.avatar_url! }}
+              style={styles.storyAvatarImage}
+            />
+          ) : (
+            <View
+              style={[styles.storyAvatar, { backgroundColor: colors.surface }]}
+            >
+              <Text style={styles.storyEmoji}>
+                {item.user.display_name?.charAt(0).toUpperCase() ||
+                  item.user.username?.charAt(0).toUpperCase() ||
+                  "?"}
+              </Text>
+            </View>
+          )}
+        </View>
+        <Text
+          style={[styles.storyUsername, { color: colors.textMuted }]}
+          numberOfLines={1}
+        >
+          {item.user.display_name || item.user.username || t("social.unknown")}
+        </Text>
+      </TouchableOpacity>
+    );
+  };
 
   // ─── Feed post ────────────────────────────────────────────────
   const renderPost = ({ item }: { item: StoryPost }) => (
@@ -276,9 +356,11 @@ export default function SocialScreen() {
         {/* ── Story Carousel ──────────────────────────────────── */}
         <FlatList
           testID="social-story-carousel"
-          data={MOCK_STORY_USERS}
+          data={storyCarouselData}
           renderItem={renderStoryUser}
-          keyExtractor={(i) => i.id}
+          keyExtractor={(item, index) =>
+            "isAddStory" in item ? "add-story" : item.user.id
+          }
           horizontal
           showsHorizontalScrollIndicator={false}
           style={styles.storyCarousel}
@@ -342,6 +424,7 @@ export default function SocialScreen() {
       <TouchableOpacity
         testID="btn-create-story"
         style={[styles.fab, { backgroundColor: colors.primary }]}
+        onPress={handleCreateStory}
       >
         <Text style={styles.fabIcon}>✏️</Text>
       </TouchableOpacity>
@@ -375,6 +458,11 @@ const styles = StyleSheet.create({
     borderRadius: 24,
     justifyContent: "center",
     alignItems: "center",
+  },
+  storyAvatarImage: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
   },
   storyEmoji: { fontSize: 20 },
   storyUsername: { fontSize: 11, marginTop: 4, textAlign: "center" },

@@ -160,6 +160,37 @@ export async function takePhoto(): Promise<PickerResult | null> {
 }
 
 /**
+ * Take video with camera
+ */
+export async function takeVideo(): Promise<PickerResult | null> {
+    const hasPermission = await requestCameraPermissions();
+    if (!hasPermission) {
+        throw new Error('Camera permission denied');
+    }
+
+    const result = await ImagePicker.launchCameraAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Videos,
+        allowsEditing: true,
+        quality: 0.8,
+        videoMaxDuration: 30, // 30 seconds max for stories
+    });
+
+    if (result.canceled || !result.assets?.[0]) {
+        return null;
+    }
+
+    const asset = result.assets[0];
+    const mimeType = asset.mimeType || 'video/mp4';
+
+    return {
+        uri: asset.uri,
+        mimeType,
+        fileName: generateFileName('video', mimeType),
+        type: 'video',
+    };
+}
+
+/**
  * Pick any media (image or video)
  */
 export async function pickMedia(): Promise<PickerResult | null> {
@@ -323,4 +354,67 @@ export async function uploadAvatar(pickerResult: PickerResult): Promise<string> 
     }
 
     return getAvatarUrl(fileName);
+}
+
+/**
+ * Upload media to Supabase storage (stories bucket)
+ * Returns the public URL of the uploaded file
+ */
+export async function uploadMediaToSupabase(
+    localUri: string,
+    bucket: 'stories' | 'messages-media' | 'avatars' = 'stories'
+): Promise<string> {
+    const user = await getCurrentUser();
+    if (!user) {
+        throw new Error('Not authenticated');
+    }
+
+    // Read file info
+    const fileInfo = await FileSystem.getInfoAsync(localUri);
+    if (!fileInfo.exists) {
+        throw new Error('File does not exist');
+    }
+
+    // Detect MIME type from extension
+    const extension = localUri.split('.').pop()?.toLowerCase() || 'jpg';
+    const mimeTypes: Record<string, string> = {
+        jpg: 'image/jpeg',
+        jpeg: 'image/jpeg',
+        png: 'image/png',
+        gif: 'image/gif',
+        webp: 'image/webp',
+        mp4: 'video/mp4',
+        mov: 'video/quicktime',
+        webm: 'video/webm',
+    };
+    const mimeType = mimeTypes[extension] || 'image/jpeg';
+
+    // Generate unique filename
+    const timestamp = Date.now();
+    const random = Math.random().toString(36).substring(7);
+    const fileName = `${user.id}/${timestamp}_${random}.${extension}`;
+
+    // Read file as base64 and upload
+    const base64Data = await FileSystem.readAsStringAsync(localUri, {
+        encoding: FileSystem.EncodingType.Base64,
+    });
+    const arrayBuffer = decode(base64Data);
+
+    const { error: uploadError } = await supabase.storage
+        .from(bucket)
+        .upload(fileName, arrayBuffer, {
+            contentType: mimeType,
+            upsert: false,
+        });
+
+    if (uploadError) {
+        throw uploadError;
+    }
+
+    // Get public URL
+    const { data: urlData } = supabase.storage
+        .from(bucket)
+        .getPublicUrl(fileName);
+
+    return urlData.publicUrl;
 }

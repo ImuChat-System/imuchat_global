@@ -168,7 +168,8 @@ export default function SearchScreen() {
   };
 
   const renderMessageItem = ({ item }: { item: Message }) => {
-    const senderName = item.sender?.username || item.sender?.full_name || "?";
+    const senderName =
+      item.sender?.username || item.sender?.display_name || "?";
 
     return (
       <TouchableOpacity

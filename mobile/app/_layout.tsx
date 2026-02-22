@@ -20,6 +20,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useState } from "react";
 
 const ONBOARDING_COMPLETED_KEY = "onboarding_completed";
+const PROFILE_SETUP_COMPLETED_KEY = "profile_setup_completed";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -73,18 +74,26 @@ function RootLayoutNav() {
   const [onboardingComplete, setOnboardingComplete] = useState<boolean | null>(
     null,
   );
+  const [profileSetupComplete, setProfileSetupComplete] = useState<
+    boolean | null
+  >(null);
 
   // Keep segments ref in sync without triggering effect re-runs
   segmentsRef.current = segments;
 
-  // Check onboarding status on mount
+  // Check onboarding + profile setup status on mount
   const checkOnboarding = useCallback(async () => {
     try {
-      const completed = await AsyncStorage.getItem(ONBOARDING_COMPLETED_KEY);
+      const [completed, profileDone] = await Promise.all([
+        AsyncStorage.getItem(ONBOARDING_COMPLETED_KEY),
+        AsyncStorage.getItem(PROFILE_SETUP_COMPLETED_KEY),
+      ]);
       setOnboardingComplete(completed === "true");
+      setProfileSetupComplete(profileDone === "true");
     } catch (error) {
       console.error("Error checking onboarding status:", error);
-      setOnboardingComplete(true); // Default to completed on error
+      setOnboardingComplete(true);
+      setProfileSetupComplete(true);
     }
   }, []);
 
@@ -92,14 +101,24 @@ function RootLayoutNav() {
     checkOnboarding();
   }, [checkOnboarding]);
 
+  // Re-check profile setup when session changes (login/signup)
   useEffect(() => {
-    if (loading || onboardingComplete === null) return;
+    if (session) {
+      AsyncStorage.getItem(PROFILE_SETUP_COMPLETED_KEY).then((val) => {
+        setProfileSetupComplete(val === "true");
+      });
+    }
+  }, [session]);
+
+  useEffect(() => {
+    if (loading || onboardingComplete === null || profileSetupComplete === null)
+      return;
 
     const inAuthGroup = (segmentsRef.current[0] as string) === "(auth)";
     const inOnboardingGroup =
       (segmentsRef.current[0] as string) === "(onboarding)";
 
-    // First check: if onboarding not completed, redirect there
+    // First check: if onboarding slides not completed, redirect there
     if (!onboardingComplete && !inOnboardingGroup) {
       router.replace("/(onboarding)" as Href);
       return;
@@ -108,13 +127,20 @@ function RootLayoutNav() {
     // Then normal auth flow
     if (!session && !inAuthGroup && onboardingComplete) {
       router.replace("/login" as Href);
-    } else if (session && inAuthGroup) {
+    } else if (session && !profileSetupComplete && !inOnboardingGroup) {
+      // Authenticated but profile not set up — redirect to profile setup
+      router.replace("/(onboarding)/profile-setup" as Href);
+    } else if (
+      session &&
+      profileSetupComplete &&
+      (inAuthGroup || inOnboardingGroup)
+    ) {
       router.replace("/(tabs)");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [session, loading, onboardingComplete]);
+  }, [session, loading, onboardingComplete, profileSetupComplete]);
 
-  if (loading || onboardingComplete === null) {
+  if (loading || onboardingComplete === null || profileSetupComplete === null) {
     return null; // Or a splash screen
   }
 

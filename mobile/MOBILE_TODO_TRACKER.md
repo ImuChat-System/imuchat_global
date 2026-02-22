@@ -17,9 +17,11 @@
 6. [🌐 MVP Phase 2C — Social & Communautés (Groupe 5 + Écrans complémentaires)](#-mvp-phase-2c--social--communautés-groupe-5--écrans-complémentaires)
 7. [🔐 MVP Phase 2D — Auth Avancée, Sécurité & Confidentialité](#-mvp-phase-2d--auth-avancée-sécurité--confidentialité)
 8. [🏗️ MVP Phase 3 — Modules, IA, Store, Services (Groupes 6-10)](#️-mvp-phase-3--modules-ia-store-services-groupes-6-10)
-9. [🎭 Vision Long Terme — 3D & Live2D](#-vision-long-terme--3d--live2d)
-10. [📊 Comparatif Mobile vs Web-App](#-comparatif-mobile-vs-web-app)
-11. [🎯 Roadmap & Priorités](#-roadmap--priorités)
+9. [� MVP Phase 4 — Modules Vie Quotidienne & Contenus Avancés](#-mvp-phase-4--modules-vie-quotidienne--contenus-avancés)
+10. [🗺️ Cartographie Complète des Mini-Apps & Modules](#️-cartographie-complète-des-mini-apps--modules)
+11. [🎭 Vision Long Terme — 3D & Live2D](#-vision-long-terme--3d--live2d)
+12. [📊 Comparatif Mobile vs Web-App](#-comparatif-mobile-vs-web-app)
+13. [🎯 Roadmap & Priorités](#-roadmap--priorités)
 
 ---
 
@@ -327,13 +329,18 @@ Le hook `useNotifications` a été refactoré en **bridge unifié** connectant l
 ### DEV-004 : Pull-to-Refresh
 
 **Priorité** : P2 - Moyen  
-**Statut** : ✅ Implémenté
+**Statut** : ✅ Implémenté (complet)
 
 **Implémentation** :
 
 - ✅ `RefreshControl` sur la liste des conversations (`chats.tsx`) — utilise `refresh` de `useChat`
 - ✅ `RefreshControl` sur la liste des messages (`[id].tsx`) — utilise `loadMessages` de `useChat`
 - ✅ `RefreshControl` sur les contacts (`contacts.tsx`) — déjà existant avant Phase 2
+- ✅ `RefreshControl` sur le tab Social (`social.tsx`) — stories + feed refresh
+- ✅ `RefreshControl` sur le profil (`profile.tsx`) — refresh données utilisateur
+- ✅ `RefreshControl` sur les appels (`calls.tsx`) — historique d'appels
+- ✅ `RefreshControl` sur Watch (`watch.tsx`) — **ajouté 22 fév 2026**
+- ✅ `RefreshControl` sur Notifications (`notifications.tsx`) — **ajouté 22 fév 2026**
 
 **Pattern utilisé** : état `refreshing` local + async handler avec try/finally + `tintColor={colors.primary}`
 
@@ -445,65 +452,120 @@ active.tsx       →  <StreamVideo> + <StreamCall> + <CallContent>
 
 > Réf : 50 Fonctionnalités — Groupe 3 (Profils & Identité) & Groupe 4 (Personnalisation avancée)
 
-### DEV-008 : Profils Avancés
+### DEV-008 : Profils Avancés ✅
 
 **Priorité** : P2 - Moyen  
 **Réf** : Groupe 3 — Profils & Identité (5 fonctionnalités)  
-**Statut** : ⚠️ Partiellement implémenté
+**Statut** : ✅ Phase 2B terminée (24 fév 2026)
 
 **État actuel** :
 
-| Fonctionnalité Groupe 3                 | Statut | Détails                            |
-| --------------------------------------- | ------ | ---------------------------------- |
-| 1. Profils privés/publics/anonymes      | ⚠️     | Profil basique ✅, modes non gérés |
-| 2. Multi-profils (perso/pro/créateur)   | 🔴     | Non démarré                        |
-| 3. Avatars 2D/3D personnalisables       | 🔴     | Avatar photo ✅, pas de 2D/3D      |
-| 4. Statuts animés (emoji/texte/musique) | 🔴     | Statut texte simple disponible     |
-| 5. Vérification identité (badge bleu)   | 🔴     | Non démarré                        |
+| Fonctionnalité Groupe 3                 | Statut | Détails                                      |
+| --------------------------------------- | ------ | -------------------------------------------- |
+| 1. Profils privés/publics/anonymes      | ✅     | Visibilité profil + RLS policy               |
+| 2. Multi-profils (perso/pro/créateur)   | 🔴     | Phase 3 — nécessite refonte DB               |
+| 3. Avatars 2D/3D personnalisables       | ⚠️     | Avatar photo ✅, pas de 2D/3D (Phase 3)      |
+| 4. Statuts animés (emoji/texte/musique) | ✅     | StatusPicker avec emoji + texte + expiration |
+| 5. Vérification identité (badge bleu)   | ⚠️     | Badge UI ✅, vérification KYC Phase 3        |
 
-**Composants existants** :
+**Implémentation Phase 2B (24 fév)** :
 
-- ✅ `app/(tabs)/profile.tsx` — écran profil
-- ✅ `Avatar.tsx` — composant avatar (photo)
-- ✅ Supabase `profiles` table (username, avatar_url, bio)
+- ✅ Migration SQL `003_advanced_profiles.sql` :
+  - ENUM `profile_visibility` (public/private/anonymous)
+  - Colonnes : `visibility`, `status_emoji`, `status_expires_at`, `website`, `is_verified`, `contacts_count`, `conversations_count`
+  - RLS policy `profiles_visibility_select`
+  - Indexes pour visibility et status_expires
 
-**À implémenter (Phase 2B)** :
+- ✅ Fix schema mismatch `full_name` → `display_name` dans 8+ fichiers
 
-- [ ] Visibilité du profil (public/privé/anonyme) — champ DB + UI settings
-- [ ] Statuts enrichis : emoji + texte court + expiration
-- [ ] Page profil étendue (badges, stats, bio formatée)
+- ✅ `stores/user-store.ts` — Extended `UserProfile` interface avec tous les nouveaux champs
+
+- ✅ `app/(tabs)/profile.tsx` — Page profil complète réécrite (530+ lignes) :
+  - Avatar avec indicateur online
+  - Display name + username + badge vérifié
+  - Enriched status (emoji + texte + expiration)
+  - Bio + website link
+  - Stats row (contacts, conversations, visibility)
+  - Action buttons (Edit Profile, Share)
+  - Info card (email, last seen)
+
+- ✅ `components/profile/StatusPicker.tsx` — Modal de statut enrichi (340+ lignes) :
+  - 24 emojis courants en grille
+  - Input texte (80 char max)
+  - 6 options d'expiration (30min à jamais)
+  - Preview card
+  - Clear status
+  - Supabase integration
+
+- ✅ `app/(tabs)/settings.tsx` — Section visibilité profil ajoutée :
+  - UI 3 boutons (Public 🌍, Private 🔒, Anonymous 👤)
+  - `saveProfileVisibility()` function
+  - Query étendue pour charger visibility
+
+- ✅ i18n complété (fr, en, ja) :
+  - Section `profile` étendue
+  - Nouvelle section `statusPicker`
+  - Clés settings pour profile visibility
 
 **À implémenter (Phase 3)** :
 
 - [ ] Multi-profils (switch perso/pro/créateur) — nécessite refonte DB
 - [ ] Avatars 2D/3D — cf. section Live2D
-- [ ] Vérification identité — nécessite KYC backend
+- [ ] Vérification identité KYC — nécessite backend
 
-**Estimation** : 3-4 jours (Phase 2B)
+**Fichiers créés/modifiés** :
+
+- `migrations/003_advanced_profiles.sql` (NEW)
+- `components/profile/StatusPicker.tsx` (NEW)
+- `app/(tabs)/profile.tsx` (REWRITTEN)
+- `stores/user-store.ts`, `services/messaging.ts`, `services/call-signaling.ts`, `services/stream-video.ts`, `services/stream-video-safe.ts`, `app/search.tsx`, `app/(onboarding)/profile-setup.tsx`, `app/(tabs)/settings.tsx`
+- `i18n/fr.json`, `i18n/en.json`, `i18n/ja.json`
 
 ---
 
-### DEV-009 : Personnalisation Avancée
+### DEV-009 : Personnalisation Avancée ✅
 
 **Priorité** : P3 - Mineur  
 **Réf** : Groupe 4 — Personnalisation avancée (5 fonctionnalités)  
-**Statut** : ⚠️ Basique
+**Statut** : ✅ Phase 2B terminée (22 fév 2026)
 
 **État actuel** :
 
-| Fonctionnalité Groupe 4      | Statut | Détails                           |
-| ---------------------------- | ------ | --------------------------------- |
-| 1. Thèmes visuels            | ⚠️     | Dark/Light ✅, pas de Kawaii/Neon |
-| 2. Arrière-plans animés      | 🔴     | Non démarré                       |
-| 3. Police personnalisable    | 🔴     | Non démarré                       |
-| 4. Packs d'icônes et de sons | 🔴     | Non démarré                       |
-| 5. Widget homescreen         | 🔴     | Non démarré                       |
+| Fonctionnalité Groupe 4      | Statut | Détails                                          |
+| ---------------------------- | ------ | ------------------------------------------------ |
+| 1. Thèmes visuels            | ✅     | 6 thèmes : Light, Dark, Kawaii, Pro, Neon, Ocean |
+| 2. Arrière-plans animés      | 🔴     | Phase 3                                          |
+| 3. Police personnalisable    | 🔴     | Phase 3                                          |
+| 4. Packs d'icônes et de sons | 🔴     | Phase 3                                          |
+| 5. Widget homescreen         | 🔴     | Phase 3                                          |
 
-**À implémenter (Phase 2B)** :
+**Implémentation Phase 2B (22 fév)** :
 
-- [ ] 4-6 thèmes prédéfinis (Kawaii, Pro, Night, Solar, Neon, Ocean)
-- [ ] Sélecteur de thème dans settings avec preview live
-- [ ] Persistence du thème choisi (AsyncStorage / Supabase)
+- ✅ `constants/theme-presets.ts` — 6 palettes de couleurs complètes :
+  - **Light** ☀️ — Clair et lumineux
+  - **Dark** 🌙 — Sombre par défaut
+  - **Kawaii** 🌸 — Rose pastel mignon
+  - **Pro** 💼 — Professionnel bleu slate
+  - **Neon** ⚡ — Cyberpunk violet/vert néon
+  - **Ocean** 🌊 — Calme aquatique teal
+
+- ✅ `stores/user-store.ts` — Support `ThemePreference = ThemePresetId | "system"`
+
+- ✅ `providers/ThemeProvider.tsx` — Refonte complète :
+  - `presetId`, `setPreset()`, `setSystemMode()`, `isSystemMode`
+  - Couleurs dynamiques via `getThemePreset()`
+  - Mode système conservé (auto light/dark)
+
+- ✅ `app/(tabs)/settings.tsx` — Sélecteur de thèmes UI :
+  - Grille 3x2 avec aperçu des couleurs
+  - Carte par thème (emoji, nom, 3 dots de couleurs)
+  - Badge de sélection ✓
+  - Toggle mode système séparé
+  - Overlay grisé quand mode système actif
+
+- ✅ i18n (fr, en, ja) — Clés ajoutées :
+  - `settings.systemTheme`, `settings.chooseTheme`
+  - `settings.themeLight`, `themeDark`, `themeKawaii`, `themePro`, `themeNeon`, `themeOcean`
 
 **À implémenter (Phase 3)** :
 
@@ -512,7 +574,13 @@ active.tsx       →  <StreamVideo> + <StreamCall> + <CallContent>
 - [ ] Packs d'icônes/sons téléchargeables (via Store)
 - [ ] Widget homescreen via `expo-widgets` (expérimental)
 
-**Estimation** : 2-3 jours (Phase 2B — thèmes seulement)
+**Fichiers créés/modifiés** :
+
+- `constants/theme-presets.ts` (NEW)
+- `providers/ThemeProvider.tsx` (REWRITTEN)
+- `stores/user-store.ts` (MODIFIED - ThemePreference type)
+- `app/(tabs)/settings.tsx` (MODIFIED - Theme selector UI)
+- `i18n/fr.json`, `i18n/en.json`, `i18n/ja.json`
 
 ---
 
@@ -520,24 +588,40 @@ active.tsx       →  <StreamVideo> + <StreamCall> + <CallContent>
 
 **Priorité** : P2 - Moyen  
 **Réf** : Écrans complémentaires — Auth & Sécurité  
-**Statut** : ⚠️ UI créée, non connectée
+**Statut** : ✅ Implémenté
 
 **État actuel** :
 
-- ✅ Dossier `app/(onboarding)/` existe
-- ✅ `app/(onboarding)/index.tsx` — écrans de slides
-- ❌ Non connecté au flow d'inscription
+- ✅ Dossier `app/(onboarding)/` avec layout + 2 écrans
+- ✅ `app/(onboarding)/index.tsx` — 4 slides de présentation (pré-auth)
+- ✅ `app/(onboarding)/_layout.tsx` — Stack layout pour le groupe
+- ✅ `app/(onboarding)/profile-setup.tsx` — 3 étapes post-signup (nom/username, avatar, thème)
+- ✅ Navigation connectée au flow d'inscription (4 états dans `_layout.tsx`)
+- ✅ Sélection thème (light/dark/system) avec preview live
+- ✅ Choix de pseudo avec validation temps réel (unicité Supabase debounced)
+- ✅ Avatar : camera + galerie + crop carré
+- ✅ Upload avatar vers Supabase Storage
+- ✅ Sauvegarde état onboarding via AsyncStorage (`profile_setup_completed`)
+- ✅ ThemeProvider connecté au user-store (persistance du thème)
+- ✅ Traductions i18n complètes (fr/en/ja) pour profileSetup
 
-**À implémenter (Phase 2B)** :
+**Corrections appliquées** :
 
-- [ ] Connecter l'onboarding après le premier signup
-- [ ] Détection automatique langue & région
-- [ ] Sélection thème initial avec preview live
-- [ ] Choix de pseudo avec validation temps réel
-- [ ] Sauvegarde état onboarding (resume flow via AsyncStorage)
-- [ ] Tutoriel interactif (3-5 slides avec tracking de complétion)
+- [x] Créé `app/(onboarding)/_layout.tsx` — Stack layout
+- [x] Créé `app/(onboarding)/profile-setup.tsx` — 3 étapes (450+ lignes)
+- [x] `_layout.tsx` — ajout 4e état navigation : session + profil incomplet → profile-setup
+- [x] `login.tsx` — supprimé redirection manuelle (délégué à `_layout.tsx`)
+- [x] `ThemeProvider.tsx` — connecté au user-store + support `system` mode + `useColorScheme`
+- [x] `i18n/fr.json`, `en.json`, `ja.json` — ajout section `profileSetup` (20+ clés)
 
-**Estimation** : 1-2 jours
+**Flow de navigation complet** :
+
+```
+App → Slides onboarding (1ère fois) → Auth (login/signup)
+→ Profile Setup (3 étapes) → Tabs (app principale)
+```
+
+**Estimation** : ✅ Terminé
 
 ---
 
@@ -546,30 +630,47 @@ active.tsx       →  <StreamVideo> + <StreamCall> + <CallContent>
 > Réf : 50 Fonctionnalités — Groupe 5 (Mini-apps sociales natives)
 > Réf : Écrans complémentaires — Gestion avancée communautés/serveurs
 
-### DEV-011 : Stories Réelles
+### DEV-011 : Stories Réelles ✅
 
 **Priorité** : P1 - Important  
 **Réf** : Groupe 5, Fonc. 1 — "Stories 24h (texte, photo, vidéo, glosses kawaii)"  
-**Statut** : 🔲 Mock UI
+**Statut** : ✅ Implémenté
 
-**État actuel** :
+**Implémentation réalisée** :
 
-- ✅ `app/(tabs)/social.tsx` (452 lignes) — StoryCarousel, StoryGrid, CreateStoryFAB, filtres
-- ✅ `app/(tabs)/index.tsx` — Stories carousel sur le Home
-- ✅ Settings stories (visibility, allow_replies, auto_archive) dans settings.tsx
-- ➡️ **Tout en données MOCK**
+- ✅ `migrations/004_stories.sql` — Tables Supabase : `stories`, `story_views`, `story_replies` avec RLS
+- ✅ `services/stories-api.ts` (~450 lignes) — CRUD stories, upload media, vues, réactions, réponses
+- ✅ `stores/stories-store.ts` (~310 lignes) — State Zustand avec viewer controls
+- ✅ `app/stories/viewer.tsx` (~470 lignes) — Viewer plein écran immersif
+  - Timer bar avec progression automatique
+  - Navigation tap gauche/droite
+  - Long press pour pause
+  - Swipe pour fermer
+  - Input réponses + réactions (❤️😂😮😢🔥👏)
+  - Compteur de vues pour ses propres stories
+- ✅ `app/stories/create.tsx` (~530 lignes) — Création multi-mode
+  - 4 modes : Photo, Vidéo, Galerie, Texte
+  - 12 backgrounds colorés pour stories texte
+  - 4 styles de police (default/serif/mono/handwritten)
+  - Sélecteur visibilité (public/amis/privé)
+  - Toggle "autoriser réponses"
+- ✅ `app/stories/_layout.tsx` — Stack navigation (fullScreenModal)
+- ✅ `app/(tabs)/social.tsx` — Intégration store remplaçant MOCK_STORY_USERS
+- ✅ i18n complet (fr, en, ja)
 
-**À implémenter** :
+**Fichiers créés/modifiés** :
 
-- [ ] Table Supabase `stories` (user_id, media_url, type, text, created_at, expires_at)
-- [ ] Upload story (photo/vidéo) via Supabase Storage
-- [ ] Création story texte avec backgrounds colorés
-- [ ] Viewer story plein écran avec progression bar
-- [ ] Marquage "vu" (table `story_views`)
-- [ ] Suppression automatique après 24h (cron / edge function)
-- [ ] Remplacer les MOCK_STORIES par données réelles
+- `mobile/migrations/004_stories.sql` (NEW)
+- `mobile/services/stories-api.ts` (NEW)
+- `mobile/stores/stories-store.ts` (NEW)
+- `mobile/app/stories/viewer.tsx` (NEW)
+- `mobile/app/stories/create.tsx` (NEW)
+- `mobile/app/stories/_layout.tsx` (NEW)
+- `mobile/app/(tabs)/social.tsx` (MODIFIED)
+- `mobile/services/media-upload.ts` (MODIFIED — ajout takeVideo, uploadMediaToSupabase)
+- `mobile/i18n/*.json` (MODIFIED — section stories)
 
-**Estimation** : 4-5 jours
+**Date de complétion** : Session actuelle
 
 ---
 
@@ -700,22 +801,39 @@ active.tsx       →  <StreamVideo> + <StreamCall> + <CallContent>
 
 **Priorité** : P2 - Moyen  
 **Réf** : Écrans complémentaires §1 — Sécurité & Sessions  
-**Statut** : 🔴 Non démarré
+**Statut** : ✅ Implémenté (Phase 2D)
 
-**À implémenter (Phase 2D)** :
+**Implémenté (22 fév)** :
 
-- [ ] Gestion multi-appareils (liste sessions actives via Supabase Auth)
-- [ ] Révocation à distance d'un appareil
-- [ ] 2FA via TOTP (Google Authenticator)
-- [ ] Biométrie locale (FaceID/TouchID) via `expo-local-authentication`
+- [x] Gestion multi-appareils (liste sessions actives via Supabase Auth)
+- [x] Révocation globale (déconnexion tous appareils)
+- [x] 2FA via TOTP (Supabase MFA — enroll, verify, unenroll)
+- [x] Biométrie locale (FaceID/TouchID) via `expo-local-authentication`
+- [x] Section Sécurité dans Settings avec UI complète
+- [x] Traductions i18n (fr/en/ja — 18 clés)
+
+**Fichiers créés** :
+
+- `services/security.ts` — Service complet (biométrie, MFA, sessions)
+
+**Fichiers modifiés** :
+
+- `app/(tabs)/settings.tsx` — Section Sécurité avec biométrie, 2FA, sessions
+- `i18n/fr.json`, `en.json`, `ja.json` — Traductions sécurité
+
+**Dépendances ajoutées** :
+
+- `expo-local-authentication` — Biométrie native
+- `expo-secure-store` — Stockage sécurisé
 
 **À implémenter (Phase 3)** :
 
 - [ ] Historique des connexions (IP, device, date)
 - [ ] Gestion clés E2EE (génération, rotation)
 - [ ] Export journal d'activité sécurisé
+- [ ] Révocation session individuelle (nécessite endpoint backend admin)
 
-**Estimation** : 3-4 jours (Phase 2D)
+**Estimation** : ✅ Complété
 
 ---
 
@@ -723,81 +841,303 @@ active.tsx       →  <StreamVideo> + <StreamCall> + <CallContent>
 
 **Priorité** : P2 - Moyen  
 **Réf** : Écrans complémentaires §2 — Confidentialité & Conformité  
-**Statut** : ⚠️ Basique
+**Statut** : ✅ Complété
 
 **État actuel** :
 
 - ✅ Settings privacy : show_online, show_last_seen, read_receipts, search_phone (dans settings.tsx)
 - ✅ Suppression de compte (écran existant dans settings)
-- ❌ Pas de centre RGPD dédié
+- ✅ Centre de confidentialité dédié (privacy-center.tsx)
 
-**À implémenter (Phase 2D)** :
+**Implémenté** :
 
-- [ ] Écran Privacy Center centralisé
-- [ ] Export complet des données personnelles (JSON/ZIP)
-- [ ] Gestion consentements IA (si chatbot IA implémenté)
-- [ ] Système de blocage avancé (shadow ban / block total)
-- [ ] Système de signalement structuré (utilisateur + contenu)
-- [ ] Suivi statut signalements
+- ✅ Service `services/privacy-center.ts` (~450 lignes)
+  - `blockUser()`, `unblockUser()`, `getBlockedUsers()`, `isUserBlocked()`
+  - `submitReport()`, `getMyReports()`
+  - `getPrivacyConsents()`, `updatePrivacyConsent()`
+  - `exportUserData()` avec progression + `shareExportedData()`
+  - `requestAccountDeletion()`
+- ✅ Écran `app/(tabs)/privacy-center.tsx` (~540 lignes)
+  - Section Export données (RGPD Art. 20) avec partage
+  - Section Consentements IA (analytics, marketing, ai_processing, third_party)
+  - Section Utilisateurs bloqués avec déblocage
+  - Section Historique signalements avec statuts
+  - Liens légaux (politique confidentialité, CGU, DPO)
+- ✅ Bouton accès depuis Settings → "Centre de confidentialité"
+- ✅ i18n complet (fr/en/ja) : ~45 clés `privacy.*`
 
-**Estimation** : 2-3 jours
+**Estimation** : ✅ Complété
 
 ---
 
 ## 🏗️ MVP Phase 3 — Modules, IA, Store, Services (Groupes 6-10)
 
 > Ces fonctionnalités sont planifiées pour **après** MVP Phase 2.
-> Référencées ici pour assurer la traçabilité avec les 50 fonctionnalités.
+> Référencées ici pour assurer la traçabilité avec les 50 fonctionnalités et ADDITIONAL_AND_CORE_MODULES.md.
 
 ### Groupe 6 — Modules avancés (installables via Store)
 
-| #   | Fonctionnalité     | Statut | Priorité | Notes                           |
-| --- | ------------------ | ------ | -------- | ------------------------------- |
-| 1   | Productivity Hub   | 🔴     | P3       | Tâches, to-do, planning         |
-| 2   | Suite Office       | 🔴     | P4       | Texte, tableur, présentation    |
-| 3   | Module PDF         | 🔴     | P3       | Viewer/editor PDF               |
-| 4   | Board collaboratif | 🔴     | P4       | Whiteboard, mindmap             |
-| 5   | Cooking & Home     | 🔴     | P4       | Courses, ménage, repas, alarmes |
+| #   | Fonctionnalité     | Route   | Statut | Priorité | Notes                           |
+| --- | ------------------ | ------- | ------ | -------- | ------------------------------- |
+| 1   | Productivity Hub   | /tasks  | 🔴     | P3       | To-do, projets, rappels, boards |
+| 2   | Suite Office       | /office | 🔴     | P4       | Texte, tableur, présentation    |
+| 3   | Module PDF         | /office | 🔴     | P3       | Viewer/editor PDF, signatures   |
+| 4   | Board collaboratif | /tasks  | 🔴     | P4       | Whiteboard, mindmap, kanban     |
+| 5   | Cooking & Home     | /home   | 🔴     | P4       | Courses, ménage, repas, alarmes |
+
+### DEV-018 : Module Productivity Hub (/tasks)
+
+**Priorité** : P3  
+**Réf** : Groupe 6, Fonc. 1 + ADDITIONAL_AND_CORE_MODULES.md §Organisation  
+**Statut** : 🔴 Non démarré
+
+**À implémenter** :
+
+- [ ] Table Supabase `tasks` (title, description, due_date, priority, status, assignee_id, project_id)
+- [ ] Table `projects` (name, description, owner_id, color, icon)
+- [ ] Écran liste projets + création
+- [ ] Écran détail projet avec sous-tâches
+- [ ] Vue Kanban (colonnes par statut)
+- [ ] Rappels via notifications push
+- [ ] Intégration avec groupes/conversations
+
+**Estimation** : 3-4 semaines
+
+---
+
+### DEV-019 : Module Office (/office)
+
+**Priorité** : P4  
+**Réf** : Groupe 6, Fonc. 2-4 + ADDITIONAL_AND_CORE_MODULES.md §Organisation  
+**Statut** : 🔴 Non démarré
+
+**À implémenter** :
+
+- [ ] Éditeur texte riche (basé sur Slate ou TipTap)
+- [ ] Tableur simple (formules de base)
+- [ ] Présentations (slides, templates)
+- [ ] Viewer/editor PDF
+- [ ] Signatures électroniques
+- [ ] Journal personnel privé
+- [ ] Export et partage multi-format
+
+**Estimation** : 6-8 semaines
+
+---
+
+### DEV-020 : Module Docs & Storage (/files)
+
+**Priorité** : P3  
+**Réf** : ADDITIONAL_AND_CORE_MODULES.md §Organisation  
+**Statut** : 🔴 Non démarré
+
+**À implémenter** :
+
+- [ ] Drive cloud intégré (Supabase Storage)
+- [ ] Versionning fichiers
+- [ ] Partage avec permissions granulaires
+- [ ] Sync multi-device
+- [ ] Aperçu fichiers (images, PDF, vidéos)
+- [ ] Recherche plein texte
+
+**Estimation** : 2-3 semaines
+
+---
 
 ### Groupe 7 — Services utilitaires publics
 
-| #   | Fonctionnalité                       | Statut | Priorité | Notes                  |
-| --- | ------------------------------------ | ------ | -------- | ---------------------- |
-| 1   | Horaires métro/tram/bus avec alertes | 🔴     | P4       | API transport + géoloc |
-| 2   | Info trafic routier temps réel       | 🔴     | P4       | API traffic            |
-| 3   | Numéros d'urgence géolocalisés       | 🔴     | P3       | Base locale            |
-| 4   | Annuaire services publics            | 🔴     | P4       | CAF, CPAM, etc.        |
-| 5   | Suivi colis multi-transporteurs      | 🔴     | P3       | API tracking           |
+| #   | Fonctionnalité                       | Route     | Statut | Priorité | Notes                  |
+| --- | ------------------------------------ | --------- | ------ | -------- | ---------------------- |
+| 1   | Horaires métro/tram/bus avec alertes | /mobility | 🔴     | P4       | API transport + géoloc |
+| 2   | Info trafic routier temps réel       | /mobility | 🔴     | P4       | API traffic            |
+| 3   | Numéros d'urgence géolocalisés       | /mobility | 🔴     | P3       | Base locale            |
+| 4   | Annuaire services publics            | /mobility | 🔴     | P4       | CAF, CPAM, etc.        |
+| 5   | Suivi colis multi-transporteurs      | /mobility | 🔴     | P3       | API tracking           |
+
+### DEV-021 : Module Mobility (/mobility)
+
+**Priorité** : P3-P4  
+**Réf** : Groupe 7 + ADDITIONAL_AND_CORE_MODULES.md §Vie quotidienne  
+**Statut** : 🔴 Non démarré
+
+**À implémenter** :
+
+- [ ] Covoiturage intégré (matching, paiement)
+- [ ] Gestion voiture électrique (niveau batterie, chargeurs à proximité)
+- [ ] Suivi trajets GPS
+- [ ] Partage localisation en temps réel
+- [ ] Horaires transports en commun (API GTFS)
+- [ ] Alertes trafic
+- [ ] Suivi colis multi-transporteurs
+
+**Estimation** : 3-4 semaines
+
+---
 
 ### Groupe 8 — Divertissement & Création
 
-| #   | Fonctionnalité                   | Statut | Priorité | Notes                    |
-| --- | -------------------------------- | ------ | -------- | ------------------------ |
-| 1   | Mini-lecteur musique + playlists | 🔴     | P3       | API streaming musique    |
-| 2   | Podcasts (catalogue + favoris)   | 🔲     | P3       | Mock UI dans Home        |
-| 3   | Lecteur vidéo intégré            | 🔴     | P3       | Qualité adaptative       |
-| 4   | Mini-jeux sociaux                | 🔴     | P4       | Quiz, dessin, devinettes |
-| 5   | Création stickers & emojis       | 🔴     | P4       | Éditeur intégré          |
+| #   | Fonctionnalité                   | Route     | Statut | Priorité | Notes                    |
+| --- | -------------------------------- | --------- | ------ | -------- | ------------------------ |
+| 1   | Mini-lecteur musique + playlists | /music    | 🔴     | P3       | API streaming musique    |
+| 2   | Podcasts (catalogue + favoris)   | /podcasts | 🔲     | P3       | Mock UI dans Home        |
+| 3   | Lecteur vidéo intégré            | /feed     | 🔴     | P3       | Qualité adaptative       |
+| 4   | Mini-jeux sociaux                | /store    | 🔴     | P4       | Quiz, dessin, devinettes |
+| 5   | Création stickers & emojis       | /design   | 🔴     | P4       | Éditeur intégré          |
+
+### DEV-022 : Module Musique & Audio (/music)
+
+**Priorité** : P3  
+**Réf** : Groupe 8, Fonc. 1 + ADDITIONAL_AND_CORE_MODULES.md §Créativité  
+**Statut** : 🔴 Non démarré
+
+**À implémenter** :
+
+- [ ] Lecteur audio avec contrôles (play, pause, seek, volume)
+- [ ] Playlists personnelles
+- [ ] Partage sons courts (style TikTok audio)
+- [ ] Ambiance sonore (focus, détente, sommeil)
+- [ ] Intégration with chat (partage musique en cours)
+- [ ] Mini-player persistant
+
+**Estimation** : 2-3 semaines
+
+---
+
+### DEV-023 : Module Podcasts (/podcasts)
+
+**Priorité** : P3  
+**Réf** : Groupe 8, Fonc. 2 + ADDITIONAL_AND_CORE_MODULES.md §Social  
+**Statut** : 🔴 Non démarré
+
+**À implémenter** :
+
+- [ ] Catalogue podcasts (API podcast index)
+- [ ] Abonnements et favoris
+- [ ] Playlists d'épisodes
+- [ ] Lecture avec vitesse variable (0.5x - 2x)
+- [ ] Chapitres (si disponibles)
+- [ ] Mode offline (téléchargement)
+- [ ] Historique d'écoute avec reprise
+
+**Estimation** : 2-3 semaines
+
+---
 
 ### Groupe 9 — IA intégrée
 
-| #   | Fonctionnalité                     | Statut | Priorité | Notes                        |
-| --- | ---------------------------------- | ------ | -------- | ---------------------------- |
-| 1   | Chatbot multi-personas             | 🔴     | P2       | Assistant Alice planifié     |
-| 2   | Suggestions intelligentes réponses | 🔴     | P3       | NLP / LLM                    |
-| 3   | Résumé automatisé conversations    | 🔴     | P3       | LLM summarization            |
-| 4   | Modération automatique groupes     | 🔴     | P3       | Détection spam / toxicité    |
-| 5   | Traduction instantanée chats       | 🔴     | P2       | Google/DeepL API intégration |
+| #   | Fonctionnalité                     | Route | Statut | Priorité | Notes                        |
+| --- | ---------------------------------- | ----- | ------ | -------- | ---------------------------- |
+| 1   | Chatbot multi-personas             | /ai   | 🔴     | P2       | Assistant Alice planifié     |
+| 2   | Suggestions intelligentes réponses | /chat | 🔴     | P3       | NLP / LLM                    |
+| 3   | Résumé automatisé conversations    | /chat | 🔴     | P3       | LLM summarization            |
+| 4   | Modération automatique groupes     | /bots | 🔴     | P3       | Détection spam / toxicité    |
+| 5   | Traduction instantanée chats       | /chat | 🔴     | P2       | Google/DeepL API intégration |
+
+### DEV-024 : Assistant IA (Alice) (/ai)
+
+**Priorité** : P2  
+**Réf** : Groupe 9, Fonc. 1 + ADDITIONAL_AND_CORE_MODULES.md §IA  
+**Statut** : 🔴 Non démarré
+
+**À implémenter** :
+
+- [ ] Chat conversationnel avec LLM (OpenAI/Claude/local)
+- [ ] Multi-personas (assistant général, santé, études, style, pro)
+- [ ] Génération de contenu (texte, résumés, images)
+- [ ] Mémoire contextuelle par utilisateur
+- [ ] Prompts système personnalisables
+- [ ] Live2D avatar animé (Phase avancée)
+- [ ] Intégration dans conversations (mention @Alice)
+
+**Estimation** : 4-6 semaines
+
+---
+
+### DEV-025 : Bots de groupe (/bots)
+
+**Priorité** : P3  
+**Réf** : ADDITIONAL_AND_CORE_MODULES.md §IA  
+**Statut** : 🔴 Non démarré
+
+**À implémenter** :
+
+- [ ] Framework bots modulaire
+- [ ] Bot modération (auto-kick, mute, warnings)
+- [ ] Bot quiz (questions/réponses dans les groupes)
+- [ ] Bot animation (GIFs, jeux, polls)
+- [ ] Bots spécialisés (gaming, études, business)
+- [ ] Marketplace bots
+
+**Estimation** : 2-3 semaines
+
+---
+
+### DEV-026 : Traduction Instantanée
+
+**Priorité** : P2  
+**Réf** : Groupe 9, Fonc. 5  
+**Statut** : 🔴 Non démarré
+
+**À implémenter** :
+
+- [ ] Détection automatique de langue
+- [ ] Traduction à la demande (bouton sur message)
+- [ ] Traduction automatique optionnelle par conversation
+- [ ] Support 50+ langues (Google Translate / DeepL API)
+- [ ] Cache traductions (économie API)
+- [ ] Indicateur "message traduit"
+
+**Estimation** : 1-2 semaines
+
+---
 
 ### Groupe 10 — App Store & Écosystème
 
-| #   | Fonctionnalité                       | Statut | Priorité | Notes                     |
-| --- | ------------------------------------ | ------ | -------- | ------------------------- |
-| 1   | Store apps internes/partenaires      | 🔲     | P3       | Mock UI (587 lignes)      |
-| 2   | Installation/désinstallation modules | 🔴     | P3       | Module registry           |
-| 3   | Permissions par app (granulaire)     | 🔴     | P4       | Sandbox permissions       |
-| 4   | Marketplace services                 | 🔴     | P4       | Designers, pros, artisans |
-| 5   | Paiement intégré + portefeuille      | 🔴     | P3       | Stripe/Apple/Google Pay   |
+| #   | Fonctionnalité                       | Route  | Statut | Priorité | Notes                     |
+| --- | ------------------------------------ | ------ | ------ | -------- | ------------------------- |
+| 1   | Store apps internes/partenaires      | /store | 🔲     | P3       | Mock UI (587 lignes)      |
+| 2   | Installation/désinstallation modules | /store | 🔴     | P3       | Module registry           |
+| 3   | Permissions par app (granulaire)     | /store | 🔴     | P4       | Sandbox permissions       |
+| 4   | Marketplace services                 | /store | 🔴     | P4       | Designers, pros, artisans |
+| 5   | Paiement intégré + portefeuille      | /store | 🔴     | P3       | Stripe/Apple/Google Pay   |
+
+### DEV-027 : Store & Modules Registry
+
+**Priorité** : P3  
+**Réf** : Groupe 10 + ADDITIONAL_AND_CORE_MODULES.md §Core Store  
+**Statut** : 🔲 Mock UI existant
+
+**À implémenter** :
+
+- [ ] Backend module registry (liste modules disponibles)
+- [ ] Installation/désinstallation dynamique
+- [ ] Permissions par module (contacts, camera, localisation, etc.)
+- [ ] Thèmes téléchargeables
+- [ ] Mini-apps tierces (sandbox sécurisé)
+- [ ] Extensions IA installables
+- [ ] Section "Recommandés" & classements
+- [ ] Reviews et notes
+
+**Estimation** : 4-6 semaines
+
+---
+
+### DEV-028 : Paiement & Portefeuille
+
+**Priorité** : P3  
+**Réf** : Groupe 10, Fonc. 5  
+**Statut** : 🔴 Non démarré
+
+**À implémenter** :
+
+- [ ] Intégration Stripe (cartes, Apple Pay, Google Pay)
+- [ ] Portefeuille ImuWallet (solde interne)
+- [ ] Achats in-app (thèmes, modules premium, avatars)
+- [ ] Abonnements ImuChat Pro
+- [ ] Historique transactions
+- [ ] Monnaie virtuelle ImuCoin (gamification)
+
+**Estimation** : 3-4 semaines
 
 ---
 
@@ -813,6 +1153,238 @@ active.tsx       →  <StreamVideo> + <StreamCall> + <CallContent>
 | Paramètres globaux avancés  | ~9       | P2       | Notifications granulaires, A11Y, performance |
 | Support & Assistance        | ~8       | P2       | Centre d'aide, tickets, FAQ                  |
 | Gamification                | ~6       | P3       | XP, badges, missions, classements            |
+
+---
+
+## � MVP Phase 4 — Modules Vie Quotidienne & Contenus Avancés
+
+> Ces fonctionnalités sont planifiées pour **après** la Phase 3.
+> Réf : ADDITIONAL_AND_CORE_MODULES.md — Social & Contenus, Vie quotidienne, Créativité
+
+### DEV-029 : Module News (/news)
+
+**Priorité** : P3  
+**Réf** : ADDITIONAL_AND_CORE_MODULES.md §Social  
+**Statut** : 🔴 Non démarré
+
+**À implémenter** :
+
+- [ ] Agrégateur d'articles (RSS, API news)
+- [ ] Tendances et actualités
+- [ ] Filtres par thématiques (tech, sport, entertainment...)
+- [ ] Lecteur interne (mode lecture)
+- [ ] Sauvegarde / bookmarks
+- [ ] Partage dans conversations
+
+**Estimation** : 2-3 semaines
+
+---
+
+### DEV-030 : Module Dating (/dating)
+
+**Priorité** : P4  
+**Réf** : ADDITIONAL_AND_CORE_MODULES.md §Social  
+**Statut** : 🔴 Non démarré
+
+**À implémenter** :
+
+- [ ] Profil dating **séparé** du profil principal (confidentialité)
+- [ ] Système de matching par préférences
+- [ ] Algorithme de compatibilité
+- [ ] Swipe cards (like/pass/super like)
+- [ ] Chat privé après match
+- [ ] Plans freemium/premium (boost, voir qui vous a liké)
+- [ ] Vérification photo anti-catfish
+
+**Estimation** : 4-6 semaines
+
+---
+
+### DEV-031 : Module Formations (/courses)
+
+**Priorité** : P4  
+**Réf** : ADDITIONAL_AND_CORE_MODULES.md §Social  
+**Statut** : 🔴 Non démarré
+
+**À implémenter** :
+
+- [ ] Catalogue de cours (vidéos, documents)
+- [ ] Suivi de progression par cours
+- [ ] Quiz et évaluations
+- [ ] Certificats de complétion
+- [ ] Notes et marque-pages
+- [ ] Forum de discussion par cours
+- [ ] Créateur de cours (UGC)
+
+**Estimation** : 4-6 semaines
+
+---
+
+### DEV-032 : Module Style & Beauté (/style)
+
+**Priorité** : P4  
+**Réf** : ADDITIONAL_AND_CORE_MODULES.md §Vie quotidienne  
+**Statut** : 🔴 Non démarré
+
+**À implémenter** :
+
+- [ ] Conseils mode, beauté, vestimentaires
+- [ ] Agent IA de style personnalisé
+- [ ] Wardrobe virtuelle (photos vêtements)
+- [ ] Suggestions outfits basées sur météo/événement
+- [ ] Marketplace looks et thèmes
+
+**Estimation** : 3-4 semaines
+
+---
+
+### DEV-033 : Module Smart Home (/home)
+
+**Priorité** : P4  
+**Réf** : ADDITIONAL_AND_CORE_MODULES.md §Vie quotidienne  
+**Statut** : 🔴 Non démarré
+
+**À implémenter** :
+
+- [ ] Connexion maison intelligente (lumières, thermostat, caméras)
+- [ ] Gestion énergie (consommation, alertes)
+- [ ] Module Famille :
+  - [ ] Liste de courses partagée
+  - [ ] Suivi santé famille
+  - [ ] Calendrier enfants (école, activités)
+  - [ ] Documents famille (ordonnances, vaccins)
+- [ ] Annuaire services maison (baby-sitter, plombier, etc.)
+
+**Estimation** : 4-6 semaines
+
+---
+
+### DEV-034 : Module Design & Media (/design)
+
+**Priorité** : P4  
+**Réf** : ADDITIONAL_AND_CORE_MODULES.md §Créativité  
+**Statut** : 🔴 Non démarré
+
+**À implémenter** :
+
+- [ ] Éditeur type Canva (templates, images, texte)
+- [ ] Montage vidéo simple (coupes, transitions, texte)
+- [ ] Bibliothèque d'assets (images, icons, backgrounds)
+- [ ] Création stickers & emojis personnalisés
+- [ ] Export multi-format (PNG, JPG, MP4, GIF)
+- [ ] Partage direct dans conversations/stories
+
+**Estimation** : 4-6 semaines
+
+---
+
+### DEV-035 : Module Organizations (/orgs)
+
+**Priorité** : P4  
+**Réf** : ADDITIONAL_AND_CORE_MODULES.md §Organisation  
+**Statut** : 🔴 Non démarré
+
+**Templates d'organisation à implémenter** :
+
+- [ ] ONG & Associations (membres, cotisations, événements)
+- [ ] Écoles & Formations (classes, profs, devoirs, notes)
+- [ ] Garderies & Périscolaire (pointage, activités, photos)
+- [ ] Églises & Communautés religieuses (paroisses, événements, dons)
+- [ ] PME & Startups (équipes, projets, KPIs)
+- [ ] Centres de loisirs (inscriptions, planning, animateurs)
+
+**Fonctionnalités communes** :
+
+- [ ] Tableau de bord par type d'org
+- [ ] Rôles et permissions granulaires
+- [ ] Communication ciblée (groupes, annonces)
+- [ ] Gestion financière (cotisations, paiements)
+- [ ] Calendrier partagé
+
+**Estimation** : 6-8 semaines
+
+---
+
+## �🗺️ Cartographie Complète des Mini-Apps & Modules
+
+> Réf : `docs/ADDITIONAL_AND_CORE_MODULES.md` — Vue d'ensemble de l'écosystème ImuChat
+> ImuChat = réseau social + hub de vie quotidienne + outils créatifs + apps collaboratives, modulaire via Store
+
+### 1. CORE — Modules installés par défaut
+
+| Module          | Route     | Description                                                                                                       | Statut  | Réf Tracker                |
+| --------------- | --------- | ----------------------------------------------------------------------------------------------------------------- | ------- | -------------------------- |
+| **Chats**       | /chat     | Messages (texte, audio, image, vidéo, fichiers), réactions, réponses, citations, épingles, groupes, arrière-plans | ✅ 80%  | DEV-001, DEV-003           |
+| **Appels**      | /calls    | Audio/vidéo (3 formats), historique, appels programmés, rappels                                                   | ⚠️ 40%  | DEV-006, DEV-007, CRIT-001 |
+| **Contacts**    | /contacts | Carnet d'adresses, sync téléphone/réseaux sociaux, statuts/présence                                               | ✅ 90%  | Existant                   |
+| **Communautés** | /comms    | Groupes enrichis (familles, associations, PME, gamers), outils collaboratifs, espaces publics/privés              | ⚠️ 20%  | DEV-014                    |
+| **Store**       | /store    | Marketplace + App Store fusionnés, thèmes, mini-apps, extensions IA                                               | 🔲 Mock | Groupe 10                  |
+| **Profil**      | /me       | Profil social, préférences (thèmes, privacy), comptes multiples                                                   | ✅ 70%  | DEV-008, DEV-009, DEV-010  |
+
+### 2. SOCIAL & CONTENUS — Modules optionnels
+
+| Module         | Route     | Description                                                                            | Statut  | Phase | Estimation   |
+| -------------- | --------- | -------------------------------------------------------------------------------------- | ------- | ----- | ------------ |
+| **Feed**       | /feed     | Vidéo/audio scroll type TikTok, "Pour Toi", Suivis, Découverte, interactions           | 🔲 Mock | 2C    | DEV-012      |
+| **News**       | /news     | Articles, tendances, filtres thématiques, lecteur interne, sauvegarde                  | 🔴      | 3     | 2-3 semaines |
+| **Podcasts**   | /podcasts | Recherche, abonnements, playlists, vitesse variable, chapitres                         | 🔴      | 3     | 2-3 semaines |
+| **Dating**     | /dating   | Profil séparé (confidentialité), matching par préférences/algorithme, freemium/premium | 🔴      | 4     | 4-6 semaines |
+| **Formations** | /courses  | Vidéos de cours, documents, suivi progrès, quiz, certifications                        | 🔴      | 4     | 4-6 semaines |
+
+### 3. VIE QUOTIDIENNE — Modules optionnels
+
+| Module             | Route     | Description                                                                                        | Statut | Phase | Estimation   |
+| ------------------ | --------- | -------------------------------------------------------------------------------------------------- | ------ | ----- | ------------ |
+| **Style & Beauté** | /style    | Conseils mode/beauté/vestimentaires, agent IA de style, marketplace looks/thèmes                   | 🔴     | 4     | 3-4 semaines |
+| **Smart Home**     | /home     | Maison connectée (lumières, alarme, énergie), famille (courses, santé, éducation), services maison | 🔴     | 4     | 4-6 semaines |
+| **Mobility**       | /mobility | Covoiturage intégré, gestion voiture électrique, suivi trajets, partage localisation               | 🔴     | 3     | 3-4 semaines |
+| **Office**         | /office   | Texte, tableur, présentation, PDF & signatures, boards & organisation, journal personnel           | 🔴     | 3     | Groupe 6     |
+
+### 4. CRÉATIVITÉ & MULTIMÉDIA — Modules optionnels
+
+| Module              | Route   | Description                                                                       | Statut | Phase | Estimation    |
+| ------------------- | ------- | --------------------------------------------------------------------------------- | ------ | ----- | ------------- |
+| **Design & Media**  | /design | Mini-app type Canva, montage vidéo simple, bibliothèque assets                    | 🔴     | 4     | 4-6 semaines  |
+| **Musique & Audio** | /music  | Lecteur musique & playlists, partage sons courts (style TikTok), ambiance sonore  | 🔴     | 3     | Groupe 8      |
+| **Animations & 3D** | /anim   | Éditeur animations 2D/3D, bibliothèque modèles, intégration stories/présentations | 🔴     | 4+    | Vision Live2D |
+
+### 5. ORGANISATION & PRO — Modules optionnels
+
+| Module                   | Route   | Description                                                                        | Statut | Phase | Estimation   |
+| ------------------------ | ------- | ---------------------------------------------------------------------------------- | ------ | ----- | ------------ |
+| **Tasks / Productivity** | /tasks  | To-do lists, projets, rappels, intégration groupes & boards                        | 🔴     | 3     | Groupe 6     |
+| **Events**               | /events | Agenda partagé, RSVP, tickets, rappels                                             | 🔴     | 2C    | DEV-013      |
+| **Docs & Storage**       | /files  | Drive cloud intégré, versionning & partage                                         | 🔴     | 3     | 2-3 semaines |
+| **Organizations**        | /orgs   | ONG, associations, écoles, formations, garderies, églises, PME, centres de loisirs | 🔴     | 4     | 4-6 semaines |
+
+### 6. IA & ASSISTANCE — Transversal
+
+| Module                   | Route | Description                                                                                                                     | Statut | Phase | Estimation   |
+| ------------------------ | ----- | ------------------------------------------------------------------------------------------------------------------------------- | ------ | ----- | ------------ |
+| **Assistant IA (Alice)** | /ai   | Chat conversationnel, conseiller perso (santé, études, style, pro), génération contenu (texte, image, résumé), prompts personas | 🔴     | 3     | Groupe 9     |
+| **Bots de groupe**       | /bots | Bots modération, quiz, animation, bots spécialisés (gaming, études, business)                                                   | 🔴     | 3     | 2-3 semaines |
+
+### 7. TRANSVERSAL — Présent partout
+
+| Fonctionnalité                            | Description                                                                             | Statut  | Réf Tracker      |
+| ----------------------------------------- | --------------------------------------------------------------------------------------- | ------- | ---------------- |
+| **Thèmes & Layout Editor**                | Choix thèmes (Sakura, Cyber Neon...), layouts personnalisés, créateur & boutique thèmes | ✅ 70%  | DEV-009          |
+| **Notifications**                         | Push, email, internes                                                                   | ✅ 80%  | BUG-003          |
+| **Search global**                         | Messages, personnes, contenus                                                           | ✅ 100% | DEV-005          |
+| **Paramètres confidentialité & sécurité** | Privacy settings, blocage, signalement                                                  | ⚠️ 30%  | DEV-016, DEV-017 |
+| **Mode hors-ligne**                       | Queue offline, sync automatique                                                         | ✅ 90%  | BUG-002          |
+| **Multi-plateforme**                      | Web, mobile, desktop                                                                    | ✅      | Existant         |
+
+---
+
+### Récapitulatif Modules par Phase
+
+| Phase             | Modules                                                                        | Priorité | Estimation        |
+| ----------------- | ------------------------------------------------------------------------------ | -------- | ----------------- |
+| **Phase 2 (MVP)** | Chats, Appels, Contacts, Profil, Communautés (basique), Feed (basique), Events | P0-P2    | ~11 semaines      |
+| **Phase 3**       | Store, Office, Tasks, Docs, Mobility, Music, Assistant IA, Bots                | P2-P3    | ~8-12 semaines    |
+| **Phase 4**       | News, Podcasts, Dating, Formations, Style, Smart Home, Design, Organizations   | P3-P4    | ~16-24 semaines   |
+| **Phase 5+**      | Animations 3D, Live2D, Mode avatar appels vidéo                                | P4       | Vision long terme |
 
 ---
 
@@ -936,10 +1508,11 @@ La 3D et le Live2D ne sont pas des gadgets — ils sont la **matérialisation de
 
 ```
 Phase 2A (Communication)  ████████████░░░  ~75% fait
-Phase 2B (Profils)         ██░░░░░░░░░░░░  ~15%
-Phase 2C (Social)          █░░░░░░░░░░░░░  ~10% (mock UI)
-Phase 2D (Auth/Sécurité)   █░░░░░░░░░░░░░  ~10%
-Phase 3  (Modules/IA)      ░░░░░░░░░░░░░░  ~0%
+Phase 2B (Profils)         █████████████░  ~90% (DEV-008 ✅, DEV-009 ✅)
+Phase 2C (Social)          ██░░░░░░░░░░░░  ~15% (DEV-011 ✅)
+Phase 2D (Auth/Sécurité)   ████████████░░  ~85% (DEV-015 ✅, DEV-016 ✅, DEV-017 ✅)
+Phase 3  (Modules/IA)      ░░░░░░░░░░░░░░  ~0%  (DEV-018 à DEV-028)
+Phase 4  (Vie quotidienne) ░░░░░░░░░░░░░░  ~0%  (DEV-029 à DEV-035)
 ```
 
 ### Sprint actuel — Phase 2A (fin Communication)
@@ -958,17 +1531,17 @@ Phase 3  (Modules/IA)      ░░░░░░░░░░░░░░  ~0%
 | #   | Tâche                        | Réf     | Priorité | Statut | Estimation     |
 | --- | ---------------------------- | ------- | -------- | ------ | -------------- |
 | 7   | OAuth Google/Apple           | DEV-015 | P1       | ✅     | ✅ Mobile done |
-| 8   | Onboarding flow complet      | DEV-010 | P2       | 🔴     | 1-2 jours      |
-| 9   | Profils avancés (visibilité) | DEV-008 | P2       | 🔴     | 3-4 jours      |
-| 10  | Thèmes étendus (4-6)         | DEV-009 | P3       | 🔴     | 2-3 jours      |
-| 11  | Sécurité avancée (2FA/bio)   | DEV-016 | P2       | 🔴     | 3-4 jours      |
+| 8   | Onboarding flow complet      | DEV-010 | P2       | ✅     | ✅ Terminé     |
+| 9   | Profils avancés (visibilité) | DEV-008 | P2       | ✅     | ✅ Phase 2B    |
+| 10  | Thèmes étendus (4-6)         | DEV-009 | P3       | ✅     | ✅ Phase 2B    |
+| 11  | Sécurité avancée (2FA/bio)   | DEV-016 | P2       | ✅     | ✅ 22 fév      |
 | 12  | Centre RGPD                  | DEV-017 | P2       | 🔴     | 2-3 jours      |
 
 ### Sprint 3 — Phase 2C (Social réel)
 
 | #   | Tâche                   | Réf     | Priorité | Statut | Estimation |
 | --- | ----------------------- | ------- | -------- | ------ | ---------- |
-| 13  | Stories réelles         | DEV-011 | P1       | 🔴     | 4-5 jours  |
+| 13  | ~~Stories réelles~~     | DEV-011 | P1       | ✅     | -          |
 | 14  | Feed social / timeline  | DEV-012 | P2       | 🔴     | 4-5 jours  |
 | 15  | Groupes avancés (rôles) | DEV-014 | P2       | 🔴     | 3-5 jours  |
 | 16  | Événements              | DEV-013 | P3       | 🔴     | 3-4 jours  |
@@ -1000,19 +1573,31 @@ Phase 3  (Modules/IA)      ░░░░░░░░░░░░░░  ~0%
 
 ### Couverture des 50 fonctionnalités
 
-| Groupe    | Nom                        | Phase | Fonc. couvertes | Progression |
-| --------- | -------------------------- | ----- | --------------- | ----------- |
-| 1         | Messagerie & Communication | 2A    | 4/5 ✅          | 80%         |
-| 2         | Appels Audio & Vidéo       | 2A    | 2/5 ⚠️          | 40%         |
-| 3         | Profils & Identité         | 2B    | 1/5 ⚠️          | 20%         |
-| 4         | Personnalisation avancée   | 2B    | 1/5 ⚠️          | 20%         |
-| 5         | Mini-apps sociales natives | 2C    | 0/5 🔲          | 0% (mock)   |
-| 6         | Modules avancés            | 3     | 0/5 🔴          | 0%          |
-| 7         | Services utilitaires       | 3     | 0/5 🔴          | 0%          |
-| 8         | Divertissement & Création  | 3     | 0/5 🔴          | 0%          |
-| 9         | IA intégrée                | 3     | 0/5 🔴          | 0%          |
-| 10        | App Store & Écosystème     | 3     | 0/5 🔲          | 0% (mock)   |
-| **Total** |                            |       | **8/50**        | **16%**     |
+| Groupe    | Nom                        | Phase | Fonc. couvertes | Progression | Réf Tracker                           |
+| --------- | -------------------------- | ----- | --------------- | ----------- | ------------------------------------- |
+| 1         | Messagerie & Communication | 2A    | 5/5 ✅          | 100%        | DEV-001, DEV-002, DEV-003, DEV-004    |
+| 2         | Appels Audio & Vidéo       | 2A    | 2/5 ⚠️          | 40%         | DEV-006, DEV-007, CRIT-001            |
+| 3         | Profils & Identité         | 2B    | 3/5 ✅          | 60%         | DEV-008, DEV-010                      |
+| 4         | Personnalisation avancée   | 2B    | 2/5 ⚠️          | 40%         | DEV-009                               |
+| 5         | Mini-apps sociales natives | 2C    | 2/5 ⚠️          | 40%         | DEV-011 ✅, DEV-012, DEV-013, DEV-014 |
+| 6         | Modules avancés            | 3     | 0/5 🔴          | 0%          | DEV-018, DEV-019, DEV-020             |
+| 7         | Services utilitaires       | 3     | 0/5 🔴          | 0%          | DEV-021                               |
+| 8         | Divertissement & Création  | 3     | 0/5 🔴          | 0%          | DEV-022, DEV-023, DEV-034             |
+| 9         | IA intégrée                | 3     | 0/5 🔴          | 0%          | DEV-024, DEV-025, DEV-026             |
+| 10        | App Store & Écosystème     | 3     | 0/5 🔲          | 0% (mock)   | DEV-027, DEV-028                      |
+| **Total** |                            |       | **14/50**       | **28%**     |                                       |
+
+### Modules additionnels (hors 50 fonctionnalités)
+
+| Module             | Phase | Réf Tracker | Statut |
+| ------------------ | ----- | ----------- | ------ |
+| News               | 4     | DEV-029     | 🔴     |
+| Dating             | 4     | DEV-030     | 🔴     |
+| Formations/Courses | 4     | DEV-031     | 🔴     |
+| Style & Beauté     | 4     | DEV-032     | 🔴     |
+| Smart Home         | 4     | DEV-033     | 🔴     |
+| Design & Media     | 4     | DEV-034     | 🔴     |
+| Organizations      | 4     | DEV-035     | 🔴     |
 
 ---
 
@@ -1096,11 +1681,11 @@ mobile/
 
 ## 📝 Notes de Session
 
-### Session en cours — DEV-015 OAuth Google/Apple
+### Session en cours — DEV-015 OAuth + DEV-010 Onboarding
 
-**Objectif** : Configurer OAuth Google + Apple Sign-In
+**Objectif** : Configurer OAuth Google + Apple Sign-In + Flow d'onboarding post-signup
 
-**Réalisations** :
+**Réalisations DEV-015** :
 
 1. ✅ Analyse complète de l'état OAuth existant (SocialLoginButtons.tsx déjà implémenté, 310 lignes)
 2. ✅ Identification de 7 problèmes de configuration bloquants
@@ -1111,12 +1696,34 @@ mobile/
 7. ✅ SocialLoginButtons ajouté à register.tsx (parité avec login.tsx)
 8. ✅ Validation client IDs + debug logs ajoutés à SocialLoginButtons.tsx
 
+**Réalisations DEV-010** :
+
+1. ✅ Créé `app/(onboarding)/_layout.tsx` — Stack layout
+2. ✅ Créé `app/(onboarding)/profile-setup.tsx` — 3 étapes (nom/username, avatar, thème)
+3. ✅ Navigation 4 états dans `_layout.tsx` : onboarding → auth → profile-setup → tabs
+4. ✅ Username validation temps réel avec check unicité Supabase (debounced 500ms)
+5. ✅ Avatar picker (camera/galerie) avec upload Supabase Storage
+6. ✅ Sélection thème (light/dark/system) avec preview live
+7. ✅ ThemeProvider connecté au user-store (persist via Zustand + AsyncStorage)
+8. ✅ ThemeProvider supporte `system` mode via `useColorScheme`
+9. ✅ Traductions profileSetup ajoutées (fr/en/ja — 20+ clés)
+10. ✅ Nettoyage login.tsx (redirection déléguée à `_layout.tsx`)
+
+**Fichiers créés** :
+
+- `app/(onboarding)/_layout.tsx`
+- `app/(onboarding)/profile-setup.tsx`
+
 **Fichiers modifiés** :
 
-- `app.json` — scheme, plugins, iOS infoPlist
-- `.env` — Google OAuth Client IDs (web, iOS, Android)
-- `components/auth/SocialLoginButtons.tsx` — validation, debug logs
-- `app/(auth)/register.tsx` — import + ajout SocialLoginButtons
+- `app.json` — scheme, plugins, iOS infoPlist (DEV-015)
+- `.env` — Google OAuth Client IDs (DEV-015)
+- `components/auth/SocialLoginButtons.tsx` — validation, debug logs (DEV-015)
+- `app/(auth)/register.tsx` — ajout SocialLoginButtons (DEV-015)
+- `app/_layout.tsx` — 4e état navigation profile-setup (DEV-010)
+- `app/(auth)/login.tsx` — nettoyage redirection (DEV-010)
+- `providers/ThemeProvider.tsx` — connecté user-store + system mode (DEV-010)
+- `i18n/fr.json`, `en.json`, `ja.json` — section profileSetup (DEV-010)
 
 ---
 

@@ -1,5 +1,5 @@
 import { Href, Stack, useRouter } from "expo-router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   ActivityIndicator,
   Alert,
@@ -21,15 +21,12 @@ export default function LoginScreen() {
   const router = useRouter();
   const { theme } = useTheme();
   const { t } = useI18n();
-  const { signIn, loading, user } = useAuth();
+  const { signIn, loading } = useAuth();
   const [socialLoading, setSocialLoading] = useState(false);
 
-  // Rediriger si déjà connecté
-  useEffect(() => {
-    if (user) {
-      router.replace("/(tabs)" as Href);
-    }
-  }, [user]);
+  // Rediriger si déjà connecté — _layout.tsx gère la redirection
+  // (vers /(tabs) si profil complet, ou /(onboarding)/profile-setup sinon)
+  // On ne redirige plus depuis ici pour éviter un conflit de navigation
 
   async function signInWithEmail() {
     try {

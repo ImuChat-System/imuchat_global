@@ -1,3 +1,6 @@
+// Define __DEV__ global for React Native compatibility
+globalThis.__DEV__ = true;
+
 // Mock Supabase
 jest.mock("./services/supabase", () => ({
   supabase: {

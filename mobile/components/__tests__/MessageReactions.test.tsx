@@ -4,7 +4,7 @@
 
 import { fireEvent, waitFor } from "@testing-library/react-native";
 import React from "react";
-import { renderWithProviders } from "../../__tests__/test-utils";
+import { renderWithProviders } from "../../__test-utils__/test-utils";
 import { MessageReactions } from "../chat/MessageReactions";
 
 const mockReactions = [

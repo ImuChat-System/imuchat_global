@@ -1,6 +1,6 @@
 import { fireEvent } from "@testing-library/react-native";
 import React from "react";
-import { renderWithProviders } from "../../__tests__/test-utils";
+import { renderWithProviders } from "../../__test-utils__/test-utils";
 import MessageInput from "../MessageInput";
 
 describe("MessageInput", () => {

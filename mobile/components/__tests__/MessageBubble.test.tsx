@@ -2,7 +2,7 @@ import React from "react";
 import {
   createMockMessage,
   renderWithProviders,
-} from "../../__tests__/test-utils";
+} from "../../__test-utils__/test-utils";
 import MessageBubble from "../MessageBubble";
 
 describe("MessageBubble", () => {

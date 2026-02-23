@@ -169,7 +169,10 @@ export default function ChatsScreen() {
       >
         <TouchableOpacity
           testID={`conversation-item-${index}`}
-          style={[styles.conversationItem, { borderBottomColor: colors.border }]}
+          style={[
+            styles.conversationItem,
+            { borderBottomColor: colors.border },
+          ]}
           onPress={() => router.push(`/chat/${item.id}` as Href)}
         >
           <View
@@ -280,14 +283,13 @@ export default function ChatsScreen() {
           <Ionicons name="chatbubble-ellipses" size={24} color="#FFFFFF" />
         </TouchableOpacity>
       </View>
-    </GestureHandlerRootView>
 
-    {/* New Chat Modal */}
-    <NewChatModal
-      visible={newChatModalVisible}
-      onClose={() => setNewChatModalVisible(false)}
-    />
-    </View>
+      {/* New Chat Modal */}
+      <NewChatModal
+        visible={newChatModalVisible}
+        onClose={() => setNewChatModalVisible(false)}
+      />
+    </GestureHandlerRootView>
   );
 }
 

@@ -22,21 +22,21 @@ describe("TypingIndicator", () => {
 
   it("should render single user typing message", () => {
     const { getByText } = render(<TypingIndicator userNames={["Alice"]} />);
-    expect(getByText("Alice est en train d'écrire...")).toBeTruthy();
+    expect(getByText("components.typing")).toBeTruthy();
   });
 
   it("should render two users typing message", () => {
     const { getByText } = render(
       <TypingIndicator userNames={["Alice", "Bob"]} />,
     );
-    expect(getByText("Alice et Bob sont en train d'écrire...")).toBeTruthy();
+    expect(getByText("components.twoTyping")).toBeTruthy();
   });
 
   it("should render multiple users typing message", () => {
     const { getByText } = render(
       <TypingIndicator userNames={["Alice", "Bob", "Charlie"]} />,
     );
-    expect(getByText("3 personnes sont en train d'écrire...")).toBeTruthy();
+    expect(getByText("components.manyTyping")).toBeTruthy();
   });
 
   it("should use custom primary color", () => {

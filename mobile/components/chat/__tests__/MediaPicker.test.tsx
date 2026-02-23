@@ -76,7 +76,7 @@ describe("MediaPicker", () => {
       <MediaPicker onMediaSelected={mockOnMediaSelected} />,
     );
 
-    expect(getByLabelText("Ajouter un média")).toBeTruthy();
+    expect(getByLabelText("components.addMedia")).toBeTruthy();
   });
 
   it("renders in icon-only mode", () => {
@@ -84,8 +84,8 @@ describe("MediaPicker", () => {
       <MediaPicker onMediaSelected={mockOnMediaSelected} iconOnly />,
     );
 
-    expect(getByLabelText("Ajouter un média")).toBeTruthy();
-    expect(queryByText("Média")).toBeNull();
+    expect(getByLabelText("components.addMedia")).toBeTruthy();
+    expect(queryByText("components.media")).toBeNull();
   });
 
   it("opens modal when pressed", () => {
@@ -93,11 +93,11 @@ describe("MediaPicker", () => {
       <MediaPicker onMediaSelected={mockOnMediaSelected} />,
     );
 
-    fireEvent.press(getByLabelText("Ajouter un média"));
+    fireEvent.press(getByLabelText("components.addMedia"));
 
-    expect(getByText("Ajouter un média")).toBeTruthy();
-    expect(getByText("Galerie")).toBeTruthy();
-    expect(getByText("Photo")).toBeTruthy();
+    expect(getByText("components.addMedia")).toBeTruthy();
+    expect(getByText("components.gallery")).toBeTruthy();
+    expect(getByText("components.photo")).toBeTruthy();
   });
 
   it("shows video option when allowVideo is true", () => {
@@ -105,9 +105,9 @@ describe("MediaPicker", () => {
       <MediaPicker onMediaSelected={mockOnMediaSelected} allowVideo />,
     );
 
-    fireEvent.press(getByLabelText("Ajouter un média"));
+    fireEvent.press(getByLabelText("components.addMedia"));
 
-    expect(getByText("Vidéo")).toBeTruthy();
+    expect(getByText("components.video")).toBeTruthy();
   });
 
   it("does not show video option when allowVideo is false", () => {
@@ -115,9 +115,9 @@ describe("MediaPicker", () => {
       <MediaPicker onMediaSelected={mockOnMediaSelected} allowVideo={false} />,
     );
 
-    fireEvent.press(getByLabelText("Ajouter un média"));
+    fireEvent.press(getByLabelText("components.addMedia"));
 
-    expect(queryByText("Vidéo")).toBeNull();
+    expect(queryByText("components.video")).toBeNull();
   });
 
   it("selects images from gallery", async () => {
@@ -142,8 +142,8 @@ describe("MediaPicker", () => {
       <MediaPicker onMediaSelected={mockOnMediaSelected} />,
     );
 
-    fireEvent.press(getByLabelText("Ajouter un média"));
-    fireEvent.press(getByText("Galerie"));
+    fireEvent.press(getByLabelText("components.addMedia"));
+    fireEvent.press(getByText("components.gallery"));
 
     await waitFor(() => {
       expect(mockOnMediaSelected).toHaveBeenCalled();
@@ -172,8 +172,8 @@ describe("MediaPicker", () => {
       <MediaPicker onMediaSelected={mockOnMediaSelected} />,
     );
 
-    fireEvent.press(getByLabelText("Ajouter un média"));
-    fireEvent.press(getByText("Photo"));
+    fireEvent.press(getByLabelText("components.addMedia"));
+    fireEvent.press(getByText("components.photo"));
 
     await waitFor(() => {
       expect(mockOnMediaSelected).toHaveBeenCalled();
@@ -206,8 +206,8 @@ describe("MediaPicker", () => {
       <MediaPicker onMediaSelected={mockOnMediaSelected} maxImages={3} />,
     );
 
-    fireEvent.press(getByLabelText("Ajouter un média"));
-    fireEvent.press(getByText("Galerie"));
+    fireEvent.press(getByLabelText("components.addMedia"));
+    fireEvent.press(getByText("components.gallery"));
 
     await waitFor(() => {
       expect(mockOnMediaSelected).toHaveBeenCalled();
@@ -227,8 +227,8 @@ describe("MediaPicker", () => {
       <MediaPicker onMediaSelected={mockOnMediaSelected} />,
     );
 
-    fireEvent.press(getByLabelText("Ajouter un média"));
-    fireEvent.press(getByText("Galerie"));
+    fireEvent.press(getByLabelText("components.addMedia"));
+    fireEvent.press(getByText("components.gallery"));
 
     await waitFor(() => {
       expect(mockOnMediaSelected).not.toHaveBeenCalled();
@@ -240,7 +240,7 @@ describe("MediaPicker", () => {
       <MediaPicker onMediaSelected={mockOnMediaSelected} disabled />,
     );
 
-    const button = getByLabelText("Ajouter un média");
+    const button = getByLabelText("components.addMedia");
     fireEvent.press(button);
 
     // Modal should not open when disabled

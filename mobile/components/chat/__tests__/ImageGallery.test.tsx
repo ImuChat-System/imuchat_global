@@ -101,7 +101,7 @@ describe("ImageGallery", () => {
       <ImageGallery media={media} onItemPress={mockOnItemPress} />,
     );
 
-    fireEvent.press(getAllByLabelText(/Voir image/)[0]);
+    fireEvent.press(getAllByLabelText(/components\.viewImage/)[0]);
     expect(mockOnItemPress).toHaveBeenCalledWith(
       expect.objectContaining({ id: "test-id" }),
       0,
@@ -113,7 +113,7 @@ describe("ImageGallery", () => {
 
     const { getByLabelText } = render(<ImageGallery media={media} />);
 
-    expect(getByLabelText(/Voir vidéo/)).toBeTruthy();
+    expect(getByLabelText(/components\.viewVideo/)).toBeTruthy();
   });
 
   it("opens lightbox when item is tapped without onItemPress", () => {
@@ -123,7 +123,7 @@ describe("ImageGallery", () => {
       <ImageGallery media={media} />,
     );
 
-    fireEvent.press(getAllByLabelText(/Voir image/)[0]);
+    fireEvent.press(getAllByLabelText(/components\.viewImage/)[0]);
 
     // Le lightbox devrait s'ouvrir et afficher le compteur
     expect(getByText("1 / 2")).toBeTruthy();
@@ -159,8 +159,8 @@ describe("ImageGallery", () => {
 
     const { getAllByLabelText } = render(<ImageGallery media={media} />);
 
-    const imageItems = getAllByLabelText(/Voir image/);
-    const videoItems = getAllByLabelText(/Voir vidéo/);
+    const imageItems = getAllByLabelText(/components\.viewImage/);
+    const videoItems = getAllByLabelText(/components\.viewVideo/);
 
     expect(imageItems).toHaveLength(2);
     expect(videoItems).toHaveLength(1);
@@ -187,10 +187,10 @@ describe("ImageGallery", () => {
     );
 
     // Ouvrir le lightbox
-    fireEvent.press(getAllByLabelText(/Voir image/)[0]);
+    fireEvent.press(getAllByLabelText(/components\.viewImage/)[0]);
     expect(queryByText("1 / 2")).toBeTruthy();
 
     // Fermer le lightbox
-    fireEvent.press(getByLabelText("Fermer"));
+    fireEvent.press(getByLabelText("common.close"));
   });
 });

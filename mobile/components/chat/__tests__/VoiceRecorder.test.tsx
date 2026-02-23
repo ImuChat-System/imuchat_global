@@ -86,7 +86,7 @@ describe("VoiceRecorder", () => {
       />,
     );
 
-    expect(getByText("Maintenir pour enregistrer")).toBeTruthy();
+    expect(getByText("components.holdToRecord")).toBeTruthy();
   });
 
   it("renders with custom primary color", () => {
@@ -97,7 +97,7 @@ describe("VoiceRecorder", () => {
       />,
     );
 
-    expect(getByText("Maintenir pour enregistrer")).toBeTruthy();
+    expect(getByText("components.holdToRecord")).toBeTruthy();
   });
 
   it("shows permission error when microphone access is denied", () => {

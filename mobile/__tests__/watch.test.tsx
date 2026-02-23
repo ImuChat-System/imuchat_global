@@ -32,7 +32,7 @@ describe("WatchScreen", () => {
   it("affiche le titre Watch", () => {
     const { getAllByText } = render(<WatchScreen />);
     // "Watch" appears in title and in section headings
-    const matches = getAllByText(/Watch/);
+    const matches = getAllByText(/watch\.title/);
     expect(matches.length).toBeGreaterThanOrEqual(1);
   });
 
@@ -145,14 +145,14 @@ describe("WatchScreen", () => {
 
   it("affiche le texte du CTA", () => {
     const { getByText } = render(<WatchScreen />);
-    expect(getByText(/Créer une Watch Party/)).toBeTruthy();
+    expect(getByText(/watch\.createParty/)).toBeTruthy();
   });
 
   // ---- Section titles ----
 
   it("affiche les titres de section", () => {
     const { getByText } = render(<WatchScreen />);
-    expect(getByText(/En direct/)).toBeTruthy();
-    expect(getByText(/À venir/)).toBeTruthy();
+    expect(getByText(/watch\.live/)).toBeTruthy();
+    expect(getByText(/watch\.upcoming/)).toBeTruthy();
   });
 });

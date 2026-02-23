@@ -120,7 +120,7 @@ describe("ParticipantView", () => {
       <ParticipantView participant={participantNoName} />,
     );
     expect(getByTestId("participant-avatar")).toBeTruthy();
-    expect(getByText("User")).toBeTruthy(); // Fallback to "User"
+    expect(getByText("common.user")).toBeTruthy(); // Fallback to i18n key
   });
 
   it("should render overlay with participant info", () => {

@@ -95,7 +95,7 @@ describe("MessageReactions", () => {
 
     // Le modal devrait s'ouvrir
     await waitFor(() => {
-      expect(findByText("3 réactions")).toBeTruthy();
+      expect(findByText("components.reactionsCount")).toBeTruthy();
     });
   });
 
@@ -104,8 +104,8 @@ describe("MessageReactions", () => {
       <MessageReactions {...defaultProps} />,
     );
 
-    const heartReaction = getByLabelText("❤️ 3 réactions");
-    const thumbsReaction = getByLabelText("👍 1 réaction");
+    const heartReaction = getByLabelText("❤️ components.reactionsCount");
+    const thumbsReaction = getByLabelText("👍 components.reactionsCount");
 
     // Les deux existent
     expect(heartReaction).toBeTruthy();
@@ -117,7 +117,7 @@ describe("MessageReactions", () => {
       <MessageReactions {...defaultProps} />,
     );
 
-    expect(getByLabelText("Ajouter une réaction")).toBeTruthy();
+    expect(getByLabelText("components.addReaction")).toBeTruthy();
   });
 });
 
@@ -142,7 +142,7 @@ describe("MessageReactions - Edge Cases", () => {
     );
 
     expect(getByText("😂")).toBeTruthy();
-    expect(getByLabelText("😂 1 réaction")).toBeTruthy();
+    expect(getByLabelText("😂 components.reactionsCount")).toBeTruthy();
   });
 
   it("handles many reactions correctly", () => {

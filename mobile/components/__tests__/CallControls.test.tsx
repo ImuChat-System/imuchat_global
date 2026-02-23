@@ -28,10 +28,10 @@ describe("CallControls", () => {
       />,
     );
 
-    expect(getByText("Mute")).toBeTruthy();
-    expect(getByText("Caméra")).toBeTruthy();
-    expect(getByText("Flip")).toBeTruthy();
-    expect(getByText("Raccrocher")).toBeTruthy();
+    expect(getByText("calls.mute")).toBeTruthy();
+    expect(getByText("calls.camera")).toBeTruthy();
+    expect(getByText("calls.flip")).toBeTruthy();
+    expect(getByText("calls.hangUp")).toBeTruthy();
   });
 
   it("should show Unmute when mic is off", () => {
@@ -46,7 +46,7 @@ describe("CallControls", () => {
       />,
     );
 
-    expect(getByText("Unmute")).toBeTruthy();
+    expect(getByText("calls.unmute")).toBeTruthy();
   });
 
   it("should show Caméra Off when camera is off", () => {
@@ -61,7 +61,7 @@ describe("CallControls", () => {
       />,
     );
 
-    expect(getByText("Caméra Off")).toBeTruthy();
+    expect(getByText("calls.cameraOff")).toBeTruthy();
   });
 
   it("should call onToggleMic when Mute button is pressed", () => {
@@ -76,7 +76,7 @@ describe("CallControls", () => {
       />,
     );
 
-    fireEvent.press(getByText("Mute"));
+    fireEvent.press(getByText("calls.mute"));
     expect(mockOnToggleMic).toHaveBeenCalledTimes(1);
   });
 
@@ -92,7 +92,7 @@ describe("CallControls", () => {
       />,
     );
 
-    fireEvent.press(getByText("Caméra"));
+    fireEvent.press(getByText("calls.camera"));
     expect(mockOnToggleCamera).toHaveBeenCalledTimes(1);
   });
 
@@ -108,7 +108,7 @@ describe("CallControls", () => {
       />,
     );
 
-    fireEvent.press(getByText("Flip"));
+    fireEvent.press(getByText("calls.flip"));
     expect(mockOnFlipCamera).toHaveBeenCalledTimes(1);
   });
 
@@ -124,7 +124,7 @@ describe("CallControls", () => {
       />,
     );
 
-    fireEvent.press(getByText("Raccrocher"));
+    fireEvent.press(getByText("calls.hangUp"));
     expect(mockOnEndCall).toHaveBeenCalledTimes(1);
   });
 
@@ -140,7 +140,7 @@ describe("CallControls", () => {
       />,
     );
 
-    const flipButton = getByText("Flip");
+    const flipButton = getByText("calls.flip");
 
     // Le bouton devrait être désactivé
     fireEvent.press(flipButton);

@@ -74,7 +74,9 @@ describe("NotificationsScreen", () => {
   it("affiche le titre Notifications", async () => {
     const { getAllByText } = render(<NotificationsScreen />);
     await waitFor(() => {
-      expect(getAllByText(/Notifications/).length).toBeGreaterThanOrEqual(1);
+      expect(
+        getAllByText(/notifications\.title/).length,
+      ).toBeGreaterThanOrEqual(1);
     });
   });
 

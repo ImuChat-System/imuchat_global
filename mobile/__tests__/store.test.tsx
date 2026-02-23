@@ -31,7 +31,7 @@ describe("StoreScreen", () => {
 
   it("affiche le titre Store", () => {
     const { getByText } = render(<StoreScreen />);
-    expect(getByText(/Store/)).toBeTruthy();
+    expect(getByText(/store\.title/)).toBeTruthy();
   });
 
   // ---- Hero Banner ----
@@ -135,7 +135,7 @@ describe("StoreScreen", () => {
 
   it("affiche Gratuit pour les items sans prix", () => {
     const { getAllByText } = render(<StoreScreen />);
-    const freeLabels = getAllByText("Gratuit");
+    const freeLabels = getAllByText("common.free");
     expect(freeLabels.length).toBeGreaterThan(0);
   });
 

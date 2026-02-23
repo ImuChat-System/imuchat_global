@@ -64,7 +64,7 @@ describe("MediaPreview", () => {
       <MediaPreview media={media} onRemove={mockOnRemove} />,
     );
 
-    const removeButtons = getAllByLabelText("Supprimer");
+    const removeButtons = getAllByLabelText("common.delete");
     expect(removeButtons).toHaveLength(2);
   });
 
@@ -75,7 +75,7 @@ describe("MediaPreview", () => {
       <MediaPreview media={media} onRemove={mockOnRemove} />,
     );
 
-    expect(getByText(/3 médias/)).toBeTruthy();
+    expect(getByText(/components\.mediaCount/)).toBeTruthy();
   });
 
   it("calls onRemove when remove button is pressed", () => {
@@ -85,7 +85,7 @@ describe("MediaPreview", () => {
       <MediaPreview media={media} onRemove={mockOnRemove} />,
     );
 
-    fireEvent.press(getByLabelText("Supprimer"));
+    fireEvent.press(getByLabelText("common.delete"));
     expect(mockOnRemove).toHaveBeenCalledWith("test-id-1");
   });
 
@@ -99,7 +99,7 @@ describe("MediaPreview", () => {
     );
 
     expect(getByText("50%")).toBeTruthy();
-    expect(getByText(/1 en cours/)).toBeTruthy();
+    expect(getByText(/components\.inProgress/)).toBeTruthy();
   });
 
   it("shows error count in header", () => {
@@ -116,7 +116,7 @@ describe("MediaPreview", () => {
       />,
     );
 
-    expect(getByText(/2 erreurs/)).toBeTruthy();
+    expect(getByText(/components\.errorsLabel/)).toBeTruthy();
   });
 
   it("shows retry button for error items", () => {
@@ -130,7 +130,7 @@ describe("MediaPreview", () => {
       />,
     );
 
-    fireEvent.press(getByText("Retry"));
+    fireEvent.press(getByText("common.retry"));
     expect(mockOnRetry).toHaveBeenCalledWith("error-id");
   });
 
@@ -182,7 +182,7 @@ describe("MediaPreview", () => {
       <MediaPreview media={media} onRemove={mockOnRemove} />,
     );
 
-    expect(getAllByLabelText("Supprimer")).toHaveLength(3);
-    expect(getByText(/3 médias/)).toBeTruthy();
+    expect(getAllByLabelText("common.delete")).toHaveLength(3);
+    expect(getByText(/components\.mediaCount/)).toBeTruthy();
   });
 });

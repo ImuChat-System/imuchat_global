@@ -107,7 +107,7 @@ describe("HomeScreen", () => {
   it("affiche le titre Accueil", async () => {
     const { getByText } = render(<HomeScreen />);
     await waitFor(() => {
-      expect(getByText(/Accueil/)).toBeTruthy();
+      expect(getByText(/home\.title/)).toBeTruthy();
     });
   });
 
@@ -146,7 +146,7 @@ describe("HomeScreen", () => {
   it("affiche le titre Stories", async () => {
     const { getByText } = render(<HomeScreen />);
     await waitFor(() => {
-      expect(getByText("Stories")).toBeTruthy();
+      expect(getByText("home.stories")).toBeTruthy();
     });
   });
 
@@ -213,9 +213,9 @@ describe("HomeScreen", () => {
   it("affiche les titres Worlds, Store, Games", async () => {
     const { getByText } = render(<HomeScreen />);
     await waitFor(() => {
-      expect(getByText("Worlds")).toBeTruthy();
-      expect(getByText("Store")).toBeTruthy();
-      expect(getByText("Games")).toBeTruthy();
+      expect(getByText("home.worlds")).toBeTruthy();
+      expect(getByText("home.storeLabel")).toBeTruthy();
+      expect(getByText("home.games")).toBeTruthy();
     });
   });
 

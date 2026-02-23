@@ -50,10 +50,19 @@ jest.mock("expo-router", () => ({
     back: jest.fn(),
   }),
   useLocalSearchParams: () => ({}),
+  useSegments: () => [],
   Stack: {
     Screen: () => null,
   },
+  Tabs: Object.assign(({ children }) => children, {
+    Screen: ({ name }) => null,
+  }),
   Href: jest.fn(),
+  router: {
+    push: jest.fn(),
+    replace: jest.fn(),
+    back: jest.fn(),
+  },
 }));
 
 // Mock Expo Image Picker
@@ -67,6 +76,145 @@ jest.mock("expo-image-picker", () => ({
 // Mock @expo/vector-icons
 jest.mock("@expo/vector-icons", () => ({
   Ionicons: "Ionicons",
+  FontAwesome: "FontAwesome",
+  FontAwesome5: "FontAwesome5",
+  MaterialIcons: "MaterialIcons",
+  MaterialCommunityIcons: "MaterialCommunityIcons",
+  Feather: "Feather",
+}));
+
+// Mock @expo/vector-icons/FontAwesome (separate import path)
+jest.mock("@expo/vector-icons/FontAwesome", () => "FontAwesome");
+
+// Mock expo-localization
+jest.mock("expo-localization", () => ({
+  getLocales: () => [{ languageCode: "fr", languageTag: "fr-FR" }],
+  getCalendars: () => [{ calendar: "gregory", timeZone: "Europe/Paris" }],
+}));
+
+// Mock expo-haptics (virtual — not installed)
+jest.mock(
+  "expo-haptics",
+  () => ({
+    impactAsync: jest.fn(),
+    notificationAsync: jest.fn(),
+    selectionAsync: jest.fn(),
+    ImpactFeedbackStyle: { Light: "Light", Medium: "Medium", Heavy: "Heavy" },
+    NotificationFeedbackType: {
+      Success: "Success",
+      Warning: "Warning",
+      Error: "Error",
+    },
+  }),
+  { virtual: true },
+);
+
+// Mock expo-clipboard
+jest.mock("expo-clipboard", () => ({
+  setStringAsync: jest.fn(),
+  getStringAsync: jest.fn(),
+}));
+
+// Mock expo-av
+jest.mock("expo-av", () => ({
+  Audio: {
+    Recording: jest.fn(() => ({
+      prepareToRecordAsync: jest.fn(),
+      startAsync: jest.fn(),
+      stopAndUnloadAsync: jest.fn(),
+      getURI: jest.fn(() => "file://recording.m4a"),
+      getStatusAsync: jest.fn(() => ({ durationMillis: 3000 })),
+    })),
+    Sound: {
+      createAsync: jest.fn(() => ({
+        sound: { playAsync: jest.fn(), unloadAsync: jest.fn() },
+      })),
+    },
+    setAudioModeAsync: jest.fn(),
+    RecordingOptionsPresets: { HIGH_QUALITY: {} },
+  },
+}));
+
+// Mock expo-sharing
+jest.mock("expo-sharing", () => ({
+  shareAsync: jest.fn(),
+  isAvailableAsync: jest.fn(() => Promise.resolve(true)),
+}));
+
+// Mock expo-file-system
+jest.mock("expo-file-system", () => ({
+  documentDirectory: "file:///docs/",
+  cacheDirectory: "file:///cache/",
+  writeAsStringAsync: jest.fn(),
+  readAsStringAsync: jest.fn(),
+  deleteAsync: jest.fn(),
+  getInfoAsync: jest.fn(() => Promise.resolve({ exists: false })),
+  EncodingType: { UTF8: "utf8", Base64: "base64" },
+}));
+
+// Mock @react-native-async-storage/async-storage
+jest.mock("@react-native-async-storage/async-storage", () => ({
+  getItem: jest.fn(() => Promise.resolve(null)),
+  setItem: jest.fn(() => Promise.resolve()),
+  removeItem: jest.fn(() => Promise.resolve()),
+  clear: jest.fn(() => Promise.resolve()),
+  getAllKeys: jest.fn(() => Promise.resolve([])),
+  multiGet: jest.fn(() => Promise.resolve([])),
+  multiSet: jest.fn(() => Promise.resolve()),
+}));
+
+// Mock I18nProvider (useI18n)
+jest.mock("./providers/I18nProvider", () => ({
+  I18nProvider: ({ children }) => children,
+  useI18n: () => ({
+    locale: "fr",
+    setLocale: jest.fn(),
+    t: (key) => key,
+  }),
+}));
+
+// Mock react-native-gesture-handler
+jest.mock("react-native-gesture-handler", () => ({
+  GestureHandlerRootView: ({ children }) => children,
+  Swipeable: ({ children }) => children,
+  RectButton: "RectButton",
+  PanGestureHandler: "PanGestureHandler",
+  State: {},
+  Directions: {},
+}));
+
+// Mock rn-emoji-keyboard (imports .png assets that Jest can't parse)
+jest.mock("rn-emoji-keyboard", () => {
+  const React = require("react");
+  return {
+    __esModule: true,
+    default: (props) => null,
+    EmojiKeyboard: (props) => null,
+  };
+});
+
+// Mock chat sub-components that depend on external native modules
+jest.mock("./components/chat/EmojiPickerButton", () => ({
+  EmojiPickerButton: () => null,
+}));
+
+jest.mock("./components/chat/GifPicker", () => ({
+  GifButton: () => null,
+  GifPicker: () => null,
+}));
+
+jest.mock("./components/chat/ReplyPreview", () => ({
+  ReplyPreview: () => null,
+}));
+
+// Mock media upload hook
+jest.mock("./hooks/useMediaUpload", () => ({
+  useMediaUpload: () => ({
+    pickImage: jest.fn(),
+    pickDocument: jest.fn(),
+    uploading: false,
+    progress: 0,
+  }),
 }));
 
 // Silence console warnings in tests

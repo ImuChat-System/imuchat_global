@@ -26,8 +26,7 @@ describe("NotificationPrompt", () => {
       <NotificationPrompt visible={true} onClose={mockOnClose} />,
     );
 
-    // Utiliser le titre exact pour éviter les matchs multiples
-    expect(getByText("Activer les notifications ?")).toBeTruthy();
+    expect(getByText("components.enableNotifications")).toBeTruthy();
   });
 
   it("should not render when visible is false", () => {
@@ -45,10 +44,10 @@ describe("NotificationPrompt", () => {
       <NotificationPrompt visible={true} onClose={mockOnClose} />,
     );
 
-    expect(getByText(/Nouveaux messages/i)).toBeTruthy();
-    expect(getByText(/Appels manqués/i)).toBeTruthy();
-    expect(getByText(/Invitations/i)).toBeTruthy();
-    expect(getByText(/Événements importants/i)).toBeTruthy();
+    expect(getByText("components.newMessages")).toBeTruthy();
+    expect(getByText("components.missedCalls")).toBeTruthy();
+    expect(getByText("components.invitations")).toBeTruthy();
+    expect(getByText("components.importantEvents")).toBeTruthy();
   });
 
   it('should call onClose when "Plus tard" button is pressed', () => {
@@ -56,7 +55,7 @@ describe("NotificationPrompt", () => {
       <NotificationPrompt visible={true} onClose={mockOnClose} />,
     );
 
-    const laterButton = getByText("Plus tard");
+    const laterButton = getByText("components.later");
     fireEvent.press(laterButton);
 
     expect(mockOnClose).toHaveBeenCalledTimes(1);
@@ -69,7 +68,7 @@ describe("NotificationPrompt", () => {
       <NotificationPrompt visible={true} onClose={mockOnClose} />,
     );
 
-    const activateButton = getByText("Activer");
+    const activateButton = getByText("components.enable");
     fireEvent.press(activateButton);
 
     await waitFor(() => {
@@ -84,7 +83,7 @@ describe("NotificationPrompt", () => {
       <NotificationPrompt visible={true} onClose={mockOnClose} />,
     );
 
-    const activateButton = getByText("Activer");
+    const activateButton = getByText("components.enable");
     fireEvent.press(activateButton);
 
     await waitFor(() => {
@@ -103,7 +102,7 @@ describe("NotificationPrompt", () => {
       <NotificationPrompt visible={true} onClose={mockOnClose} />,
     );
 
-    const activateButton = getByText("Activer");
+    const activateButton = getByText("components.enable");
     fireEvent.press(activateButton);
 
     // Vérifier que le bouton est en état de chargement
@@ -126,7 +125,7 @@ describe("NotificationPrompt", () => {
       <NotificationPrompt visible={true} onClose={mockOnClose} />,
     );
 
-    const activateButton = getByText("Activer");
+    const activateButton = getByText("components.enable");
     fireEvent.press(activateButton);
 
     await waitFor(() => {
@@ -140,7 +139,7 @@ describe("NotificationPrompt", () => {
       <NotificationPrompt visible={true} onClose={mockOnClose} />,
     );
 
-    expect(getByText(/Vos données restent privées/i)).toBeTruthy();
+    expect(getByText("components.privacyNote")).toBeTruthy();
   });
 
   it("should display emoji icons for each benefit", () => {

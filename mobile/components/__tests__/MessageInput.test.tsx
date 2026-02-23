@@ -10,7 +10,7 @@ describe("MessageInput", () => {
       <MessageInput onSend={mockOnSend} />,
     );
 
-    expect(getByPlaceholderText("Type a message...")).toBeTruthy();
+    expect(getByPlaceholderText("chat.typeMessage")).toBeTruthy();
   });
 
   it("should call onSend with message text when send button is pressed", () => {
@@ -19,7 +19,7 @@ describe("MessageInput", () => {
       <MessageInput onSend={mockOnSend} />,
     );
 
-    const input = getByPlaceholderText("Type a message...");
+    const input = getByPlaceholderText("chat.typeMessage");
     fireEvent.changeText(input, "Hello World");
 
     // Find and press the send button
@@ -39,7 +39,7 @@ describe("MessageInput", () => {
       <MessageInput onSend={mockOnSend} />,
     );
 
-    const input = getByPlaceholderText("Type a message...");
+    const input = getByPlaceholderText("chat.typeMessage");
     fireEvent.changeText(input, "Test message");
 
     // Simulate send
@@ -59,7 +59,7 @@ describe("MessageInput", () => {
       <MessageInput onSend={mockOnSend} />,
     );
 
-    const input = getByPlaceholderText("Type a message...");
+    const input = getByPlaceholderText("chat.typeMessage");
     const sendButton = input.parent?.parent?.children.find(
       (child: any) => child.type === "TouchableOpacity",
     );
@@ -76,7 +76,7 @@ describe("MessageInput", () => {
       <MessageInput onSend={mockOnSend} />,
     );
 
-    const input = getByPlaceholderText("Type a message...");
+    const input = getByPlaceholderText("chat.typeMessage");
     fireEvent.changeText(input, "   ");
 
     const sendButton = input.parent?.parent?.children.find(
@@ -95,7 +95,7 @@ describe("MessageInput", () => {
       <MessageInput onSend={mockOnSend} disabled={true} />,
     );
 
-    const input = getByPlaceholderText("Type a message...");
+    const input = getByPlaceholderText("chat.typeMessage");
     expect(input.props.editable).toBe(false);
   });
 
@@ -105,7 +105,7 @@ describe("MessageInput", () => {
       <MessageInput onSend={mockOnSend} />,
     );
 
-    const input = getByPlaceholderText("Type a message...");
+    const input = getByPlaceholderText("chat.typeMessage");
     fireEvent.changeText(input, "  Hello World  ");
 
     const sendButton = input.parent?.parent?.children.find(

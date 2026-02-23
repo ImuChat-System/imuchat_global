@@ -89,6 +89,43 @@ jest.mock("@/services/supabase", () => ({
   },
 }));
 
+jest.mock("@/services/security", () => ({
+  checkBiometricAvailability: jest.fn().mockResolvedValue({
+    isAvailable: false,
+    biometryType: null,
+    isEnabled: false,
+  }),
+  authenticateWithBiometrics: jest.fn().mockResolvedValue({ success: false }),
+  setBiometricEnabled: jest.fn().mockResolvedValue(undefined),
+  getBiometryLabel: jest.fn().mockReturnValue("Biometric"),
+  getMfaFactors: jest.fn().mockResolvedValue([]),
+  enrollMfa: jest.fn().mockResolvedValue({ success: false }),
+  verifyMfaEnrollment: jest.fn().mockResolvedValue({ success: false }),
+  unenrollMfa: jest.fn().mockResolvedValue(false),
+  getActiveSessions: jest.fn().mockResolvedValue([]),
+  revokeAllSessions: jest.fn().mockResolvedValue(undefined),
+}));
+
+jest.mock("@/constants/theme-presets", () => ({
+  getAllThemePresets: () => [
+    {
+      id: "default",
+      emoji: "🌙",
+      colors: {
+        background: "#0f0a1a",
+        surface: "#1a1525",
+        text: "#fff",
+        textMuted: "#aaa",
+        border: "#333",
+        primary: "#ec4899",
+        secondary: "#8b5cf6",
+        success: "#22c55e",
+        error: "#ef4444",
+      },
+    },
+  ],
+}));
+
 // Alert spy
 const { Alert } = require("react-native");
 const alertSpy = jest.spyOn(Alert, "alert");
@@ -150,28 +187,28 @@ describe("SettingsScreen", () => {
   it("affiche toutes les sections", async () => {
     const { getByText } = render(<SettingsScreen />);
     await waitFor(() => {
-      expect(getByText("Compte")).toBeTruthy();
-      expect(getByText("Mot de passe")).toBeTruthy();
-      expect(getByText("Apparence")).toBeTruthy();
-      expect(getByText("Langue")).toBeTruthy();
-      expect(getByText("Notifications")).toBeTruthy();
-      expect(getByText("Stories")).toBeTruthy();
-      expect(getByText("Confidentialité")).toBeTruthy();
-      expect(getByText("À propos")).toBeTruthy();
+      expect(getByText("settings.account")).toBeTruthy();
+      expect(getByText("settings.password")).toBeTruthy();
+      expect(getByText("settings.appearance")).toBeTruthy();
+      expect(getByText("settings.language")).toBeTruthy();
+      expect(getByText("settings.notifications")).toBeTruthy();
+      expect(getByText("settings.stories")).toBeTruthy();
+      expect(getByText("settings.privacy")).toBeTruthy();
+      expect(getByText("settings.about")).toBeTruthy();
     });
   });
 
   it("affiche le titre Paramètres", async () => {
     const { getByText } = render(<SettingsScreen />);
     await waitFor(() => {
-      expect(getByText("Paramètres")).toBeTruthy();
+      expect(getByText("settings.title")).toBeTruthy();
     });
   });
 
   it("affiche la version", async () => {
     const { getByText } = render(<SettingsScreen />);
     await waitFor(() => {
-      expect(getByText("1.0.0 (MVP)")).toBeTruthy();
+      expect(getByText("settings.versionValue")).toBeTruthy();
     });
   });
 
@@ -237,8 +274,8 @@ describe("SettingsScreen", () => {
     fireEvent.changeText(getByTestId("input-new-password"), "ab");
     fireEvent.press(getByTestId("btn-change-password"));
     expect(alertSpy).toHaveBeenCalledWith(
-      "Erreur",
-      expect.stringContaining("6 caractères"),
+      "common.error",
+      expect.stringContaining("settings.passwordMinLength"),
     );
   });
 
@@ -322,7 +359,7 @@ describe("SettingsScreen", () => {
   it("affiche le switch mode sombre", async () => {
     const { getByTestId } = render(<SettingsScreen />);
     await waitFor(() => {
-      expect(getByTestId("switch-dark-mode")).toBeTruthy();
+      expect(getByTestId("switch-system-theme")).toBeTruthy();
     });
   });
 
@@ -364,8 +401,8 @@ describe("SettingsScreen", () => {
   it("affiche les boutons Déconnexion et Supprimer", async () => {
     const { getByText } = render(<SettingsScreen />);
     await waitFor(() => {
-      expect(getByText("Déconnexion")).toBeTruthy();
-      expect(getByText("Supprimer le compte")).toBeTruthy();
+      expect(getByText("settings.signOut")).toBeTruthy();
+      expect(getByText("settings.deleteAccount")).toBeTruthy();
     });
   });
 
@@ -376,7 +413,7 @@ describe("SettingsScreen", () => {
     });
     fireEvent.press(getByTestId("btn-sign-out"));
     expect(alertSpy).toHaveBeenCalledWith(
-      "Déconnexion",
+      "settings.signOut",
       expect.any(String),
       expect.any(Array),
     );
@@ -389,7 +426,7 @@ describe("SettingsScreen", () => {
     });
     fireEvent.press(getByTestId("btn-delete-account"));
     expect(alertSpy).toHaveBeenCalledWith(
-      "Supprimer le compte",
+      "settings.deleteAccount",
       expect.any(String),
       expect.any(Array),
     );

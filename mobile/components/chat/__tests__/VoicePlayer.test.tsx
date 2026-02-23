@@ -84,7 +84,7 @@ describe("VoicePlayer", () => {
       <VoicePlayer {...defaultProps} transcription="Test transcription" />,
     );
 
-    expect(getByText("Transcription")).toBeTruthy();
+    expect(getByText("components.transcription")).toBeTruthy();
   });
 
   it("toggles transcription visibility on button press", () => {
@@ -99,11 +99,11 @@ describe("VoicePlayer", () => {
     expect(queryByText("Test transcription content")).toBeNull();
 
     // Press transcription toggle
-    fireEvent.press(getByText("Transcription"));
+    fireEvent.press(getByText("components.transcription"));
 
     // Now transcription should be visible
     expect(getByText("Test transcription content")).toBeTruthy();
-    expect(getByText("Masquer")).toBeTruthy();
+    expect(getByText("components.hide")).toBeTruthy();
   });
 
   it("renders with isOwn style", () => {

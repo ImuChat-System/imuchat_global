@@ -63,7 +63,7 @@
 - [x] **Web** : Next.js App Router
   - [x] /login
   - [x] /signup
-  - [x] /app/* (protected — ⚠️ middleware = i18n seulement, pas de SSR auth guard)
+  - [x] /app/* (protected — ✅ middleware SSR auth guard + i18n fusionnés, 40+ routes protégées)
 
 **Livrable** : Apps lancent localement ✅
 
@@ -101,8 +101,8 @@
 - [x] Page `/login`
 - [x] Page `/signup` (+ OAuth Google/Discord)
 - [x] Page `/forgot-password` — ✅ Créée (formulaire email + resetPassword + i18n fr/en/ja)
-- [x] Middleware auth protection — ✅ Réécrit avec `@supabase/ssr`, protection SSR sur `/chat`, `/app`, `/settings`, `/profile`
-- [x] Session cookies (SSR) — client-side
+- [x] Middleware auth protection — ✅ Réécrit v2 avec `@supabase/ssr` + `next-intl` fusionnés. Approche inverse : 40+ routes feature protégées par défaut, routing pur extrait dans `middleware-routes.ts` (128 tests), intégration middleware complète (62 tests)
+- [x] Session cookies (SSR) — ✅ `createBrowserClient` de `@supabase/ssr` (cookies auto-sync avec middleware)
 - [x] Redirect si authenticated
 
 **Backend** :
@@ -1119,19 +1119,20 @@
 ### Problèmes Critiques Transversaux
 
 1. ~~**Web-app : 100% MOCK_DATA pour le chat**~~ ✅ Résolu — Chat connecté Socket.IO temps réel (11 events : message:new, typing, presence, reactions, edit, delete)
-2. **Backend : Modules en mémoire** — ChatEngineModule stocke tout dans des `Map`, pas de persistance DB
+2. ~~**Backend : Modules en mémoire**~~ ✅ Résolu — SupabaseChatPersistenceAdapter implémenté (~380L), ChatEngineModule délègue toutes les opérations CRUD à Supabase quand l'adapter est injecté
 3. ~~**Pas de routes REST**~~ ⚠️ Partiellement résolu — Routes API chat/messages/notifications créées, mais modules secondaires encore mock
-4. **Schéma Drizzle désynchronisé** du SQL Supabase (table `users` vs `profiles`)
+4. ~~**Schéma Drizzle désynchronisé**~~ ✅ Résolu — Drizzle schema.ts v2 : 7 tables, 7 CHECK constraints, 3 indexes messages, FK self-référentielle reply_to_id, 7 relations(), noms de colonnes call_logs corrigés (start_time/end_time), migration 0000 générée
 5. ~~**Forgot Password web CASSÉ**~~ ✅ Résolu (BUG-003 auth corrigé)
-6. **Middleware web = i18n seulement** — Pas de SSR auth guard (TODO)
+6. ~~**Middleware web = i18n seulement**~~ ✅ Résolu — Middleware réécrit : auth SSR + i18n fusionnés, 40+ routes protégées (approche inverse), `createBrowserClient` sync cookies, 190 tests (128 routing + 62 intégration)
 7. ~~**Socket.IO hardcodé localhost**~~ ✅ Résolu — Configuration production avec transport polling/websocket, reconnection, CORS dynamique
 8. ~~**334 fichiers** importent encore `mock-data.ts`~~ ✅ Résolu — Architecture mock-data.ts démantelée : types dans `@/lib/types/` (10 fichiers), données seed dans `@/lib/data/` (10 fichiers), 0 import mock-data restant
 
 ### Tests
 
 - **Mobile** : 22 suites, 281 tests, 0 failures ✅
-- **Web** : 95/96 suites, 905 tests, 0 failures ✅
-- **Total** : 117 suites, 1186 tests, 0 failures
+- **Web** : 88/89 suites (+ 2 node env), 1026 tests, 0 failures ✅ (+ 190 middleware tests)
+- **Platform-core** : 22 suites, 883 tests, 0 failures ✅
+- **Total** : 139 suites, 2069 tests, 0 failures
 - **E2E** : ❌ Aucun test end-to-end
 
 ---
@@ -1154,7 +1155,7 @@
 4. ✅ Appels Audio/Vidéo (Semaines 5-6) — FAIT
 5. ✅ Notifications + Thèmes (Semaine 7) — FAIT
 6. ✅ ~~**P0 : Connecter web-app au vrai backend**~~ — Chat/messages connecté Socket.IO, MOCK_APPS → moduleRegistry (27 modules)
-7. 🔴 **P0 : Ajouter persistance DB** aux modules backend (ChatEngine en mémoire)
+7. ✅ ~~**P0 : Ajouter persistance DB**~~ — SupabaseChatPersistenceAdapter créé, ChatEngineModule délègue à Supabase, Drizzle schema synced, 883/883 tests OK
 8. ✅ ~~**P1 : Edit/Delete, Search, Offline**~~ — Tous implémentés sur web (context menu, Socket.IO, SearchDialog 536L, offline-queue IndexedDB)
 9. ✅ ~~**P1 : Fixer Forgot Password + auth**~~ — BUG-003 résolu (refresh token, 401 retry, error state)
 10. ✅ ~~**P1 : Migrer MOCK_DATA modules secondaires**~~ — 334 fichiers migrés, mock-data.ts éliminé (types → `@/lib/types/`, données → `@/lib/data/`)
@@ -1170,6 +1171,6 @@
 
 ---
 
-*🗓️ ~80% du MVP web est implémenté. Priorité : connecter les modules secondaires à de vraies API Supabase et ajouter persistance DB backend.*
+*🗓️ ~85% du MVP web est implémenté. Priorité : tests WebSocket + coverage, puis Desktop packaging.*
 
-> **Dernière mise à jour** : 22 février 2026 — Migration mock→real complète (334 fichiers), 0 erreurs TS
+> **Dernière mise à jour** : 23 février 2026 — P0-DB + P0-SCHEMA complets. Drizzle schema v2 (7 CHECK, 3 index, FK self-ref, relations, migration). 883/883 tests platform-core.

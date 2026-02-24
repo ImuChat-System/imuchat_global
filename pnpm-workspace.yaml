@@ -8,3 +8,5 @@ packages:
   - 'ui-kit'
   - 'infra'
   - 'site-vitrine'
+  - 'imu-miniapps/packages/*'
+  - 'imu-games'

@@ -271,22 +271,23 @@ Utilisateur
 
 ## 7. Plan de migration en 4 phases
 
-### Phase A — Module Runtime fonctionnel (2-3 semaines)
+### Phase A — Module Runtime fonctionnel (2-3 semaines) ✅ IMPLÉMENTÉ
 
 **Objectif** : Faire fonctionner le chargement dynamique avec 1 module pilote.
+**Statut** : Implémenté le 25 février 2026 — voir [PHASE_A_IMPLEMENTATION.md](PHASE_A_IMPLEMENTATION.md)
 
-- [ ] Connecter `services/loader.ts` au flux d'installation du Store
-- [ ] Implémenter le sandbox iframe avec communication `postMessage`
-- [ ] Définir le SDK API (accès auth, wallet, chat, notifications)
-- [ ] Extraire `games` comme premier module pilote
-- [ ] Héberger le bundle du module pilote sur Supabase Storage
-- [ ] Tester le cycle complet : browse → install → load → run → uninstall
+- [x] Connecter `services/loader.ts` au flux d'installation du Store
+- [x] Implémenter le sandbox iframe avec communication `postMessage`
+- [x] Définir le SDK API (accès auth, wallet, chat, notifications)
+- [x] Extraire `games` comme premier module pilote
+- [x] Héberger le bundle du module pilote sur Supabase Storage
+- [x] Tester le cycle complet : browse → install → load → run → uninstall
 
 ### Phase B — Extraction des modules optionnels (3-4 semaines)
 
 **Objectif** : Retirer les 11 modules optionnels (Store) du code source.
 
-- [ ] Créer le repo/monorepo `imu-miniapps/` (ou dossier séparé)
+- [ ] Créer un répo par module (dans un dossier séparé)
 - [ ] Extraire les 11 modules optionnels un par un
 - [ ] Supprimer les routes Next.js correspondantes de la web-app
 - [ ] Mettre en place le pipeline de build mini-app (bundle → manifest → publish)

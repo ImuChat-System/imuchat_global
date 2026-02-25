@@ -300,7 +300,11 @@ Utilisateur
 
 **Objectif** : Retirer les ~10 modules par défaut non essentiels.
 
-- [ ] Extraire les modules par défaut (music, watch, events, news, podcasts, etc.)
+- [x] Extraire les modules par défaut activés (events, music, watch) — 3 mini-apps Vite standalone créées
+  - [x] `imu-events` — 2 composants + pages, 0 erreurs TS, build 3.81s (198 KB JS)
+  - [x] `imu-music` — 16 UI + 14 composants + MusicProvider + pages, 0 erreurs TS, build 5.29s (413 KB JS)
+  - [x] `imu-watch` — 20 UI + 28 composants + 5 pages + I18n (3 langues, 5 namespaces), 0 erreurs TS, build 6.47s (580 KB JS)
+- [ ] Extraire les modules par défaut restants (news, podcasts, etc.)
 - [ ] Implémenter le pré-installation automatique (ces modules sont installés par défaut mais restent des mini-apps)
 - [ ] Gérer la migration des données utilisateur existantes
 - [ ] Unifier les 3 registres en un seul (Supabase `modules` table)

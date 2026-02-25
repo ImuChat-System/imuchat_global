@@ -1,0 +1,35 @@
+{
+  "id": "imu-contests",
+  "name": "ImuContests",
+  "version": "1.0.0",
+  "description": "Competitions & contests — Participate, challenge friends, and win prizes.",
+  "category": "games",
+  "icon": "🏆",
+  "author": "ImuChat Team",
+  "license": "MIT",
+  "entry": "index.html",
+  "permissions": [
+    "auth:read",
+    "auth:profile",
+    "theme:read",
+    "ui:toast",
+    "ui:modal",
+    "notifications:send",
+    "storage:read",
+    "storage:write"
+  ],
+  "dependencies": [
+    "games"
+  ],
+  "size": 0,
+  "defaultEnabled": false,
+  "config": {
+    "sandbox": "iframe",
+    "maxStorageSize": 10485760,
+    "allowedDomains": [
+      "placehold.co",
+      "picsum.photos",
+      "api.dicebear.com"
+    ]
+  }
+}

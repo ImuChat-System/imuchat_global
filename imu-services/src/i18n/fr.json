@@ -1,0 +1,153 @@
+{
+  "hub": {
+    "title": "ImuServices",
+    "subtitle": "Services professionnels",
+    "comingSoon": "Plus de services bientôt",
+    "comingSoonDesc": "Trouvez des professionnels et réservez.",
+    "feature1": {
+      "title": "Parcourir",
+      "description": "Trouver un professionnel"
+    },
+    "feature2": {
+      "title": "Réservations",
+      "description": "Vos rendez-vous"
+    },
+    "feature3": {
+      "title": "Urgence",
+      "description": "Services d'urgence"
+    }
+  },
+  "ServicesPage": {
+    "header": {
+      "title": "Trouver des services",
+      "description": "Parcourez des professionnels pour tous vos besoins.",
+      "searchPlaceholder": "Rechercher un service...",
+      "quickFilters": "Filtres rapides",
+      "emergency": "Urgence"
+    },
+    "main": {
+      "title": "Services",
+      "myBookings": "Mes réservations",
+      "emergency": "Urgence"
+    },
+    "booking": {
+      "steps": {
+        "describe": "Décrire le besoin",
+        "select": "Choisir un pro",
+        "confirm": "Confirmer et payer"
+      },
+      "back": "Retour",
+      "title": "Réserver un service",
+      "previous": "Précédent",
+      "next": "Suivant",
+      "confirmBooking": "Confirmer la réservation",
+      "step1": {
+        "title": "Décrivez votre besoin",
+        "description": "Dites-nous ce dont vous avez besoin.",
+        "placeholder": "Le formulaire de description apparaîtra ici."
+      },
+      "step2": {
+        "title": "Sélectionnez un professionnel",
+        "description": "Choisissez un pro dans la liste.",
+        "placeholder": "La liste des professionnels apparaîtra ici."
+      },
+      "step3": {
+        "title": "Confirmez et payez",
+        "description": "Vérifiez les détails et le paiement.",
+        "placeholder": "Le formulaire de confirmation apparaîtra ici."
+      }
+    },
+    "categories": {
+      "domestic": {
+        "title": "Maison",
+        "plumber": "Plombier",
+        "electrician": "Électricien",
+        "locksmith": "Serrurier",
+        "cleaning": "Nettoyage",
+        "gardener": "Jardinier",
+        "handyman": "Bricoleur",
+        "decorator": "Décorateur"
+      },
+      "family": {
+        "title": "Famille",
+        "babysitter": "Baby-sitter",
+        "homeHelp": "Aide à domicile",
+        "parentingCoach": "Coach parental",
+        "tutor": "Tuteur",
+        "psychologist": "Psychologue"
+      },
+      "wellness": {
+        "title": "Bien-être",
+        "chef": "Chef à domicile",
+        "fitnessCoach": "Coach sportif",
+        "beautician": "Esthéticienne",
+        "smartHomeTech": "Technicien domotique",
+        "vet": "Vétérinaire"
+      },
+      "security": {
+        "title": "Sécurité",
+        "emergencyLocksmith": "Serrurier d'urgence",
+        "privateSecurity": "Sécurité privée",
+        "applianceRepair": "Réparation électroménager",
+        "medicalAssistance": "Assistance médicale",
+        "insurance": "Assurance"
+      },
+      "mobility": {
+        "title": "Mobilité",
+        "evTechnician": "Technicien VE",
+        "mobileMechanic": "Mécanicien mobile",
+        "driver": "Chauffeur"
+      }
+    },
+    "pro_detail": {
+      "header": {
+        "reviews": "avis",
+        "responseTime": "Temps de réponse",
+        "interventionTime": "Délai d'intervention",
+        "verified": "Vérifié",
+        "insured": "Assuré",
+        "contact": "Contacter",
+        "call": "Appeler",
+        "view": "Voir",
+        "book": "Réserver"
+      },
+      "history": {
+        "title": "Historique",
+        "description": "Travaux précédents et notes.",
+        "placeholder": "L'historique apparaîtra ici."
+      },
+      "communication": {
+        "title": "Communication",
+        "description": "Historique des messages.",
+        "placeholder": "Les options de communication apparaîtront ici."
+      },
+      "guarantees": {
+        "title": "Garanties",
+        "placeholder": "Les détails des garanties apparaîtront ici."
+      },
+      "badges": {
+        "title": "Badges de confiance",
+        "placeholder": "Les badges apparaîtront ici."
+      },
+      "services": {
+        "title": "Forfaits de services",
+        "description": "Services disponibles et tarifs.",
+        "placeholder": "La liste des services apparaîtra ici."
+      },
+      "gallery": {
+        "title": "Galerie",
+        "description": "Photos des travaux réalisés.",
+        "placeholder": "La galerie apparaîtra ici."
+      },
+      "related": {
+        "title": "Professionnels similaires",
+        "placeholder": "D'autres pros apparaîtront ici."
+      },
+      "availability": {
+        "title": "Disponibilités",
+        "description": "Calendrier des rendez-vous.",
+        "placeholder": "Le calendrier des disponibilités apparaîtra ici."
+      }
+    }
+  }
+}

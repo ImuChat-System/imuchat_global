@@ -1,4 +1,11 @@
 {
+	"scripts": {
+		"build:miniapps": "bash scripts/build-all-miniapps.sh",
+		"build:miniapps:games": "bash scripts/build-all-miniapps.sh imu-games",
+		"clone:all": "bash scripts/clone-all-repos.sh",
+		"test:all": "bash scripts/run-all-tests.sh",
+		"lint:all": "bash scripts/lint-all.sh"
+	},
 	"dependencies": {
 		"@babel/runtime": "^7.28.6",
 		"@expo/metro-runtime": "^6.1.2",

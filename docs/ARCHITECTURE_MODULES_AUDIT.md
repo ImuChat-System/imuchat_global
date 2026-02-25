@@ -286,13 +286,15 @@ Utilisateur
 ### Phase B — Extraction des modules optionnels (3-4 semaines)
 
 **Objectif** : Retirer les 11 modules optionnels (Store) du code source.
+**Statut** : ✅ IMPLÉMENTÉ — voir [PHASE_B_IMPLEMENTATION.md](PHASE_B_IMPLEMENTATION.md)
 
-- [ ] Créer un répo par module (dans un dossier séparé)
-- [ ] Extraire les 11 modules optionnels un par un
-- [ ] Supprimer les routes Next.js correspondantes de la web-app
-- [ ] Mettre en place le pipeline de build mini-app (bundle → manifest → publish)
-- [ ] Activer `moduleReview.ts` avec checksums et signatures
-- [ ] Persister l'état d'installation dans Supabase (table `user_modules`)
+- [x] Créer un répo par dossier de module (dans un dossier séparé)
+- [x] Extraire les 13 modules optionnels en mini-apps standalone
+- [x] Convertir les routes Next.js en chargement dynamique 3-tier (mini-app → Supabase → legacy fallback)
+- [x] Mettre en place le pipeline de build mini-app (bundle → manifest → publish)
+- [x] Activer `moduleReview.ts` avec checksums et signatures
+- [x] Persister l'état d'installation dans Supabase (table `user_modules`)
+- [x] Migrer les composants des modules complexes (11 modules — 264 composants + 142 UI migrés, 0 erreurs TS, tous les builds Vite passent)
 
 ### Phase C — Extraction des modules par défaut non-core (3-4 semaines)
 

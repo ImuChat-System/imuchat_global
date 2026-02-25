@@ -160,6 +160,464 @@ importers:
         specifier: ^0.14.5
         version: 0.14.6
 
+  imu-contests:
+    dependencies:
+      '@hookform/resolvers':
+        specifier: ^3.3.0
+        version: 3.10.0(react-hook-form@7.71.1(react@18.3.1))
+      '@imuchat/miniapp-sdk':
+        specifier: workspace:*
+        version: link:../imu-miniapps/packages/sdk
+      '@radix-ui/react-avatar':
+        specifier: ^1.1.11
+        version: 1.1.11(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@radix-ui/react-checkbox':
+        specifier: ^1.3.3
+        version: 1.3.3(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@radix-ui/react-dialog':
+        specifier: ^1.0.0
+        version: 1.1.15(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@radix-ui/react-label':
+        specifier: ^2.0.0
+        version: 2.1.8(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@radix-ui/react-scroll-area':
+        specifier: ^1.0.0
+        version: 1.2.10(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@radix-ui/react-select':
+        specifier: ^2.0.0
+        version: 2.2.6(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@radix-ui/react-separator':
+        specifier: ^1.1.8
+        version: 1.1.8(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@radix-ui/react-slot':
+        specifier: ^1.0.0
+        version: 1.2.4(@types/react@18.3.28)(react@18.3.1)
+      '@radix-ui/react-tabs':
+        specifier: ^1.0.0
+        version: 1.1.13(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      class-variance-authority:
+        specifier: ^0.7.0
+        version: 0.7.1
+      clsx:
+        specifier: ^2.1.0
+        version: 2.1.1
+      embla-carousel-autoplay:
+        specifier: ^8.0.0
+        version: 8.6.0(embla-carousel@8.6.0)
+      embla-carousel-react:
+        specifier: ^8.0.0
+        version: 8.6.0(react@18.3.1)
+      framer-motion:
+        specifier: ^11.0.0
+        version: 11.18.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      lucide-react:
+        specifier: ^0.400.0
+        version: 0.400.0(react@18.3.1)
+      react:
+        specifier: ^18.3.0
+        version: 18.3.1
+      react-dom:
+        specifier: ^18.3.0
+        version: 18.3.1(react@18.3.1)
+      react-hook-form:
+        specifier: ^7.50.0
+        version: 7.71.1(react@18.3.1)
+      tailwind-merge:
+        specifier: ^2.2.0
+        version: 2.6.1
+      zod:
+        specifier: ^3.22.0
+        version: 3.25.76
+    devDependencies:
+      '@types/react':
+        specifier: ^18.3.0
+        version: 18.3.28
+      '@types/react-dom':
+        specifier: ^18.3.0
+        version: 18.3.7(@types/react@18.3.28)
+      '@vitejs/plugin-react':
+        specifier: ^4.3.0
+        version: 4.7.0(vite@5.4.21(@types/node@24.10.13)(lightningcss@1.31.1)(terser@5.46.0))
+      autoprefixer:
+        specifier: ^10.4.0
+        version: 10.4.24(postcss@8.5.6)
+      eslint:
+        specifier: ^8.57.0
+        version: 8.57.1
+      eslint-plugin-react-hooks:
+        specifier: ^4.6.0
+        version: 4.6.2(eslint@8.57.1)
+      eslint-plugin-react-refresh:
+        specifier: ^0.4.0
+        version: 0.4.26(eslint@8.57.1)
+      postcss:
+        specifier: ^8.4.0
+        version: 8.5.6
+      prettier:
+        specifier: ^3.2.0
+        version: 3.8.1
+      tailwindcss:
+        specifier: ^3.4.0
+        version: 3.4.19(tsx@4.21.0)(yaml@2.8.2)
+      typescript:
+        specifier: ^5.4.0
+        version: 5.9.3
+      vite:
+        specifier: ^5.4.0
+        version: 5.4.21(@types/node@24.10.13)(lightningcss@1.31.1)(terser@5.46.0)
+
+  imu-dating:
+    dependencies:
+      '@hookform/resolvers':
+        specifier: ^5.2.2
+        version: 5.2.2(react-hook-form@7.71.2(react@18.3.1))
+      '@imuchat/miniapp-sdk':
+        specifier: workspace:*
+        version: link:../imu-miniapps/packages/sdk
+      '@radix-ui/react-alert-dialog':
+        specifier: ^1.1.15
+        version: 1.1.15(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@radix-ui/react-avatar':
+        specifier: ^1.0.0
+        version: 1.1.11(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@radix-ui/react-checkbox':
+        specifier: ^1.3.3
+        version: 1.3.3(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@radix-ui/react-dialog':
+        specifier: ^1.0.0
+        version: 1.1.15(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@radix-ui/react-progress':
+        specifier: ^1.1.8
+        version: 1.1.8(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@radix-ui/react-select':
+        specifier: ^2.2.6
+        version: 2.2.6(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@radix-ui/react-separator':
+        specifier: ^1.0.0
+        version: 1.1.8(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@radix-ui/react-slot':
+        specifier: ^1.0.0
+        version: 1.2.4(@types/react@18.3.28)(react@18.3.1)
+      '@radix-ui/react-switch':
+        specifier: ^1.2.6
+        version: 1.2.6(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@radix-ui/react-tabs':
+        specifier: ^1.0.0
+        version: 1.1.13(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@radix-ui/react-tooltip':
+        specifier: ^1.2.8
+        version: 1.2.8(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      class-variance-authority:
+        specifier: ^0.7.0
+        version: 0.7.1
+      clsx:
+        specifier: ^2.1.0
+        version: 2.1.1
+      embla-carousel-autoplay:
+        specifier: ^8.0.0
+        version: 8.6.0(embla-carousel@8.6.0)
+      embla-carousel-react:
+        specifier: ^8.0.0
+        version: 8.6.0(react@18.3.1)
+      framer-motion:
+        specifier: ^11.0.0
+        version: 11.18.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      lucide-react:
+        specifier: ^0.400.0
+        version: 0.400.0(react@18.3.1)
+      react:
+        specifier: ^18.3.0
+        version: 18.3.1
+      react-dom:
+        specifier: ^18.3.0
+        version: 18.3.1(react@18.3.1)
+      react-hook-form:
+        specifier: ^7.71.2
+        version: 7.71.2(react@18.3.1)
+      tailwind-merge:
+        specifier: ^2.2.0
+        version: 2.6.1
+      zod:
+        specifier: ^4.3.6
+        version: 4.3.6
+    devDependencies:
+      '@types/react':
+        specifier: ^18.3.0
+        version: 18.3.28
+      '@types/react-dom':
+        specifier: ^18.3.0
+        version: 18.3.7(@types/react@18.3.28)
+      '@vitejs/plugin-react':
+        specifier: ^4.3.0
+        version: 4.7.0(vite@5.4.21(@types/node@24.10.13)(lightningcss@1.31.1)(terser@5.46.0))
+      autoprefixer:
+        specifier: ^10.4.0
+        version: 10.4.24(postcss@8.5.6)
+      eslint:
+        specifier: ^8.57.0
+        version: 8.57.1
+      eslint-plugin-react-hooks:
+        specifier: ^4.6.0
+        version: 4.6.2(eslint@8.57.1)
+      eslint-plugin-react-refresh:
+        specifier: ^0.4.0
+        version: 0.4.26(eslint@8.57.1)
+      postcss:
+        specifier: ^8.4.0
+        version: 8.5.6
+      prettier:
+        specifier: ^3.2.0
+        version: 3.8.1
+      tailwindcss:
+        specifier: ^3.4.0
+        version: 3.4.19(tsx@4.21.0)(yaml@2.8.2)
+      typescript:
+        specifier: ^5.4.0
+        version: 5.9.3
+      vite:
+        specifier: ^5.4.0
+        version: 5.4.21(@types/node@24.10.13)(lightningcss@1.31.1)(terser@5.46.0)
+
+  imu-events:
+    dependencies:
+      '@imuchat/miniapp-sdk':
+        specifier: workspace:*
+        version: link:../imu-miniapps/packages/sdk
+      '@radix-ui/react-slot':
+        specifier: ^1.0.0
+        version: 1.2.4(@types/react@18.3.28)(react@18.3.1)
+      class-variance-authority:
+        specifier: ^0.7.0
+        version: 0.7.1
+      clsx:
+        specifier: ^2.1.0
+        version: 2.1.1
+      embla-carousel-react:
+        specifier: ^8.0.0
+        version: 8.6.0(react@18.3.1)
+      lucide-react:
+        specifier: ^0.400.0
+        version: 0.400.0(react@18.3.1)
+      react:
+        specifier: ^18.3.0
+        version: 18.3.1
+      react-dom:
+        specifier: ^18.3.0
+        version: 18.3.1(react@18.3.1)
+      tailwind-merge:
+        specifier: ^2.2.0
+        version: 2.6.1
+    devDependencies:
+      '@types/react':
+        specifier: ^18.3.0
+        version: 18.3.28
+      '@types/react-dom':
+        specifier: ^18.3.0
+        version: 18.3.7(@types/react@18.3.28)
+      '@vitejs/plugin-react':
+        specifier: ^4.3.0
+        version: 4.7.0(vite@5.4.21(@types/node@24.10.13)(lightningcss@1.31.1)(terser@5.46.0))
+      autoprefixer:
+        specifier: ^10.4.0
+        version: 10.4.24(postcss@8.5.6)
+      postcss:
+        specifier: ^8.4.0
+        version: 8.5.6
+      tailwindcss:
+        specifier: ^3.4.0
+        version: 3.4.19(tsx@4.21.0)(yaml@2.8.2)
+      typescript:
+        specifier: ~5.5.0
+        version: 5.5.4
+      vite:
+        specifier: ^5.4.0
+        version: 5.4.21(@types/node@24.10.13)(lightningcss@1.31.1)(terser@5.46.0)
+
+  imu-finance:
+    dependencies:
+      '@imuchat/miniapp-sdk':
+        specifier: workspace:*
+        version: link:../imu-miniapps/packages/sdk
+      '@radix-ui/react-avatar':
+        specifier: ^1.1.11
+        version: 1.1.11(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@radix-ui/react-label':
+        specifier: ^2.0.0
+        version: 2.1.8(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@radix-ui/react-progress':
+        specifier: ^1.1.8
+        version: 1.1.8(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@radix-ui/react-scroll-area':
+        specifier: ^1.2.10
+        version: 1.2.10(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@radix-ui/react-select':
+        specifier: ^2.0.0
+        version: 2.2.6(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@radix-ui/react-separator':
+        specifier: ^1.0.0
+        version: 1.1.8(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@radix-ui/react-slot':
+        specifier: ^1.0.0
+        version: 1.2.4(@types/react@18.3.28)(react@18.3.1)
+      '@radix-ui/react-tabs':
+        specifier: ^1.0.0
+        version: 1.1.13(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      class-variance-authority:
+        specifier: ^0.7.0
+        version: 0.7.1
+      clsx:
+        specifier: ^2.1.0
+        version: 2.1.1
+      lucide-react:
+        specifier: ^0.400.0
+        version: 0.400.0(react@18.3.1)
+      react:
+        specifier: ^18.3.0
+        version: 18.3.1
+      react-dom:
+        specifier: ^18.3.0
+        version: 18.3.1(react@18.3.1)
+      recharts:
+        specifier: ^2.12.0
+        version: 2.15.4(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      tailwind-merge:
+        specifier: ^2.2.0
+        version: 2.6.1
+    devDependencies:
+      '@types/react':
+        specifier: ^18.3.0
+        version: 18.3.28
+      '@types/react-dom':
+        specifier: ^18.3.0
+        version: 18.3.7(@types/react@18.3.28)
+      '@vitejs/plugin-react':
+        specifier: ^4.3.0
+        version: 4.7.0(vite@5.4.21(@types/node@24.10.13)(lightningcss@1.31.1)(terser@5.46.0))
+      autoprefixer:
+        specifier: ^10.4.0
+        version: 10.4.24(postcss@8.5.6)
+      eslint:
+        specifier: ^8.57.0
+        version: 8.57.1
+      eslint-plugin-react-hooks:
+        specifier: ^4.6.0
+        version: 4.6.2(eslint@8.57.1)
+      eslint-plugin-react-refresh:
+        specifier: ^0.4.0
+        version: 0.4.26(eslint@8.57.1)
+      postcss:
+        specifier: ^8.4.0
+        version: 8.5.6
+      prettier:
+        specifier: ^3.2.0
+        version: 3.8.1
+      tailwindcss:
+        specifier: ^3.4.0
+        version: 3.4.19(tsx@4.21.0)(yaml@2.8.2)
+      typescript:
+        specifier: ^5.4.0
+        version: 5.9.3
+      vite:
+        specifier: ^5.4.0
+        version: 5.4.21(@types/node@24.10.13)(lightningcss@1.31.1)(terser@5.46.0)
+
+  imu-formations:
+    dependencies:
+      '@imuchat/miniapp-sdk':
+        specifier: workspace:*
+        version: link:../imu-miniapps/packages/sdk
+      '@radix-ui/react-accordion':
+        specifier: ^1.2.12
+        version: 1.2.12(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@radix-ui/react-avatar':
+        specifier: ^1.0.0
+        version: 1.1.11(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@radix-ui/react-label':
+        specifier: ^2.0.0
+        version: 2.1.8(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@radix-ui/react-progress':
+        specifier: ^1.0.0
+        version: 1.1.8(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@radix-ui/react-radio-group':
+        specifier: ^1.0.0
+        version: 1.3.8(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@radix-ui/react-separator':
+        specifier: ^1.0.0
+        version: 1.1.8(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@radix-ui/react-slot':
+        specifier: ^1.0.0
+        version: 1.2.4(@types/react@18.3.28)(react@18.3.1)
+      '@radix-ui/react-tabs':
+        specifier: ^1.0.0
+        version: 1.1.13(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@radix-ui/react-tooltip':
+        specifier: ^1.2.8
+        version: 1.2.8(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      class-variance-authority:
+        specifier: ^0.7.0
+        version: 0.7.1
+      clsx:
+        specifier: ^2.1.0
+        version: 2.1.1
+      embla-carousel-autoplay:
+        specifier: ^8.0.0
+        version: 8.6.0(embla-carousel@8.6.0)
+      embla-carousel-react:
+        specifier: ^8.0.0
+        version: 8.6.0(react@18.3.1)
+      framer-motion:
+        specifier: ^11.0.0
+        version: 11.18.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      lucide-react:
+        specifier: ^0.400.0
+        version: 0.400.0(react@18.3.1)
+      react:
+        specifier: ^18.3.0
+        version: 18.3.1
+      react-dom:
+        specifier: ^18.3.0
+        version: 18.3.1(react@18.3.1)
+      tailwind-merge:
+        specifier: ^2.2.0
+        version: 2.6.1
+    devDependencies:
+      '@types/react':
+        specifier: ^18.3.0
+        version: 18.3.28
+      '@types/react-dom':
+        specifier: ^18.3.0
+        version: 18.3.7(@types/react@18.3.28)
+      '@vitejs/plugin-react':
+        specifier: ^4.3.0
+        version: 4.7.0(vite@5.4.21(@types/node@24.10.13)(lightningcss@1.31.1)(terser@5.46.0))
+      autoprefixer:
+        specifier: ^10.4.0
+        version: 10.4.24(postcss@8.5.6)
+      eslint:
+        specifier: ^8.57.0
+        version: 8.57.1
+      eslint-plugin-react-hooks:
+        specifier: ^4.6.0
+        version: 4.6.2(eslint@8.57.1)
+      eslint-plugin-react-refresh:
+        specifier: ^0.4.0
+        version: 0.4.26(eslint@8.57.1)
+      postcss:
+        specifier: ^8.4.0
+        version: 8.5.6
+      prettier:
+        specifier: ^3.2.0
+        version: 3.8.1
+      tailwindcss:
+        specifier: ^3.4.0
+        version: 3.4.19(tsx@4.21.0)(yaml@2.8.2)
+      typescript:
+        specifier: ^5.4.0
+        version: 5.9.3
+      vite:
+        specifier: ^5.4.0
+        version: 5.4.21(@types/node@24.10.13)(lightningcss@1.31.1)(terser@5.46.0)
+
   imu-games:
     dependencies:
       '@imuchat/miniapp-sdk':
@@ -177,6 +635,115 @@ importers:
       react-dom:
         specifier: ^18.3.0
         version: 18.3.1(react@18.3.1)
+    devDependencies:
+      '@types/react':
+        specifier: ^18.3.0
+        version: 18.3.28
+      '@types/react-dom':
+        specifier: ^18.3.0
+        version: 18.3.7(@types/react@18.3.28)
+      '@vitejs/plugin-react':
+        specifier: ^4.3.0
+        version: 4.7.0(vite@5.4.21(@types/node@24.10.13)(lightningcss@1.31.1)(terser@5.46.0))
+      autoprefixer:
+        specifier: ^10.4.0
+        version: 10.4.24(postcss@8.5.6)
+      eslint:
+        specifier: ^8.57.0
+        version: 8.57.1
+      eslint-plugin-react-hooks:
+        specifier: ^4.6.0
+        version: 4.6.2(eslint@8.57.1)
+      eslint-plugin-react-refresh:
+        specifier: ^0.4.0
+        version: 0.4.26(eslint@8.57.1)
+      postcss:
+        specifier: ^8.4.0
+        version: 8.5.6
+      prettier:
+        specifier: ^3.2.0
+        version: 3.8.1
+      tailwindcss:
+        specifier: ^3.4.0
+        version: 3.4.19(tsx@4.21.0)(yaml@2.8.2)
+      typescript:
+        specifier: ^5.4.0
+        version: 5.9.3
+      vite:
+        specifier: ^5.4.0
+        version: 5.4.21(@types/node@24.10.13)(lightningcss@1.31.1)(terser@5.46.0)
+
+  imu-library:
+    dependencies:
+      '@imuchat/miniapp-sdk':
+        specifier: workspace:*
+        version: link:../imu-miniapps/packages/sdk
+      '@radix-ui/react-accordion':
+        specifier: ^1.2.12
+        version: 1.2.12(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@radix-ui/react-avatar':
+        specifier: ^1.1.11
+        version: 1.1.11(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@radix-ui/react-collapsible':
+        specifier: ^1.1.12
+        version: 1.1.12(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@radix-ui/react-dialog':
+        specifier: ^1.0.0
+        version: 1.1.15(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@radix-ui/react-dropdown-menu':
+        specifier: ^2.0.0
+        version: 2.1.16(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@radix-ui/react-popover':
+        specifier: ^1.1.15
+        version: 1.1.15(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@radix-ui/react-progress':
+        specifier: ^1.0.0
+        version: 1.1.8(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@radix-ui/react-scroll-area':
+        specifier: ^1.0.0
+        version: 1.2.10(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@radix-ui/react-separator':
+        specifier: ^1.0.0
+        version: 1.1.8(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@radix-ui/react-slider':
+        specifier: ^1.0.0
+        version: 1.3.6(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@radix-ui/react-slot':
+        specifier: ^1.0.0
+        version: 1.2.4(@types/react@18.3.28)(react@18.3.1)
+      '@radix-ui/react-switch':
+        specifier: ^1.2.6
+        version: 1.2.6(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@radix-ui/react-tabs':
+        specifier: ^1.0.0
+        version: 1.1.13(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      class-variance-authority:
+        specifier: ^0.7.0
+        version: 0.7.1
+      clsx:
+        specifier: ^2.1.0
+        version: 2.1.1
+      embla-carousel-autoplay:
+        specifier: ^8.0.0
+        version: 8.6.0(embla-carousel@8.6.0)
+      embla-carousel-react:
+        specifier: ^8.0.0
+        version: 8.6.0(react@18.3.1)
+      framer-motion:
+        specifier: ^11.0.0
+        version: 11.18.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      lucide-react:
+        specifier: ^0.400.0
+        version: 0.400.0(react@18.3.1)
+      react:
+        specifier: ^18.3.0
+        version: 18.3.1
+      react-dom:
+        specifier: ^18.3.0
+        version: 18.3.1(react@18.3.1)
+      tailwind-merge:
+        specifier: ^2.2.0
+        version: 2.6.1
     devDependencies:
       '@types/react':
         specifier: ^18.3.0
@@ -254,6 +821,868 @@ importers:
       vitest:
         specifier: ^1.0.0
         version: 1.6.1(@types/node@24.10.13)(jsdom@27.4.0)(lightningcss@1.31.1)(terser@5.46.0)
+
+  imu-mobility:
+    dependencies:
+      '@imuchat/miniapp-sdk':
+        specifier: workspace:*
+        version: link:../imu-miniapps/packages/sdk
+      '@radix-ui/react-avatar':
+        specifier: ^1.1.11
+        version: 1.1.11(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@radix-ui/react-label':
+        specifier: ^2.0.0
+        version: 2.1.8(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@radix-ui/react-popover':
+        specifier: ^1.0.0
+        version: 1.1.15(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@radix-ui/react-progress':
+        specifier: ^1.0.0
+        version: 1.1.8(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@radix-ui/react-radio-group':
+        specifier: ^1.3.8
+        version: 1.3.8(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@radix-ui/react-scroll-area':
+        specifier: ^1.0.0
+        version: 1.2.10(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@radix-ui/react-select':
+        specifier: ^2.0.0
+        version: 2.2.6(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@radix-ui/react-separator':
+        specifier: ^1.0.0
+        version: 1.1.8(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@radix-ui/react-slider':
+        specifier: ^1.0.0
+        version: 1.3.6(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@radix-ui/react-slot':
+        specifier: ^1.0.0
+        version: 1.2.4(@types/react@18.3.28)(react@18.3.1)
+      '@radix-ui/react-switch':
+        specifier: ^1.0.0
+        version: 1.2.6(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@radix-ui/react-tabs':
+        specifier: ^1.0.0
+        version: 1.1.13(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      class-variance-authority:
+        specifier: ^0.7.0
+        version: 0.7.1
+      clsx:
+        specifier: ^2.1.0
+        version: 2.1.1
+      date-fns:
+        specifier: ^3.3.0
+        version: 3.6.0
+      lucide-react:
+        specifier: ^0.400.0
+        version: 0.400.0(react@18.3.1)
+      react:
+        specifier: ^18.3.0
+        version: 18.3.1
+      react-day-picker:
+        specifier: ^8.10.0
+        version: 8.10.1(date-fns@3.6.0)(react@18.3.1)
+      react-dom:
+        specifier: ^18.3.0
+        version: 18.3.1(react@18.3.1)
+      tailwind-merge:
+        specifier: ^2.2.0
+        version: 2.6.1
+    devDependencies:
+      '@types/react':
+        specifier: ^18.3.0
+        version: 18.3.28
+      '@types/react-dom':
+        specifier: ^18.3.0
+        version: 18.3.7(@types/react@18.3.28)
+      '@vitejs/plugin-react':
+        specifier: ^4.3.0
+        version: 4.7.0(vite@5.4.21(@types/node@24.10.13)(lightningcss@1.31.1)(terser@5.46.0))
+      autoprefixer:
+        specifier: ^10.4.0
+        version: 10.4.24(postcss@8.5.6)
+      eslint:
+        specifier: ^8.57.0
+        version: 8.57.1
+      eslint-plugin-react-hooks:
+        specifier: ^4.6.0
+        version: 4.6.2(eslint@8.57.1)
+      eslint-plugin-react-refresh:
+        specifier: ^0.4.0
+        version: 0.4.26(eslint@8.57.1)
+      postcss:
+        specifier: ^8.4.0
+        version: 8.5.6
+      prettier:
+        specifier: ^3.2.0
+        version: 3.8.1
+      tailwindcss:
+        specifier: ^3.4.0
+        version: 3.4.19(tsx@4.21.0)(yaml@2.8.2)
+      typescript:
+        specifier: ^5.4.0
+        version: 5.9.3
+      vite:
+        specifier: ^5.4.0
+        version: 5.4.21(@types/node@24.10.13)(lightningcss@1.31.1)(terser@5.46.0)
+
+  imu-music:
+    dependencies:
+      '@imuchat/miniapp-sdk':
+        specifier: workspace:*
+        version: link:../imu-miniapps/packages/sdk
+      '@radix-ui/react-avatar':
+        specifier: ^1.0.0
+        version: 1.1.11(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@radix-ui/react-label':
+        specifier: ^2.0.0
+        version: 2.1.8(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@radix-ui/react-popover':
+        specifier: ^1.0.0
+        version: 1.1.15(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@radix-ui/react-progress':
+        specifier: ^1.0.0
+        version: 1.1.8(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@radix-ui/react-separator':
+        specifier: ^1.0.0
+        version: 1.1.8(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@radix-ui/react-slider':
+        specifier: ^1.0.0
+        version: 1.3.6(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@radix-ui/react-slot':
+        specifier: ^1.0.0
+        version: 1.2.4(@types/react@18.3.28)(react@18.3.1)
+      '@radix-ui/react-switch':
+        specifier: ^1.0.0
+        version: 1.2.6(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@radix-ui/react-tabs':
+        specifier: ^1.0.0
+        version: 1.1.13(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@radix-ui/react-tooltip':
+        specifier: ^1.0.0
+        version: 1.2.8(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      class-variance-authority:
+        specifier: ^0.7.0
+        version: 0.7.1
+      clsx:
+        specifier: ^2.1.0
+        version: 2.1.1
+      embla-carousel-autoplay:
+        specifier: ^8.0.0
+        version: 8.6.0(embla-carousel@8.6.0)
+      embla-carousel-react:
+        specifier: ^8.0.0
+        version: 8.6.0(react@18.3.1)
+      framer-motion:
+        specifier: ^11.0.0
+        version: 11.18.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      lucide-react:
+        specifier: ^0.400.0
+        version: 0.400.0(react@18.3.1)
+      react:
+        specifier: ^18.3.0
+        version: 18.3.1
+      react-dom:
+        specifier: ^18.3.0
+        version: 18.3.1(react@18.3.1)
+      tailwind-merge:
+        specifier: ^2.2.0
+        version: 2.6.1
+    devDependencies:
+      '@types/react':
+        specifier: ^18.3.0
+        version: 18.3.28
+      '@types/react-dom':
+        specifier: ^18.3.0
+        version: 18.3.7(@types/react@18.3.28)
+      '@vitejs/plugin-react':
+        specifier: ^4.3.0
+        version: 4.7.0(vite@5.4.21(@types/node@24.10.13)(lightningcss@1.31.1)(terser@5.46.0))
+      autoprefixer:
+        specifier: ^10.4.0
+        version: 10.4.24(postcss@8.5.6)
+      postcss:
+        specifier: ^8.4.0
+        version: 8.5.6
+      tailwindcss:
+        specifier: ^3.4.0
+        version: 3.4.19(tsx@4.21.0)(yaml@2.8.2)
+      typescript:
+        specifier: ~5.5.0
+        version: 5.5.4
+      vite:
+        specifier: ^5.4.0
+        version: 5.4.21(@types/node@24.10.13)(lightningcss@1.31.1)(terser@5.46.0)
+
+  imu-resources:
+    dependencies:
+      '@imuchat/miniapp-sdk':
+        specifier: workspace:*
+        version: link:../imu-miniapps/packages/sdk
+      lucide-react:
+        specifier: ^0.400.0
+        version: 0.400.0(react@18.3.1)
+      react:
+        specifier: ^18.3.0
+        version: 18.3.1
+      react-dom:
+        specifier: ^18.3.0
+        version: 18.3.1(react@18.3.1)
+    devDependencies:
+      '@types/react':
+        specifier: ^18.3.0
+        version: 18.3.28
+      '@types/react-dom':
+        specifier: ^18.3.0
+        version: 18.3.7(@types/react@18.3.28)
+      '@vitejs/plugin-react':
+        specifier: ^4.3.0
+        version: 4.7.0(vite@5.4.21(@types/node@24.10.13)(lightningcss@1.31.1)(terser@5.46.0))
+      autoprefixer:
+        specifier: ^10.4.0
+        version: 10.4.24(postcss@8.5.6)
+      eslint:
+        specifier: ^8.57.0
+        version: 8.57.1
+      eslint-plugin-react-hooks:
+        specifier: ^4.6.0
+        version: 4.6.2(eslint@8.57.1)
+      eslint-plugin-react-refresh:
+        specifier: ^0.4.0
+        version: 0.4.26(eslint@8.57.1)
+      postcss:
+        specifier: ^8.4.0
+        version: 8.5.6
+      prettier:
+        specifier: ^3.2.0
+        version: 3.8.1
+      tailwindcss:
+        specifier: ^3.4.0
+        version: 3.4.19(tsx@4.21.0)(yaml@2.8.2)
+      typescript:
+        specifier: ^5.4.0
+        version: 5.9.3
+      vite:
+        specifier: ^5.4.0
+        version: 5.4.21(@types/node@24.10.13)(lightningcss@1.31.1)(terser@5.46.0)
+
+  imu-services:
+    dependencies:
+      '@hookform/resolvers':
+        specifier: ^3.3.0
+        version: 3.10.0(react-hook-form@7.71.1(react@18.3.1))
+      '@imuchat/miniapp-sdk':
+        specifier: workspace:*
+        version: link:../imu-miniapps/packages/sdk
+      '@radix-ui/react-avatar':
+        specifier: ^1.0.0
+        version: 1.1.11(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@radix-ui/react-dialog':
+        specifier: ^1.0.0
+        version: 1.1.15(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@radix-ui/react-label':
+        specifier: ^2.0.0
+        version: 2.1.8(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@radix-ui/react-popover':
+        specifier: ^1.0.0
+        version: 1.1.15(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@radix-ui/react-select':
+        specifier: ^2.0.0
+        version: 2.2.6(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@radix-ui/react-separator':
+        specifier: ^1.0.0
+        version: 1.1.8(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@radix-ui/react-slot':
+        specifier: ^1.0.0
+        version: 1.2.4(@types/react@18.3.28)(react@18.3.1)
+      '@radix-ui/react-tabs':
+        specifier: ^1.0.0
+        version: 1.1.13(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      class-variance-authority:
+        specifier: ^0.7.0
+        version: 0.7.1
+      clsx:
+        specifier: ^2.1.0
+        version: 2.1.1
+      date-fns:
+        specifier: ^3.3.0
+        version: 3.6.0
+      lucide-react:
+        specifier: ^0.400.0
+        version: 0.400.0(react@18.3.1)
+      react:
+        specifier: ^18.3.0
+        version: 18.3.1
+      react-day-picker:
+        specifier: ^8.10.0
+        version: 8.10.1(date-fns@3.6.0)(react@18.3.1)
+      react-dom:
+        specifier: ^18.3.0
+        version: 18.3.1(react@18.3.1)
+      react-hook-form:
+        specifier: ^7.50.0
+        version: 7.71.1(react@18.3.1)
+      tailwind-merge:
+        specifier: ^2.2.0
+        version: 2.6.1
+      zod:
+        specifier: ^3.22.0
+        version: 3.25.76
+    devDependencies:
+      '@types/react':
+        specifier: ^18.3.0
+        version: 18.3.28
+      '@types/react-dom':
+        specifier: ^18.3.0
+        version: 18.3.7(@types/react@18.3.28)
+      '@vitejs/plugin-react':
+        specifier: ^4.3.0
+        version: 4.7.0(vite@5.4.21(@types/node@24.10.13)(lightningcss@1.31.1)(terser@5.46.0))
+      autoprefixer:
+        specifier: ^10.4.0
+        version: 10.4.24(postcss@8.5.6)
+      eslint:
+        specifier: ^8.57.0
+        version: 8.57.1
+      eslint-plugin-react-hooks:
+        specifier: ^4.6.0
+        version: 4.6.2(eslint@8.57.1)
+      eslint-plugin-react-refresh:
+        specifier: ^0.4.0
+        version: 0.4.26(eslint@8.57.1)
+      postcss:
+        specifier: ^8.4.0
+        version: 8.5.6
+      prettier:
+        specifier: ^3.2.0
+        version: 3.8.1
+      tailwindcss:
+        specifier: ^3.4.0
+        version: 3.4.19(tsx@4.21.0)(yaml@2.8.2)
+      typescript:
+        specifier: ^5.4.0
+        version: 5.9.3
+      vite:
+        specifier: ^5.4.0
+        version: 5.4.21(@types/node@24.10.13)(lightningcss@1.31.1)(terser@5.46.0)
+
+  imu-smart-home:
+    dependencies:
+      '@imuchat/miniapp-sdk':
+        specifier: workspace:*
+        version: link:../imu-miniapps/packages/sdk
+      '@radix-ui/react-accordion':
+        specifier: ^1.2.12
+        version: 1.2.12(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@radix-ui/react-avatar':
+        specifier: ^1.1.11
+        version: 1.1.11(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@radix-ui/react-checkbox':
+        specifier: ^1.3.3
+        version: 1.3.3(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@radix-ui/react-dialog':
+        specifier: ^1.0.0
+        version: 1.1.15(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@radix-ui/react-label':
+        specifier: ^2.0.0
+        version: 2.1.8(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@radix-ui/react-progress':
+        specifier: ^1.0.0
+        version: 1.1.8(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@radix-ui/react-scroll-area':
+        specifier: ^1.0.0
+        version: 1.2.10(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@radix-ui/react-select':
+        specifier: ^2.0.0
+        version: 2.2.6(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@radix-ui/react-separator':
+        specifier: ^1.0.0
+        version: 1.1.8(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@radix-ui/react-slider':
+        specifier: ^1.0.0
+        version: 1.3.6(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@radix-ui/react-slot':
+        specifier: ^1.0.0
+        version: 1.2.4(@types/react@18.3.28)(react@18.3.1)
+      '@radix-ui/react-switch':
+        specifier: ^1.0.0
+        version: 1.2.6(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@radix-ui/react-tabs':
+        specifier: ^1.0.0
+        version: 1.1.13(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      class-variance-authority:
+        specifier: ^0.7.0
+        version: 0.7.1
+      clsx:
+        specifier: ^2.1.0
+        version: 2.1.1
+      embla-carousel-react:
+        specifier: ^8.6.0
+        version: 8.6.0(react@18.3.1)
+      framer-motion:
+        specifier: ^11.0.0
+        version: 11.18.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      lucide-react:
+        specifier: ^0.400.0
+        version: 0.400.0(react@18.3.1)
+      react:
+        specifier: ^18.3.0
+        version: 18.3.1
+      react-dom:
+        specifier: ^18.3.0
+        version: 18.3.1(react@18.3.1)
+      recharts:
+        specifier: ^2.12.0
+        version: 2.15.4(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      tailwind-merge:
+        specifier: ^2.2.0
+        version: 2.6.1
+    devDependencies:
+      '@types/react':
+        specifier: ^18.3.0
+        version: 18.3.28
+      '@types/react-dom':
+        specifier: ^18.3.0
+        version: 18.3.7(@types/react@18.3.28)
+      '@vitejs/plugin-react':
+        specifier: ^4.3.0
+        version: 4.7.0(vite@5.4.21(@types/node@24.10.13)(lightningcss@1.31.1)(terser@5.46.0))
+      autoprefixer:
+        specifier: ^10.4.0
+        version: 10.4.24(postcss@8.5.6)
+      eslint:
+        specifier: ^8.57.0
+        version: 8.57.1
+      eslint-plugin-react-hooks:
+        specifier: ^4.6.0
+        version: 4.6.2(eslint@8.57.1)
+      eslint-plugin-react-refresh:
+        specifier: ^0.4.0
+        version: 0.4.26(eslint@8.57.1)
+      postcss:
+        specifier: ^8.4.0
+        version: 8.5.6
+      prettier:
+        specifier: ^3.2.0
+        version: 3.8.1
+      tailwindcss:
+        specifier: ^3.4.0
+        version: 3.4.19(tsx@4.21.0)(yaml@2.8.2)
+      typescript:
+        specifier: ^5.4.0
+        version: 5.9.3
+      vite:
+        specifier: ^5.4.0
+        version: 5.4.21(@types/node@24.10.13)(lightningcss@1.31.1)(terser@5.46.0)
+
+  imu-sports:
+    dependencies:
+      '@imuchat/miniapp-sdk':
+        specifier: workspace:*
+        version: link:../imu-miniapps/packages/sdk
+      '@radix-ui/react-scroll-area':
+        specifier: ^1.0.0
+        version: 1.2.10(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@radix-ui/react-separator':
+        specifier: ^1.0.0
+        version: 1.1.8(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@radix-ui/react-slot':
+        specifier: ^1.0.0
+        version: 1.2.4(@types/react@18.3.28)(react@18.3.1)
+      '@radix-ui/react-tabs':
+        specifier: ^1.0.0
+        version: 1.1.13(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      class-variance-authority:
+        specifier: ^0.7.0
+        version: 0.7.1
+      clsx:
+        specifier: ^2.1.0
+        version: 2.1.1
+      embla-carousel-react:
+        specifier: ^8.6.0
+        version: 8.6.0(react@18.3.1)
+      lucide-react:
+        specifier: ^0.400.0
+        version: 0.400.0(react@18.3.1)
+      react:
+        specifier: ^18.3.0
+        version: 18.3.1
+      react-dom:
+        specifier: ^18.3.0
+        version: 18.3.1(react@18.3.1)
+      recharts:
+        specifier: ^2.12.0
+        version: 2.15.4(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      tailwind-merge:
+        specifier: ^2.2.0
+        version: 2.6.1
+    devDependencies:
+      '@types/react':
+        specifier: ^18.3.0
+        version: 18.3.28
+      '@types/react-dom':
+        specifier: ^18.3.0
+        version: 18.3.7(@types/react@18.3.28)
+      '@vitejs/plugin-react':
+        specifier: ^4.3.0
+        version: 4.7.0(vite@5.4.21(@types/node@24.10.13)(lightningcss@1.31.1)(terser@5.46.0))
+      autoprefixer:
+        specifier: ^10.4.0
+        version: 10.4.24(postcss@8.5.6)
+      eslint:
+        specifier: ^8.57.0
+        version: 8.57.1
+      eslint-plugin-react-hooks:
+        specifier: ^4.6.0
+        version: 4.6.2(eslint@8.57.1)
+      eslint-plugin-react-refresh:
+        specifier: ^0.4.0
+        version: 0.4.26(eslint@8.57.1)
+      postcss:
+        specifier: ^8.4.0
+        version: 8.5.6
+      prettier:
+        specifier: ^3.2.0
+        version: 3.8.1
+      tailwindcss:
+        specifier: ^3.4.0
+        version: 3.4.19(tsx@4.21.0)(yaml@2.8.2)
+      typescript:
+        specifier: ^5.4.0
+        version: 5.9.3
+      vite:
+        specifier: ^5.4.0
+        version: 5.4.21(@types/node@24.10.13)(lightningcss@1.31.1)(terser@5.46.0)
+
+  imu-style-beauty:
+    dependencies:
+      '@imuchat/miniapp-sdk':
+        specifier: workspace:*
+        version: link:../imu-miniapps/packages/sdk
+      '@radix-ui/react-avatar':
+        specifier: ^1.0.0
+        version: 1.1.11(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@radix-ui/react-dialog':
+        specifier: ^1.0.0
+        version: 1.1.15(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@radix-ui/react-dropdown-menu':
+        specifier: ^2.1.16
+        version: 2.1.16(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@radix-ui/react-label':
+        specifier: ^2.0.0
+        version: 2.1.8(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@radix-ui/react-progress':
+        specifier: ^1.0.0
+        version: 1.1.8(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@radix-ui/react-scroll-area':
+        specifier: ^1.0.0
+        version: 1.2.10(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@radix-ui/react-select':
+        specifier: ^2.0.0
+        version: 2.2.6(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@radix-ui/react-separator':
+        specifier: ^1.0.0
+        version: 1.1.8(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@radix-ui/react-slider':
+        specifier: ^1.0.0
+        version: 1.3.6(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@radix-ui/react-slot':
+        specifier: ^1.0.0
+        version: 1.2.4(@types/react@18.3.28)(react@18.3.1)
+      '@radix-ui/react-switch':
+        specifier: ^1.2.6
+        version: 1.2.6(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@radix-ui/react-tabs':
+        specifier: ^1.0.0
+        version: 1.1.13(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@radix-ui/react-tooltip':
+        specifier: ^1.2.8
+        version: 1.2.8(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      class-variance-authority:
+        specifier: ^0.7.0
+        version: 0.7.1
+      clsx:
+        specifier: ^2.1.0
+        version: 2.1.1
+      embla-carousel-autoplay:
+        specifier: ^8.0.0
+        version: 8.6.0(embla-carousel@8.6.0)
+      embla-carousel-react:
+        specifier: ^8.0.0
+        version: 8.6.0(react@18.3.1)
+      framer-motion:
+        specifier: ^11.0.0
+        version: 11.18.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      lucide-react:
+        specifier: ^0.400.0
+        version: 0.400.0(react@18.3.1)
+      react:
+        specifier: ^18.3.0
+        version: 18.3.1
+      react-dom:
+        specifier: ^18.3.0
+        version: 18.3.1(react@18.3.1)
+      tailwind-merge:
+        specifier: ^2.2.0
+        version: 2.6.1
+    devDependencies:
+      '@types/react':
+        specifier: ^18.3.0
+        version: 18.3.28
+      '@types/react-dom':
+        specifier: ^18.3.0
+        version: 18.3.7(@types/react@18.3.28)
+      '@vitejs/plugin-react':
+        specifier: ^4.3.0
+        version: 4.7.0(vite@5.4.21(@types/node@24.10.13)(lightningcss@1.31.1)(terser@5.46.0))
+      autoprefixer:
+        specifier: ^10.4.0
+        version: 10.4.24(postcss@8.5.6)
+      eslint:
+        specifier: ^8.57.0
+        version: 8.57.1
+      eslint-plugin-react-hooks:
+        specifier: ^4.6.0
+        version: 4.6.2(eslint@8.57.1)
+      eslint-plugin-react-refresh:
+        specifier: ^0.4.0
+        version: 0.4.26(eslint@8.57.1)
+      postcss:
+        specifier: ^8.4.0
+        version: 8.5.6
+      prettier:
+        specifier: ^3.2.0
+        version: 3.8.1
+      tailwindcss:
+        specifier: ^3.4.0
+        version: 3.4.19(tsx@4.21.0)(yaml@2.8.2)
+      typescript:
+        specifier: ^5.4.0
+        version: 5.9.3
+      vite:
+        specifier: ^5.4.0
+        version: 5.4.21(@types/node@24.10.13)(lightningcss@1.31.1)(terser@5.46.0)
+
+  imu-voom:
+    dependencies:
+      '@imuchat/miniapp-sdk':
+        specifier: workspace:*
+        version: link:../imu-miniapps/packages/sdk
+      lucide-react:
+        specifier: ^0.400.0
+        version: 0.400.0(react@18.3.1)
+      react:
+        specifier: ^18.3.0
+        version: 18.3.1
+      react-dom:
+        specifier: ^18.3.0
+        version: 18.3.1(react@18.3.1)
+    devDependencies:
+      '@types/react':
+        specifier: ^18.3.0
+        version: 18.3.28
+      '@types/react-dom':
+        specifier: ^18.3.0
+        version: 18.3.7(@types/react@18.3.28)
+      '@vitejs/plugin-react':
+        specifier: ^4.3.0
+        version: 4.7.0(vite@5.4.21(@types/node@24.10.13)(lightningcss@1.31.1)(terser@5.46.0))
+      autoprefixer:
+        specifier: ^10.4.0
+        version: 10.4.24(postcss@8.5.6)
+      eslint:
+        specifier: ^8.57.0
+        version: 8.57.1
+      eslint-plugin-react-hooks:
+        specifier: ^4.6.0
+        version: 4.6.2(eslint@8.57.1)
+      eslint-plugin-react-refresh:
+        specifier: ^0.4.0
+        version: 0.4.26(eslint@8.57.1)
+      postcss:
+        specifier: ^8.4.0
+        version: 8.5.6
+      prettier:
+        specifier: ^3.2.0
+        version: 3.8.1
+      tailwindcss:
+        specifier: ^3.4.0
+        version: 3.4.19(tsx@4.21.0)(yaml@2.8.2)
+      typescript:
+        specifier: ^5.4.0
+        version: 5.9.3
+      vite:
+        specifier: ^5.4.0
+        version: 5.4.21(@types/node@24.10.13)(lightningcss@1.31.1)(terser@5.46.0)
+
+  imu-watch:
+    dependencies:
+      '@radix-ui/react-avatar':
+        specifier: ^1.1.1
+        version: 1.1.11(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@radix-ui/react-label':
+        specifier: ^2.1.0
+        version: 2.1.8(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@radix-ui/react-popover':
+        specifier: ^1.1.2
+        version: 1.1.15(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@radix-ui/react-progress':
+        specifier: ^1.1.0
+        version: 1.1.8(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@radix-ui/react-scroll-area':
+        specifier: ^1.2.1
+        version: 1.2.10(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@radix-ui/react-separator':
+        specifier: ^1.1.0
+        version: 1.1.8(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@radix-ui/react-slider':
+        specifier: ^1.2.1
+        version: 1.3.6(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@radix-ui/react-slot':
+        specifier: ^1.1.0
+        version: 1.2.4(@types/react@18.3.28)(react@18.3.1)
+      '@radix-ui/react-switch':
+        specifier: ^1.1.1
+        version: 1.2.6(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@radix-ui/react-tabs':
+        specifier: ^1.1.1
+        version: 1.1.13(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@radix-ui/react-tooltip':
+        specifier: ^1.1.4
+        version: 1.2.8(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      class-variance-authority:
+        specifier: ^0.7.1
+        version: 0.7.1
+      clsx:
+        specifier: ^2.1.1
+        version: 2.1.1
+      cmdk:
+        specifier: ^1.0.0
+        version: 1.1.1(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      embla-carousel-autoplay:
+        specifier: ^8.5.1
+        version: 8.6.0(embla-carousel@8.6.0)
+      embla-carousel-react:
+        specifier: ^8.5.1
+        version: 8.6.0(react@18.3.1)
+      framer-motion:
+        specifier: ^11.15.0
+        version: 11.18.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      lucide-react:
+        specifier: ^0.453.0
+        version: 0.453.0(react@18.3.1)
+      react:
+        specifier: ^18.3.1
+        version: 18.3.1
+      react-dom:
+        specifier: ^18.3.1
+        version: 18.3.1(react@18.3.1)
+      react-player:
+        specifier: ^2.16.0
+        version: 2.16.1(react@18.3.1)
+      tailwind-merge:
+        specifier: ^2.6.0
+        version: 2.6.1
+    devDependencies:
+      '@types/react':
+        specifier: ^18.3.12
+        version: 18.3.28
+      '@types/react-dom':
+        specifier: ^18.3.1
+        version: 18.3.7(@types/react@18.3.28)
+      '@vitejs/plugin-react':
+        specifier: ^4.3.4
+        version: 4.7.0(vite@5.4.21(@types/node@24.10.13)(lightningcss@1.31.1)(terser@5.46.0))
+      autoprefixer:
+        specifier: ^10.4.20
+        version: 10.4.24(postcss@8.5.6)
+      postcss:
+        specifier: ^8.4.49
+        version: 8.5.6
+      tailwindcss:
+        specifier: ^3.4.16
+        version: 3.4.19(tsx@4.21.0)(yaml@2.8.2)
+      typescript:
+        specifier: ^5.6.3
+        version: 5.9.3
+      vite:
+        specifier: ^5.4.11
+        version: 5.4.21(@types/node@24.10.13)(lightningcss@1.31.1)(terser@5.46.0)
+
+  imu-worlds:
+    dependencies:
+      '@imuchat/miniapp-sdk':
+        specifier: workspace:*
+        version: link:../imu-miniapps/packages/sdk
+      '@radix-ui/react-scroll-area':
+        specifier: ^1.0.0
+        version: 1.2.10(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@radix-ui/react-slot':
+        specifier: ^1.0.0
+        version: 1.2.4(@types/react@18.3.28)(react@18.3.1)
+      class-variance-authority:
+        specifier: ^0.7.0
+        version: 0.7.1
+      clsx:
+        specifier: ^2.1.0
+        version: 2.1.1
+      embla-carousel-autoplay:
+        specifier: ^8.0.0
+        version: 8.6.0(embla-carousel@8.6.0)
+      embla-carousel-react:
+        specifier: ^8.0.0
+        version: 8.6.0(react@18.3.1)
+      framer-motion:
+        specifier: ^11.0.0
+        version: 11.18.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      lucide-react:
+        specifier: ^0.400.0
+        version: 0.400.0(react@18.3.1)
+      react:
+        specifier: ^18.3.0
+        version: 18.3.1
+      react-dom:
+        specifier: ^18.3.0
+        version: 18.3.1(react@18.3.1)
+      tailwind-merge:
+        specifier: ^2.2.0
+        version: 2.6.1
+    devDependencies:
+      '@types/react':
+        specifier: ^18.3.0
+        version: 18.3.28
+      '@types/react-dom':
+        specifier: ^18.3.0
+        version: 18.3.7(@types/react@18.3.28)
+      '@vitejs/plugin-react':
+        specifier: ^4.3.0
+        version: 4.7.0(vite@5.4.21(@types/node@24.10.13)(lightningcss@1.31.1)(terser@5.46.0))
+      autoprefixer:
+        specifier: ^10.4.0
+        version: 10.4.24(postcss@8.5.6)
+      eslint:
+        specifier: ^8.57.0
+        version: 8.57.1
+      eslint-plugin-react-hooks:
+        specifier: ^4.6.0
+        version: 4.6.2(eslint@8.57.1)
+      eslint-plugin-react-refresh:
+        specifier: ^0.4.0
+        version: 0.4.26(eslint@8.57.1)
+      postcss:
+        specifier: ^8.4.0
+        version: 8.5.6
+      prettier:
+        specifier: ^3.2.0
+        version: 3.8.1
+      tailwindcss:
+        specifier: ^3.4.0
+        version: 3.4.19(tsx@4.21.0)(yaml@2.8.2)
+      typescript:
+        specifier: ^5.4.0
+        version: 5.9.3
+      vite:
+        specifier: ^5.4.0
+        version: 5.4.21(@types/node@24.10.13)(lightningcss@1.31.1)(terser@5.46.0)
 
   mobile:
     dependencies:
@@ -3521,10 +4950,20 @@ packages:
     peerDependencies:
       hono: ^4
 
+  '@hookform/resolvers@3.10.0':
+    resolution: {integrity: sha512-79Dv+3mDF7i+2ajj7SkypSKHhl1cbln1OGavqrsF7p6mbUv11xpqpacPsGDCTRvCSjEEIez2ef1NveSVL3b0Ag==}
+    peerDependencies:
+      react-hook-form: ^7.0.0
+
   '@hookform/resolvers@4.1.3':
     resolution: {integrity: sha512-Jsv6UOWYTrEFJ/01ZrnwVXs7KDvP8XIo115i++5PWvNkNvkrsTfGiLS6w+eJ57CYtUtDQalUWovCZDHFJ8u1VQ==}
     peerDependencies:
       react-hook-form: ^7.0.0
+
+  '@hookform/resolvers@5.2.2':
+    resolution: {integrity: sha512-A/IxlMLShx3KjV/HeTcTfaMxdwy690+L/ZADoeaTltLx+CVuzkeVIPuybK3jrRfw7YZnmdKsVVHAlEPIAEUNlA==}
+    peerDependencies:
+      react-hook-form: ^7.55.0
 
   '@humanfs/core@0.19.1':
     resolution: {integrity: sha512-5DyQ4+1JEUzejeK1JGICcideyfUbGixgS9jNgex5nqkW+cY7WZhxBigmieN5Qnw9ZosSNVC9KQKyb+GUaGyKUA==}
@@ -11184,6 +12623,11 @@ packages:
     peerDependencies:
       react: ^16.5.1 || ^17.0.0 || ^18.0.0 || ^19.0.0
 
+  lucide-react@0.453.0:
+    resolution: {integrity: sha512-kL+RGZCcJi9BvJtzg2kshO192Ddy9hv3ij+cPrVPWSRzgCWCVazoQJxOjAwgK53NomL07HB7GPHW120FimjNhQ==}
+    peerDependencies:
+      react: ^16.5.1 || ^17.0.0 || ^18.0.0 || ^19.0.0-rc
+
   lucide-react@0.475.0:
     resolution: {integrity: sha512-NJzvVu1HwFVeZ+Gwq2q00KygM1aBhy/ZrhY9FsAgJtpB+E4R7uxRk9M2iKvHa6/vNxZydIB59htha4c2vvwvVg==}
     peerDependencies:
@@ -12454,6 +13898,12 @@ packages:
 
   react-hook-form@7.71.1:
     resolution: {integrity: sha512-9SUJKCGKo8HUSsCO+y0CtqkqI5nNuaDqTxyqPsZPqIwudpj4rCrAz/jZV+jn57bx5gtZKOh3neQu94DXMc+w5w==}
+    engines: {node: '>=18.0.0'}
+    peerDependencies:
+      react: ^16.8.0 || ^17 || ^18 || ^19
+
+  react-hook-form@7.71.2:
+    resolution: {integrity: sha512-1CHvcDYzuRUNOflt4MOq3ZM46AronNJtQ1S7tnX6YN4y72qhgiUItpacZUAQ0TyWYci3yz1X+rXaSxiuEm86PA==}
     engines: {node: '>=18.0.0'}
     peerDependencies:
       react: ^16.8.0 || ^17 || ^18 || ^19
@@ -13903,6 +15353,11 @@ packages:
     peerDependencies:
       eslint: ^8.57.0 || ^9.0.0 || ^10.0.0
       typescript: '>=4.8.4 <6.0.0'
+
+  typescript@5.5.4:
+    resolution: {integrity: sha512-Mtq29sKDAEYP7aljRgtPOpTvOfbwRWlS6dPRzwjdE+C0R4brX/GUyhHSecbHMFLNBLcJIPt9nl9yG5TZ1weH+Q==}
+    engines: {node: '>=14.17'}
+    hasBin: true
 
   typescript@5.9.3:
     resolution: {integrity: sha512-jl1vZzPDinLr9eUt3J/t7V6FgNEw9QjvBPdysz9KfQDD41fQrC2Y4vKQdiaUpFT4bXlb1RHhLpp8wtm6M5TgSw==}
@@ -17729,10 +19184,19 @@ snapshots:
     dependencies:
       hono: 4.11.9
 
+  '@hookform/resolvers@3.10.0(react-hook-form@7.71.1(react@18.3.1))':
+    dependencies:
+      react-hook-form: 7.71.1(react@18.3.1)
+
   '@hookform/resolvers@4.1.3(react-hook-form@7.71.1(react@18.3.1))':
     dependencies:
       '@standard-schema/utils': 0.3.0
       react-hook-form: 7.71.1(react@18.3.1)
+
+  '@hookform/resolvers@5.2.2(react-hook-form@7.71.2(react@18.3.1))':
+    dependencies:
+      '@standard-schema/utils': 0.3.0
+      react-hook-form: 7.71.2(react@18.3.1)
 
   '@humanfs/core@0.19.1': {}
 
@@ -25088,7 +26552,7 @@ snapshots:
       eslint: 8.57.1
       eslint-import-resolver-node: 0.3.9
       eslint-import-resolver-typescript: 3.10.1(eslint-plugin-import@2.32.0(eslint@8.57.1))(eslint@8.57.1)
-      eslint-plugin-import: 2.32.0(@typescript-eslint/parser@7.2.0(eslint@8.57.1)(typescript@5.9.3))(eslint-import-resolver-typescript@3.10.1)(eslint@8.57.1)
+      eslint-plugin-import: 2.32.0(@typescript-eslint/parser@7.2.0(eslint@8.57.1)(typescript@5.9.3))(eslint-import-resolver-typescript@3.10.1(eslint-plugin-import@2.32.0(eslint@8.57.1))(eslint@8.57.1))(eslint@8.57.1)
       eslint-plugin-jsx-a11y: 6.10.2(eslint@8.57.1)
       eslint-plugin-react: 7.37.5(eslint@8.57.1)
       eslint-plugin-react-hooks: 4.6.2(eslint@8.57.1)
@@ -25133,7 +26597,7 @@ snapshots:
       tinyglobby: 0.2.15
       unrs-resolver: 1.11.1
     optionalDependencies:
-      eslint-plugin-import: 2.32.0(@typescript-eslint/parser@7.2.0(eslint@8.57.1)(typescript@5.9.3))(eslint-import-resolver-typescript@3.10.1)(eslint@8.57.1)
+      eslint-plugin-import: 2.32.0(@typescript-eslint/parser@7.2.0(eslint@8.57.1)(typescript@5.9.3))(eslint-import-resolver-typescript@3.10.1(eslint-plugin-import@2.32.0(eslint@8.57.1))(eslint@8.57.1))(eslint@8.57.1)
     transitivePeerDependencies:
       - supports-color
 
@@ -25168,7 +26632,7 @@ snapshots:
       - supports-color
       - typescript
 
-  eslint-plugin-import@2.32.0(@typescript-eslint/parser@7.2.0(eslint@8.57.1)(typescript@5.9.3))(eslint-import-resolver-typescript@3.10.1)(eslint@8.57.1):
+  eslint-plugin-import@2.32.0(@typescript-eslint/parser@7.2.0(eslint@8.57.1)(typescript@5.9.3))(eslint-import-resolver-typescript@3.10.1(eslint-plugin-import@2.32.0(eslint@8.57.1))(eslint@8.57.1))(eslint@8.57.1):
     dependencies:
       '@rtsao/scc': 1.1.0
       array-includes: 3.1.9
@@ -28634,6 +30098,10 @@ snapshots:
     dependencies:
       react: 18.3.1
 
+  lucide-react@0.453.0(react@18.3.1):
+    dependencies:
+      react: 18.3.1
+
   lucide-react@0.475.0(react@18.3.1):
     dependencies:
       react: 18.3.1
@@ -30222,6 +31690,10 @@ snapshots:
     optional: true
 
   react-hook-form@7.71.1(react@18.3.1):
+    dependencies:
+      react: 18.3.1
+
+  react-hook-form@7.71.2(react@18.3.1):
     dependencies:
       react: 18.3.1
 
@@ -32279,6 +33751,8 @@ snapshots:
       typescript: 5.9.3
     transitivePeerDependencies:
       - supports-color
+
+  typescript@5.5.4: {}
 
   typescript@5.9.3: {}
 

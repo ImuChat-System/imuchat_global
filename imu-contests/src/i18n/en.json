@@ -1,0 +1,34 @@
+{
+  "hub": {
+    "title": "Contests",
+    "subtitle": "Compete and win",
+    "comingSoon": "More contests coming soon",
+    "comingSoonDesc": "Participate in challenges and win prizes.",
+    "feature1": {
+      "title": "Active",
+      "description": "Current competitions"
+    },
+    "feature2": {
+      "title": "Create",
+      "description": "Start a new contest"
+    },
+    "feature3": {
+      "title": "Archive",
+      "description": "Past contests"
+    }
+  },
+  "ContestsPage": {
+    "title": "Contests",
+    "description": "Participate in community contests and win prizes.",
+    "viewArchive": "View Archive",
+    "detail": {
+      "back": "Back to Contests"
+    }
+  },
+  "ContestsArchivePage": {
+    "title": "Contest Archive",
+    "description": "Browse past contests and see the winners.",
+    "back": "Back to Contests",
+    "searchPlaceholder": "Search archived contests..."
+  }
+}

@@ -1,0 +1,153 @@
+{
+  "hub": {
+    "title": "ImuServices",
+    "subtitle": "プロフェッショナルサービス",
+    "comingSoon": "さらなるサービスが近日登場",
+    "comingSoonDesc": "プロを見つけて予約。",
+    "feature1": {
+      "title": "閲覧",
+      "description": "プロを見つける"
+    },
+    "feature2": {
+      "title": "予約",
+      "description": "あなたの予約"
+    },
+    "feature3": {
+      "title": "緊急",
+      "description": "緊急サービス"
+    }
+  },
+  "ServicesPage": {
+    "header": {
+      "title": "サービスを探す",
+      "description": "あらゆるニーズに対応するプロを探しましょう。",
+      "searchPlaceholder": "サービスを検索...",
+      "quickFilters": "クイックフィルター",
+      "emergency": "緊急"
+    },
+    "main": {
+      "title": "サービス",
+      "myBookings": "予約一覧",
+      "emergency": "緊急"
+    },
+    "booking": {
+      "steps": {
+        "describe": "内容を入力",
+        "select": "プロを選択",
+        "confirm": "確認と支払い"
+      },
+      "back": "戻る",
+      "title": "サービスを予約",
+      "previous": "前へ",
+      "next": "次へ",
+      "confirmBooking": "予約を確定",
+      "step1": {
+        "title": "依頼内容を入力",
+        "description": "必要な作業を教えてください。",
+        "placeholder": "説明フォームがここに表示されます。"
+      },
+      "step2": {
+        "title": "プロを選択",
+        "description": "リストからプロを選んでください。",
+        "placeholder": "プロのリストがここに表示されます。"
+      },
+      "step3": {
+        "title": "内容を確認して支払い",
+        "description": "詳細と支払いを確認します。",
+        "placeholder": "確認フォームがここに表示されます。"
+      }
+    },
+    "categories": {
+      "domestic": {
+        "title": "生活",
+        "plumber": "配管工",
+        "electrician": "電気技師",
+        "locksmith": "鍵屋",
+        "cleaning": "清掃",
+        "gardener": "庭師",
+        "handyman": "便利屋",
+        "decorator": "装飾業者"
+      },
+      "family": {
+        "title": "ファミリー",
+        "babysitter": "ベビーシッター",
+        "homeHelp": "家事代行",
+        "parentingCoach": "育児コーチ",
+        "tutor": "家庭教師",
+        "psychologist": "心理士"
+      },
+      "wellness": {
+        "title": "ウェルネス",
+        "chef": "出張シェフ",
+        "fitnessCoach": "フィットネスコーチ",
+        "beautician": "美容師",
+        "smartHomeTech": "スマートホーム技術者",
+        "vet": "獣医"
+      },
+      "security": {
+        "title": "セキュリティ",
+        "emergencyLocksmith": "緊急鍵屋",
+        "privateSecurity": "警備員",
+        "applianceRepair": "家電修理",
+        "medicalAssistance": "医療支援",
+        "insurance": "保険"
+      },
+      "mobility": {
+        "title": "モビリティ",
+        "evTechnician": "EV技術者",
+        "mobileMechanic": "出張整備士",
+        "driver": "ドライバー"
+      }
+    },
+    "pro_detail": {
+      "header": {
+        "reviews": "件のレビュー",
+        "responseTime": "返信時間",
+        "interventionTime": "対応時間",
+        "verified": "認証済み",
+        "insured": "保険加入",
+        "contact": "連絡",
+        "call": "電話",
+        "view": "表示",
+        "book": "予約"
+      },
+      "history": {
+        "title": "履歴",
+        "description": "過去の仕事と評価。",
+        "placeholder": "履歴がここに表示されます。"
+      },
+      "communication": {
+        "title": "コミュニケーション",
+        "description": "チャットとメッセージ履歴。",
+        "placeholder": "コミュニケーションのオプションがここに表示されます。"
+      },
+      "guarantees": {
+        "title": "保証",
+        "placeholder": "保証の詳細がここに表示されます。"
+      },
+      "badges": {
+        "title": "信頼バッジ",
+        "placeholder": "バッジがここに表示されます。"
+      },
+      "services": {
+        "title": "サービスパッケージ",
+        "description": "利用可能なサービスと料金。",
+        "placeholder": "サービス一覧がここに表示されます。"
+      },
+      "gallery": {
+        "title": "ギャラリー",
+        "description": "過去の作業写真。",
+        "placeholder": "ギャラリーがここに表示されます。"
+      },
+      "related": {
+        "title": "関連プロ",
+        "placeholder": "他のプロがここに表示されます。"
+      },
+      "availability": {
+        "title": "空き状況",
+        "description": "スケジュールと予約枠。",
+        "placeholder": "空き状況カレンダーがここに表示されます。"
+      }
+    }
+  }
+}

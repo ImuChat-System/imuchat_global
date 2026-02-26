@@ -26,3 +26,5 @@ packages:
   - 'imu-events'
   - 'imu-music'
   - 'imu-watch'
+  - 'imu-admin'
+  - 'imu-stickers'

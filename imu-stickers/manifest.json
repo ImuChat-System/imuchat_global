@@ -1,0 +1,30 @@
+{
+    "id": "imu-stickers",
+    "name": "ImuStickers",
+    "version": "1.0.0",
+    "description": "Stickers — Browse, collect and share sticker packs.",
+    "category": "social",
+    "icon": "🎨",
+    "author": "ImuChat Team",
+    "license": "MIT",
+    "entry": "index.html",
+    "permissions": [
+        "auth:read",
+        "auth:profile",
+        "theme:read",
+        "ui:toast",
+        "chat:stickers"
+    ],
+    "dependencies": [],
+    "size": 0,
+    "defaultEnabled": false,
+    "config": {
+        "sandbox": "iframe",
+        "maxStorageSize": 10485760,
+        "allowedDomains": [
+            "placehold.co",
+            "picsum.photos",
+            "images.unsplash.com"
+        ]
+    }
+}

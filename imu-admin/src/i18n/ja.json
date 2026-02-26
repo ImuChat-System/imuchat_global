@@ -1,0 +1,11 @@
+{
+    "AdminPage": {
+        "title": "管理パネル",
+        "description": "ImuChatプラットフォームを管理するための管理ダッシュボード。設定の構成、ユーザーの管理、システムの状態の監視を行います。",
+        "users": "ユーザー",
+        "settings": "設定",
+        "analytics": "アナリティクス",
+        "moderation": "モデレーション",
+        "comingSoon": "近日公開"
+    }
+}

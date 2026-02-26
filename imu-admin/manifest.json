@@ -1,0 +1,28 @@
+{
+    "id": "imu-admin",
+    "name": "ImuAdmin",
+    "version": "1.0.0",
+    "description": "Admin Panel — Back-office administration dashboard.",
+    "category": "tools",
+    "icon": "🛠️",
+    "author": "ImuChat Team",
+    "license": "MIT",
+    "entry": "index.html",
+    "permissions": [
+        "auth:read",
+        "auth:profile",
+        "theme:read",
+        "ui:toast",
+        "ui:modal",
+        "admin:read",
+        "admin:write"
+    ],
+    "dependencies": [],
+    "size": 0,
+    "defaultEnabled": false,
+    "config": {
+        "sandbox": "iframe",
+        "maxStorageSize": 5242880,
+        "allowedDomains": []
+    }
+}

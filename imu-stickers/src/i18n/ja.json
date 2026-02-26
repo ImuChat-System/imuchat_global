@@ -1,0 +1,13 @@
+{
+    "StickersPage": {
+        "title": "ステッカー",
+        "description": "ステッカーパックを閲覧、収集、共有しましょう。ユニークなステッカーでチャットを楽しもう！",
+        "myPacks": "マイパック",
+        "trending": "トレンド",
+        "categories": "カテゴリー",
+        "search": "ステッカーを検索...",
+        "comingSoon": "近日公開",
+        "installed": "インストール済み",
+        "install": "インストール"
+    }
+}

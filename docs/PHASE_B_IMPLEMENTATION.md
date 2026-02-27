@@ -225,13 +225,19 @@ psql -f supabase_modules_phase_b.sql
 
 ---
 
-## Prochaines étapes (Phase C)
+## Prochaines étapes → Phase C (EN COURS)
 
-La Phase C prévue dans l'audit concerne :
+La Phase C est documentée dans [PHASE_C_MINIAPPS_IMPLEMENTATION.md](PHASE_C_MINIAPPS_IMPLEMENTATION.md).
 
-1. **Store UI** : Interface de découverte et installation des mini-apps
-2. **Migration composants** : Déplacer les composants de `web-app/src/components/<module>/` vers les mini-apps (par ordre de complexité croissante)
-3. **Suppression code legacy** : Une fois tous les composants migrés, supprimer les dossiers `web-app/src/modules/<module>/` et `web-app/src/components/<module>/`
-4. **CI/CD** : Pipeline de build et déploiement automatique des mini-apps
-5. **Checksums** : Générer automatiquement les checksums et signatures lors du build
-6. **Hot-reload** : Support du rechargement à chaud des mini-apps en développement via le HostBridge
+**Avancement Phase C (26 février 2026) :**
+
+1. ✅ **Extraction modules par défaut** : `imu-events` (3214), `imu-music` (3215), `imu-watch` (3216) — 3 mini-apps complètes
+2. ✅ **Extraction modules simples** : `imu-admin` (3217), `imu-stickers` (3218) — 2 mini-apps complètes
+3. ✅ **Décision core** : `customize` et `stories` restent natifs dans le core
+4. ⏳ **Modules restants** : `news`, `podcasts`, `social-hub`, `creator-studio` — à extraire
+5. ⏳ **Pré-installation automatique** : les modules default-enabled seront installés automatiquement
+6. ⏳ **Unification registres** : unifier ModulesContext + module-registry + filesystem en 1 source Supabase
+7. ⏳ **Suppression code legacy** : retirer les dossiers `web-app/src/modules/<module>/` une fois migrés
+8. ⏳ **CI/CD mini-apps** : pipeline de build et déploiement automatique
+9. ⏳ **Checksums** : génération automatique lors du build
+10. ⏳ **Hot-reload** : support du rechargement à chaud via HostBridge

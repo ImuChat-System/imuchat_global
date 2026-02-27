@@ -1,9 +1,10 @@
 # 📱 Mobile App - Tracker Complet des Tâches (MVP Phase 2 Élargi)
 
 > **Date de création** : 21 février 2026  
-> **Dernière mise à jour** : 23 février 2026  
-> **Statut global** : En développement actif (MVP Phase 2 Élargi — Communication + Social + Profils)
+> **Dernière mise à jour** : 27 février 2026  
+> **Statut global** : MVP Phase 2 quasi-terminé (Communication ✅ · Social ✅ · Profils ✅ · Auth/Sécurité ✅) — Phase 3 à démarrer
 > **Référence** : Basé sur les 50 fonctionnalités (10 groupes), les ~110 écrans complémentaires, et la roadmap 3D/Live2D
+> **Métriques** : ~53 500 lignes TS/TSX · 183 fichiers · 51 fichiers de tests · 4 Zustand stores · 15 hooks · 16 services
 
 ---
 
@@ -54,31 +55,36 @@
 
 ---
 
-### CRIT-002 : OAuth Non Implémenté ⚠️
+### CRIT-002 : OAuth Non Implémenté → ✅ Configuré (côté mobile)
 
 **Priorité** : P1 - Important  
 **Impact** : UX d'inscription limitée  
-**Statut** : ⚠️ Non démarré
+**Statut** : ✅ Code mobile terminé — config dashboard Supabase restante
 
-**Problème** :
+**Solution appliquée** (24 fév) :
 
-- Seule l'authentification email/password est disponible
-- Google et Apple Sign-In non configurés
-- Placeholders ajoutés dans `.env` mais SDK non intégré
+- ✅ Google Sign-In via `expo-auth-session` + `signInWithIdToken` Supabase
+- ✅ Apple Sign-In via `expo-apple-authentication` + `signInWithIdToken` Supabase
+- ✅ Client IDs Google configurés dans `.env` (web, iOS, Android depuis Firebase `imuchat-378ad`)
+- ✅ Plugin `expo-apple-authentication` ajouté dans `app.json`
+- ✅ `REVERSED_CLIENT_ID` ajouté comme `CFBundleURLScheme` iOS
+- ✅ `SocialLoginButtons.tsx` présent sur login + register
+- ✅ Scheme corrigé : `app.json` scheme `"imuchat"` (redirect URI `imuchat://auth/callback`)
 
-**Fichiers concernés** :
+**Fichiers modifiés** :
 
-- `mobile/.env` (EXPO_PUBLIC_GOOGLE_CLIENT_ID placeholder)
-- `app/(auth)/sign-in.tsx`
-- `app/(auth)/sign-up.tsx`
+- `app.json` — scheme, plugins, iOS infoPlist CFBundleURLTypes
+- `.env` — Google OAuth Client IDs (3 plateformes)
+- `components/auth/SocialLoginButtons.tsx` — validation config + debug logs
+- `app/(auth)/register.tsx` — ajout SocialLoginButtons
 
-**Solution** :
+**Actions restantes (dashboard)** :
 
-1. Configurer Google Sign-In via `expo-auth-session`
-2. Configurer Apple Sign-In via `expo-apple-authentication`
-3. Lier les providers à Supabase Auth
+- [ ] Configurer Google comme provider OAuth dans Supabase Dashboard
+- [ ] Configurer Apple comme provider OAuth dans Supabase Dashboard
+- [ ] Vérifier Google OAuth Consent Screen dans Google Cloud Console
 
-**Estimation** : 2-3 jours
+**Estimation restante** : ~1h (configuration dashboard uniquement)
 
 ---
 
@@ -167,16 +173,26 @@ Le hook `useNotifications` a été refactoré en **bridge unifié** connectant l
 
 **État actuel** :
 
-- Configuration Jest présente ✅
-- 24 fichiers de tests existants
-- Couverture estimée ~20%
+- Configuration Jest + Detox E2E en place ✅
+- **51 fichiers de tests** (progression depuis 24 initiaux)
+  - 4 tests écrans app
+  - 8 tests root-level (home, media-api, notification-api, etc.)
+  - 11 tests composants (Avatar, CallControls, MessageBubble, chat/\*, etc.)
+  - 4 tests hooks (useReactions, useChat, useTypingIndicator, useAuth)
+  - 10 tests services (messaging, stories-api, groups, events, etc.)
+  - 3 tests stores (stories-store, notifications-store, global)
+  - 2 tests providers (AuthProvider, ThemeProvider)
+  - 1 test utils (markdown-parser)
+  - 2 tests E2E Detox (auth, chat)
+- Couverture estimée **~25-30%**
 
-**Tests à créer** :
+**Tests à créer (priorité)** :
 
-- [ ] Hooks d'authentification (`useAuth`, `useAuthV2`)
-- [ ] Hooks de messagerie (`useChat`, `useMessages`)
-- [ ] Services API (`messaging.ts`, `reactions.ts`)
-- [ ] Composants UI core
+- [ ] Hooks : `useAuthV2`, `useNotifications`, `useCalls`, `useCallHistory`
+- [ ] Services : `security.ts`, `privacy-center.ts`, `transcription.ts`, `call-signaling.ts`
+- [ ] Stores : `user-store.ts`, `ui-store.ts`
+- [ ] Composants : `StatusPicker`, `SocialLoginButtons`, `NewChatModal`
+- [ ] Écrans : `events/`, `stories/`, `(onboarding)/profile-setup`
 
 **Objectif** : 50% de couverture
 
@@ -211,16 +227,18 @@ Le hook `useNotifications` a été refactoré en **bridge unifié** connectant l
 **Impact** : Gestion d'état  
 **Statut** : ✅ Implémenté
 
-**Stores créés** :
+**Stores créés (4)** :
 
-- ✅ `stores/notifications-store.ts` — Badge, push token, liste de notifications (persist AsyncStorage)
-- ✅ `stores/ui-store.ts` — Tab active, network status, keyboard, search
-- ✅ `stores/user-store.ts` — Profil, préférences (locale, thème, sons), persist AsyncStorage
+- ✅ `stores/notifications-store.ts` (120 lig.) — Badge, push token, liste de notifications (persist AsyncStorage, 20 dernières)
+- ✅ `stores/ui-store.ts` — Tab active, network status, keyboard, search (volatile, pas de persist)
+- ✅ `stores/user-store.ts` — Profil + préférences (locale, thème, sons, haptic), persist AsyncStorage
+- ✅ `stores/stories-store.ts` (434 lig.) — Groupes stories, viewer state, cache 30s, persist AsyncStorage
 
 **Architecture** :
 
 - Zustand v5 avec middleware `persist` + `createJSONStorage(AsyncStorage)`
 - `notifications-store` : buffer de 50 notifs, persist des 20 dernières
+- `stories-store` : viewer controls (currentIndex, paused, replyText), groupes par utilisateur, cache TTL
 - `user-store` : profil + préférences avec reset
 - `ui-store` : état volatile (pas de persist)
 
@@ -891,6 +909,8 @@ App → Slides onboarding (1ère fois) → Auth (login/signup)
 
 > Ces fonctionnalités sont planifiées pour **après** MVP Phase 2.
 > Référencées ici pour assurer la traçabilité avec les 50 fonctionnalités et ADDITIONAL_AND_CORE_MODULES.md.
+>
+> ⚠️ **Architecture modulaire** : Côté web, 23 mini-apps ont déjà été extraites en apps Vite standalone (Phases A-C terminées). Le backend Supabase (tables `modules` + `user_modules`, triggers auto-install) est **partagé et réutilisable** par le mobile. Voir [📦 MOBILE_MODULES_STRATEGY.md](MOBILE_MODULES_STRATEGY.md) pour la stratégie complète.
 
 ### Groupe 6 — Modules avancés (installables via Store)
 
@@ -1122,18 +1142,30 @@ App → Slides onboarding (1ère fois) → Auth (login/signup)
 
 **Priorité** : P3  
 **Réf** : Groupe 10 + ADDITIONAL_AND_CORE_MODULES.md §Core Store  
-**Statut** : 🔲 Mock UI existant
+**Statut** : 🔲 Mock UI existant  
+**Stratégie détaillée** : ➡️ [MOBILE_MODULES_STRATEGY.md](MOBILE_MODULES_STRATEGY.md)
 
-**À implémenter** :
+**Backend déjà prêt (à réutiliser)** :
 
-- [ ] Backend module registry (liste modules disponibles)
-- [ ] Installation/désinstallation dynamique
-- [ ] Permissions par module (contacts, camera, localisation, etc.)
-- [ ] Thèmes téléchargeables
-- [ ] Mini-apps tierces (sandbox sécurisé)
-- [ ] Extensions IA installables
-- [ ] Section "Recommandés" & classements
+- ✅ Table Supabase `modules` (37 modules, colonnes `default_enabled`, `is_core`)
+- ✅ Table Supabase `user_modules` (install/uninstall par user)
+- ✅ Trigger auto-install au signup (`on_profile_created_install_modules`)
+- ✅ Fonction backfill pour users existants (`backfill_default_modules_all_users()`)
+- ✅ API platform-core : `GET /api/modules`, `POST /api/modules/:id/install`, `DELETE /api/modules/:id/uninstall`
+- ✅ 23 mini-apps Vite chargeables en WebView (mêmes bundles que le web)
+
+**À implémenter côté mobile** :
+
+- [ ] `services/modules-api.ts` — Client API catalogue + install/uninstall
+- [ ] `stores/modules-store.ts` — Zustand persist (catalogue + modules installés)
+- [ ] `components/miniapps/MiniAppHostMobile.tsx` — WebView sandboxée (analogue MiniAppHost.tsx web)
+- [ ] `services/mobile-bridge.ts` — Communication postMessage WebView ↔ RN
+- [ ] Remplacer `MOCK_CATALOG` dans `store.tsx` par le catalogue Supabase
+- [ ] Navigation `/store/:moduleId` → MiniAppHostMobile
+- [ ] Permissions par module (modal avant installation)
+- [ ] Section « Recommandés » & classements
 - [ ] Reviews et notes
+- [ ] Mini-apps tierces (sandbox sécurisé via WebView)
 
 **Estimation** : 4-6 semaines
 
@@ -1322,10 +1354,13 @@ App → Slides onboarding (1ère fois) → Auth (login/signup)
 
 ---
 
-## �🗺️ Cartographie Complète des Mini-Apps & Modules
+## 🗺️ Cartographie Complète des Mini-Apps & Modules
 
 > Réf : `docs/ADDITIONAL_AND_CORE_MODULES.md` — Vue d'ensemble de l'écosystème ImuChat
 > ImuChat = réseau social + hub de vie quotidienne + outils créatifs + apps collaboratives, modulaire via Store
+>
+> 📦 **Stratégie modulaire mobile détaillée** : [MOBILE_MODULES_STRATEGY.md](MOBILE_MODULES_STRATEGY.md)
+> 🏗️ **Audit architecture web (Phases A-C)** : [ARCHITECTURE_MODULES_AUDIT.md](../docs/ARCHITECTURE_MODULES_AUDIT.md)
 
 ### 1. CORE — Modules installés par défaut
 
@@ -1383,14 +1418,14 @@ App → Slides onboarding (1ère fois) → Auth (login/signup)
 
 ### 7. TRANSVERSAL — Présent partout
 
-| Fonctionnalité                            | Description                                                                             | Statut  | Réf Tracker      |
-| ----------------------------------------- | --------------------------------------------------------------------------------------- | ------- | ---------------- |
-| **Thèmes & Layout Editor**                | Choix thèmes (Sakura, Cyber Neon...), layouts personnalisés, créateur & boutique thèmes | ✅ 70%  | DEV-009          |
-| **Notifications**                         | Push, email, internes                                                                   | ✅ 80%  | BUG-003          |
-| **Search global**                         | Messages, personnes, contenus                                                           | ✅ 100% | DEV-005          |
-| **Paramètres confidentialité & sécurité** | Privacy settings, blocage, signalement                                                  | ⚠️ 30%  | DEV-016, DEV-017 |
-| **Mode hors-ligne**                       | Queue offline, sync automatique                                                         | ✅ 90%  | BUG-002          |
-| **Multi-plateforme**                      | Web, mobile, desktop                                                                    | ✅      | Existant         |
+| Fonctionnalité                            | Description                                                                                             | Statut  | Réf Tracker            |
+| ----------------------------------------- | ------------------------------------------------------------------------------------------------------- | ------- | ---------------------- |
+| **Thèmes & Layout Editor**                | Choix thèmes (Light, Dark, Kawaii, Pro, Neon, Ocean), layouts personnalisés, créateur & boutique thèmes | ✅ 80%  | DEV-009 ✅             |
+| **Notifications**                         | Push (Expo + FCM), bridge 3 couches, badge système                                                      | ✅ 90%  | BUG-003 ✅             |
+| **Search global**                         | Messages, conversations (debounce, surbrillance)                                                        | ✅ 100% | DEV-005 ✅             |
+| **Paramètres confidentialité & sécurité** | MFA TOTP, biométrie, sessions, privacy center, RGPD, blocage, signalements                              | ✅ 90%  | DEV-016 ✅, DEV-017 ✅ |
+| **Mode hors-ligne**                       | Queue offline AsyncStorage, sync automatique                                                            | ✅ 90%  | BUG-002 ✅             |
+| **Multi-plateforme**                      | Web, mobile, desktop                                                                                    | ✅      | Existant               |
 
 ---
 
@@ -1442,43 +1477,43 @@ La 3D et le Live2D ne sont pas des gadgets — ils sont la **matérialisation de
 
 ### Groupe 1 — Messagerie & Communication
 
-| Fonctionnalité (50 fonc.)           | Mobile                        | Web-App              | Écart            |
-| ----------------------------------- | ----------------------------- | -------------------- | ---------------- |
-| 1. Messagerie (texte, emojis, GIFs) | ✅ Supabase Realtime          | ✅ Socket.IO         | Parité           |
-| 2. Messages vocaux transcrits       | ⚠️ Vocal ✅, transcription ❌ | ✅                   | **Web > Mobile** |
-| 3. Pièces jointes (photos/vidéos)   | ✅ Caméra + galerie           | ✅ Drag & drop       | Parité           |
-| 4. Édition/suppression messages     | ✅ Session 21/02              | ✅                   | Parité           |
-| 5. Réactions rapides                | ✅ Long-press + count         | ✅ Supabase Realtime | Parité           |
+| Fonctionnalité (50 fonc.)           | Mobile                          | Web-App              | Écart  |
+| ----------------------------------- | ------------------------------- | -------------------- | ------ |
+| 1. Messagerie (texte, emojis, GIFs) | ✅ Supabase Realtime            | ✅ Socket.IO         | Parité |
+| 2. Messages vocaux transcrits       | ✅ Whisper pipeline (4 couches) | ✅                   | Parité |
+| 3. Pièces jointes (photos/vidéos)   | ✅ Caméra + galerie             | ✅ Drag & drop       | Parité |
+| 4. Édition/suppression messages     | ✅ Session 21/02                | ✅                   | Parité |
+| 5. Réactions rapides                | ✅ Long-press + count           | ✅ Supabase Realtime | Parité |
 
 ### Groupe 2 — Appels Audio & Vidéo
 
-| Fonctionnalité (50 fonc.)    | Mobile             | Web-App | Écart            |
-| ---------------------------- | ------------------ | ------- | ---------------- |
-| 1. Appels audio (1:1/groupe) | ⚠️ UI ✅, Token ❌ | ✅      | **Web > Mobile** |
-| 2. Appels vidéo HD           | ⚠️ UI ✅, Token ❌ | ✅      | **Web > Mobile** |
-| 3. Mini-fenêtre PiP          | 🔴                 | ❌      | Aucun            |
-| 4. Partage d'écran           | 🔴                 | ✅      | **Web > Mobile** |
-| 5. Filtre beauté IA + flou   | 🔴                 | ❌      | Aucun            |
+| Fonctionnalité (50 fonc.)    | Mobile                                    | Web-App | Écart            |
+| ---------------------------- | ----------------------------------------- | ------- | ---------------- |
+| 1. Appels audio (1:1/groupe) | ✅ Stream Video SDK, token backend        | ✅      | Parité           |
+| 2. Appels vidéo HD           | ✅ StreamVideo + StreamCall + CallContent | ✅      | Parité           |
+| 3. Mini-fenêtre PiP          | 🔴                                        | ❌      | Aucun            |
+| 4. Partage d'écran           | 🔴                                        | ✅      | **Web > Mobile** |
+| 5. Filtre beauté IA + flou   | 🔴                                        | ❌      | Aucun            |
 
 ### Groupe 3 — Profils & Identité
 
-| Fonctionnalité (50 fonc.)          | Mobile               | Web-App              | Écart  |
-| ---------------------------------- | -------------------- | -------------------- | ------ |
-| 1. Profils privés/publics/anonymes | ⚠️ Basique           | ⚠️ Basique           | Parité |
-| 2. Multi-profils                   | 🔴                   | 🔴                   | Aucun  |
-| 3. Avatars 2D/3D                   | 🔴 (photo seulement) | 🔴 (photo seulement) | Aucun  |
-| 4. Statuts animés                  | 🔴                   | 🔴                   | Aucun  |
-| 5. Vérification identité           | 🔴                   | 🔴                   | Aucun  |
+| Fonctionnalité (50 fonc.)          | Mobile                                   | Web-App            | Écart            |
+| ---------------------------------- | ---------------------------------------- | ------------------ | ---------------- |
+| 1. Profils privés/publics/anonymes | ✅ Visibility ENUM + RLS                 | ⚠️ Basique         | **Mobile > Web** |
+| 2. Multi-profils                   | 🔴                                       | 🔴                 | Aucun            |
+| 3. Avatars 2D/3D                   | ⚠️ Photo + upload Storage                | ⚠️ Photo seulement | Parité           |
+| 4. Statuts animés                  | ✅ StatusPicker (emoji+texte+expiration) | 🔴                 | **Mobile > Web** |
+| 5. Vérification identité           | ⚠️ Badge UI, KYC Phase 3                 | 🔴                 | **Mobile > Web** |
 
 ### Groupe 4 — Personnalisation
 
-| Fonctionnalité (50 fonc.)  | Mobile        | Web-App               | Écart            |
-| -------------------------- | ------------- | --------------------- | ---------------- |
-| 1. Thèmes visuels          | ⚠️ Dark/Light | ✅ 8 thèmes + density | **Web > Mobile** |
-| 2. Arrière-plans animés    | 🔴            | 🔴                    | Aucun            |
-| 3. Police par conversation | 🔴            | 🔴                    | Aucun            |
-| 4. Packs d'icônes/sons     | 🔴            | 🔴                    | Aucun            |
-| 5. Widget homescreen       | 🔴            | N/A                   | Mobile-only      |
+| Fonctionnalité (50 fonc.)  | Mobile                                              | Web-App               | Écart       |
+| -------------------------- | --------------------------------------------------- | --------------------- | ----------- |
+| 1. Thèmes visuels          | ✅ 6 thèmes (Light, Dark, Kawaii, Pro, Neon, Ocean) | ✅ 8 thèmes + density | Parité      |
+| 2. Arrière-plans animés    | 🔴                                                  | 🔴                    | Aucun       |
+| 3. Police par conversation | 🔴                                                  | 🔴                    | Aucun       |
+| 4. Packs d'icônes/sons     | 🔴                                                  | 🔴                    | Aucun       |
+| 5. Widget homescreen       | 🔴                                                  | N/A                   | Mobile-only |
 
 ### Groupe 5 — Mini-apps Sociales
 
@@ -1492,30 +1527,31 @@ La 3D et le Live2D ne sont pas des gadgets — ils sont la **matérialisation de
 
 ### Auth, Sécurité & Confidentialité (Écrans complémentaires)
 
-| Fonctionnalité               | Mobile                      | Web-App    | Écart            |
-| ---------------------------- | --------------------------- | ---------- | ---------------- |
-| OAuth (Google/Apple/Discord) | ❌                          | ✅         | **Web > Mobile** |
-| OTP téléphone                | ❌                          | ❌         | Aucun            |
-| 2FA / TOTP                   | ❌                          | ❌         | Aucun            |
-| Biométrie (FaceID/TouchID)   | ❌                          | N/A        | Mobile-only      |
-| Gestion multi-appareils      | ❌                          | ❌         | Aucun            |
-| Centre RGPD / Privacy Center | ⚠️ Settings privacy basique | ⚠️ Basique | Parité           |
-| Export données personnelles  | ❌                          | ❌         | Aucun            |
-| Blocage/Signalement          | ❌                          | ❌         | Aucun            |
+| Fonctionnalité               | Mobile                                                    | Web-App    | Écart            |
+| ---------------------------- | --------------------------------------------------------- | ---------- | ---------------- |
+| OAuth (Google/Apple/Discord) | ✅ Code mobile done (config dashboard restante)           | ✅         | Parité           |
+| OTP téléphone                | ❌                                                        | ❌         | Aucun            |
+| 2FA / TOTP                   | ✅ Supabase MFA (enroll/verify/unenroll)                  | ❌         | **Mobile > Web** |
+| Biométrie (FaceID/TouchID)   | ✅ expo-local-authentication                              | N/A        | Mobile-only      |
+| Gestion multi-appareils      | ✅ Sessions actives + révocation globale                  | ❌         | **Mobile > Web** |
+| Centre RGPD / Privacy Center | ✅ Complet (export, blocage, signalements, consentements) | ⚠️ Basique | **Mobile > Web** |
+| Export données personnelles  | ✅ JSON + partage (RGPD Art. 20)                          | ❌         | **Mobile > Web** |
+| Blocage/Signalement          | ✅ Service complet + UI                                   | ❌         | **Mobile > Web** |
 
 ### Infrastructure
 
-| Feature            | Mobile          | Web-App       | Écart            |
-| ------------------ | --------------- | ------------- | ---------------- |
-| Offline queue      | ✅ AsyncStorage | ✅ IndexedDB  | Parité           |
-| Logger unifié      | ❌              | ✅            | **Web > Mobile** |
-| Push notifications | ✅ Expo         | ✅ FCM        | Parité           |
-| i18n               | ✅ ~320 clés    | ✅ ~2300 clés | **Web > Mobile** |
-| Zustand stores     | ❌              | ✅            | **Web > Mobile** |
-| Tests              | ⚠️ ~20%         | ⚠️ ~7%        | Mobile > Web     |
-| Onboarding         | ⚠️ UI créée     | ❌            | **Mobile > Web** |
-| Swipe actions      | ✅              | N/A           | **Mobile > Web** |
-| Read receipts      | ✅              | ⚠️            | **Mobile > Web** |
+| Feature            | Mobile                                               | Web-App       | Écart            |
+| ------------------ | ---------------------------------------------------- | ------------- | ---------------- |
+| Offline queue      | ✅ AsyncStorage                                      | ✅ IndexedDB  | Parité           |
+| Logger unifié      | ✅ Factory scopé + buffer circulaire                 | ✅            | Parité           |
+| Push notifications | ✅ Expo + bridge 3 couches                           | ✅ FCM        | Parité           |
+| i18n               | ✅ ~320 clés (3 langues)                             | ✅ ~2300 clés | **Web > Mobile** |
+| Zustand stores     | ✅ 4 stores (notifs, user, stories, ui)              | ✅            | Parité           |
+| Tests              | ✅ 51 fichiers (~25-30%)                             | ⚠️ ~7%        | **Mobile > Web** |
+| Onboarding         | ✅ 4 slides + profile-setup 3 étapes                 | ❌            | **Mobile > Web** |
+| Swipe actions      | ✅                                                   | N/A           | **Mobile > Web** |
+| Read receipts      | ✅ ✓✓ visuel                                         | ⚠️            | **Mobile > Web** |
+| Rich text/Markdown | ✅ Parser léger (gras, italique, code, barré, liens) | ✅            | Parité           |
 
 ---
 
@@ -1524,10 +1560,10 @@ La 3D et le Live2D ne sont pas des gadgets — ils sont la **matérialisation de
 ### Vue d'ensemble des phases
 
 ```
-Phase 2A (Communication)  ████████████░░░  ~75% fait
-Phase 2B (Profils)         █████████████░  ~90% (DEV-008 ✅, DEV-009 ✅)
-Phase 2C (Social)          ██░░░░░░░░░░░░  ~15% (DEV-011 ✅)
-Phase 2D (Auth/Sécurité)   ████████████░░  ~85% (DEV-015 ✅, DEV-016 ✅, DEV-017 ✅)
+Phase 2A (Communication)  █████████████░  ~90% fait (DEV-001→006 ✅, CallKit restant)
+Phase 2B (Profils)         █████████████░  ~90% (DEV-008 ✅, DEV-009 ✅, DEV-010 ✅)
+Phase 2C (Social)          ██████████████  100% (DEV-011→014 tous ✅)
+Phase 2D (Auth/Sécurité)   █████████████░  ~90% (DEV-015→017 ✅, config dashboard)
 Phase 3  (Modules/IA)      ░░░░░░░░░░░░░░  ~0%  (DEV-018 à DEV-028)
 Phase 4  (Vie quotidienne) ░░░░░░░░░░░░░░  ~0%  (DEV-029 à DEV-035)
 ```
@@ -1539,9 +1575,9 @@ Phase 4  (Vie quotidienne) ░░░░░░░░░░░░░░  ~0%  (DEV
 | 1   | ~~FAB New Chat~~         | DEV-001  | P0       | ✅     | -          |
 | 2   | ~~Edit/Delete messages~~ | DEV-001  | P0       | ✅     | -          |
 | 3   | ~~Read receipts~~        | DEV-001  | P0       | ✅     | -          |
-| 4   | Stream Video token fix   | CRIT-001 | P0       | ⚠️     | 2-3 jours  |
-| 5   | Pull-to-refresh          | DEV-004  | P2       | 🔴     | 2-4 heures |
-| 6   | Search globale           | DEV-005  | P2       | 🔴     | 2-3 jours  |
+| 4   | ~~Stream Video token~~   | CRIT-001 | P0       | ✅     | -          |
+| 5   | ~~Pull-to-refresh~~      | DEV-004  | P2       | ✅     | -          |
+| 6   | ~~Search globale~~       | DEV-005  | P2       | ✅     | -          |
 
 ### Sprint suivant — Phase 2B + 2D (Profils + Auth)
 
@@ -1565,15 +1601,15 @@ Phase 4  (Vie quotidienne) ░░░░░░░░░░░░░░  ~0%  (DEV
 
 ### Backlog infrastructure
 
-| #   | Tâche                      | Priorité | Estimation |
-| --- | -------------------------- | -------- | ---------- |
-| 17  | Logger unifié              | P2       | 1 jour     |
-| 18  | Zustand stores             | P2       | 2-3 jours  |
-| 19  | Tests unitaires (+30%)     | P1       | 1 semaine  |
-| 20  | i18n extension (~500 clés) | P3       | 2-3 jours  |
-| 21  | Messages vocaux transcrits | P2       | 2-3 jours  |
-| 22  | Rich text/Markdown         | P3       | 1-2 jours  |
-| 23  | CallKit/ConnectionService  | P2       | 1 semaine  |
+| #   | Tâche                          | Priorité | Estimation |
+| --- | ------------------------------ | -------- | ---------- |
+| 17  | ~~Logger unifié~~              | P2       | ✅         |
+| 18  | ~~Zustand stores~~             | P2       | ✅         |
+| 19  | Tests unitaires (+30%)         | P1       | 1 semaine  |
+| 20  | i18n extension (~500 clés)     | P3       | 2-3 jours  |
+| 21  | ~~Messages vocaux transcrits~~ | P2       | ✅         |
+| 22  | ~~Rich text/Markdown~~         | P3       | ✅         |
+| 23  | CallKit/ConnectionService      | P2       | 1 semaine  |
 
 ### Estimation globale MVP Phase 2 Élargi
 
@@ -1593,16 +1629,16 @@ Phase 4  (Vie quotidienne) ░░░░░░░░░░░░░░  ~0%  (DEV
 | Groupe    | Nom                        | Phase | Fonc. couvertes | Progression | Réf Tracker                                    |
 | --------- | -------------------------- | ----- | --------------- | ----------- | ---------------------------------------------- |
 | 1         | Messagerie & Communication | 2A    | 5/5 ✅          | 100%        | DEV-001, DEV-002, DEV-003, DEV-004             |
-| 2         | Appels Audio & Vidéo       | 2A    | 2/5 ⚠️          | 40%         | DEV-006, DEV-007, CRIT-001                     |
-| 3         | Profils & Identité         | 2B    | 3/5 ✅          | 60%         | DEV-008, DEV-010                               |
-| 4         | Personnalisation avancée   | 2B    | 2/5 ⚠️          | 40%         | DEV-009                                        |
+| 2         | Appels Audio & Vidéo       | 2A    | 2/5 ⚠️          | 40%         | DEV-006 ✅, DEV-007                            |
+| 3         | Profils & Identité         | 2B    | 4/5 ✅          | 80%         | DEV-008 ✅, DEV-010 ✅                         |
+| 4         | Personnalisation avancée   | 2B    | 2/5 ⚠️          | 40%         | DEV-009 ✅                                     |
 | 5         | Mini-apps sociales natives | 2C    | 5/5 ✅          | 100%        | DEV-011 ✅, DEV-012 ✅, DEV-013 ✅, DEV-014 ✅ |
 | 6         | Modules avancés            | 3     | 0/5 🔴          | 0%          | DEV-018, DEV-019, DEV-020                      |
 | 7         | Services utilitaires       | 3     | 0/5 🔴          | 0%          | DEV-021                                        |
 | 8         | Divertissement & Création  | 3     | 0/5 🔴          | 0%          | DEV-022, DEV-023, DEV-034                      |
 | 9         | IA intégrée                | 3     | 0/5 🔴          | 0%          | DEV-024, DEV-025, DEV-026                      |
 | 10        | App Store & Écosystème     | 3     | 0/5 🔲          | 0% (mock)   | DEV-027, DEV-028                               |
-| **Total** |                            |       | **16/50**       | **32%**     |                                                |
+| **Total** |                            |       | **18/50**       | **36%**     |                                                |
 
 ### Modules additionnels (hors 50 fonctionnalités)
 
@@ -1625,20 +1661,24 @@ mobile/
 ├── app/                    # Routes expo-router
 │   ├── (auth)/            # Login, Register, Forgot-password
 │   ├── (onboarding)/      # Onboarding (UI créée, non connecté)
-│   ├── (tabs)/            # 10 tabs principales
-│   │   ├── index.tsx      # Home (683 lig.) — Hero, Stories, Friends, Explorer
-│   │   ├── chats.tsx      # Conversations list + FAB
-│   │   ├── calls.tsx      # Historique appels
-│   │   ├── contacts.tsx   # Contacts
-│   │   ├── social.tsx     # Feed social (452 lig.) — Stories, Feed, Filtres [MOCK]
+│   ├── (tabs)/            # 10 tabs visibles + Profile caché
+│   │   ├── index.tsx      # Home (683 lig.) — Hero, Stories, Explorer, Podcasts [100% MOCK]
+│   │   ├── chats.tsx      # Conversations list + FAB [✅ Supabase]
+│   │   ├── calls.tsx      # Historique appels [✅ Supabase]
+│   │   ├── contacts.tsx   # Contacts 3 sub-tabs [✅ Supabase]
+│   │   ├── social.tsx     # Feed social (654 lig.) — Feed réel + Stories [✅ Supabase]
 │   │   ├── store.tsx      # Store apps (587 lig.) — Tabs, Search, Purchase [MOCK]
-│   │   ├── watch.tsx      # Watch parties [MOCK]
-│   │   ├── notifications.tsx
-│   │   ├── settings.tsx   # Settings (1004 lig.) — Complet
-│   │   └── profile.tsx    # Profil utilisateur
-│   ├── call/              # Écrans appels in-call
-│   ├── chat/              # Chat room [id].tsx
-│   └── search.tsx         # Recherche (vide)
+│   │   ├── watch.tsx      # Watch parties (518 lig.) [100% MOCK]
+│   │   ├── notifications.tsx # Notifs (604 lig.) [✅ avec fallback mock]
+│   │   ├── settings.tsx   # Settings (1770 lig.) — Complet (MFA, bio, sessions, RGPD)
+│   │   ├── privacy-center.tsx # Privacy (677 lig.) — RGPD complet
+│   │   └── profile.tsx    # Profil (630 lig.) — Avancé (visibility, status, stats)
+│   ├── call/              # Écrans appels (active, incoming, outgoing)
+│   ├── chat/              # Chat room [id].tsx + group-settings
+│   ├── events/            # Liste + création + détail [✅ Supabase]
+│   ├── stories/           # Viewer + création multi-mode [✅ Supabase]
+│   ├── social/            # Création post [✅ Supabase]
+│   └── search.tsx         # Recherche globale [✅ Fonctionnel]
 ├── components/            # Composants React Native
 │   ├── chat/              # 16 composants chat spécifiques
 │   │   ├── MessageContextMenu.tsx  # Reply, Copy, Forward, Edit, Delete
@@ -1659,24 +1699,32 @@ mobile/
 │   ├── Avatar.tsx / CallControls.tsx / IncomingCallModal.tsx
 │   ├── VoiceRecorder.tsx / ReactionPicker.tsx
 │   └── OfflineBanner.tsx / NotificationPrompt.tsx
-├── hooks/                 # 14 custom hooks
+├── hooks/                 # 15 custom hooks
 │   ├── useAuth.ts / useAuthV2.ts
 │   ├── useChat.ts / useReactions.ts / useTypingIndicator.ts
-│   ├── useCallManager.ts / useCallsSafe.ts / useCallHistory.ts
+│   ├── useCallManager.ts / useCallsSafe.ts / useCallHistory.ts / useCalls.ts
 │   ├── useMediaUpload.ts / useVoiceRecording.ts
-│   ├── useNetworkState.ts / useNotifications.ts
+│   ├── useNetworkState.ts / useNotifications.ts / useTranscription.ts
 │   └── ...
-├── services/              # 16 services API
-│   ├── messaging.ts       # CRUD messages + conversations + read receipts
+├── services/              # 18+ services API
+│   ├── messaging.ts       # CRUD messages + conversations + read receipts (748 lig.)
 │   ├── reactions.ts / media-upload.ts / voice-recording.ts
 │   ├── offline-queue.ts   # AsyncStorage queue
 │   ├── notifications.ts / notification-api.ts
 │   ├── stream-video.ts / stream-video-safe.ts / stream-token.ts
 │   ├── call-signaling.ts / calls.ts / calls-safe.ts
+│   ├── social-feed.ts (756 lig.) / stories-api.ts (531 lig.)
+│   ├── groups.ts (1088 lig.) / events.ts (783 lig.)
+│   ├── security.ts (481 lig.) / privacy-center.ts (683 lig.)
+│   ├── transcription.ts (205 lig.) / logger.ts (117 lig.)
 │   ├── supabase.ts / platform.ts / media-api.ts
 │   └── ...
 ├── providers/             # Context providers (Auth, Theme, I18n)
-├── stores/                # Zustand (VIDE — à créer)
+├── stores/                # Zustand v5 (4 stores)
+│   ├── notifications-store.ts (120 lig.) — persist AsyncStorage
+│   ├── stories-store.ts (434 lig.) — persist AsyncStorage
+│   ├── user-store.ts — persist AsyncStorage (profil + préférences)
+│   └── ui-store.ts — volatile (tab, network, keyboard, search)
 ├── i18n/                  # fr.json, en.json, ja.json (~320 clés)
 ├── types/                 # TypeScript types
 ├── utils/                 # Utilitaires
@@ -1686,13 +1734,15 @@ mobile/
 
 **Compteurs** :
 
-- ~10 routes/tabs
-- ~30 composants
-- ~14 hooks
-- ~16 services
-- ~320 clés i18n (3 langues)
-- ~24 fichiers de tests
-- 0 Zustand stores
+- ~12 routes/tabs + 7 sous-routes
+- ~35 composants (dont 17 chat/)
+- ~15 hooks
+- ~18 services
+- ~320 clés i18n (3 langues : fr, en, ja)
+- **51 fichiers de tests** (~25-30% couverture)
+- **4 Zustand stores** (notifications, stories, user, ui)
+- **~53 500 lignes** de code TS/TSX
+- **183 fichiers** TypeScript/TSX
 
 ---
 
@@ -1744,6 +1794,42 @@ mobile/
 
 ---
 
+### Sessions 22-24 février 2026 — DEV-008 → DEV-017
+
+**Objectif** : Implémenter les features sociales, sécurité, privacy et infrastructure
+
+**Réalisations majeures** :
+
+1. ✅ **DEV-008 Social Feed** — Feed créé avec posts, likes, commentaires, pagination curseur (social-feed.ts 756 lig.)
+2. ✅ **DEV-009 Stories** — CRUD complet, viewer, création multi-mode, stories-store Zustand (stories-api.ts 531 lig., stories-store 434 lig.)
+3. ✅ **DEV-011 Événements** — CRUD + RSVP + participants + détail (events.ts 783 lig.)
+4. ✅ **DEV-012 Groupes** — Rôles, modération, invitations, banning (groups.ts 1088 lig.)
+5. ✅ **DEV-013 Sécurité** — MFA TOTP, biométrie Expo, gestion sessions (security.ts 481 lig.)
+6. ✅ **DEV-014 Privacy Center** — RGPD : export JSON, blocage, signalements, consentements (privacy-center.ts 683 lig.)
+7. ✅ **DEV-016 Logger** — Factory avec scopes, circular buffer (logger.ts 117 lig.)
+8. ✅ **DEV-017 Markdown** — Parser custom pour chat (markdown-parser.ts)
+9. ✅ **Settings étendu** — 1004 → 1770 lignes avec MFA, biométrie, sessions, RGPD, 6 thèmes
+10. ✅ **Profil avancé** — StatusPicker, visibility ENUM, stats profil
+
+---
+
+### Session 27 février 2026 — Audit & Tracker Update
+
+**Objectif** : Analyser l'état complet du développement mobile et mettre à jour le tracker
+
+**Réalisations** :
+
+1. ✅ Audit complet du codebase mobile (~53 500 lignes, 183 fichiers, 51 tests)
+2. ✅ Identification de 20+ discordances entre tracker et code réel
+3. ✅ Mise à jour de tous les tableaux comparatifs (5 groupes + Auth + Infra)
+4. ✅ Mise à jour de la cartographie MVP (CORE + Transversal)
+5. ✅ Mise à jour des progress bars roadmap
+6. ✅ Mise à jour sprint + backlog
+7. ✅ Mise à jour compteurs et structure du projet
+8. ✅ Coverage 50-fonctionnalités : 16/50 32% → 18/50 36%
+
+---
+
 ### Session du 21 février 2026
 
 **Objectif** : Rattraper le mobile sur les fonctionnalités chat avancé
@@ -1791,4 +1877,4 @@ mobile/
 
 ---
 
-_Document mis à jour — 21 février 2026 — MVP Phase 2 Élargi_
+_Document mis à jour — 27 février 2026 — MVP Phase 2 quasi-terminé (36% des 50 fonctionnalités)_

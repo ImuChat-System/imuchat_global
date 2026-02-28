@@ -231,14 +231,14 @@ export default function SocialScreen() {
     }
 
     // Story group from other user
-    const hasAvatar = item.user.avatar_url;
+    const hasAvatar = item.avatar_url;
     const latestStory = item.stories[0];
 
     return (
       <TouchableOpacity
-        testID={`story-user-${item.user.id}`}
+        testID={`story-user-${item.user_id}`}
         style={styles.storyItem}
-        onPress={() => handleStoryTap(index - 1, item.user.id === user?.id)}
+        onPress={() => handleStoryTap(index - 1, item.user_id === user?.id)}
       >
         <View
           style={[
@@ -248,7 +248,7 @@ export default function SocialScreen() {
         >
           {hasAvatar ? (
             <Image
-              source={{ uri: item.user.avatar_url! }}
+              source={{ uri: item.avatar_url! }}
               style={styles.storyAvatarImage}
             />
           ) : (
@@ -256,8 +256,8 @@ export default function SocialScreen() {
               style={[styles.storyAvatar, { backgroundColor: colors.surface }]}
             >
               <Text style={styles.storyEmoji}>
-                {item.user.display_name?.charAt(0).toUpperCase() ||
-                  item.user.username?.charAt(0).toUpperCase() ||
+                {item.display_name?.charAt(0).toUpperCase() ||
+                  item.username?.charAt(0).toUpperCase() ||
                   "?"}
               </Text>
             </View>
@@ -267,7 +267,7 @@ export default function SocialScreen() {
           style={[styles.storyUsername, { color: colors.textMuted }]}
           numberOfLines={1}
         >
-          {item.user.display_name || item.user.username || t("social.unknown")}
+          {item.display_name || item.username || t("social.unknown")}
         </Text>
       </TouchableOpacity>
     );
@@ -412,7 +412,7 @@ export default function SocialScreen() {
         data={storyCarouselData}
         renderItem={renderStoryUser}
         keyExtractor={(item, _index) =>
-          "isAddStory" in item ? "add-story" : item.user.id
+          "isAddStory" in item ? "add-story" : item.user_id
         }
         horizontal
         showsHorizontalScrollIndicator={false}

@@ -32,7 +32,7 @@ export const createMockMessage = (overrides = {}) => ({
     id: "user-123",
     username: "testuser",
     avatar_url: "",
-    full_name: "Test User",
+    display_name: "Test User",
   },
   ...overrides,
 });

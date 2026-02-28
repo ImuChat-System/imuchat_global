@@ -98,7 +98,7 @@ export default function ProfileScreen() {
           last_seen,
           contacts_count,
           conversations_count
-        `
+        `,
         )
         .eq("id", session.user.id)
         .single();
@@ -170,7 +170,7 @@ export default function ProfileScreen() {
   // -----------------------------------------------------------------------
 
   const handleEditProfile = () => {
-    router.push("/edit-profile");
+    router.push("/edit-profile" as any);
   };
 
   const handleGoToSettings = () => {
@@ -221,16 +221,15 @@ export default function ProfileScreen() {
         style={[styles.center, { backgroundColor: theme.colors.background }]}
       >
         <Ionicons name="person-outline" size={64} color={theme.colors.border} />
-        <Text
-          style={[styles.emptyText, { color: theme.colors.textMuted }]}
-        >
+        <Text style={[styles.emptyText, { color: theme.colors.textMuted }]}>
           {t("profile.noSession")}
         </Text>
       </View>
     );
   }
 
-  const displayName = profile.display_name || profile.username || t("common.user");
+  const displayName =
+    profile.display_name || profile.username || t("common.user");
   const statusText =
     profile.status_emoji && !isStatusExpired()
       ? `${profile.status_emoji} ${profile.status || ""}`
@@ -257,7 +256,11 @@ export default function ProfileScreen() {
           onPress={handleGoToSettings}
           hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
         >
-          <Ionicons name="settings-outline" size={24} color={theme.colors.text} />
+          <Ionicons
+            name="settings-outline"
+            size={24}
+            color={theme.colors.text}
+          />
         </TouchableOpacity>
       </View>
 
@@ -271,7 +274,10 @@ export default function ProfileScreen() {
               // Update avatar
               await supabase
                 .from("profiles")
-                .update({ avatar_url: url, updated_at: new Date().toISOString() })
+                .update({
+                  avatar_url: url,
+                  updated_at: new Date().toISOString(),
+                })
                 .eq("id", profile.id);
               await loadProfile();
             }}
@@ -334,7 +340,11 @@ export default function ProfileScreen() {
       {/* Website */}
       {profile.website && (
         <TouchableOpacity style={styles.websiteRow}>
-          <Ionicons name="link-outline" size={16} color={theme.colors.primary} />
+          <Ionicons
+            name="link-outline"
+            size={16}
+            color={theme.colors.primary}
+          />
           <Text style={[styles.websiteText, { color: theme.colors.primary }]}>
             {profile.website.replace(/^https?:\/\//, "")}
           </Text>
@@ -342,9 +352,7 @@ export default function ProfileScreen() {
       )}
 
       {/* Stats Row */}
-      <View
-        style={[styles.statsRow, { borderColor: theme.colors.border }]}
-      >
+      <View style={[styles.statsRow, { borderColor: theme.colors.border }]}>
         <View style={styles.statItem}>
           <Text style={[styles.statValue, { color: theme.colors.text }]}>
             {profile.contacts_count}
@@ -353,7 +361,9 @@ export default function ProfileScreen() {
             {t("profile.contacts")}
           </Text>
         </View>
-        <View style={[styles.statDivider, { backgroundColor: theme.colors.border }]} />
+        <View
+          style={[styles.statDivider, { backgroundColor: theme.colors.border }]}
+        />
         <View style={styles.statItem}>
           <Text style={[styles.statValue, { color: theme.colors.text }]}>
             {profile.conversations_count}
@@ -362,7 +372,9 @@ export default function ProfileScreen() {
             {t("profile.conversations")}
           </Text>
         </View>
-        <View style={[styles.statDivider, { backgroundColor: theme.colors.border }]} />
+        <View
+          style={[styles.statDivider, { backgroundColor: theme.colors.border }]}
+        />
         <View style={styles.statItem}>
           <View style={styles.visibilityIcon}>
             <FontAwesome5
@@ -370,15 +382,17 @@ export default function ProfileScreen() {
                 profile.visibility === "public"
                   ? "globe"
                   : profile.visibility === "private"
-                  ? "lock"
-                  : "user-secret"
+                    ? "lock"
+                    : "user-secret"
               }
               size={16}
               color={theme.colors.textMuted}
             />
           </View>
           <Text style={[styles.statLabel, { color: theme.colors.textMuted }]}>
-            {t(`profile.visibility${profile.visibility.charAt(0).toUpperCase() + profile.visibility.slice(1)}`)}
+            {t(
+              `profile.visibility${profile.visibility.charAt(0).toUpperCase() + profile.visibility.slice(1)}`,
+            )}
           </Text>
         </View>
       </View>
@@ -393,7 +407,10 @@ export default function ProfileScreen() {
           <Text style={styles.actionBtnText}>{t("profile.editProfile")}</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          style={[styles.actionBtnSecondary, { borderColor: theme.colors.border }]}
+          style={[
+            styles.actionBtnSecondary,
+            { borderColor: theme.colors.border },
+          ]}
           onPress={handleShareProfile}
         >
           <Ionicons name="share-outline" size={18} color={theme.colors.text} />
@@ -401,7 +418,9 @@ export default function ProfileScreen() {
       </View>
 
       {/* Email (readonly) */}
-      <View style={[styles.infoCard, { backgroundColor: theme.colors.surface }]}>
+      <View
+        style={[styles.infoCard, { backgroundColor: theme.colors.surface }]}
+      >
         <View style={styles.infoRow}>
           <Text style={[styles.infoLabel, { color: theme.colors.textMuted }]}>
             {t("profile.email")}

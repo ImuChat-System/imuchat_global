@@ -312,47 +312,50 @@ Registry centralisé avec :
 
 ## 7. Plan d'implémentation mobile
 
-### Phase M1 — Connecter le Store au backend (1-2 semaines)
+### Phase M1 — Connecter le Store au backend ✅ (terminé)
 
 **Objectif** : Remplacer le mock du Store par le catalogue Supabase réel.
 
-- [ ] Créer `services/modules-api.ts` — CRUD modules (fetch catalogue, install, uninstall)
-- [ ] Créer `stores/modules-store.ts` — Zustand avec persist (catalogue + modules installés)
-- [ ] Modifier `app/(tabs)/store.tsx` — remplacer `MOCK_CATALOG` par `modules-store`
-- [ ] Ajouter `PurchaseModal` réel — appel API install au lieu de simulation
-- [ ] Afficher les modules installés dans un onglet "Mes apps"
-- [ ] Supporter le pull-to-refresh sur le catalogue
+- [x] Créer `services/modules-api.ts` — CRUD modules (fetch catalogue, install, uninstall)
+- [x] Créer `stores/modules-store.ts` — Zustand avec persist (catalogue + modules installés)
+- [x] Modifier `app/(tabs)/store.tsx` — remplacer `MOCK_CATALOG` par `modules-store`
+- [x] Ajouter `PurchaseModal` réel — appel API install au lieu de simulation
+- [x] Afficher les modules installés dans un onglet "Mes apps"
+- [x] Supporter le pull-to-refresh sur le catalogue
 
-### Phase M2 — Module Runtime Mobile (2-3 semaines)
+### Phase M2 — Module Runtime Mobile ✅ (terminé)
 
 **Objectif** : Charger et exécuter des mini-apps dans une WebView sandboxée.
 
-- [ ] Installer `react-native-webview`
-- [ ] Créer `components/miniapps/MiniAppHostMobile.tsx` — WebView + cycle de vie
-- [ ] Créer `services/mobile-bridge.ts` — communication postMessage (même protocole que web)
-- [ ] Créer `services/module-loader-mobile.ts` — `resolveEntryUrl()` + `loadFromStore()`
-- [ ] Implémenter le SDK injecté (`window.ImuChat`) — auth, storage, theme, ui
-- [ ] Écran de transition loading / error pour les mini-apps
+- [x] Installer `react-native-webview` (13.15.0)
+- [x] Créer `components/miniapps/MiniAppHostMobile.tsx` — WebView + cycle de vie complet
+- [x] Créer `services/mobile-bridge.ts` — MobileBridge : communication postMessage (même protocole que web)
+- [x] Créer `services/module-loader-mobile.ts` — `resolveEntryUrl()` + `loadFromStore()` + `generateInjectedSDK()`
+- [x] Implémenter le SDK injecté (`window.ImuChat`) — auth, storage, theme, ui, notifications, wallet, chat
+- [x] Écran de transition loading / connecting / error pour les mini-apps (overlays dans MiniAppHostMobile)
+- [x] Réécriture `app/miniapp/[id].tsx` — Flux install → load → WebView ou modules core natifs
+- [x] handleRequest — auth (Supabase), storage (AsyncStorage isolé par miniapp), theme sync, AppState visibility
+- [x] i18n — 8 nouvelles clés fr/en/ja
 
-### Phase M3 — Intégration Store + Runtime (1-2 semaines)
+### Phase M3 — Intégration avancée Store + Runtime ✅ (terminé)
 
 **Objectif** : Cycle complet browse → install → load → use → uninstall.
 
-- [ ] Navigation `/store/:moduleId` → `MiniAppHostMobile`
-- [ ] Gestion des permissions (modal avant installation)
-- [ ] Détection online/offline (désactiver install si offline)
-- [ ] Badge "Installé" / "Update disponible" dans le catalogue
-- [ ] Deep-link vers les mini-apps installées
-- [ ] Ajout des mini-apps installées dans le tab bar ou menu dédié
+- [x] Navigation `/store/:moduleId` → `MiniAppHostMobile` (via store.tsx → `/miniapp/[id]`)
+- [x] Gestion des permissions (modal avant installation — déjà en Phase M1)
+- [x] Détection online/offline (désactiver install si offline) — `useNetworkState()` + bannière
+- [x] Badge "Installé" / "Update disponible" dans le catalogue — comparaison version installée vs catalogue
+- [x] Deep-link vers les mini-apps installées — `services/miniapp-deeplink.ts` + scheme `imuchat://`
+- [x] Ajout des mini-apps installées sur l'onglet d'accueil (Home) — section "Mes Apps" avec icônes
 
 ### Phase M4 — Modules natifs prioritaires (4-6 semaines)
 
 **Objectif** : Implémenter nativement les modules qui nécessitent des APIs natives.
 
-- [ ] **Music** — expo-av, contrôles lockscreen, background audio
-- [ ] **Watch** — expo-video, PiP, lecteur plein écran
-- [ ] **Home tab** — connecter l'accueil au vrai feed (remplacer le mock)
-- [ ] **Wallet** — implémentation ImuWallet (Stripe, ImuCoin)
+- [x] **Music** — expo-av, contrôles lockscreen, background audio (`types/music.ts`, `services/audio-player.ts`, `stores/music-store.ts`, `app/music/index.tsx`)
+- [x] **Watch** — expo-video, PiP, lecteur plein écran (`types/watch.ts`, `services/video-player.ts`, `app/(tabs)/watch.tsx` rewrite)
+- [x] **Home tab** — connecter l'accueil au vrai feed (remplacer le mock) (`app/(tabs)/index.tsx` — section Social Feed + pull-to-refresh)
+- [x] **Wallet** — implémentation ImuWallet (Stripe, ImuCoin) (`types/wallet.ts`, `services/wallet-api.ts`, `stores/wallet-store.ts`, `app/wallet/index.tsx`)
 
 ---
 

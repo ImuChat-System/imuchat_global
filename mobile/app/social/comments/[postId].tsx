@@ -126,7 +126,7 @@ export default function CommentsScreen() {
             text: t("common.delete"),
             style: "destructive",
             onPress: async () => {
-              const success = await deleteComment(commentId);
+              const success = await deleteComment(commentId, postId!);
               if (success) {
                 setComments((prev) => prev.filter((c) => c.id !== commentId));
               }

@@ -34,7 +34,7 @@ export function ReplyPreview({
     message.sender_id === currentUserId
       ? t("common.you")
       : message.sender?.username ||
-        message.sender?.full_name ||
+        message.sender?.display_name ||
         t("common.unknownUser");
 
   // Truncate message content

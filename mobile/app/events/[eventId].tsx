@@ -13,7 +13,6 @@ import { format, isPast, parseISO } from "date-fns";
 import { enUS, fr, ja } from "date-fns/locale";
 import { Stack, useLocalSearchParams, useRouter } from "expo-router";
 import React, { useCallback, useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
 import {
   ActivityIndicator,
   Alert,
@@ -28,7 +27,8 @@ import {
 } from "react-native";
 
 import { ThemedView } from "@/components/ThemedView";
-import { useColorScheme } from "@/hooks/useColorScheme";
+import { useI18n } from "@/providers/I18nProvider";
+import { useTheme } from "@/providers/ThemeProvider";
 import {
   cancelEvent,
   deleteEvent,
@@ -39,15 +39,14 @@ import {
   ParticipantStatus,
   respondToEvent,
 } from "@/services/events";
-import i18n from "@/services/i18n";
 import { supabase } from "@/services/supabase";
 
 export default function EventDetailScreen() {
   const { eventId } = useLocalSearchParams<{ eventId: string }>();
   const router = useRouter();
-  const colorScheme = useColorScheme();
-  const { t } = useTranslation();
-  const isDark = colorScheme === "dark";
+  const { theme, mode } = useTheme();
+  const { t, locale: appLocale } = useI18n();
+  const isDark = mode === "dark";
 
   const [event, setEvent] = useState<Event | null>(null);
   const [participants, setParticipants] = useState<EventParticipant[]>([]);
@@ -84,7 +83,7 @@ export default function EventDetailScreen() {
   }, [loadEvent]);
 
   const getDateLocale = () => {
-    const lang = i18n.language;
+    const lang = appLocale;
     if (lang.startsWith("fr")) return fr;
     if (lang.startsWith("ja")) return ja;
     return enUS;

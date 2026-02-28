@@ -12,7 +12,6 @@ import { Ionicons } from "@expo/vector-icons";
 import { useFocusEffect } from "@react-navigation/native";
 import { Stack, useLocalSearchParams, useRouter } from "expo-router";
 import React, { useCallback, useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
 import {
   ActivityIndicator,
   Alert,
@@ -28,7 +27,8 @@ import {
 } from "react-native";
 
 import { ThemedView } from "@/components/ThemedView";
-import { useColorScheme } from "@/hooks/useColorScheme";
+import { useI18n } from "@/providers/I18nProvider";
+import { useTheme } from "@/providers/ThemeProvider";
 import {
   banMember,
   fetchGroupMembers,
@@ -66,9 +66,9 @@ const ROLE_COLORS: Record<GroupRole, string> = {
 export default function GroupSettingsScreen() {
   const { conversationId } = useLocalSearchParams<{ conversationId: string }>();
   const router = useRouter();
-  const colorScheme = useColorScheme();
-  const { t } = useTranslation();
-  const isDark = colorScheme === "dark";
+  const { mode } = useTheme();
+  const { t } = useI18n();
+  const isDark = mode === "dark";
 
   const [settings, setSettings] = useState<GroupSettings | null>(null);
   const [members, setMembers] = useState<GroupMember[]>([]);
@@ -428,7 +428,7 @@ export default function GroupSettingsScreen() {
           }
           const success = await leaveGroup(conversationId);
           if (success) {
-            router.replace("/(tabs)/messages");
+            router.replace("/(tabs)/chats" as any);
           }
         },
       },

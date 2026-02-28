@@ -77,7 +77,7 @@ export function ConversationPickerModal({
       const other = conv.participants?.find((p) => p.profile);
       return (
         other?.profile?.username ||
-        other?.profile?.full_name ||
+        other?.profile?.display_name ||
         t("common.unknownUser")
       );
     },

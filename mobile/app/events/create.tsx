@@ -10,12 +10,10 @@
  */
 
 import { Ionicons } from "@expo/vector-icons";
-import DateTimePicker from "@react-native-community/datetimepicker";
 import { format } from "date-fns";
 import { enUS, fr, ja } from "date-fns/locale";
 import { Stack, useRouter } from "expo-router";
 import React, { useState } from "react";
-import { useTranslation } from "react-i18next";
 import {
   ActivityIndicator,
   Alert,
@@ -31,15 +29,15 @@ import {
 } from "react-native";
 
 import { ThemedView } from "@/components/ThemedView";
-import { useColorScheme } from "@/hooks/useColorScheme";
+import { useI18n } from "@/providers/I18nProvider";
+import { useTheme } from "@/providers/ThemeProvider";
 import { createEvent, CreateEventParams } from "@/services/events";
-import i18n from "@/services/i18n";
 
 export default function CreateEventScreen() {
   const router = useRouter();
-  const colorScheme = useColorScheme();
-  const { t } = useTranslation();
-  const isDark = colorScheme === "dark";
+  const { theme, mode } = useTheme();
+  const { t, locale: appLocale } = useI18n();
+  const isDark = mode === "dark";
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -57,7 +55,7 @@ export default function CreateEventScreen() {
   const [submitting, setSubmitting] = useState(false);
 
   const getDateLocale = () => {
-    const lang = i18n.language;
+    const lang = appLocale;
     if (lang.startsWith("fr")) return fr;
     if (lang.startsWith("ja")) return ja;
     return enUS;
@@ -113,7 +111,7 @@ export default function CreateEventScreen() {
     }
   };
 
-  const handleStartDateChange = (event: any, selectedDate?: Date) => {
+  const handleStartDateChange = (_event: any, selectedDate?: Date) => {
     setShowStartDatePicker(false);
     if (selectedDate) {
       const newDate = new Date(startsAt);
@@ -124,7 +122,7 @@ export default function CreateEventScreen() {
     }
   };
 
-  const handleStartTimeChange = (event: any, selectedTime?: Date) => {
+  const handleStartTimeChange = (_event: any, selectedTime?: Date) => {
     setShowStartTimePicker(false);
     if (selectedTime) {
       const newDate = new Date(startsAt);
@@ -134,7 +132,7 @@ export default function CreateEventScreen() {
     }
   };
 
-  const handleEndDateChange = (event: any, selectedDate?: Date) => {
+  const handleEndDateChange = (_event: any, selectedDate?: Date) => {
     setShowEndDatePicker(false);
     if (selectedDate) {
       const newDate = endsAt ? new Date(endsAt) : new Date(startsAt);
@@ -145,7 +143,7 @@ export default function CreateEventScreen() {
     }
   };
 
-  const handleEndTimeChange = (event: any, selectedTime?: Date) => {
+  const handleEndTimeChange = (_event: any, selectedTime?: Date) => {
     setShowEndTimePicker(false);
     if (selectedTime) {
       const newDate = endsAt ? new Date(endsAt) : new Date(startsAt);
@@ -386,42 +384,90 @@ export default function CreateEventScreen() {
         </ScrollView>
       </KeyboardAvoidingView>
 
-      {/* Date/Time Pickers */}
+      {/* Date/Time Pickers - Simple version */}
       {showStartDatePicker && (
-        <DateTimePicker
-          value={startsAt}
-          mode="date"
-          display="default"
-          onChange={handleStartDateChange}
-          minimumDate={new Date()}
-        />
+        <View style={[styles.pickerOverlay, { backgroundColor: isDark ? '#1c1c1e' : '#fff' }]}>
+          <Text style={[styles.pickerTitle, { color: isDark ? '#fff' : '#000' }]}>{t("events.startsAt")} - {t("events.date") || "Date"}</Text>
+          <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.pickerScroll}>
+            {Array.from({ length: 30 }, (_, i) => {
+              const d = new Date(); d.setDate(d.getDate() + i);
+              const isSelected = startsAt.toDateString() === d.toDateString();
+              return (
+                <TouchableOpacity key={i} style={[styles.pickerOption, { backgroundColor: isSelected ? '#007AFF' : (isDark ? '#2c2c2e' : '#f2f2f7'), borderColor: isSelected ? '#007AFF' : (isDark ? '#3a3a3c' : '#e5e5ea') }]} onPress={() => handleStartDateChange(null, d)}>
+                  <Text style={{ color: isSelected ? '#fff' : (isDark ? '#fff' : '#000'), fontWeight: '600', fontSize: 13 }}>{format(d, 'EEE', { locale: getDateLocale() })}</Text>
+                  <Text style={{ color: isSelected ? '#fff' : (isDark ? '#fff' : '#000'), fontSize: 15, fontWeight: '700' }}>{d.getDate()}</Text>
+                  <Text style={{ color: isSelected ? '#ddd' : (isDark ? '#8e8e93' : '#aeaeb2'), fontSize: 11 }}>{format(d, 'MMM', { locale: getDateLocale() })}</Text>
+                </TouchableOpacity>
+              );
+            })}
+          </ScrollView>
+          <TouchableOpacity onPress={() => setShowStartDatePicker(false)} style={styles.pickerClose}>
+            <Text style={{ color: '#007AFF' }}>{t("common.done") || "OK"}</Text>
+          </TouchableOpacity>
+        </View>
       )}
       {showStartTimePicker && (
-        <DateTimePicker
-          value={startsAt}
-          mode="time"
-          display="default"
-          onChange={handleStartTimeChange}
-          is24Hour={true}
-        />
+        <View style={[styles.pickerOverlay, { backgroundColor: isDark ? '#1c1c1e' : '#fff' }]}>
+          <Text style={[styles.pickerTitle, { color: isDark ? '#fff' : '#000' }]}>{t("events.startsAt")} - {t("events.time") || "Heure"}</Text>
+          <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.pickerScroll}>
+            {Array.from({ length: 48 }, (_, i) => {
+              const h = Math.floor(i / 2); const m = (i % 2) * 30;
+              const isSelected = startsAt.getHours() === h && Math.abs(startsAt.getMinutes() - m) < 15;
+              const d = new Date(startsAt); d.setHours(h, m, 0, 0);
+              return (
+                <TouchableOpacity key={i} style={[styles.pickerOption, { backgroundColor: isSelected ? '#007AFF' : (isDark ? '#2c2c2e' : '#f2f2f7'), borderColor: isSelected ? '#007AFF' : (isDark ? '#3a3a3c' : '#e5e5ea') }]} onPress={() => handleStartTimeChange(null, d)}>
+                  <Text style={{ color: isSelected ? '#fff' : (isDark ? '#fff' : '#000'), fontSize: 15, fontWeight: '600' }}>{`${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`}</Text>
+                </TouchableOpacity>
+              );
+            })}
+          </ScrollView>
+          <TouchableOpacity onPress={() => setShowStartTimePicker(false)} style={styles.pickerClose}>
+            <Text style={{ color: '#007AFF' }}>{t("common.done") || "OK"}</Text>
+          </TouchableOpacity>
+        </View>
       )}
       {showEndDatePicker && (
-        <DateTimePicker
-          value={endsAt || startsAt}
-          mode="date"
-          display="default"
-          onChange={handleEndDateChange}
-          minimumDate={startsAt}
-        />
+        <View style={[styles.pickerOverlay, { backgroundColor: isDark ? '#1c1c1e' : '#fff' }]}>
+          <Text style={[styles.pickerTitle, { color: isDark ? '#fff' : '#000' }]}>{t("events.endsAt")} - {t("events.date") || "Date"}</Text>
+          <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.pickerScroll}>
+            {Array.from({ length: 30 }, (_, i) => {
+              const d = new Date(startsAt); d.setDate(d.getDate() + i);
+              const base = endsAt || startsAt;
+              const isSelected = base.toDateString() === d.toDateString();
+              return (
+                <TouchableOpacity key={i} style={[styles.pickerOption, { backgroundColor: isSelected ? '#007AFF' : (isDark ? '#2c2c2e' : '#f2f2f7'), borderColor: isSelected ? '#007AFF' : (isDark ? '#3a3a3c' : '#e5e5ea') }]} onPress={() => handleEndDateChange(null, d)}>
+                  <Text style={{ color: isSelected ? '#fff' : (isDark ? '#fff' : '#000'), fontWeight: '600', fontSize: 13 }}>{format(d, 'EEE', { locale: getDateLocale() })}</Text>
+                  <Text style={{ color: isSelected ? '#fff' : (isDark ? '#fff' : '#000'), fontSize: 15, fontWeight: '700' }}>{d.getDate()}</Text>
+                  <Text style={{ color: isSelected ? '#ddd' : (isDark ? '#8e8e93' : '#aeaeb2'), fontSize: 11 }}>{format(d, 'MMM', { locale: getDateLocale() })}</Text>
+                </TouchableOpacity>
+              );
+            })}
+          </ScrollView>
+          <TouchableOpacity onPress={() => setShowEndDatePicker(false)} style={styles.pickerClose}>
+            <Text style={{ color: '#007AFF' }}>{t("common.done") || "OK"}</Text>
+          </TouchableOpacity>
+        </View>
       )}
       {showEndTimePicker && (
-        <DateTimePicker
-          value={endsAt || startsAt}
-          mode="time"
-          display="default"
-          onChange={handleEndTimeChange}
-          is24Hour={true}
-        />
+        <View style={[styles.pickerOverlay, { backgroundColor: isDark ? '#1c1c1e' : '#fff' }]}>
+          <Text style={[styles.pickerTitle, { color: isDark ? '#fff' : '#000' }]}>{t("events.endsAt")} - {t("events.time") || "Heure"}</Text>
+          <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.pickerScroll}>
+            {Array.from({ length: 48 }, (_, i) => {
+              const h = Math.floor(i / 2); const m = (i % 2) * 30;
+              const base = endsAt || startsAt;
+              const isSelected = base.getHours() === h && Math.abs(base.getMinutes() - m) < 15;
+              const d = new Date(base); d.setHours(h, m, 0, 0);
+              return (
+                <TouchableOpacity key={i} style={[styles.pickerOption, { backgroundColor: isSelected ? '#007AFF' : (isDark ? '#2c2c2e' : '#f2f2f7'), borderColor: isSelected ? '#007AFF' : (isDark ? '#3a3a3c' : '#e5e5ea') }]} onPress={() => handleEndTimeChange(null, d)}>
+                  <Text style={{ color: isSelected ? '#fff' : (isDark ? '#fff' : '#000'), fontSize: 15, fontWeight: '600' }}>{`${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`}</Text>
+                </TouchableOpacity>
+              );
+            })}
+          </ScrollView>
+          <TouchableOpacity onPress={() => setShowEndTimePicker(false)} style={styles.pickerClose}>
+            <Text style={{ color: '#007AFF' }}>{t("common.done") || "OK"}</Text>
+          </TouchableOpacity>
+        </View>
       )}
     </ThemedView>
   );
@@ -528,5 +574,42 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 17,
     fontWeight: "600",
+  },
+  pickerOverlay: {
+    position: "absolute",
+    bottom: 0,
+    left: 0,
+    right: 0,
+    padding: 16,
+    borderTopLeftRadius: 16,
+    borderTopRightRadius: 16,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: -2 },
+    shadowOpacity: 0.15,
+    shadowRadius: 8,
+    elevation: 10,
+  },
+  pickerTitle: {
+    fontSize: 16,
+    fontWeight: "600",
+    marginBottom: 12,
+  },
+  pickerScroll: {
+    maxHeight: 80,
+  },
+  pickerOption: {
+    paddingHorizontal: 14,
+    paddingVertical: 10,
+    borderRadius: 10,
+    borderWidth: 1,
+    marginRight: 8,
+    alignItems: "center",
+    minWidth: 56,
+  },
+  pickerClose: {
+    marginTop: 12,
+    alignSelf: "center",
+    paddingVertical: 8,
+    paddingHorizontal: 24,
   },
 });

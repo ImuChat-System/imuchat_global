@@ -58,13 +58,13 @@ export default function CallsScreen() {
         <View style={[styles.avatar, { backgroundColor: colors.primary }]}>
           {item.otherUser.avatar_url ? (
             <Text style={styles.avatarText}>
-              {(item.otherUser.username || item.otherUser.full_name || "?")
+              {(item.otherUser.username || item.otherUser.display_name || "?")
                 .charAt(0)
                 .toUpperCase()}
             </Text>
           ) : (
             <Text style={styles.avatarText}>
-              {(item.otherUser.username || item.otherUser.full_name || "?")
+              {(item.otherUser.username || item.otherUser.display_name || "?")
                 .charAt(0)
                 .toUpperCase()}
             </Text>
@@ -80,7 +80,7 @@ export default function CallsScreen() {
                 { color: isMissed ? colors.error : colors.text },
               ]}
             >
-              {item.otherUser.full_name ||
+              {item.otherUser.display_name ||
                 item.otherUser.username ||
                 t("common.unknownUser")}
             </Text>

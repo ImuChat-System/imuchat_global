@@ -16,7 +16,7 @@ export interface CallHistoryItem extends CallEvent {
     otherUser: {
         id: string;
         username: string | null;
-        full_name: string | null;
+        display_name: string | null;
         avatar_url: string | null;
     };
     duration: number | null; // in seconds
@@ -107,7 +107,7 @@ export function useCallHistory(): UseCallHistoryReturn {
                 otherUser: otherUser || {
                     id: isOutgoing ? call.callee_id : call.caller_id,
                     username: null,
-                    full_name: null,
+                    display_name: null,
                     avatar_url: null,
                 },
                 duration,

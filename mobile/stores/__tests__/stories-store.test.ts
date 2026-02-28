@@ -39,21 +39,28 @@ jest.mock("../../services/stories-api", () => ({
 
 import { useStoriesStore } from "../stories-store";
 
-const makeStory = (id: string, userId: string = "u-1", viewed = false) => ({
+const makeStory = (id: string, userId: string = "u-1", viewed = false): any => ({
     id,
     user_id: userId,
-    content_type: "text" as const,
+    type: "text" as const,
+    media_url: null,
+    thumbnail_url: null,
     text_content: "Hello",
-    image_url: null,
-    video_url: null,
-    background: null,
-    font_style: null,
-    is_archived: false,
-    views_count: 0,
+    background_color: "#6366f1",
+    text_color: "#ffffff",
+    font_style: "normal" as const,
+    visibility: "all" as const,
+    allow_replies: true,
+    duration_seconds: 24 * 3600,
     created_at: "2024-01-01T00:00:00Z",
     expires_at: "2024-01-02T00:00:00Z",
+    is_archived: false,
+    archived_at: null,
+    username: "bob",
+    display_name: "Bob" as string | null,
+    author_avatar: null as string | null,
+    view_count: 0,
     is_viewed: viewed,
-    author: { id: userId, username: "bob", display_name: "Bob", avatar_url: null },
 });
 
 const makeGroup = (userId: string, stories: any[], hasUnread = true) => ({
@@ -262,7 +269,7 @@ describe("useStoriesStore", () => {
 
             const group = useStoriesStore.getState().storyGroups[0];
             const story = group.stories.find((s: any) => s.id === "s-1");
-            expect(story.is_viewed).toBe(true);
+            expect(story!.is_viewed).toBe(true);
         });
 
         it("should silently handle errors", async () => {

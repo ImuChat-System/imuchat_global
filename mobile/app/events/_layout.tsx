@@ -4,25 +4,24 @@
  * DEV-013: Events navigation stack
  */
 
-import { useColorScheme } from "@/hooks/useColorScheme";
+import { useTheme } from "@/providers/ThemeProvider";
 import { Stack } from "expo-router";
 
 export default function EventsLayout() {
-  const colorScheme = useColorScheme();
-  const isDark = colorScheme === "dark";
+  const { theme } = useTheme();
+  const colors = theme.colors;
 
   return (
     <Stack
       screenOptions={{
         headerStyle: {
-          backgroundColor: isDark ? "#000" : "#fff",
+          backgroundColor: colors.background,
         },
-        headerTintColor: "#007AFF",
+        headerTintColor: colors.primary,
         headerTitleStyle: {
-          color: isDark ? "#fff" : "#000",
+          color: colors.text,
         },
         headerShadowVisible: false,
-        headerBackTitleVisible: false,
       }}
     />
   );

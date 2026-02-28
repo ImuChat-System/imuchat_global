@@ -16,10 +16,10 @@ const mockSubscribeToReactions = jest.fn(() => jest.fn());
 const mockToggleReaction = jest.fn().mockResolvedValue(undefined);
 
 jest.mock("@/services/reactions", () => ({
-    getReactionsForMessages: (...args: any[]) => mockGetReactionsForMessages(...args),
-    groupReactions: (...args: any[]) => mockGroupReactions(...args),
-    subscribeToReactions: (...args: any[]) => mockSubscribeToReactions(...args),
-    toggleReaction: (...args: any[]) => mockToggleReaction(...args),
+    getReactionsForMessages: (...args: unknown[]) => mockGetReactionsForMessages.apply(null, args),
+    groupReactions: (...args: unknown[]) => mockGroupReactions.apply(null, args),
+    subscribeToReactions: (...args: unknown[]) => mockSubscribeToReactions.apply(null, args),
+    toggleReaction: (...args: unknown[]) => mockToggleReaction.apply(null, args),
     QUICK_REACTIONS: ["❤️", "😂", "😮", "😢", "😡", "👍"],
 }));
 

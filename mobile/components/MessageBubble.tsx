@@ -104,8 +104,8 @@ export default function MessageBubble({
   // Parse markdown segments (memoized)
   const markdownSegments = useMemo<TextSegment[] | null>(() => {
     if (!hasText || isDeleted) return null;
-    if (!hasMarkdown(message.content)) return null;
-    return parseMarkdown(message.content);
+    if (!hasMarkdown(message.content!)) return null;
+    return parseMarkdown(message.content!);
   }, [message.content, hasText, isDeleted]);
 
   /** Renders message content with Markdown formatting */
@@ -190,7 +190,7 @@ export default function MessageBubble({
       {!isOwnMessage && message.sender && (
         <Text style={[styles.senderName, { color: colors.primary }]}>
           {message.sender.username ||
-            message.sender.full_name ||
+            message.sender.display_name ||
             t("common.unknown")}
         </Text>
       )}
@@ -230,7 +230,7 @@ export default function MessageBubble({
                 numberOfLines={1}
               >
                 {message.replied_message.sender?.username ||
-                  message.replied_message.sender?.full_name ||
+                  message.replied_message.sender?.display_name ||
                   t("common.unknownUser")}
               </Text>
               <Text

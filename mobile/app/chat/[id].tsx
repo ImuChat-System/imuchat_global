@@ -3,6 +3,7 @@ import MessageInput from "@/components/MessageInput";
 import ConversationPickerModal from "@/components/chat/ConversationPickerModal";
 import { useChat } from "@/hooks/useChat";
 import { useReactions } from "@/hooks/useReactions";
+import { useI18n } from "@/providers/I18nProvider";
 import { useTheme } from "@/providers/ThemeProvider";
 import { initiateCall } from "@/services/call-signaling";
 import {
@@ -14,7 +15,6 @@ import { Ionicons } from "@expo/vector-icons";
 import * as Clipboard from "expo-clipboard";
 import { Stack, useLocalSearchParams, useRouter } from "expo-router";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { useTranslation } from "react-i18next";
 import {
   ActivityIndicator,
   Alert,
@@ -57,7 +57,7 @@ export default function ChatRoomScreen() {
   const flatListRef = useRef<FlatList>(null);
   const { theme } = useTheme();
   const router = useRouter();
-  const { t } = useTranslation();
+  const { t } = useI18n();
   const [initiatingCall, setInitiatingCall] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
 

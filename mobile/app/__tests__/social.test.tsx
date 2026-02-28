@@ -114,7 +114,7 @@ jest.mock("@/services/social-feed", () => ({
 // ─── Helpers ──────────────────────────────────────────────────────
 
 import { useStoriesStore } from "@/stores/stories-store";
-const mockUseStoriesStore = useStoriesStore as jest.Mock;
+const mockUseStoriesStore = useStoriesStore as unknown as jest.Mock;
 
 function createPost(overrides: Record<string, unknown> = {}) {
   return {

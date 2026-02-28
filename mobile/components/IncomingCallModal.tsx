@@ -32,7 +32,7 @@ export default function IncomingCallModal({
   if (!call) return null;
 
   const callerName =
-    call.caller?.full_name || call.caller?.username || t("common.unknown");
+    call.caller?.display_name || call.caller?.username || t("common.unknown");
   const callTypeText =
     call.call_type === "video" ? t("calls.videoCall") : t("calls.audioCall");
 

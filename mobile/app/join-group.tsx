@@ -7,7 +7,6 @@
 import { Ionicons } from "@expo/vector-icons";
 import { Stack, useLocalSearchParams, useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
 import {
   ActivityIndicator,
   Alert,
@@ -22,7 +21,8 @@ import {
 } from "react-native";
 
 import { ThemedView } from "@/components/ThemedView";
-import { useColorScheme } from "@/hooks/useColorScheme";
+import { useI18n } from "@/providers/I18nProvider";
+import { useTheme } from "@/providers/ThemeProvider";
 import {
   getInviteInfo,
   GroupInvite,
@@ -32,9 +32,9 @@ import {
 export default function JoinGroupScreen() {
   const { code: initialCode } = useLocalSearchParams<{ code?: string }>();
   const router = useRouter();
-  const colorScheme = useColorScheme();
-  const { t } = useTranslation();
-  const isDark = colorScheme === "dark";
+  const { theme, mode } = useTheme();
+  const { t } = useI18n();
+  const isDark = mode === "dark";
 
   const [code, setCode] = useState(initialCode || "");
   const [inviteInfo, setInviteInfo] = useState<GroupInvite | null>(null);

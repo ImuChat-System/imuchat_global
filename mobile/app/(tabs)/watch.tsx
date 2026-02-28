@@ -1,11 +1,24 @@
 /**
- * WatchScreen — Parité web watch hub
- * Sections : FeaturedCarousel, CategoryFilter, WatchPartyCards, UpcomingSection, CTA
+ * WatchScreen — Watch hub with expo-av video player
+ * Sections : FeaturedCarousel, VideoPlayer, CategoryFilter, WatchPartyCards, UpcomingSection, CTA
+ *
+ * Phase M4 — Module Watch natif (expo-av + plein écran)
  */
 
 import { useI18n } from "@/providers/I18nProvider";
 import { useColors, useSpacing } from "@/providers/ThemeProvider";
-import React, { useCallback, useState } from "react";
+import {
+  enterFullscreen,
+  pauseVideo,
+  playVideo,
+  seekVideo,
+  setVideoRef,
+  setVideoStatusCallback,
+  unloadVideo,
+} from "@/services/video-player";
+import { Ionicons } from "@expo/vector-icons";
+import { ResizeMode, Video } from "expo-av";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
   Dimensions,
   FlatList,
@@ -17,57 +30,68 @@ import {
   View,
 } from "react-native";
 
-// ─── Types ────────────────────────────────────────────────────────
-type WatchCategory = "all" | "anime" | "movie" | "series" | "documentary";
+import type {
+  VideoPlayerState,
+  WatchCategory,
+  WatchItem,
+  WatchParty,
+} from "@/types/watch";
 
-interface FeaturedItem {
-  id: string;
-  title: string;
-  subtitle: string;
-  badge: string;
-  viewers: number;
-}
-
-interface WatchParty {
-  id: string;
-  title: string;
-  host: string;
-  category: WatchCategory;
-  viewers: number;
-  startedAt: string;
-  isLive: boolean;
-}
-
-interface UpcomingParty {
-  id: string;
-  title: string;
-  host: string;
-  scheduledFor: string;
-  attendees: number;
-}
-
-// ─── Mock data (parité avec web MOCK_UPCOMING_PARTIES) ───────────
-const FEATURED_ITEMS: FeaturedItem[] = [
+// ─── Mock data (typed, parité web) ─────────────────────────────────
+const FEATURED_ITEMS: WatchItem[] = [
   {
     id: "f1",
     title: "Anime Night: One Piece",
-    subtitle: "Épisode 1122 — Egg Head Arc",
-    badge: "🔴 LIVE",
-    viewers: 142,
+    description: "Épisode 1122 — Egg Head Arc",
+    video_url:
+      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+    thumbnail_url: "",
+    author_id: "system",
+    author_username: "ImuChat",
+    source: "external",
+    category: "anime",
+    duration_ms: 5400000,
+    view_count: 5420,
+    like_count: 820,
+    is_live: true,
+    tags: ["one-piece", "anime"],
+    created_at: new Date().toISOString(),
   },
   {
     id: "f2",
     title: "Ciné Club: Inception",
-    subtitle: "Christopher Nolan — 2h28",
-    badge: "⭐ Top",
-    viewers: 89,
+    description: "Christopher Nolan — 2h28",
+    video_url:
+      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
+    thumbnail_url: "",
+    author_id: "system",
+    author_username: "ImuChat",
+    source: "external",
+    category: "movie",
+    duration_ms: 8880000,
+    view_count: 3200,
+    like_count: 490,
+    is_live: false,
+    tags: ["inception", "nolan"],
+    created_at: new Date().toISOString(),
   },
   {
     id: "f3",
     title: "Docu: Notre Planète",
-    subtitle: "Saison 2, Ép. 4",
-    badge: "🌍 Nature",
-    viewers: 56,
+    description: "Saison 2, Ép. 4",
+    video_url:
+      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+    thumbnail_url: "",
+    author_id: "system",
+    author_username: "ImuChat",
+    source: "external",
+    category: "documentary",
+    duration_ms: 3600000,
+    view_count: 1800,
+    like_count: 310,
+    is_live: false,
+    tags: ["nature", "documentary"],
+    created_at: new Date().toISOString(),
   },
 ];
 
@@ -75,73 +99,144 @@ const WATCH_PARTIES: WatchParty[] = [
   {
     id: "wp1",
     title: "Dragon Ball Super: Broly",
-    host: "Alice",
-    category: "anime",
-    viewers: 23,
-    startedAt: new Date(Date.now() - 45 * 60000).toISOString(),
-    isLive: true,
+    host_id: "user_alice",
+    video: FEATURED_ITEMS[0],
+    viewer_count: 23,
+    status: "live",
+    scheduled_for: new Date(Date.now() - 45 * 60000).toISOString(),
+    chat_enabled: true,
+    created_at: new Date().toISOString(),
+    description: "",
+    host_username: "",
+    category: "live",
+    started_at: null,
+    attendee_count: 0,
   },
   {
     id: "wp2",
     title: "Breaking Bad S5 Marathon",
-    host: "Bob",
-    category: "series",
-    viewers: 67,
-    startedAt: new Date(Date.now() - 90 * 60000).toISOString(),
-    isLive: true,
+    host_id: "user_bob",
+    video: FEATURED_ITEMS[1],
+    viewer_count: 67,
+    status: "live",
+    scheduled_for: new Date(Date.now() - 90 * 60000).toISOString(),
+    chat_enabled: true,
+    created_at: new Date().toISOString(),
+    description: "",
+    host_username: "",
+    category: "live",
+    started_at: null,
+    attendee_count: 0,
   },
   {
     id: "wp3",
     title: "Interstellar",
-    host: "David",
-    category: "movie",
-    viewers: 34,
-    startedAt: new Date(Date.now() - 30 * 60000).toISOString(),
-    isLive: true,
+    host_id: "user_david",
+    video: FEATURED_ITEMS[1],
+    viewer_count: 34,
+    status: "live",
+    scheduled_for: new Date(Date.now() - 30 * 60000).toISOString(),
+    chat_enabled: true,
+    created_at: new Date().toISOString(),
+    description: "",
+    host_username: "",
+    category: "live",
+    started_at: null,
+    attendee_count: 0,
   },
   {
     id: "wp4",
     title: "Cosmos: A Spacetime Odyssey",
-    host: "Emma",
-    category: "documentary",
-    viewers: 18,
-    startedAt: new Date(Date.now() - 120 * 60000).toISOString(),
-    isLive: true,
+    host_id: "user_emma",
+    video: FEATURED_ITEMS[2],
+    viewer_count: 18,
+    status: "live",
+    scheduled_for: new Date(Date.now() - 120 * 60000).toISOString(),
+    chat_enabled: false,
+    created_at: new Date().toISOString(),
+    description: "",
+    host_username: "",
+    category: "live",
+    started_at: null,
+    attendee_count: 0,
   },
   {
     id: "wp5",
     title: "Attack on Titan Final",
-    host: "François",
-    category: "anime",
-    viewers: 95,
-    startedAt: new Date(Date.now() - 15 * 60000).toISOString(),
-    isLive: true,
+    host_id: "user_francois",
+    video: FEATURED_ITEMS[0],
+    viewer_count: 95,
+    status: "live",
+    scheduled_for: new Date(Date.now() - 15 * 60000).toISOString(),
+    chat_enabled: true,
+    created_at: new Date().toISOString(),
+    description: "",
+    host_username: "",
+    category: "live",
+    started_at: null,
+    attendee_count: 0,
   },
 ];
 
-const UPCOMING_PARTIES: UpcomingParty[] = [
+const UPCOMING_PARTIES: WatchParty[] = [
   {
     id: "up1",
     title: "Marvel Movie Night",
-    host: "Chloé",
-    scheduledFor: new Date(Date.now() + 3 * 3600000).toISOString(),
-    attendees: 12,
+    host_id: "user_chloe",
+    video: FEATURED_ITEMS[1],
+    viewer_count: 0,
+    status: "scheduled",
+    scheduled_for: new Date(Date.now() + 3 * 3600000).toISOString(),
+    chat_enabled: true,
+    created_at: new Date().toISOString(),
+    description: "",
+    host_username: "",
+    category: "live",
+    started_at: null,
+    attendee_count: 0,
   },
   {
     id: "up2",
     title: "Anime Friday: Jujutsu Kaisen",
-    host: "Alice",
-    scheduledFor: new Date(Date.now() + 24 * 3600000).toISOString(),
-    attendees: 28,
+    host_id: "user_alice",
+    video: FEATURED_ITEMS[0],
+    viewer_count: 0,
+    status: "scheduled",
+    scheduled_for: new Date(Date.now() + 24 * 3600000).toISOString(),
+    chat_enabled: true,
+    created_at: new Date().toISOString(),
+    description: "",
+    host_username: "",
+    category: "live",
+    started_at: null,
+    attendee_count: 0,
   },
   {
     id: "up3",
     title: "Documentary Sunday",
-    host: "Bob",
-    scheduledFor: new Date(Date.now() + 48 * 3600000).toISOString(),
-    attendees: 8,
+    host_id: "user_bob",
+    video: FEATURED_ITEMS[2],
+    viewer_count: 0,
+    status: "scheduled",
+    scheduled_for: new Date(Date.now() + 48 * 3600000).toISOString(),
+    chat_enabled: false,
+    created_at: new Date().toISOString(),
+    description: "",
+    host_username: "",
+    category: "live",
+    started_at: null,
+    attendee_count: 0,
   },
 ];
+
+const HOST_NAMES: Record<string, string> = {
+  user_alice: "Alice",
+  user_bob: "Bob",
+  user_david: "David",
+  user_emma: "Emma",
+  user_francois: "François",
+  user_chloe: "Chloé",
+};
 
 const CATEGORIES: { key: WatchCategory; label: string; icon: string }[] = [
   { key: "all", label: "watch.all", icon: "🎨" },
@@ -152,14 +247,112 @@ const CATEGORIES: { key: WatchCategory; label: string; icon: string }[] = [
 ];
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
+const VIDEO_HEIGHT = (SCREEN_WIDTH * 9) / 16; // 16:9 aspect ratio
+
+// ─── Helpers ──────────────────────────────────────────────────────
+function formatDuration(ms: number): string {
+  const totalSec = Math.floor(ms / 1000);
+  const h = Math.floor(totalSec / 3600);
+  const m = Math.floor((totalSec % 3600) / 60);
+  const s = totalSec % 60;
+  if (h > 0)
+    return `${h}:${m.toString().padStart(2, "0")}:${s.toString().padStart(2, "0")}`;
+  return `${m}:${s.toString().padStart(2, "0")}`;
+}
 
 // ─── Component ────────────────────────────────────────────────────
 export default function WatchScreen() {
   const colors = useColors();
   const spacing = useSpacing();
   const { t } = useI18n();
+  const videoRef = useRef<Video>(null);
+
   const [category, setCategory] = useState<WatchCategory>("all");
   const [refreshing, setRefreshing] = useState(false);
+  const [activeVideo, setActiveVideo] = useState<WatchItem | null>(null);
+  const [playerState, setPlayerState] = useState<VideoPlayerState>({
+    currentVideo: null,
+    currentParty: null,
+    isPlaying: false,
+    positionMs: 0,
+    durationMs: 0,
+    isBuffering: false,
+    isFullscreen: false,
+    isPiP: false,
+  });
+
+  // Register video ref & status callback
+  useEffect(() => {
+    if (videoRef.current) {
+      setVideoRef(videoRef.current);
+    }
+    setVideoStatusCallback((status) => {
+      if (status.isLoaded) {
+        setPlayerState((prev) => ({
+          ...prev,
+          isPlaying: status.isPlaying,
+          positionMs: status.positionMillis ?? 0,
+          durationMs: status.durationMillis ?? 0,
+          isBuffering: status.isBuffering,
+        }));
+      }
+    });
+    return () => {
+      unloadVideo();
+    };
+  }, []);
+
+  // Play a featured item / party video
+  const handlePlayVideo = useCallback(
+    async (item: WatchItem) => {
+      if (activeVideo?.id === item.id) {
+        // Toggle play/pause if same video
+        if (playerState.isPlaying) {
+          await pauseVideo();
+        } else {
+          await playVideo();
+        }
+        return;
+      }
+      setActiveVideo(item);
+      try {
+        if (videoRef.current) {
+          await videoRef.current.unloadAsync();
+          await videoRef.current.loadAsync(
+            { uri: item.video_url },
+            { shouldPlay: true, progressUpdateIntervalMillis: 500 },
+          );
+        }
+      } catch (err) {
+        console.warn("[Watch] Failed to load video:", err);
+      }
+    },
+    [activeVideo, playerState.isPlaying],
+  );
+
+  const handleTogglePlayPause = useCallback(async () => {
+    if (playerState.isPlaying) {
+      await pauseVideo();
+    } else {
+      await playVideo();
+    }
+  }, [playerState.isPlaying]);
+
+  const handleFullscreen = useCallback(async () => {
+    await enterFullscreen();
+  }, []);
+
+  const handleSeek = useCallback(
+    async (direction: "back" | "forward") => {
+      const delta = direction === "back" ? -10000 : 10000;
+      const target = Math.max(
+        0,
+        Math.min(playerState.positionMs + delta, playerState.durationMs),
+      );
+      await seekVideo(target);
+    },
+    [playerState.positionMs, playerState.durationMs],
+  );
 
   // Pull-to-refresh handler
   const handleRefresh = useCallback(async () => {
@@ -172,12 +365,13 @@ export default function WatchScreen() {
   const filteredParties =
     category === "all"
       ? WATCH_PARTIES
-      : WATCH_PARTIES.filter((p) => p.category === category);
+      : WATCH_PARTIES.filter((p) => p.video?.category === category);
 
   // ─── Featured carousel item ───────────────────────────────────
-  const renderFeatured = ({ item }: { item: FeaturedItem }) => (
+  const renderFeatured = ({ item }: { item: WatchItem }) => (
     <TouchableOpacity
       testID={`featured-${item.id}`}
+      onPress={() => handlePlayVideo(item)}
       style={[
         styles.featuredCard,
         {
@@ -189,73 +383,98 @@ export default function WatchScreen() {
     >
       <View style={styles.featuredTop}>
         <Text style={[styles.featuredBadge, { color: colors.primary }]}>
-          {item.badge}
+          {item.is_live ? "🔴 LIVE" : `⏱ ${formatDuration(item.duration_ms)}`}
         </Text>
         <Text style={[styles.featuredViewers, { color: colors.textMuted }]}>
-          👁 {item.viewers}
+          👁 {item.view_count.toLocaleString()}
         </Text>
       </View>
       <Text style={[styles.featuredTitle, { color: colors.text }]}>
         {item.title}
       </Text>
       <Text style={[styles.featuredSub, { color: colors.textMuted }]}>
-        {item.subtitle}
+        {item.description}
       </Text>
-      <TouchableOpacity
-        testID={`join-featured-${item.id}`}
-        style={[styles.joinBtn, { backgroundColor: colors.primary }]}
-      >
-        <Text style={styles.joinBtnText}>{t("watch.join")}</Text>
-      </TouchableOpacity>
-    </TouchableOpacity>
-  );
-
-  // ─── Watch party card ─────────────────────────────────────────
-  const renderParty = (p: WatchParty) => (
-    <TouchableOpacity
-      key={p.id}
-      testID={`party-${p.id}`}
-      style={[
-        styles.partyCard,
-        { backgroundColor: colors.surface, borderColor: colors.border },
-      ]}
-    >
-      <View style={styles.partyHeader}>
-        <View
-          style={[
-            styles.liveDot,
-            { backgroundColor: p.isLive ? "#ef4444" : colors.border },
-          ]}
-        />
-        <Text
-          style={[styles.partyTitle, { color: colors.text }]}
-          numberOfLines={1}
-        >
-          {p.title}
-        </Text>
-      </View>
-      <Text style={[styles.partyHost, { color: colors.textMuted }]}>
-        👤 {p.host}
-      </Text>
-      <View style={styles.partyMeta}>
-        <Text style={[styles.partyViewers, { color: colors.primary }]}>
-          👁 {p.viewers}
-        </Text>
+      <View style={styles.featuredActions}>
         <TouchableOpacity
-          testID={`join-party-${p.id}`}
-          style={[styles.partyJoin, { borderColor: colors.primary }]}
+          testID={`play-featured-${item.id}`}
+          style={[styles.joinBtn, { backgroundColor: colors.primary }]}
+          onPress={() => handlePlayVideo(item)}
         >
-          <Text style={[styles.partyJoinText, { color: colors.primary }]}>
-            {t("watch.join")}
+          <Ionicons name="play" size={14} color="#fff" />
+          <Text style={styles.joinBtnText}>
+            {activeVideo?.id === item.id && playerState.isPlaying
+              ? t("watch.pause") || "Pause"
+              : t("watch.play") || "Lecture"}
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.secondaryBtn, { borderColor: colors.border }]}
+        >
+          <Ionicons name="heart-outline" size={14} color={colors.textMuted} />
+          <Text style={[styles.secondaryBtnText, { color: colors.textMuted }]}>
+            {item.like_count}
           </Text>
         </TouchableOpacity>
       </View>
     </TouchableOpacity>
   );
 
+  // ─── Watch party card ─────────────────────────────────────────
+  const renderParty = (p: WatchParty) => {
+    const hostName = HOST_NAMES[p.host_id] ?? p.host_id;
+    return (
+      <TouchableOpacity
+        key={p.id}
+        testID={`party-${p.id}`}
+        onPress={() => p.video && handlePlayVideo(p.video)}
+        style={[
+          styles.partyCard,
+          { backgroundColor: colors.surface, borderColor: colors.border },
+        ]}
+      >
+        <View style={styles.partyHeader}>
+          <View
+            style={[
+              styles.liveDot,
+              {
+                backgroundColor:
+                  p.status === "live" ? "#ef4444" : colors.border,
+              },
+            ]}
+          />
+          <Text
+            style={[styles.partyTitle, { color: colors.text }]}
+            numberOfLines={1}
+          >
+            {p.title}
+          </Text>
+        </View>
+        <Text style={[styles.partyHost, { color: colors.textMuted }]}>
+          👤 {hostName}
+        </Text>
+        <View style={styles.partyMeta}>
+          <Text style={[styles.partyViewers, { color: colors.primary }]}>
+            👁 {p.viewer_count}
+          </Text>
+          <TouchableOpacity
+            testID={`join-party-${p.id}`}
+            style={[styles.partyJoin, { borderColor: colors.primary }]}
+            onPress={() => p.video && handlePlayVideo(p.video)}
+          >
+            <Text style={[styles.partyJoinText, { color: colors.primary }]}>
+              {t("watch.join")}
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </TouchableOpacity>
+    );
+  };
+
   // ─── Upcoming card ────────────────────────────────────────────
-  const renderUpcoming = (u: UpcomingParty) => {
-    const date = new Date(u.scheduledFor);
+  const renderUpcoming = (u: WatchParty) => {
+    const hostName = HOST_NAMES[u.host_id] ?? u.host_id;
+    const date = new Date(u.scheduled_for!);
     const timeStr = `${date.getHours()}h${date.getMinutes().toString().padStart(2, "0")}`;
     const dayDiff = Math.floor((date.getTime() - Date.now()) / (24 * 3600000));
     const dayLabel =
@@ -290,7 +509,7 @@ export default function WatchScreen() {
             {u.title}
           </Text>
           <Text style={[styles.upcomingHost, { color: colors.textMuted }]}>
-            👤 {u.host} · {u.attendees} {t("watch.registered")}
+            👤 {hostName} · {u.viewer_count} {t("watch.registered")}
           </Text>
         </View>
       </TouchableOpacity>
@@ -300,6 +519,11 @@ export default function WatchScreen() {
   // ═══════════════════════════════════════════════════════════════
   // RENDER
   // ═══════════════════════════════════════════════════════════════
+  const progressPercent =
+    playerState.durationMs > 0
+      ? (playerState.positionMs / playerState.durationMs) * 100
+      : 0;
+
   return (
     <ScrollView
       testID="watch-screen"
@@ -320,6 +544,125 @@ export default function WatchScreen() {
         <Text style={[styles.subtitle, { color: colors.textMuted }]}>
           {t("watch.subtitle")}
         </Text>
+
+        {/* ── Video Player ────────────────────────────────────── */}
+        {activeVideo && (
+          <View
+            testID="video-player-container"
+            style={[
+              styles.videoContainer,
+              { backgroundColor: "#000", borderColor: colors.border },
+            ]}
+          >
+            <Video
+              ref={videoRef}
+              style={styles.video}
+              resizeMode={ResizeMode.CONTAIN}
+              useNativeControls={false}
+              onPlaybackStatusUpdate={(status) => {
+                if (status.isLoaded) {
+                  setPlayerState((prev) => ({
+                    ...prev,
+                    isPlaying: status.isPlaying,
+                    positionMs: status.positionMillis ?? 0,
+                    durationMs: status.durationMillis ?? 0,
+                    isBuffering: status.isBuffering,
+                  }));
+                }
+              }}
+            />
+
+            {/* Buffering indicator */}
+            {playerState.isBuffering && (
+              <View style={styles.bufferingOverlay}>
+                <Text style={styles.bufferingText}>⏳</Text>
+              </View>
+            )}
+
+            {/* Video controls overlay */}
+            <View style={styles.controlsOverlay}>
+              <TouchableOpacity
+                testID="btn-seek-back"
+                onPress={() => handleSeek("back")}
+                style={styles.controlBtn}
+              >
+                <Ionicons name="play-back" size={22} color="#fff" />
+              </TouchableOpacity>
+              <TouchableOpacity
+                testID="btn-play-pause"
+                onPress={handleTogglePlayPause}
+                style={styles.controlBtnLarge}
+              >
+                <Ionicons
+                  name={playerState.isPlaying ? "pause" : "play"}
+                  size={32}
+                  color="#fff"
+                />
+              </TouchableOpacity>
+              <TouchableOpacity
+                testID="btn-seek-forward"
+                onPress={() => handleSeek("forward")}
+                style={styles.controlBtn}
+              >
+                <Ionicons name="play-forward" size={22} color="#fff" />
+              </TouchableOpacity>
+            </View>
+
+            {/* Progress bar + time */}
+            <View style={styles.progressContainer}>
+              <View
+                style={[styles.progressBar, { backgroundColor: colors.border }]}
+              >
+                <View
+                  style={[
+                    styles.progressFill,
+                    {
+                      backgroundColor: colors.primary,
+                      width: `${progressPercent}%`,
+                    },
+                  ]}
+                />
+              </View>
+              <View style={styles.timeRow}>
+                <Text style={styles.timeText}>
+                  {formatDuration(playerState.positionMs)}
+                </Text>
+                <View style={styles.playerActions}>
+                  <TouchableOpacity
+                    testID="btn-fullscreen"
+                    onPress={handleFullscreen}
+                    style={styles.playerActionBtn}
+                  >
+                    <Ionicons name="expand" size={18} color="#fff" />
+                  </TouchableOpacity>
+                </View>
+                <Text style={styles.timeText}>
+                  {formatDuration(playerState.durationMs)}
+                </Text>
+              </View>
+            </View>
+
+            {/* Now playing info */}
+            <View
+              style={[
+                styles.nowPlayingInfo,
+                { backgroundColor: colors.surface },
+              ]}
+            >
+              <Text
+                style={[styles.nowPlayingTitle, { color: colors.text }]}
+                numberOfLines={1}
+              >
+                {activeVideo.title}
+              </Text>
+              <Text
+                style={[styles.nowPlayingDesc, { color: colors.textMuted }]}
+              >
+                {activeVideo.description}
+              </Text>
+            </View>
+          </View>
+        )}
 
         {/* ── Featured Carousel ───────────────────────────────── */}
         <FlatList
@@ -418,6 +761,87 @@ const styles = StyleSheet.create({
     marginTop: 16,
   },
 
+  // Video player
+  videoContainer: {
+    borderRadius: 16,
+    overflow: "hidden",
+    marginBottom: 20,
+    borderWidth: 1,
+  },
+  video: {
+    width: "100%",
+    height: VIDEO_HEIGHT,
+  },
+  bufferingOverlay: {
+    ...StyleSheet.absoluteFillObject,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0,0,0,0.3)",
+    height: VIDEO_HEIGHT,
+  },
+  bufferingText: { fontSize: 32 },
+  controlsOverlay: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    height: VIDEO_HEIGHT,
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    gap: 32,
+  },
+  controlBtn: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: "rgba(0,0,0,0.4)",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  controlBtnLarge: {
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    backgroundColor: "rgba(0,0,0,0.5)",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  progressContainer: {
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    backgroundColor: "#000",
+  },
+  progressBar: {
+    height: 3,
+    borderRadius: 1.5,
+    overflow: "hidden",
+  },
+  progressFill: {
+    height: "100%",
+    borderRadius: 1.5,
+  },
+  timeRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginTop: 4,
+  },
+  timeText: { fontSize: 11, color: "#ccc", fontVariant: ["tabular-nums"] },
+  playerActions: { flexDirection: "row", gap: 12 },
+  playerActionBtn: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  nowPlayingInfo: {
+    padding: 12,
+  },
+  nowPlayingTitle: { fontSize: 15, fontWeight: "600", marginBottom: 2 },
+  nowPlayingDesc: { fontSize: 13 },
+
   // Featured
   featuredList: { marginBottom: 16 },
   featuredCard: {
@@ -436,13 +860,30 @@ const styles = StyleSheet.create({
   featuredViewers: { fontSize: 13 },
   featuredTitle: { fontSize: 20, fontWeight: "bold", marginBottom: 4 },
   featuredSub: { fontSize: 14, marginBottom: 16 },
+  featuredActions: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 10,
+  },
   joinBtn: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 6,
     paddingHorizontal: 20,
     paddingVertical: 10,
     borderRadius: 20,
-    alignSelf: "flex-start",
   },
   joinBtnText: { color: "#fff", fontWeight: "600", fontSize: 14 },
+  secondaryBtn: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 4,
+    paddingHorizontal: 14,
+    paddingVertical: 10,
+    borderRadius: 20,
+    borderWidth: 1,
+  },
+  secondaryBtnText: { fontSize: 13, fontWeight: "500" },
 
   // Categories
   categoryRow: {

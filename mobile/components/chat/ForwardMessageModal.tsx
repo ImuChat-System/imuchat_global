@@ -100,7 +100,7 @@ export function ForwardMessageModal({
     }
     return (
       conv.participants?.[0]?.profile?.username ||
-      conv.participants?.[0]?.profile?.full_name ||
+      conv.participants?.[0]?.profile?.display_name ||
       t("common.unknownUser")
     );
   };

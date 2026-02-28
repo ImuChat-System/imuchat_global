@@ -37,7 +37,7 @@ jest.mock("@/services/messaging", () => ({
 
 jest.mock("@/components/chat/NewChatModal", () => ({
   NewChatModal: ({ visible }: { visible: boolean }) =>
-    visible ? <mock-new-chat-modal testID="new-chat-modal" /> : null,
+    visible ? <div data-testid="new-chat-modal" /> : null,
 }));
 
 jest.mock("@/components/chat/SwipeableConversationItem", () => ({

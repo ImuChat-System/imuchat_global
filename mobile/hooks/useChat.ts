@@ -147,7 +147,7 @@ export function useChat(options: UseChatOptions = {}) {
                     sender_id: replyingTo.sender_id,
                     sender: replyingTo.sender ? {
                         username: replyingTo.sender.username,
-                        full_name: replyingTo.sender.full_name,
+                        display_name: replyingTo.sender.display_name,
                     } : undefined,
                 } : null,
             };

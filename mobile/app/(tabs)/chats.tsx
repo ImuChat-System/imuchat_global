@@ -25,7 +25,9 @@ import {
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 export default function ChatsScreen() {
-  const { conversations, loading, refresh } = useChat({ autoLoad: true });
+  const { conversations, loading, loadConversations } = useChat({
+    autoLoad: true,
+  });
   const { t } = useI18n();
   const colors = useColors();
   const spacing = useSpacing();
@@ -39,11 +41,11 @@ export default function ChatsScreen() {
   const handleRefresh = useCallback(async () => {
     setRefreshing(true);
     try {
-      await refresh?.();
+      await loadConversations?.();
     } finally {
       setRefreshing(false);
     }
-  }, [refresh]);
+  }, [loadConversations]);
 
   const handleSearchPress = () => {
     router.push("/search" as Href);
@@ -54,14 +56,14 @@ export default function ChatsScreen() {
     async (conversationId: string) => {
       try {
         await archiveConversation(conversationId);
-        refresh?.();
+        loadConversations?.();
         Alert.alert(t("common.success"), t("chat.conversationArchived"));
       } catch (error) {
         console.error("Archive error:", error);
         Alert.alert(t("common.error"), t("common.genericError"));
       }
     },
-    [refresh, t],
+    [loadConversations, t],
   );
 
   const handleMute = useCallback(
@@ -99,7 +101,7 @@ export default function ChatsScreen() {
             onPress: async () => {
               try {
                 await deleteConversation(conversationId);
-                refresh?.();
+                loadConversations?.();
               } catch (error) {
                 console.error("Delete error:", error);
                 Alert.alert(t("common.error"), t("common.genericError"));
@@ -109,7 +111,7 @@ export default function ChatsScreen() {
         ],
       );
     },
-    [refresh, t],
+    [loadConversations, t],
   );
 
   const formatTime = (timestamp: string | null) => {
@@ -145,7 +147,7 @@ export default function ChatsScreen() {
 
     return (
       otherParticipant?.profile?.username ||
-      otherParticipant?.profile?.full_name ||
+      otherParticipant?.profile?.display_name ||
       t("common.unknownUser")
     );
   };

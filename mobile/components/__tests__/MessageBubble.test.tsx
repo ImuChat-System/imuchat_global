@@ -22,7 +22,7 @@ describe("MessageBubble", () => {
         id: "user-2",
         username: "otheruser",
         avatar_url: null,
-        full_name: "Other User",
+        display_name: "Other User",
       },
     });
 
@@ -40,7 +40,7 @@ describe("MessageBubble", () => {
         id: "user-1",
         username: "myuser",
         avatar_url: null,
-        full_name: "My User",
+        display_name: "My User",
       },
     });
 

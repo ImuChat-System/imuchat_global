@@ -7,11 +7,16 @@ import { useAuth } from "@/providers/AuthProvider";
 import { useI18n } from "@/providers/I18nProvider";
 import { useColors, useSpacing } from "@/providers/ThemeProvider";
 import { Conversation, getConversations } from "@/services/messaging";
+import { openMiniApp } from "@/services/miniapp-deeplink";
+import { fetchFeed, toggleLike, type Post } from "@/services/social-feed";
+import { useModulesStore } from "@/stores/modules-store";
+import { Ionicons } from "@expo/vector-icons";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
   ActivityIndicator,
   Dimensions,
   FlatList,
+  RefreshControl,
   ScrollView,
   StyleSheet,
   Text,
@@ -172,19 +177,47 @@ export default function HomeScreen() {
   const { user } = useAuth();
 
   const [conversations, setConversations] = useState<Conversation[]>([]);
+  const [feedPosts, setFeedPosts] = useState<Post[]>([]);
+  const [feedLoading, setFeedLoading] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
   const [loading, setLoading] = useState(true);
   const [heroIndex, setHeroIndex] = useState(0);
   const heroRef = useRef<FlatList>(null);
 
+  // ─── Module store – installed mini-apps ──────────────────────
+  const { installedModules, fetchInstalled } = useModulesStore();
+
+  const myApps = installedModules
+    .filter((um) => um.module && !um.module.is_core && um.module.entry_url)
+    .map((um) => um.module!)
+    .slice(0, 8); // max 8 on home
+
   // ─── Load conversations ──────────────────────────────────────
+  useEffect(() => {
+    fetchInstalled();
+  }, [fetchInstalled]);
+
+  // ─── Load feed posts ─────────────────────────────────────────
+  const loadFeed = useCallback(async () => {
+    setFeedLoading(true);
+    try {
+      const result = await fetchFeed(undefined, "all");
+      setFeedPosts(result.posts.slice(0, 5)); // top 5 on home
+    } catch (e) {
+      console.warn("[Home] feed error:", e);
+    } finally {
+      setFeedLoading(false);
+    }
+  }, []);
+
   useEffect(() => {
     let mounted = true;
     (async () => {
       try {
-        const data = await getConversations();
-        if (mounted) setConversations(data.slice(0, 3));
+        const [convData] = await Promise.all([getConversations(), loadFeed()]);
+        if (mounted) setConversations(convData.slice(0, 3));
       } catch (e) {
-        console.error("[Home] conversations error:", e);
+        console.error("[Home] load error:", e);
       } finally {
         if (mounted) setLoading(false);
       }
@@ -192,6 +225,39 @@ export default function HomeScreen() {
     return () => {
       mounted = false;
     };
+  }, [loadFeed]);
+
+  // Pull-to-refresh
+  const handleRefresh = useCallback(async () => {
+    setRefreshing(true);
+    try {
+      const [convData] = await Promise.all([getConversations(), loadFeed()]);
+      setConversations(convData.slice(0, 3));
+    } catch (e) {
+      console.warn("[Home] refresh error:", e);
+    } finally {
+      setRefreshing(false);
+    }
+  }, [loadFeed]);
+
+  // Like/unlike a post
+  const handleToggleLike = useCallback(async (post: Post) => {
+    try {
+      await toggleLike(post.id, post.isLiked);
+      setFeedPosts((prev) =>
+        prev.map((p) =>
+          p.id === post.id
+            ? {
+                ...p,
+                isLiked: !p.isLiked,
+                likesCount: p.isLiked ? p.likesCount - 1 : p.likesCount + 1,
+              }
+            : p,
+        ),
+      );
+    } catch (e) {
+      console.warn("[Home] like error:", e);
+    }
   }, []);
 
   // ─── Hero auto-scroll ────────────────────────────────────────
@@ -413,6 +479,13 @@ export default function HomeScreen() {
     <ScrollView
       testID="home-screen"
       style={[styles.container, { backgroundColor: colors.background }]}
+      refreshControl={
+        <RefreshControl
+          refreshing={refreshing}
+          onRefresh={handleRefresh}
+          tintColor={colors.primary}
+        />
+      }
     >
       <View style={[styles.content, { padding: spacing.lg }]}>
         {/* Header */}
@@ -478,6 +551,54 @@ export default function HomeScreen() {
           style={styles.storyList}
         />
 
+        {/* ── 2b. My Mini-Apps ───────────────────────────────── */}
+        {myApps.length > 0 && (
+          <>
+            <View style={styles.sectionHeader}>
+              <Text style={[styles.sectionTitle, { color: colors.text }]}>
+                {t("home.myApps")}
+              </Text>
+              <TouchableOpacity
+                testID="btn-see-all-apps"
+                onPress={() => openMiniApp("")}
+              >
+                <Text style={[styles.seeAll, { color: colors.primary }]}>
+                  {t("home.seeAll")}
+                </Text>
+              </TouchableOpacity>
+            </View>
+            <ScrollView
+              testID="my-apps-row"
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              style={styles.myAppsRow}
+            >
+              {myApps.map((app) => (
+                <TouchableOpacity
+                  key={app.id}
+                  testID={`home-app-${app.id}`}
+                  style={[
+                    styles.myAppCard,
+                    {
+                      backgroundColor: colors.surface,
+                      borderColor: colors.border,
+                    },
+                  ]}
+                  onPress={() => openMiniApp(app.id)}
+                >
+                  <Text style={styles.myAppIcon}>{app.icon || "📦"}</Text>
+                  <Text
+                    style={[styles.myAppName, { color: colors.text }]}
+                    numberOfLines={1}
+                  >
+                    {app.name}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </ScrollView>
+          </>
+        )}
+
         {/* ── 3. Friends / Recent Conversations ─────────────── */}
         <View style={styles.sectionHeader}>
           <Text style={[styles.sectionTitle, { color: colors.text }]}>
@@ -508,7 +629,161 @@ export default function HomeScreen() {
           )}
         </View>
 
-        {/* ── 4. Explorer Grid ───────────────────────────────── */}
+        {/* ── 4. Social Feed (real Supabase data) ────────── */}
+        <View style={styles.sectionHeader}>
+          <Text style={[styles.sectionTitle, { color: colors.text }]}>
+            {t("home.feed") || "Feed"}
+          </Text>
+          <TouchableOpacity testID="btn-see-all-feed">
+            <Text style={[styles.seeAll, { color: colors.primary }]}>
+              {t("home.seeAll")}
+            </Text>
+          </TouchableOpacity>
+        </View>
+        <View testID="social-feed">
+          {feedLoading && feedPosts.length === 0 ? (
+            <ActivityIndicator
+              size="small"
+              color={colors.primary}
+              style={{ padding: 20 }}
+            />
+          ) : feedPosts.length === 0 ? (
+            <Text
+              testID="no-feed"
+              style={[styles.emptyText, { color: colors.textMuted }]}
+            >
+              {t("home.noFeed") || "Aucun post pour le moment"}
+            </Text>
+          ) : (
+            feedPosts.map((post) => {
+              const authorName =
+                post.author.displayName ||
+                post.author.username ||
+                t("common.user");
+              return (
+                <View
+                  key={post.id}
+                  testID={`feed-post-${post.id}`}
+                  style={[
+                    styles.feedCard,
+                    {
+                      backgroundColor: colors.surface,
+                      borderColor: colors.border,
+                    },
+                  ]}
+                >
+                  <View style={styles.feedHeader}>
+                    <View
+                      style={[
+                        styles.feedAvatar,
+                        { backgroundColor: colors.primary + "20" },
+                      ]}
+                    >
+                      <Text
+                        style={[
+                          styles.feedAvatarText,
+                          { color: colors.primary },
+                        ]}
+                      >
+                        {authorName.charAt(0).toUpperCase()}
+                      </Text>
+                    </View>
+                    <View style={styles.feedAuthorInfo}>
+                      <Text
+                        style={[styles.feedAuthorName, { color: colors.text }]}
+                      >
+                        {authorName}
+                      </Text>
+                      <Text
+                        style={[styles.feedTime, { color: colors.textMuted }]}
+                      >
+                        {formatTime(post.createdAt)}
+                      </Text>
+                    </View>
+                    {post.type !== "post" && (
+                      <View
+                        style={[
+                          styles.feedTypeBadge,
+                          { backgroundColor: colors.primary + "15" },
+                        ]}
+                      >
+                        <Text
+                          style={[
+                            styles.feedTypeBadgeText,
+                            { color: colors.primary },
+                          ]}
+                        >
+                          {post.type === "news" ? "📰" : "📢"}
+                        </Text>
+                      </View>
+                    )}
+                  </View>
+                  <Text
+                    style={[styles.feedContent, { color: colors.text }]}
+                    numberOfLines={4}
+                  >
+                    {post.content}
+                  </Text>
+                  <View style={styles.feedActions}>
+                    <TouchableOpacity
+                      testID={`like-post-${post.id}`}
+                      style={styles.feedActionBtn}
+                      onPress={() => handleToggleLike(post)}
+                    >
+                      <Ionicons
+                        name={post.isLiked ? "heart" : "heart-outline"}
+                        size={18}
+                        color={post.isLiked ? "#ef4444" : colors.textMuted}
+                      />
+                      <Text
+                        style={[
+                          styles.feedActionText,
+                          {
+                            color: post.isLiked ? "#ef4444" : colors.textMuted,
+                          },
+                        ]}
+                      >
+                        {post.likesCount}
+                      </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.feedActionBtn}>
+                      <Ionicons
+                        name="chatbubble-outline"
+                        size={16}
+                        color={colors.textMuted}
+                      />
+                      <Text
+                        style={[
+                          styles.feedActionText,
+                          { color: colors.textMuted },
+                        ]}
+                      >
+                        {post.commentsCount}
+                      </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.feedActionBtn}>
+                      <Ionicons
+                        name="share-outline"
+                        size={16}
+                        color={colors.textMuted}
+                      />
+                      <Text
+                        style={[
+                          styles.feedActionText,
+                          { color: colors.textMuted },
+                        ]}
+                      >
+                        {post.sharesCount}
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              );
+            })
+          )}
+        </View>
+
+        {/* ── 5. Explorer Grid ───────────────────────────────── */}
         <Text style={[styles.sectionTitle, { color: colors.text }]}>
           Explorer
         </Text>
@@ -516,7 +791,7 @@ export default function HomeScreen() {
           {EXPLORER_ITEMS.map(renderExplorerItem)}
         </View>
 
-        {/* ── 5. Podcasts ────────────────────────────────────── */}
+        {/* ── 6. Podcasts ────────────────────────────────────── */}
         <Text style={[styles.sectionTitle, { color: colors.text }]}>
           Podcasts
         </Text>
@@ -602,6 +877,19 @@ const styles = StyleSheet.create({
   storyAvatarEmoji: { fontSize: 20 },
   storyUsername: { fontSize: 11, marginTop: 4, textAlign: "center" },
 
+  // My Apps
+  myAppsRow: { marginBottom: 16 },
+  myAppCard: {
+    width: 72,
+    alignItems: "center",
+    borderRadius: 12,
+    borderWidth: 1,
+    padding: 10,
+    marginRight: 10,
+  },
+  myAppIcon: { fontSize: 28, marginBottom: 4 },
+  myAppName: { fontSize: 10, fontWeight: "600", textAlign: "center" },
+
   // Friends card
   friendsCard: {
     borderRadius: 12,
@@ -658,6 +946,50 @@ const styles = StyleSheet.create({
   explorerIcon: { fontSize: 28, marginBottom: 6 },
   explorerTitle: { fontSize: 14, fontWeight: "600" },
   explorerDesc: { fontSize: 12, marginTop: 2, textAlign: "center" },
+
+  // Feed
+  feedCard: {
+    borderRadius: 12,
+    borderWidth: 1,
+    padding: 14,
+    marginBottom: 10,
+  },
+  feedHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 10,
+  },
+  feedAvatar: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  feedAvatarText: { fontSize: 16, fontWeight: "600" },
+  feedAuthorInfo: { flex: 1, marginLeft: 10 },
+  feedAuthorName: { fontSize: 14, fontWeight: "600" },
+  feedTime: { fontSize: 11, marginTop: 1 },
+  feedTypeBadge: {
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 10,
+  },
+  feedTypeBadgeText: { fontSize: 12 },
+  feedContent: { fontSize: 14, lineHeight: 20, marginBottom: 12 },
+  feedActions: {
+    flexDirection: "row",
+    gap: 20,
+    borderTopWidth: StyleSheet.hairlineWidth,
+    borderTopColor: "rgba(0,0,0,0.08)",
+    paddingTop: 10,
+  },
+  feedActionBtn: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 4,
+  },
+  feedActionText: { fontSize: 13, fontWeight: "500" },
 
   // Podcasts
   podcastCard: {

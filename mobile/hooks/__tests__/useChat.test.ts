@@ -39,9 +39,9 @@ jest.mock("@/services/messaging", () => ({
     copyMessageToClipboard: (...args: any[]) => mockCopyMessageToClipboard(...args),
     forwardMessage: (...args: any[]) => mockForwardMessage(...args),
     sendTypingIndicator: (...args: any[]) => mockSendTypingIndicator(...args),
-    subscribeToConversation: (...args: any[]) => mockSubscribeToConversation(...args),
-    subscribeToConversations: (...args: any[]) => mockSubscribeToConversations(...args),
-    subscribeToTypingIndicators: (...args: any[]) => mockSubscribeToTypingIndicators(...args),
+    subscribeToConversation: (...args: unknown[]) => mockSubscribeToConversation.apply(null, args),
+    subscribeToConversations: (...args: unknown[]) => mockSubscribeToConversations.apply(null, args),
+    subscribeToTypingIndicators: (...args: unknown[]) => mockSubscribeToTypingIndicators.apply(null, args),
 }));
 
 // Offline queue mock

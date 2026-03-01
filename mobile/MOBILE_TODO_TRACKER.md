@@ -2,9 +2,9 @@
 
 > **Date de création** : 21 février 2026  
 > **Dernière mise à jour** : 3 mars 2026  
-> **Statut global** : MVP Phase 2 terminé — Phase 3 modulaire en cours (DEV-018 ✅ · DEV-022 ✅ · DEV-027 ✅ M1-M5 · DEV-028 ⚠️) — 23/50 fonctionnalités (46%)
+> **Statut global** : MVP Phase 2 terminé — Phase 3 modulaire en cours (DEV-018 ✅ · DEV-022 ✅ · DEV-024 ✅ · DEV-026 ✅ · DEV-027 ✅ M1-M5 · DEV-028 ⚠️) — 25/50 fonctionnalités (50%)
 > **Référence** : Basé sur les 50 fonctionnalités (10 groupes), les ~110 écrans complémentaires, et la roadmap 3D/Live2D
-> **Métriques** : ~64 700 lignes TS/TSX · 209 fichiers · 66 fichiers de tests (72% couverture) · 7 Zustand stores · 14 hooks · 32 services · 814 clés i18n (fr/en/ja)
+> **Métriques** : ~66 500 lignes TS/TSX · 220+ fichiers · 70 fichiers de tests (1183 tests, 0 échecs) · 8 Zustand stores · 15 hooks · 33 services · ~930 clés i18n (fr/en/ja)
 
 ---
 
@@ -21,8 +21,9 @@
 9. [� MVP Phase 4 — Modules Vie Quotidienne & Contenus Avancés](#-mvp-phase-4--modules-vie-quotidienne--contenus-avancés)
 10. [🗺️ Cartographie Complète des Mini-Apps & Modules](#️-cartographie-complète-des-mini-apps--modules)
 11. [🎭 Vision Long Terme — 3D & Live2D](#-vision-long-terme--3d--live2d)
-12. [📊 Comparatif Mobile vs Web-App](#-comparatif-mobile-vs-web-app)
-13. [🎯 Roadmap & Priorités](#-roadmap--priorités)
+12. [🤖 ImuCompanion Engine — Assistant IA Incarné](#-imucompanion-engine--assistant-ia-incarné)
+13. [📊 Comparatif Mobile vs Web-App](#-comparatif-mobile-vs-web-app)
+14. [🎯 Roadmap & Priorités](#-roadmap--priorités)
 
 ---
 
@@ -1138,7 +1139,7 @@ App → Slides onboarding (1ère fois) → Auth (login/signup)
 
 | #   | Fonctionnalité                     | Route | Statut | Priorité | Notes                        |
 | --- | ---------------------------------- | ----- | ------ | -------- | ---------------------------- |
-| 1   | Chatbot multi-personas             | /ai   | 🔴     | P2       | Assistant Alice planifié     |
+| 1   | Chatbot multi-personas             | /ai   | ✅     | P2       | ✅ DEV-024 Terminé           |
 | 2   | Suggestions intelligentes réponses | /chat | 🔴     | P3       | NLP / LLM                    |
 | 3   | Résumé automatisé conversations    | /chat | 🔴     | P3       | LLM summarization            |
 | 4   | Modération automatique groupes     | /bots | 🔴     | P3       | Détection spam / toxicité    |
@@ -1148,19 +1149,47 @@ App → Slides onboarding (1ère fois) → Auth (login/signup)
 
 **Priorité** : P2  
 **Réf** : Groupe 9, Fonc. 1 + ADDITIONAL_AND_CORE_MODULES.md §IA  
-**Statut** : 🔴 Non démarré
+**Statut** : ✅ Implémenté
 
-**À implémenter** :
+**Implémenté** :
 
-- [ ] Chat conversationnel avec LLM (OpenAI/Claude/local)
-- [ ] Multi-personas (assistant général, santé, études, style, pro)
-- [ ] Génération de contenu (texte, résumés, images)
-- [ ] Mémoire contextuelle par utilisateur
-- [ ] Prompts système personnalisables
-- [ ] Live2D avatar animé (Phase avancée)
-- [ ] Intégration dans conversations (mention @Alice)
+- [x] Chat conversationnel multi-provider (OpenAI, Anthropic Claude, Google Gemini, Mistral, Groq, Custom OpenAI-compatible)
+- [x] Multi-personas (7 : assistant général Alice, santé, études, style, pro, code, créatif)
+- [x] Choix du fournisseur LLM personnalisé (privé ou open source)
+- [x] Support fournisseurs locaux (Ollama, LM Studio, vLLM) — appel local direct depuis le mobile
+- [x] Gestion conversations (création, suppression, historique, titre auto)
+- [x] Mémoire contextuelle par conversation (50 derniers messages)
+- [x] Prompts système par persona avec températures adaptées
+- [x] Backend proxy sécurisé (clés API jamais stockées serveur, passées par requête)
+- [x] Interface chat complète (bulles, input multiline, loading, retry)
+- [x] Settings provider (cards, API key, custom URL, modèles, test connexion)
+- [x] i18n complet (35 clés × 3 langues : fr/en/ja)
+- [x] Tests unitaires (59 tests : 31 store + 28 service)
 
-**Estimation** : 4-6 semaines
+**Architecture** :
+
+- Mobile → Backend proxy pour LLM cloud (avec token Firebase)
+- Mobile → Appel direct pour fournisseurs locaux (Ollama/LM Studio/vLLM)
+- Clés API stockées localement (AsyncStorage, migration expo-secure-store prévue)
+
+**Fichiers créés/modifiés** :
+
+- `platform-core/src/services/alice.ts` — Service backend multi-provider (~430 lignes)
+- `platform-core/src/routes/alice.ts` — Routes Fastify (4 endpoints : chat, personas, providers, validate)
+- `platform-core/src/index.ts` — Registration route alice
+- `services/alice.ts` — Client mobile avec routage intelligent local/cloud (~520 lignes)
+- `stores/alice-store.ts` — Zustand store persisté (conversations, provider, preferences)
+- `hooks/useAlice.ts` — Hook React (send, retry, create, delete, switch, persona, provider)
+- `app/alice/_layout.tsx` — Stack layout (3 écrans)
+- `app/alice/index.tsx` — Écran d'accueil (grille personas, conversations récentes)
+- `app/alice/chat.tsx` — Interface chat (bulles, input, loading, erreur)
+- `app/alice/settings.tsx` — Configuration provider (6 cards, API key, URL, modèles, test)
+- `i18n/fr.json`, `i18n/en.json`, `i18n/ja.json` — +35 clés alice chacun
+- `app/_layout.tsx` — Navigation alice ajoutée
+- `services/__tests__/alice.test.ts` — 28 tests service
+- `stores/__tests__/alice-store.test.ts` — 31 tests store
+
+**Estimation** : ✅ Terminé
 
 ---
 
@@ -1498,6 +1527,54 @@ App → Slides onboarding (1ère fois) → Auth (login/signup)
 
 ---
 
+### DEV-036 : ImuCompanion Engine — Assistant IA Incarné
+
+**Priorité** : P2  
+**Réf** : `docs/VISION_muCompanion.md` · `docs/IMUCOMPANION_ROADMAP_MOBILE.md` · Groupe 9  
+**Statut** : 🔴 Non démarré  
+**Estimation** : ~27 semaines (~126 jours-dev, 6 phases)
+
+> Évolution de DEV-024 (Alice IA) vers un **assistant IA incarné** avec avatar Live2D animé,
+> comportement émotionnel (FSM), lip sync TTS, et personnalisation complète.
+
+**Phases d'implémentation** :
+
+| Phase                      | Contenu                                                            | Durée  | Dépendances                  |
+| -------------------------- | ------------------------------------------------------------------ | :----: | ---------------------------- |
+| **IC-M1** Companion Core   | Types, store Zustand, useCompanion, overlay UI, post-processing IA | 4 sem. | DEV-024 (Alice) ✅           |
+| **IC-M2** Rendering Live2D | expo-gl bridge, model loader, animation controller, ImuAvatarView  | 6 sem. | IC-M1 + Live2D SDK           |
+| **IC-M3** Behaviour Engine | FSM 7 états, context adapter, segmentation par âge                 | 4 sem. | IC-M1 (parallélisable IC-M2) |
+| **IC-M4** TTS & Lip Sync   | expo-speech streaming, amplitude → ParamMouthOpen                  | 3 sem. | IC-M2 + IC-M3                |
+| **IC-M5** Personnalisation | 6 archétypes, éditeur apparence, skins Store                       | 4 sem. | IC-M2                        |
+| **IC-M6** Mode Avancé      | Avatar en appel vidéo, réactions messages, intégration modules     | 6 sem. | IC-M4 + IC-M5                |
+
+**Architecture 3 couches** :
+
+- **Rendering Engine** : Live2D Cubism SDK via expo-gl (WebGL)
+- **Behaviour Engine** : FSM (IDLE → LISTENING → THINKING → SPEAKING → REACTING → FOCUS → LOW_POWER)
+- **AI Pipeline** : Alice multi-provider + post-processing → CompanionResponse (text + emotion + animation + tts + tool_calls)
+
+**6 Archétypes** : Assistant Pro · Professeur · Coach · Mascotte Éducative · Modérateur · Créatif
+
+**4 Modes d'affichage** : Mini (FAB 60×60) · Dock (half-body) · FullScreen (immersif) · Hidden
+
+**Fichiers planifiés** :
+
+- `types/companion.ts` — Types partagés
+- `stores/companion-store.ts` — Zustand persist (préférences, archétype, état)
+- `hooks/useCompanion.ts` — Hook principal
+- `services/companion-ai.ts` — Client IA + post-processing
+- `services/companion-fsm.ts` — FSM émotionnelle
+- `services/companion-tts.ts` — TTS + lip sync
+- `components/companion/` — ImuAvatarView, CompanionOverlay, CompanionChat, ArchetypeGallery, CompanionCustomizer
+- `app/companion/` — Routes (index, archetypes, customize, settings)
+
+**Objectifs performance** : 30 fps · <8% CPU idle · <50 MB RAM · <15 MB assets
+
+**Roadmap complète** : → `docs/IMUCOMPANION_ROADMAP_MOBILE.md`
+
+---
+
 ## 🗺️ Cartographie Complète des Mini-Apps & Modules
 
 > Réf : `docs/ADDITIONAL_AND_CORE_MODULES.md` — Vue d'ensemble de l'écosystème ImuChat
@@ -1556,10 +1633,11 @@ App → Slides onboarding (1ère fois) → Auth (login/signup)
 
 ### 6. IA & ASSISTANCE — Transversal
 
-| Module                   | Route | Description                                                                                                                     | Statut | Phase | Estimation   |
-| ------------------------ | ----- | ------------------------------------------------------------------------------------------------------------------------------- | ------ | ----- | ------------ |
-| **Assistant IA (Alice)** | /ai   | Chat conversationnel, conseiller perso (santé, études, style, pro), génération contenu (texte, image, résumé), prompts personas | 🔴     | 3     | Groupe 9     |
-| **Bots de groupe**       | /bots | Bots modération, quiz, animation, bots spécialisés (gaming, études, business)                                                   | 🔴     | 3     | 2-3 semaines |
+| Module                   | Route | Description                                                                                                                     | Statut | Phase | Estimation         |
+| ------------------------ | ----- | ------------------------------------------------------------------------------------------------------------------------------- | ------ | ----- | ------------------ |
+| **Assistant IA (Alice)** | /ai   | Chat conversationnel, conseiller perso (santé, études, style, pro), génération contenu (texte, image, résumé), prompts personas | ✅     | 3     | DEV-024 ✅         |
+| **ImuCompanion Engine**  | /ai   | Assistant IA incarné Live2D, avatar animé, FSM émotionnelle, lip sync, archétypes, personnalisation                             | 🔴     | 3-5   | DEV-036 (~27 sem.) |
+| **Bots de groupe**       | /bots | Bots modération, quiz, animation, bots spécialisés (gaming, études, business)                                                   | 🔴     | 3     | 2-3 semaines       |
 
 ### 7. TRANSVERSAL — Présent partout
 
@@ -1576,18 +1654,18 @@ App → Slides onboarding (1ère fois) → Auth (login/signup)
 
 ### Récapitulatif Modules par Phase
 
-| Phase             | Modules                                                                                    | Priorité | Estimation        |
-| ----------------- | ------------------------------------------------------------------------------------------ | -------- | ----------------- |
-| **Phase 2 (MVP)** | Chats, Appels, Contacts, Profil, Communautés (basique), Feed (basique), Events             | P0-P2    | ~11 semaines      |
-| **Phase 3**       | Store ✅, Office, Tasks, Docs, Mobility, Music ✅, Watch ✅, Wallet ⚠️, Assistant IA, Bots | P2-P3    | ~8-12 semaines    |
-| **Phase 4**       | News, Podcasts, Dating, Formations, Style, Smart Home, Design, Organizations               | P3-P4    | ~16-24 semaines   |
-| **Phase 5+**      | Animations 3D, Live2D, Mode avatar appels vidéo                                            | P4       | Vision long terme |
+| Phase             | Modules                                                                                    | Priorité | Estimation             |
+| ----------------- | ------------------------------------------------------------------------------------------ | -------- | ---------------------- |
+| **Phase 2 (MVP)** | Chats, Appels, Contacts, Profil, Communautés (basique), Feed (basique), Events             | P0-P2    | ~11 semaines           |
+| **Phase 3**       | Store ✅, Office, Tasks, Docs, Mobility, Music ✅, Watch ✅, Wallet ⚠️, Assistant IA, Bots | P2-P3    | ~8-12 semaines         |
+| **Phase 4**       | News, Podcasts, Dating, Formations, Style, Smart Home, Design, Organizations               | P3-P4    | ~16-24 semaines        |
+| **Phase 5+**      | Animations 3D, Live2D, Mode avatar appels vidéo, **ImuCompanion Engine** (DEV-036)         | P4       | ~27 semaines (DEV-036) |
 
 ---
 
 ## 🎭 Vision Long Terme — 3D & Live2D
 
-> Réf : Document 3D_AND_Live2D.md — Stratégie d'intégration progressive
+> Réf : `docs/3D_AND_Live2D.md` · `docs/VISION_muCompanion.md` · `docs/IMUCOMPANION_ROADMAP_MOBILE.md`
 
 ### Principe
 
@@ -1595,26 +1673,93 @@ La 3D et le Live2D ne sont pas des gadgets — ils sont la **matérialisation de
 
 ### Phases d'intégration
 
-| Phase             | Contenu                                                           | Estimation   | Prérequis                |
-| ----------------- | ----------------------------------------------------------------- | ------------ | ------------------------ |
-| **Phase 1 (MVP)** | Avatars statiques, infrastructure prête pour Live2D               | ✅ Fait      | -                        |
-| **Phase 2**       | Live2D dans profils & assistant IA, avatar animé léger (lip sync) | 2-3 semaines | GPU profiling, EAS Build |
-| **Phase 3**       | Espaces 3D optionnels (salons communautaires, watch party)        | 1-2 mois     | Three.js / Expo GL       |
+| Phase             | Contenu                                                           | Estimation   | Prérequis                | Roadmap       |
+| ----------------- | ----------------------------------------------------------------- | ------------ | ------------------------ | ------------- |
+| **Phase 1 (MVP)** | Avatars statiques, infrastructure prête pour Live2D               | ✅ Fait      | -                        | -             |
+| **Phase 2**       | Live2D dans profils & assistant IA, avatar animé léger (lip sync) | 2-3 semaines | GPU profiling, EAS Build | IC-M1 + IC-M2 |
+| **Phase 3**       | ImuCompanion complet (FSM, TTS lip sync, archétypes, skins)       | ~20 semaines | IC-M1 à IC-M5            | DEV-036       |
+| **Phase 4**       | Avatar en appel vidéo, intégration modules, réactions avatar      | ~6 semaines  | IC-M6                    | DEV-036       |
+| **Phase 5**       | Espaces 3D optionnels (salons communautaires, watch party)        | 1-2 mois     | Three.js / Expo GL       | Vision        |
 
 ### Cas d'usage stratégiques
 
 1. **Avatar Live2D dans les profils** — Clignement, respiration, micro-expressions
 2. **Appels vidéo mode avatar** — Lip sync sans caméra (respect vie privée)
-3. **Assistant IA incarné (Alice)** — Persona visuelle animée pendant les réponses
-4. **Personnalisation avatar premium** — Vêtements, accessoires, emotes (monétisation)
+3. **Assistant IA incarné (ImuCompanion)** — Avatar animé Live2D avec FSM émotionnelle, 6 archétypes, lip sync temps réel
+4. **Personnalisation avatar premium** — Vêtements, accessoires, emotes, skins vendables via Store (ImuCoin)
 5. **Espaces communautaires 3D** — Hall virtuel, événements immersifs
+
+### ImuCompanion Engine — Architecture
+
+```
+┌─────────────────────────────────────────────────────────┐
+│                    ImuCompanion Engine                   │
+├─────────────────┬─────────────────┬─────────────────────┤
+│ Rendering Engine│ Behaviour Engine│    AI Pipeline       │
+│                 │                 │                      │
+│ Live2D Cubism   │ FSM 7 états     │ Alice Multi-Provider │
+│ expo-gl WebGL   │ Context Adapter │ Post-processing      │
+│ Animations      │ Age Segmentation│ CompanionResponse    │
+│ Lip Sync visual │ Proactivité     │ emotion + animation  │
+└─────────────────┴─────────────────┴─────────────────────┘
+```
 
 ### Monétisation potentielle
 
-- Packs d'animations / expressions premium
-- Skins et accessoires avatar
+- Packs d'animations / expressions premium (ImuCoin)
+- Skins et accessoires avatar (Store intégré DEV-027)
 - Bundles thématiques (anime, cyberpunk, kawaii)
+- Archétypes premium (au-delà des 6 de base)
+- Voix TTS premium (ElevenLabs, personnalisées)
 - Marketplace créateurs de modèles Live2D
+
+---
+
+## 🤖 ImuCompanion Engine — Assistant IA Incarné
+
+> **Roadmap complète** : [`docs/IMUCOMPANION_ROADMAP_MOBILE.md`](../docs/IMUCOMPANION_ROADMAP_MOBILE.md)  
+> **Vision** : [`docs/VISION_muCompanion.md`](../docs/VISION_muCompanion.md)  
+> **Ref tracker** : DEV-036
+
+### Résumé
+
+ImuCompanion est l'évolution majeure de l'Assistant IA (DEV-024 Alice) vers un **assistant incarné** avec avatar Live2D animé. Il combine :
+
+- **IA Conversationnelle** — Multi-provider (OpenAI, Claude, Gemini, Mistral, Groq, Ollama) ✅ déjà implémenté via Alice
+- **Avatar Animé Live2D** — Rendu WebGL via expo-gl, idle animations, expressions émotionnelles
+- **FSM Comportementale** — 7 états (IDLE → LISTENING → THINKING → SPEAKING → REACTING → FOCUS → LOW_POWER)
+- **Lip Sync TTS** — Text-to-Speech streaming + mapping amplitude → ouverture bouche Live2D
+- **6 Archétypes** — Assistant Pro · Professeur · Coach · Mascotte Éducative · Modérateur · Créatif
+- **Personnalisation** — Éditeur apparence, skins premium via Store, accessoires, couleurs
+
+### Timeline Mobile (6 phases, ~27 semaines)
+
+```
+IC-M1 Core         ████░░░░░░░░░░░░░░░░░░░░░░░  4 sem.  (types, store, hook, overlay)
+IC-M2 Live2D       ░░░░██████░░░░░░░░░░░░░░░░░  6 sem.  (expo-gl, animations)
+IC-M3 FSM          ░░░░████░░░░░░░░░░░░░░░░░░░  4 sem.  (FSM, contexte, âge) ← parallèle IC-M2
+IC-M4 TTS          ░░░░░░░░░░███░░░░░░░░░░░░░░  3 sem.  (lip sync, streaming)
+IC-M5 Perso        ░░░░░░░░░░░░░████░░░░░░░░░░  4 sem.  (archétypes, skins)
+IC-M6 Avancé       ░░░░░░░░░░░░░░░░░██████░░░░  6 sem.  (appel avatar, modules)
+```
+
+### Prérequis remplis
+
+| Prérequis               | Statut | Référence          |
+| ----------------------- | :----: | ------------------ |
+| Alice IA multi-provider |   ✅   | DEV-024 (59 tests) |
+| Store & Modules         |   ✅   | DEV-027 M1-M5      |
+| Stream Video SDK        |   ✅   | CRIT-001           |
+| i18n infrastructure     |   ✅   | ~930 clés          |
+| Zustand stores pattern  |   ✅   | 8 stores           |
+
+### Roadmaps cross-platform
+
+| Plateforme  | Document                                                                     | Effort |     Début recommandé     |
+| ----------- | ---------------------------------------------------------------------------- | :----: | :----------------------: |
+| **Mobile**  | [`IMUCOMPANION_ROADMAP_MOBILE.md`](../docs/IMUCOMPANION_ROADMAP_MOBILE.md)   | ~126j  |    1er (stack mature)    |
+| **Web**     | [`IMUCOMPANION_ROADMAP_WEBAPP.md`](../docs/IMUCOMPANION_ROADMAP_WEBAPP.md)   | ~102j  |   2ème (après Mobile)    |
+| **Desktop** | [`IMUCOMPANION_ROADMAP_DESKTOP.md`](../docs/IMUCOMPANION_ROADMAP_DESKTOP.md) |  ~90j  | 3ème (prérequis desktop) |
 
 ---
 
@@ -1757,7 +1902,7 @@ Phase 4  (Vie quotidienne) ░░░░░░░░░░░░░░  ~0%  (DEV
 | 23  | ~~Bug fix session (60 TS errors)~~ | -        | P0       | ✅     | ✅ 1 mars                |
 | 24  | Module Podcasts                    | DEV-023  | P3       | 🔴     | 2-3 semaines             |
 | 25  | Module Office                      | DEV-019  | P3       | 🔴     | 3-4 semaines             |
-| 26  | Assistant IA (Alice)               | DEV-024  | P2       | 🔴     | 4-6 semaines             |
+| 26  | Assistant IA (Alice)               | DEV-024  | P2       | ✅     | ✅ Terminé               |
 | 27  | Traduction Instantanée             | DEV-026  | P2       | ✅     | ✅ Terminé               |
 
 ### Backlog infrastructure
@@ -1797,9 +1942,9 @@ Phase 4  (Vie quotidienne) ░░░░░░░░░░░░░░  ~0%  (DEV
 | 6         | Modules avancés            | 3     | 1/5 ⚠️          | 20%                                | DEV-018 ✅, DEV-019, DEV-020                   |
 | 7         | Services utilitaires       | 3     | 0/5 🔴          | 0%                                 | DEV-021                                        |
 | 8         | Divertissement & Création  | 3     | 2/5 ⚠️          | 40% (Music ✅, Watch ✅)           | DEV-022 ✅, DEV-022b ✅, DEV-023, DEV-034      |
-| 9         | IA intégrée                | 3     | 1/5 ⚠️          | 20% (Traduction ✅)                | DEV-024, DEV-025, DEV-026 ✅                   |
+| 9         | IA intégrée                | 3     | 2/5 ⚠️          | 40% (Traduction ✅, Alice ✅)      | DEV-024 ✅, DEV-025, DEV-026 ✅                |
 | 10        | App Store & Écosystème     | 3     | 3/5 🟡          | 80% (Phase M1-M4 + Wallet partiel) | DEV-027 ✅ Phase M1-M4, DEV-028 ⚠️             |
-| **Total** |                            |       | **24/50**       | **48%**                            |                                                |
+| **Total** |                            |       | **25/50**       | **50%**                            |                                                |
 
 ### Modules additionnels (hors 50 fonctionnalités)
 
@@ -2190,6 +2335,10 @@ mobile/
 | `docs/OTHERS_SCREENS.md`                  | ~100 écrans secondaires/structurels (14 catégories) |
 | `docs/OTHERS_SCREENS_FONCTIONNALITIES.md` | ~110 fonctionnalités des écrans complémentaires     |
 | `docs/3D_AND_Live2D.md`                   | Stratégie intégration 3D/Live2D en 3 phases         |
+| `docs/VISION_muCompanion.md`              | Vision complète ImuCompanion Engine (707 lignes)    |
+| `docs/IMUCOMPANION_ROADMAP_MOBILE.md`     | Roadmap mobile ImuCompanion (6 phases, ~27 sem.)    |
+| `docs/IMUCOMPANION_ROADMAP_WEBAPP.md`     | Roadmap web-app ImuCompanion (6 phases, ~21 sem.)   |
+| `docs/IMUCOMPANION_ROADMAP_DESKTOP.md`    | Roadmap desktop ImuCompanion (6 phases, ~20 sem.)   |
 | `docs/Progression_Mobile.md`              | Progression mobile vs web détaillée par semaine     |
 | `WEBAPP_TODO_TRACKER.md`                  | Tracker équivalent côté web-app                     |
 

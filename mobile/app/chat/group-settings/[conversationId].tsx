@@ -29,6 +29,7 @@ import {
 import { ThemedView } from "@/components/ThemedView";
 import { useI18n } from "@/providers/I18nProvider";
 import { useTheme } from "@/providers/ThemeProvider";
+import { useToast } from "@/providers/ToastProvider";
 import {
   banMember,
   fetchGroupMembers,
@@ -68,6 +69,7 @@ export default function GroupSettingsScreen() {
   const router = useRouter();
   const { mode } = useTheme();
   const { t } = useI18n();
+  const { showToast } = useToast();
   const isDark = mode === "dark";
 
   const [settings, setSettings] = useState<GroupSettings | null>(null);
@@ -137,7 +139,7 @@ export default function GroupSettingsScreen() {
       setEditing(false);
       loadData();
     } else {
-      Alert.alert(t("groups.error"), t("groups.saveFailed"));
+      showToast(t("groups.saveFailed"), "error");
     }
   };
 
@@ -147,7 +149,7 @@ export default function GroupSettingsScreen() {
     const code = await generateInviteLink(conversationId);
     if (code) {
       loadData();
-      Alert.alert(t("groups.inviteGenerated"), code);
+      showToast(t("groups.inviteGenerated") + ": " + code, "success");
     }
   };
 
@@ -170,7 +172,7 @@ export default function GroupSettingsScreen() {
   const handleCopyInvite = () => {
     if (settings?.inviteCode) {
       Clipboard.setString(settings.inviteCode);
-      Alert.alert(t("groups.copied"), settings.inviteCode);
+      showToast(t("groups.copied"), "success");
     }
   };
 
@@ -294,7 +296,7 @@ export default function GroupSettingsScreen() {
     if (success) {
       loadData();
     } else {
-      Alert.alert(t("groups.error"), t("groups.roleChangeFailed"));
+      showToast(t("groups.roleChangeFailed"), "error");
     }
   };
 
@@ -319,7 +321,7 @@ export default function GroupSettingsScreen() {
             if (success) {
               loadData();
             } else {
-              Alert.alert(t("groups.error"), t("groups.transferFailed"));
+              showToast(t("groups.transferFailed"), "error");
             }
           },
         },
@@ -423,7 +425,7 @@ export default function GroupSettingsScreen() {
         style: "destructive",
         onPress: async () => {
           if (isOwner && members.length > 1) {
-            Alert.alert(t("groups.error"), t("groups.mustTransferFirst"));
+            showToast(t("groups.mustTransferFirst"), "error");
             return;
           }
           const success = await leaveGroup(conversationId);

@@ -1,3 +1,4 @@
+import { useToast } from '@/providers/ToastProvider';
 import { useCallback, useState } from 'react';
 import { Alert } from 'react-native';
 import {
@@ -41,6 +42,7 @@ interface UseMediaUploadReturn {
 
 export function useMediaUpload(options: UseMediaUploadOptions = {}): UseMediaUploadReturn {
     const { bucket = 'messages-media', onSuccess, onError } = options;
+    const { showToast } = useToast();
 
     const [isUploading, setIsUploading] = useState(false);
     const [uploadProgress, setUploadProgress] = useState(0);
@@ -53,8 +55,8 @@ export function useMediaUpload(options: UseMediaUploadOptions = {}): UseMediaUpl
         setIsUploading(false);
         setUploadProgress(0);
         onError?.(err);
-        Alert.alert('Erreur', err.message);
-    }, [onError]);
+        showToast(err.message, 'error');
+    }, [onError, showToast]);
 
     const selectImage = useCallback(async () => {
         try {

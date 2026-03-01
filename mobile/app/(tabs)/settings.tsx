@@ -10,6 +10,7 @@ import { getAllThemePresets } from "@/constants/theme-presets";
 import { useAuth } from "@/providers/AuthProvider";
 import { useI18n } from "@/providers/I18nProvider";
 import { useTheme } from "@/providers/ThemeProvider";
+import { useToast } from "@/providers/ToastProvider";
 import {
   ActiveSession,
   authenticateWithBiometrics,
@@ -134,6 +135,7 @@ export default function SettingsScreen() {
   const { theme, mode, presetId, setPreset, isSystemMode, setSystemMode } =
     useTheme();
   const { t, locale, setLocale } = useI18n();
+  const { showToast } = useToast();
 
   const themePresets = getAllThemePresets();
 
@@ -151,6 +153,9 @@ export default function SettingsScreen() {
 
   // Language
   const [language, setLanguage] = useState<LanguageCode>("fr");
+
+  // Auto-translate
+  const [autoTranslate, setAutoTranslate] = useState(false);
 
   // Notification preferences
   const [notifPrefs, setNotifPrefs] = useState<NotificationPrefs>(
@@ -322,9 +327,9 @@ export default function SettingsScreen() {
       }
 
       setAccountDirty(false);
-      Alert.alert(t("common.success"), t("settings.profileUpdated"));
+      showToast(t("settings.profileUpdated"), "success");
     } catch (err: any) {
-      Alert.alert(t("common.error"), err.message ?? t("settings.cannotSave"));
+      showToast(err.message ?? t("settings.cannotSave"), "error");
     } finally {
       setSaving(false);
     }
@@ -336,7 +341,7 @@ export default function SettingsScreen() {
 
   async function handleChangePassword() {
     if (!newPassword || newPassword.length < 6) {
-      Alert.alert(t("common.error"), t("settings.passwordMinLength"));
+      showToast(t("settings.passwordMinLength"), "warning");
       return;
     }
     setSaving(true);
@@ -347,12 +352,9 @@ export default function SettingsScreen() {
       if (error) throw error;
       setCurrentPassword("");
       setNewPassword("");
-      Alert.alert(t("common.success"), t("settings.passwordUpdated"));
+      showToast(t("settings.passwordUpdated"), "success");
     } catch (err: any) {
-      Alert.alert(
-        t("common.error"),
-        err.message ?? t("settings.cannotChangePassword"),
-      );
+      showToast(err.message ?? t("settings.cannotChangePassword"), "error");
     } finally {
       setSaving(false);
     }
@@ -490,7 +492,7 @@ export default function SettingsScreen() {
       if (success) {
         setBiometricStatus((prev) => ({ ...prev, isEnabled: enabled }));
       } else {
-        Alert.alert(t("common.error"), t("settings.securityBiometricFailed"));
+        showToast(t("settings.securityBiometricFailed"), "error");
       }
     } finally {
       setSecurityLoading(false);
@@ -508,7 +510,7 @@ export default function SettingsScreen() {
           secret: result.enrollment.secret,
         });
       } else {
-        Alert.alert(t("common.error"), result.error);
+        showToast(result.error, "error");
       }
     } finally {
       setSecurityLoading(false);
@@ -525,14 +527,14 @@ export default function SettingsScreen() {
         mfaTotpCode,
       );
       if (result.success) {
-        Alert.alert(t("common.success"), t("settings.security2faEnabled"));
+        showToast(t("settings.security2faEnabled"), "success");
         setMfaEnrollmentData(null);
         setMfaTotpCode("");
         loadSecuritySettings();
       } else {
-        Alert.alert(
-          t("common.error"),
+        showToast(
           result.error ?? t("settings.security2faInvalidCode"),
+          "error",
         );
       }
     } finally {
@@ -563,10 +565,7 @@ export default function SettingsScreen() {
               const success = await unenrollMfa(factorId);
               if (success) {
                 loadSecuritySettings();
-                Alert.alert(
-                  t("common.success"),
-                  t("settings.security2faDisabled"),
-                );
+                showToast(t("settings.security2faDisabled"), "success");
               }
             } finally {
               setSecurityLoading(false);
@@ -624,10 +623,7 @@ export default function SettingsScreen() {
           text: t("common.delete"),
           style: "destructive",
           onPress: () => {
-            Alert.alert(
-              t("settings.comingSoon"),
-              t("settings.comingSoonMessage"),
-            );
+            showToast(t("settings.comingSoonMessage"), "info");
           },
         },
       ],
@@ -954,6 +950,41 @@ export default function SettingsScreen() {
             )}
           </View>
         ))}
+      </View>
+
+      {/* Auto-translate toggle */}
+      <View
+        style={[
+          styles.card,
+          { backgroundColor: theme.colors.surface, marginTop: 12 },
+        ]}
+      >
+        <View style={styles.row}>
+          <View style={{ flex: 1 }}>
+            <Text style={[styles.rowLabel, { color: theme.colors.text }]}>
+              {t("settings.autoTranslate")}
+            </Text>
+            <Text
+              style={[
+                styles.rowSubtitle || { fontSize: 12, marginTop: 2 },
+                { color: theme.colors.textMuted },
+              ]}
+            >
+              {t("settings.autoTranslateDescription")}
+            </Text>
+          </View>
+          <Switch
+            testID="auto-translate-switch"
+            value={autoTranslate}
+            onValueChange={(val) => {
+              setAutoTranslate(val);
+            }}
+            trackColor={{
+              false: theme.colors.border,
+              true: theme.colors.primary,
+            }}
+          />
+        </View>
       </View>
 
       {/* ===== NOTIFICATIONS ===== */}

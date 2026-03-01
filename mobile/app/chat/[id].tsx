@@ -5,6 +5,7 @@ import { useChat } from "@/hooks/useChat";
 import { useReactions } from "@/hooks/useReactions";
 import { useI18n } from "@/providers/I18nProvider";
 import { useTheme } from "@/providers/ThemeProvider";
+import { useToast } from "@/providers/ToastProvider";
 import { initiateCall } from "@/services/call-signaling";
 import {
   deleteMessage,
@@ -17,7 +18,6 @@ import { Stack, useLocalSearchParams, useRouter } from "expo-router";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   ActivityIndicator,
-  Alert,
   FlatList,
   KeyboardAvoidingView,
   Platform,
@@ -58,6 +58,7 @@ export default function ChatRoomScreen() {
   const { theme } = useTheme();
   const router = useRouter();
   const { t } = useI18n();
+  const { showToast } = useToast();
   const [initiatingCall, setInitiatingCall] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
 
@@ -108,10 +109,7 @@ export default function ChatRoomScreen() {
   const handleCopy = useCallback(
     async (messageText: string) => {
       await Clipboard.setStringAsync(messageText);
-      Alert.alert(
-        t("common.success"),
-        t("chat.messageCopied") || "Message copied",
-      );
+      showToast(t("chat.messageCopied") || "Message copied", "success");
     },
     [t],
   );
@@ -136,7 +134,7 @@ export default function ChatRoomScreen() {
         setEditingMessage(null);
       } catch (error) {
         console.error("Error editing message:", error);
-        Alert.alert(t("common.error"), t("common.genericError"));
+        showToast(t("common.genericError"), "error");
       }
     },
     [editingMessage, t],
@@ -149,7 +147,7 @@ export default function ChatRoomScreen() {
         await deleteMessage(messageId);
       } catch (error) {
         console.error("Error deleting message:", error);
-        Alert.alert(t("common.error"), t("common.genericError"));
+        showToast(t("common.genericError"), "error");
       }
     },
     [t],
@@ -177,10 +175,10 @@ export default function ChatRoomScreen() {
         );
         setForwardModalVisible(false);
         setMessageToForward(null);
-        Alert.alert(t("common.success"), t("chat.messageForwarded"));
+        showToast(t("chat.messageForwarded"), "success");
       } catch (error) {
         console.error("Error forwarding message:", error);
-        Alert.alert(t("common.error"), t("common.genericError"));
+        showToast(t("common.genericError"), "error");
       }
     },
     [messageToForward, t],
@@ -220,9 +218,9 @@ export default function ChatRoomScreen() {
       });
 
       if (!callsSafe) {
-        Alert.alert(
-          "Appels non disponibles",
+        showToast(
           "Les appels vidéo nécessitent un build de développement. Expo Go n'est pas supporté.",
+          "warning",
         );
         setInitiatingCall(false);
         return;
@@ -236,9 +234,9 @@ export default function ChatRoomScreen() {
       });
 
       if (!client) {
-        Alert.alert(
-          "Appels non disponibles",
+        showToast(
           "Impossible d'initialiser le service d'appels. Vérifiez votre connexion.",
+          "warning",
         );
         setInitiatingCall(false);
         return;
@@ -270,7 +268,7 @@ export default function ChatRoomScreen() {
       } as any);
     } catch (error) {
       console.error("Error initiating call:", error);
-      Alert.alert("Erreur", "Impossible d'initier l'appel");
+      showToast("Impossible d'initier l'appel", "error");
     } finally {
       setInitiatingCall(false);
     }

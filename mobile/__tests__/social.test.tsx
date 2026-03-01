@@ -101,32 +101,26 @@ jest.mock("@/stores/stories-store", () => ({
   useStoriesStore: () => ({
     storyGroups: [
       {
-        user: {
-          id: "su-me",
-          username: "socialuser",
-          display_name: "Me",
-          avatar_url: null,
-        },
+        user_id: "su-me",
+        username: "socialuser",
+        display_name: "Me",
+        avatar_url: null,
         stories: [{ id: "s1", created_at: new Date().toISOString() }],
         has_unread: false,
       },
       {
-        user: {
-          id: "su-1",
-          username: "alice",
-          display_name: "Alice",
-          avatar_url: null,
-        },
+        user_id: "su-1",
+        username: "alice",
+        display_name: "Alice",
+        avatar_url: null,
         stories: [{ id: "s2", created_at: new Date().toISOString() }],
         has_unread: true,
       },
       {
-        user: {
-          id: "su-2",
-          username: "bob",
-          display_name: "Bob",
-          avatar_url: null,
-        },
+        user_id: "su-2",
+        username: "bob",
+        display_name: "Bob",
+        avatar_url: null,
         stories: [{ id: "s3", created_at: new Date().toISOString() }],
         has_unread: true,
       },

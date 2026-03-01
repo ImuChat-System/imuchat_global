@@ -10,8 +10,15 @@ import { Conversation, getConversations } from "@/services/messaging";
 import { openMiniApp } from "@/services/miniapp-deeplink";
 import { fetchFeed, toggleLike, type Post } from "@/services/social-feed";
 import { useModulesStore } from "@/stores/modules-store";
+import { useStoriesStore } from "@/stores/stories-store";
 import { Ionicons } from "@expo/vector-icons";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import {
   ActivityIndicator,
   Dimensions,
@@ -91,12 +98,10 @@ const HERO_SLIDES: HeroSlide[] = [
 
 const MOCK_STORIES: StoryUser[] = [
   { id: "s1", username: "Vous", avatar: null, hasNew: false },
-  { id: "s2", username: "Alice", avatar: null, hasNew: true },
-  { id: "s3", username: "Bob", avatar: null, hasNew: true },
-  { id: "s4", username: "Chloé", avatar: null, hasNew: false },
-  { id: "s5", username: "David", avatar: null, hasNew: true },
-  { id: "s6", username: "Emma", avatar: null, hasNew: false },
 ];
+
+// Fallback when store is empty
+const EMPTY_STORIES: StoryUser[] = [];
 
 const EXPLORER_ITEMS: ExplorerItem[] = [
   {
@@ -176,6 +181,34 @@ export default function HomeScreen() {
   const { t } = useI18n();
   const { user } = useAuth();
 
+  // ─── Stories store ─────────────────────────────────────────
+  const {
+    storyGroups,
+    fetchStories,
+    isLoading: storiesLoading,
+  } = useStoriesStore();
+
+  const stories: StoryUser[] = useMemo(() => {
+    // "You" entry always first
+    const me: StoryUser = {
+      id: user?.id ?? "me",
+      username: t("stories.you", { defaultValue: "Vous" }),
+      avatar: null,
+      hasNew: false,
+    };
+
+    const mapped: StoryUser[] = storyGroups
+      .filter((g) => g.user_id !== user?.id)
+      .map((g) => ({
+        id: g.user_id,
+        username: g.display_name || g.username,
+        avatar: g.avatar_url,
+        hasNew: g.has_unread,
+      }));
+
+    return [me, ...mapped];
+  }, [storyGroups, user?.id, t]);
+
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [feedPosts, setFeedPosts] = useState<Post[]>([]);
   const [feedLoading, setFeedLoading] = useState(false);
@@ -195,7 +228,8 @@ export default function HomeScreen() {
   // ─── Load conversations ──────────────────────────────────────
   useEffect(() => {
     fetchInstalled();
-  }, [fetchInstalled]);
+    fetchStories();
+  }, [fetchInstalled, fetchStories]);
 
   // ─── Load feed posts ─────────────────────────────────────────
   const loadFeed = useCallback(async () => {
@@ -231,7 +265,11 @@ export default function HomeScreen() {
   const handleRefresh = useCallback(async () => {
     setRefreshing(true);
     try {
-      const [convData] = await Promise.all([getConversations(), loadFeed()]);
+      const [convData] = await Promise.all([
+        getConversations(),
+        loadFeed(),
+        fetchStories(),
+      ]);
       setConversations(convData.slice(0, 3));
     } catch (e) {
       console.warn("[Home] refresh error:", e);
@@ -322,6 +360,11 @@ export default function HomeScreen() {
   );
 
   // ─── Story Carousel ───────────────────────────────────────────
+  const isMyStoryEntry = useCallback(
+    (id: string) => id === (user?.id ?? "me"),
+    [user?.id],
+  );
+
   const renderStoryAvatar = ({ item }: { item: StoryUser }) => (
     <TouchableOpacity
       testID={`story-avatar-${item.id}`}
@@ -337,7 +380,7 @@ export default function HomeScreen() {
       >
         <View style={[styles.storyAvatar, { backgroundColor: colors.surface }]}>
           <Text style={styles.storyAvatarEmoji}>
-            {item.id === "s1" ? "➕" : item.username.charAt(0)}
+            {isMyStoryEntry(item.id) ? "➕" : item.username.charAt(0)}
           </Text>
         </View>
       </View>
@@ -543,7 +586,7 @@ export default function HomeScreen() {
         </Text>
         <FlatList
           testID="story-carousel"
-          data={MOCK_STORIES}
+          data={stories}
           renderItem={renderStoryAvatar}
           keyExtractor={(i) => i.id}
           horizontal

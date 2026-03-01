@@ -156,7 +156,12 @@
         "newChat": "新しい会話",
         "createGroup": "グループを作成",
         "selectedContacts": "{{count}}件の連絡先を選択中",
-        "newGroupChat": "新しいグループ"
+        "newGroupChat": "新しいグループ",
+        "translate": "翻訳",
+        "showOriginal": "原文を表示",
+        "translatedFrom": "{{language}}から翻訳",
+        "translating": "翻訳中…",
+        "translationError": "翻訳エラー"
     },
     "settings": {
         "title": "設定",
@@ -182,6 +187,8 @@
         "themeNeon": "ネオン",
         "themeOcean": "オーシャン",
         "language": "言語",
+        "autoTranslate": "自動翻訳",
+        "autoTranslateDescription": "メッセージを自動的にあなたの言語に翻訳する",
         "notifications": "通知",
         "mentions": "メンション",
         "directMessages": "ダイレクトメッセージ",

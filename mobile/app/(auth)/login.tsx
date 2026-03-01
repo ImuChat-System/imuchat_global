@@ -2,7 +2,6 @@ import { Href, Stack, useRouter } from "expo-router";
 import { useState } from "react";
 import {
   ActivityIndicator,
-  Alert,
   Button,
   StyleSheet,
   Text,
@@ -14,6 +13,7 @@ import { SocialLoginButtons } from "@/components/auth/SocialLoginButtons";
 import { useAuth } from "@/hooks/useAuthV2";
 import { useI18n } from "@/providers/I18nProvider";
 import { useTheme } from "@/providers/ThemeProvider";
+import { useToast } from "@/providers/ToastProvider";
 
 export default function LoginScreen() {
   const [email, setEmail] = useState("");
@@ -21,6 +21,7 @@ export default function LoginScreen() {
   const router = useRouter();
   const { theme } = useTheme();
   const { t } = useI18n();
+  const { showToast } = useToast();
   const { signIn, loading } = useAuth();
   const [socialLoading, setSocialLoading] = useState(false);
 
@@ -33,9 +34,9 @@ export default function LoginScreen() {
       await signIn(email, password);
       // La redirection se fera automatiquement via useEffect
     } catch (error) {
-      Alert.alert(
-        t("auth.error"),
+      showToast(
         error instanceof Error ? error.message : t("auth.loginFailed"),
+        "error",
       );
     }
   }

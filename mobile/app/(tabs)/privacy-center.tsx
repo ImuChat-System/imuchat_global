@@ -10,6 +10,7 @@
 
 import { useI18n } from "@/providers/I18nProvider";
 import { useTheme } from "@/providers/ThemeProvider";
+import { useToast } from "@/providers/ToastProvider";
 import {
   BlockedUser,
   DataExportProgress,
@@ -46,6 +47,7 @@ import {
 export default function PrivacyCenterScreen() {
   const { theme } = useTheme();
   const { t } = useI18n();
+  const { showToast } = useToast();
   const router = useRouter();
 
   // State
@@ -108,7 +110,7 @@ export default function PrivacyCenterScreen() {
         ],
       );
     } else {
-      Alert.alert(t("common.error"), result.error || t("privacy.exportError"));
+      showToast(result.error || t("privacy.exportError"), "error");
     }
   };
 

@@ -1,10 +1,122 @@
 /**
- * Tests pour StoreScreen — Parité web store page
+ * Tests pour StoreScreen — Connecté au modules-store (Phase M1)
+ *
+ * Le StoreScreen utilise useModulesStore() pour le catalogue,
+ * useI18n(), useToast(), useNetworkState(), useRouter().
  */
 
 import React from "react";
 
+// === MOCK DATA ===
+
+function makeModule(overrides: Record<string, unknown> = {}) {
+  return {
+    id: "mod-1",
+    name: "Thème Aurora",
+    version: "1.0.0",
+    description: "A beautiful theme",
+    category: "media" as const,
+    icon: "🎨",
+    author: "ImuChat",
+    license: "MIT",
+    entry_url: "https://example.com",
+    permissions: [],
+    dependencies: [],
+    bundle_size: 1024,
+    checksum: null,
+    signature: null,
+    sandbox: "iframe" as const,
+    allowed_domains: [],
+    content_security_policy: null,
+    max_storage_size: 0,
+    is_published: true,
+    is_verified: true,
+    default_enabled: false,
+    is_core: false,
+    publisher_id: null,
+    download_count: 5000,
+    rating: 4.8,
+    price: null,
+    created_at: "2026-01-01T00:00:00Z",
+    updated_at: "2026-01-01T00:00:00Z",
+    ...overrides,
+  };
+}
+
+const MOCK_CATALOG = [
+  makeModule({
+    id: "mod-1",
+    name: "Thème Aurora",
+    category: "media",
+    rating: 4.8,
+    download_count: 5000,
+    is_verified: true,
+    price: null,
+  }),
+  makeModule({
+    id: "mod-2",
+    name: "Music Player Pro",
+    category: "entertainment",
+    rating: 4.5,
+    download_count: 3000,
+    is_verified: false,
+    price: 2.99,
+  }),
+  makeModule({
+    id: "mod-3",
+    name: "Anime Sticker Pack",
+    category: "creativity",
+    rating: 4.2,
+    download_count: 8000,
+    price: null,
+  }),
+  makeModule({
+    id: "mod-4",
+    name: "Bot Assistant",
+    category: "services",
+    rating: 4.0,
+    download_count: 2000,
+    price: null,
+  }),
+  makeModule({
+    id: "mod-5",
+    name: "Task Manager",
+    category: "productivity",
+    rating: 3.8,
+    download_count: 1000,
+    price: 0.99,
+  }),
+];
+
 // === MOCKS ===
+
+const mockFetchCatalog = jest.fn().mockResolvedValue(undefined);
+const mockFetchInstalled = jest.fn().mockResolvedValue(undefined);
+const mockInstall = jest.fn().mockResolvedValue(undefined);
+const mockUninstall = jest.fn().mockResolvedValue(undefined);
+const mockIsInstalled = jest.fn().mockReturnValue(false);
+const mockIsActive = jest.fn().mockReturnValue(false);
+const mockRunAutoInstall = jest.fn().mockResolvedValue(undefined);
+
+jest.mock("@/stores/modules-store", () => ({
+  useModulesStore: () => ({
+    catalog: MOCK_CATALOG,
+    catalogLoading: false,
+    catalogError: null,
+    installedModules: [],
+    fetchCatalog: mockFetchCatalog,
+    fetchInstalled: mockFetchInstalled,
+    install: mockInstall,
+    uninstall: mockUninstall,
+    isInstalled: mockIsInstalled,
+    isActive: mockIsActive,
+    runAutoInstall: mockRunAutoInstall,
+  }),
+}));
+
+jest.mock("@/hooks/useNetworkState", () => ({
+  useNetworkState: () => ({ isConnected: true }),
+}));
 
 jest.mock("@/providers/ThemeProvider", () => ({
   useColors: () => ({
@@ -14,6 +126,7 @@ jest.mock("@/providers/ThemeProvider", () => ({
     textMuted: "#aaa",
     border: "#333",
     primary: "#ec4899",
+    error: "#ef4444",
   }),
   useSpacing: () => ({ xs: 4, sm: 8, md: 12, lg: 16, xl: 24 }),
 }));
@@ -24,6 +137,12 @@ import { fireEvent, render } from "@testing-library/react-native";
 // ===================================================================
 
 describe("StoreScreen", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    mockIsInstalled.mockReturnValue(false);
+    mockIsActive.mockReturnValue(false);
+  });
+
   it("affiche l'écran store", () => {
     const { getByTestId } = render(<StoreScreen />);
     expect(getByTestId("store-screen")).toBeTruthy();
@@ -38,6 +157,7 @@ describe("StoreScreen", () => {
 
   it("affiche le hero banner", () => {
     const { getByTestId } = render(<StoreScreen />);
+    // Hero = highest-rated verified non-core module → mod-1 (4.8, verified)
     expect(getByTestId("store-hero")).toBeTruthy();
   });
 
@@ -51,8 +171,8 @@ describe("StoreScreen", () => {
   it("filtre les résultats par recherche", () => {
     const { getByTestId, queryByTestId } = render(<StoreScreen />);
     fireEvent.changeText(getByTestId("store-search"), "Aurora");
-    expect(getByTestId("store-item-si-1")).toBeTruthy(); // Thème Aurora
-    expect(queryByTestId("store-item-si-2")).toBeNull(); // Music Player Pro
+    expect(getByTestId("store-item-mod-1")).toBeTruthy(); // Thème Aurora
+    expect(queryByTestId("store-item-mod-2")).toBeNull(); // Music Player Pro
   });
 
   it("affiche le bouton clear quand on recherche", () => {
@@ -66,8 +186,8 @@ describe("StoreScreen", () => {
     fireEvent.changeText(getByTestId("store-search"), "Aurora");
     fireEvent.press(getByTestId("search-clear"));
     // All items should be back
-    expect(getByTestId("store-item-si-1")).toBeTruthy();
-    expect(getByTestId("store-item-si-2")).toBeTruthy();
+    expect(getByTestId("store-item-mod-1")).toBeTruthy();
+    expect(getByTestId("store-item-mod-2")).toBeTruthy();
   });
 
   // ---- Tabs ----
@@ -76,32 +196,35 @@ describe("StoreScreen", () => {
     const { getByTestId } = render(<StoreScreen />);
     expect(getByTestId("tab-all")).toBeTruthy();
     expect(getByTestId("tab-apps")).toBeTruthy();
+    expect(getByTestId("tab-installed")).toBeTruthy();
     expect(getByTestId("tab-contents")).toBeTruthy();
     expect(getByTestId("tab-services")).toBeTruthy();
-    expect(getByTestId("tab-bundles")).toBeTruthy();
   });
 
   it("filtre par onglet Apps", () => {
+    // CATEGORY_TAB_MAP: productivity → apps
     const { getByTestId, queryByTestId } = render(<StoreScreen />);
     fireEvent.press(getByTestId("tab-apps"));
-    expect(getByTestId("store-item-si-2")).toBeTruthy(); // Music Player Pro (apps)
-    expect(queryByTestId("store-item-si-1")).toBeNull(); // Thème Aurora (contents)
+    expect(getByTestId("store-item-mod-5")).toBeTruthy(); // Task Manager (productivity → apps)
+    expect(queryByTestId("store-item-mod-1")).toBeNull(); // Thème Aurora (media → contents)
   });
 
   it("filtre par onglet Contents", () => {
+    // CATEGORY_TAB_MAP: media, entertainment, creativity → contents
     const { getByTestId, queryByTestId } = render(<StoreScreen />);
     fireEvent.press(getByTestId("tab-contents"));
-    expect(getByTestId("store-item-si-1")).toBeTruthy(); // Thème Aurora
-    expect(getByTestId("store-item-si-3")).toBeTruthy(); // Anime Sticker Pack
-    expect(queryByTestId("store-item-si-4")).toBeNull(); // Bot Assistant (services)
+    expect(getByTestId("store-item-mod-1")).toBeTruthy(); // Thème Aurora (media)
+    expect(getByTestId("store-item-mod-2")).toBeTruthy(); // Music Player Pro (entertainment)
+    expect(getByTestId("store-item-mod-3")).toBeTruthy(); // Anime Sticker Pack (creativity)
+    expect(queryByTestId("store-item-mod-4")).toBeNull(); // Bot Assistant (services)
   });
 
-  it("filtre par onglet Bundles", () => {
+  it("filtre par onglet Services", () => {
+    // CATEGORY_TAB_MAP: services → services
     const { getByTestId, queryByTestId } = render(<StoreScreen />);
-    fireEvent.press(getByTestId("tab-bundles"));
-    expect(getByTestId("store-item-si-5")).toBeTruthy(); // Starter Bundle
-    expect(getByTestId("store-item-si-9")).toBeTruthy(); // Premium Theme Pack
-    expect(queryByTestId("store-item-si-1")).toBeNull();
+    fireEvent.press(getByTestId("tab-services"));
+    expect(getByTestId("store-item-mod-4")).toBeTruthy(); // Bot Assistant (services)
+    expect(queryByTestId("store-item-mod-1")).toBeNull(); // Thème Aurora
   });
 
   // ---- Sort ----
@@ -115,8 +238,8 @@ describe("StoreScreen", () => {
     const { getByTestId } = render(<StoreScreen />);
     expect(getByTestId("sort-popular")).toBeTruthy();
     expect(getByTestId("sort-newest")).toBeTruthy();
+    expect(getByTestId("sort-rating")).toBeTruthy();
     expect(getByTestId("sort-price-asc")).toBeTruthy();
-    expect(getByTestId("sort-price-desc")).toBeTruthy();
   });
 
   // ---- Product grid ----
@@ -126,10 +249,10 @@ describe("StoreScreen", () => {
     expect(getByTestId("store-grid")).toBeTruthy();
   });
 
-  it("affiche les 10 items du catalogue", () => {
+  it("affiche les 5 items du catalogue", () => {
     const { getByTestId } = render(<StoreScreen />);
-    for (let i = 1; i <= 10; i++) {
-      expect(getByTestId(`store-item-si-${i}`)).toBeTruthy();
+    for (let i = 1; i <= 5; i++) {
+      expect(getByTestId(`store-item-mod-${i}`)).toBeTruthy();
     }
   });
 
@@ -151,24 +274,24 @@ describe("StoreScreen", () => {
     expect(getByTestId("no-results")).toBeTruthy();
   });
 
-  // ---- Purchase Modal ----
+  // ---- Install Modal ----
 
-  it("ouvre la modale d'achat au clic sur un item", () => {
+  it("ouvre la modale d'installation au clic sur un item", () => {
     const { getByTestId } = render(<StoreScreen />);
-    fireEvent.press(getByTestId("store-item-si-1"));
-    expect(getByTestId("purchase-modal")).toBeTruthy();
-    expect(getByTestId("btn-purchase")).toBeTruthy();
+    fireEvent.press(getByTestId("store-item-mod-1"));
+    expect(getByTestId("install-modal")).toBeTruthy();
+    expect(getByTestId("btn-install")).toBeTruthy();
   });
 
   it("affiche le bouton fermer dans la modale", () => {
     const { getByTestId } = render(<StoreScreen />);
-    fireEvent.press(getByTestId("store-item-si-1"));
+    fireEvent.press(getByTestId("store-item-mod-1"));
     expect(getByTestId("btn-close-modal")).toBeTruthy();
   });
 
   it("affiche le nom de l'item dans la modale", () => {
     const { getByTestId, getAllByText } = render(<StoreScreen />);
-    fireEvent.press(getByTestId("store-item-si-1"));
+    fireEvent.press(getByTestId("store-item-mod-1"));
     const titles = getAllByText("Thème Aurora");
     expect(titles.length).toBeGreaterThanOrEqual(1);
   });
@@ -177,9 +300,10 @@ describe("StoreScreen", () => {
 
   it("combine onglet et recherche", () => {
     const { getByTestId, queryByTestId } = render(<StoreScreen />);
-    fireEvent.press(getByTestId("tab-apps"));
+    // Contents tab: mod-1, mod-2, mod-3
+    fireEvent.press(getByTestId("tab-contents"));
     fireEvent.changeText(getByTestId("store-search"), "Music");
-    expect(getByTestId("store-item-si-2")).toBeTruthy();
-    expect(queryByTestId("store-item-si-8")).toBeNull(); // Games Hub (apps but not matching "Music")
+    expect(getByTestId("store-item-mod-2")).toBeTruthy();
+    expect(queryByTestId("store-item-mod-1")).toBeNull(); // Thème Aurora doesn't match "Music"
   });
 });

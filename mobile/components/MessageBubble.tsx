@@ -8,10 +8,24 @@ import {
   type TextSegment,
 } from "@/utils/markdown-parser";
 import { useCallback, useMemo, useState } from "react";
-import { Linking, Pressable, StyleSheet, Text, View } from "react-native";
+import {
+  ActivityIndicator,
+  Linking,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import { MessageContextMenu } from "./chat/MessageContextMenu";
 import { MediaPreview, MediaViewer } from "./MediaComponents";
 import { ReactionBar, ReactionPicker } from "./ReactionPicker";
+
+/** Translation data for a message (from useMessageTranslation hook) */
+export interface MessageTranslationData {
+  translatedText: string;
+  detectedLanguage: string;
+  detectedLanguageName: string;
+}
 
 interface MessageBubbleProps {
   message: Message;
@@ -30,6 +44,12 @@ interface MessageBubbleProps {
   onDelete?: (messageId: string) => void;
   /** Callback for forward action */
   onForward?: (messageId: string, messageText: string) => void;
+  /** Callback for translate action */
+  onTranslate?: (messageId: string, messageText: string) => void;
+  /** Translation data (if translated) */
+  translation?: MessageTranslationData | null;
+  /** Whether translation is in progress */
+  isTranslating?: boolean;
   /** Read receipt status for own messages */
   isRead?: boolean;
 }
@@ -44,6 +64,9 @@ export default function MessageBubble({
   onEdit,
   onDelete,
   onForward,
+  onTranslate,
+  translation,
+  isTranslating = false,
   isRead,
 }: MessageBubbleProps) {
   const colors = useColors();
@@ -283,6 +306,67 @@ export default function MessageBubble({
             renderContent()
           ) : null}
 
+          {/* Translation display */}
+          {!isDeleted && translation && (
+            <View
+              style={[
+                styles.translationContainer,
+                {
+                  borderTopColor: isOwnMessage
+                    ? "rgba(255,255,255,0.2)"
+                    : colors.border,
+                },
+              ]}
+            >
+              <Text
+                style={[
+                  styles.messageText,
+                  {
+                    color: isOwnMessage ? "#FFFFFF" : colors.text,
+                  },
+                ]}
+              >
+                {translation.translatedText}
+              </Text>
+              <Text
+                style={[
+                  styles.translatedIndicator,
+                  {
+                    color: isOwnMessage
+                      ? "rgba(255,255,255,0.5)"
+                      : colors.textMuted,
+                  },
+                ]}
+              >
+                {t("chat.translatedFrom", {
+                  language: translation.detectedLanguageName,
+                })}
+              </Text>
+            </View>
+          )}
+
+          {/* Translation loading indicator */}
+          {!isDeleted && isTranslating && !translation && (
+            <View style={styles.translationLoading}>
+              <ActivityIndicator
+                size="small"
+                color={isOwnMessage ? "rgba(255,255,255,0.7)" : colors.primary}
+              />
+              <Text
+                style={[
+                  styles.translatingText,
+                  {
+                    color: isOwnMessage
+                      ? "rgba(255,255,255,0.5)"
+                      : colors.textMuted,
+                  },
+                ]}
+              >
+                {t("chat.translating")}
+              </Text>
+            </View>
+          )}
+
           {/* Timestamp + edited indicator + read receipt */}
           <View style={styles.timestampRow}>
             {isEdited && !isDeleted && (
@@ -372,6 +456,8 @@ export default function MessageBubble({
         onEdit={onEdit}
         onDelete={onDelete}
         onForward={onForward}
+        onTranslate={onTranslate}
+        isTranslated={!!translation}
       />
     </View>
   );
@@ -448,5 +534,25 @@ const styles = StyleSheet.create({
   readReceipt: {
     fontSize: 11,
     fontWeight: "600",
+  },
+  translationContainer: {
+    borderTopWidth: StyleSheet.hairlineWidth,
+    marginTop: 8,
+    paddingTop: 8,
+  },
+  translatedIndicator: {
+    fontSize: 10,
+    fontStyle: "italic",
+    marginTop: 4,
+  },
+  translationLoading: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginTop: 6,
+    gap: 6,
+  },
+  translatingText: {
+    fontSize: 11,
+    fontStyle: "italic",
   },
 });

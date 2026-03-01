@@ -1,11 +1,11 @@
 import { useI18n } from "@/providers/I18nProvider";
 import { useColors } from "@/providers/ThemeProvider";
+import { useToast } from "@/providers/ToastProvider";
 import { supabase } from "@/services/supabase";
 import * as ImagePicker from "expo-image-picker";
 import { useEffect, useState } from "react";
 import {
   ActivityIndicator,
-  Alert,
   Image,
   StyleSheet,
   Text,
@@ -30,6 +30,7 @@ export default function Avatar({
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
   const colors = useColors();
   const { t } = useI18n();
+  const { showToast } = useToast();
 
   const avatarSize = { height: size, width: size };
 
@@ -99,7 +100,7 @@ export default function Avatar({
       onUpload(filePath);
     } catch (error) {
       if (error instanceof Error) {
-        Alert.alert(error.message);
+        showToast(error.message, "error");
       } else {
         throw error;
       }

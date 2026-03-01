@@ -16,6 +16,7 @@ import { useCallManager } from "@/hooks/useCallManagerHook";
 import { AuthProvider, useAuth } from "@/providers/AuthProvider";
 import { I18nProvider } from "@/providers/I18nProvider";
 import { ThemeProvider } from "@/providers/ThemeProvider";
+import { ToastProvider } from "@/providers/ToastProvider";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useState } from "react";
 
@@ -146,20 +147,28 @@ function RootLayoutNav() {
 
   return (
     <ThemeProvider>
-      <NavigationThemeProvider
-        value={colorScheme === "dark" ? DarkTheme : DefaultTheme}
-      >
-        <Stack>
-          <Stack.Screen name="(onboarding)" options={{ headerShown: false }} />
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          <Stack.Screen name="(auth)/login" options={{ headerShown: false }} />
-          <Stack.Screen name="modal" options={{ presentation: "modal" }} />
-        </Stack>
-        {/* Call manager must be inside ThemeProvider */}
-        <CallManagerProvider />
-        {/* Notification permission prompt */}
-        <NotificationPromptManager />
-      </NavigationThemeProvider>
+      <ToastProvider>
+        <NavigationThemeProvider
+          value={colorScheme === "dark" ? DarkTheme : DefaultTheme}
+        >
+          <Stack>
+            <Stack.Screen
+              name="(onboarding)"
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+            <Stack.Screen
+              name="(auth)/login"
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen name="modal" options={{ presentation: "modal" }} />
+          </Stack>
+          {/* Call manager must be inside ThemeProvider */}
+          <CallManagerProvider />
+          {/* Notification permission prompt */}
+          <NotificationPromptManager />
+        </NavigationThemeProvider>
+      </ToastProvider>
     </ThemeProvider>
   );
 }

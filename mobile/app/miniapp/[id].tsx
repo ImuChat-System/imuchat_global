@@ -13,12 +13,12 @@ import MiniAppHostMobile from "@/components/miniapps/MiniAppHostMobile";
 import { useNetworkState } from "@/hooks/useNetworkState";
 import { useI18n } from "@/providers/I18nProvider";
 import { useColors, useSpacing, useTheme } from "@/providers/ThemeProvider";
+import { useToast } from "@/providers/ToastProvider";
 import { useModulesStore } from "@/stores/modules-store";
 import { Stack, useLocalSearchParams, useRouter } from "expo-router";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import {
   ActivityIndicator,
-  Alert,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -32,6 +32,7 @@ export default function MiniAppScreen() {
   const { theme: themeCtx } = useTheme();
   const { t } = useI18n();
   const router = useRouter();
+  const { showToast } = useToast();
   const { isConnected: isOnline } = useNetworkState();
 
   const {
@@ -94,10 +95,7 @@ export default function MiniAppScreen() {
     try {
       await install(module.id, module.permissions);
     } catch (e) {
-      Alert.alert(
-        t("store.installFailed"),
-        e instanceof Error ? e.message : String(e),
-      );
+      showToast(e instanceof Error ? e.message : String(e), "error");
     } finally {
       setInstalling(false);
     }

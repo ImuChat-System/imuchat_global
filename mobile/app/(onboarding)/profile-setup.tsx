@@ -12,6 +12,7 @@ import type { ThemePresetId } from "@/constants/theme-presets";
 import { useAuth } from "@/providers/AuthProvider";
 import { useI18n } from "@/providers/I18nProvider";
 import { useColors, useSpacing, useTheme } from "@/providers/ThemeProvider";
+import { useToast } from "@/providers/ToastProvider";
 import { supabase } from "@/services/supabase";
 import { useUserStore } from "@/stores/user-store";
 import { Ionicons } from "@expo/vector-icons";
@@ -21,7 +22,6 @@ import { Href, useRouter } from "expo-router";
 import { useCallback, useRef, useState } from "react";
 import {
   ActivityIndicator,
-  Alert,
   Animated,
   Dimensions,
   Image,
@@ -48,6 +48,7 @@ export default function ProfileSetupScreen() {
   const { setPreset, setSystemMode } = useTheme();
   const router = useRouter();
   const { user } = useAuth();
+  const { showToast } = useToast();
   const { setPreferences, updateProfile } = useUserStore();
 
   // Step state
@@ -148,7 +149,7 @@ export default function ProfileSetupScreen() {
       if (source === "camera") {
         const permission = await ImagePicker.requestCameraPermissionsAsync();
         if (!permission.granted) {
-          Alert.alert("Permission needed", "Camera access is required.");
+          showToast("Camera access is required.", "warning");
           return;
         }
         result = await ImagePicker.launchCameraAsync({
@@ -161,7 +162,7 @@ export default function ProfileSetupScreen() {
         const permission =
           await ImagePicker.requestMediaLibraryPermissionsAsync();
         if (!permission.granted) {
-          Alert.alert("Permission needed", "Photo library access is required.");
+          showToast("Photo library access is required.", "warning");
           return;
         }
         result = await ImagePicker.launchImageLibraryAsync({
@@ -308,11 +309,11 @@ export default function ProfileSetupScreen() {
       router.replace("/(tabs)" as Href);
     } catch (error) {
       console.error("Profile setup error:", error);
-      Alert.alert(
-        t("common.error"),
+      showToast(
         t("profileSetup.saveError", {
           defaultValue: "Failed to save profile. Please try again.",
         }),
+        "error",
       );
     } finally {
       setSaving(false);

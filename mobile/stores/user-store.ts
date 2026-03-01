@@ -44,6 +44,8 @@ interface UserPreferences {
     notificationsEnabled: boolean;
     soundEnabled: boolean;
     hapticEnabled: boolean;
+    /** Auto-translate incoming messages to user locale */
+    autoTranslateEnabled: boolean;
 }
 
 interface UserState {
@@ -66,6 +68,7 @@ const DEFAULT_PREFERENCES: UserPreferences = {
     notificationsEnabled: true,
     soundEnabled: true,
     hapticEnabled: true,
+    autoTranslateEnabled: false,
 };
 
 export const useUserStore = create<UserState>()(

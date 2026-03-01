@@ -9,7 +9,6 @@ import { Stack, useLocalSearchParams, useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
 import {
   ActivityIndicator,
-  Alert,
   Image,
   KeyboardAvoidingView,
   Platform,
@@ -23,6 +22,7 @@ import {
 import { ThemedView } from "@/components/ThemedView";
 import { useI18n } from "@/providers/I18nProvider";
 import { useTheme } from "@/providers/ThemeProvider";
+import { useToast } from "@/providers/ToastProvider";
 import {
   getInviteInfo,
   GroupInvite,
@@ -34,6 +34,7 @@ export default function JoinGroupScreen() {
   const router = useRouter();
   const { theme, mode } = useTheme();
   const { t } = useI18n();
+  const { showToast } = useToast();
   const isDark = mode === "dark";
 
   const [code, setCode] = useState(initialCode || "");
@@ -77,7 +78,7 @@ export default function JoinGroupScreen() {
     if (conversationId) {
       router.replace(`/chat/${conversationId}`);
     } else {
-      Alert.alert(t("groups.error"), t("groups.joinFailed"));
+      showToast(t("groups.joinFailed"), "error");
       setJoining(false);
     }
   };

@@ -10,6 +10,7 @@
 import { useAuth } from "@/providers/AuthProvider";
 import { useI18n } from "@/providers/I18nProvider";
 import { useColors, useSpacing } from "@/providers/ThemeProvider";
+import { useToast } from "@/providers/ToastProvider";
 import {
   PostComment,
   addComment,
@@ -37,6 +38,7 @@ export default function CommentsScreen() {
   const colors = useColors();
   const spacing = useSpacing();
   const { t } = useI18n();
+  const { showToast } = useToast();
   const { user } = useAuth();
   const router = useRouter();
   const { postId } = useLocalSearchParams<{ postId: string }>();
@@ -108,7 +110,7 @@ export default function CommentsScreen() {
         flatListRef.current?.scrollToOffset({ offset: 0, animated: true });
       }
     } catch (error) {
-      Alert.alert(t("common.error"), t("social.comments.addFailed"));
+      showToast(t("social.comments.addFailed"), "error");
     } finally {
       setIsSubmitting(false);
     }

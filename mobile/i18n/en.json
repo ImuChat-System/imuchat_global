@@ -156,7 +156,12 @@
         "newChat": "New conversation",
         "createGroup": "Create group",
         "selectedContacts": "{{count}} contact(s) selected",
-        "newGroupChat": "New group"
+        "newGroupChat": "New group",
+        "translate": "Translate",
+        "showOriginal": "Show original",
+        "translatedFrom": "Translated from {{language}}",
+        "translating": "Translating…",
+        "translationError": "Translation error"
     },
     "settings": {
         "title": "Settings",
@@ -182,6 +187,8 @@
         "themeNeon": "Neon",
         "themeOcean": "Ocean",
         "language": "Language",
+        "autoTranslate": "Auto-translate",
+        "autoTranslateDescription": "Automatically translate messages to your language",
         "notifications": "Notifications",
         "mentions": "Mentions",
         "directMessages": "Direct messages",

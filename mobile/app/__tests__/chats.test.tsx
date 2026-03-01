@@ -7,14 +7,14 @@ import React from "react";
 
 // ─── Mocks ────────────────────────────────────────────────────────
 
-const mockRefresh = jest.fn();
+const mockLoadConversations = jest.fn();
 const mockPush = jest.fn();
 
 jest.mock("@/hooks/useChat", () => ({
   useChat: jest.fn(() => ({
     conversations: [],
     loading: false,
-    refresh: mockRefresh,
+    loadConversations: mockLoadConversations,
   })),
 }));
 
@@ -35,10 +35,13 @@ jest.mock("@/services/messaging", () => ({
   muteConversation: jest.fn(() => Promise.resolve()),
 }));
 
-jest.mock("@/components/chat/NewChatModal", () => ({
-  NewChatModal: ({ visible }: { visible: boolean }) =>
-    visible ? <div data-testid="new-chat-modal" /> : null,
-}));
+jest.mock("@/components/chat/NewChatModal", () => {
+  const { View } = require("react-native");
+  return {
+    NewChatModal: ({ visible }: { visible: boolean }) =>
+      visible ? <View testID="new-chat-modal" /> : null,
+  };
+});
 
 jest.mock("@/components/chat/SwipeableConversationItem", () => ({
   SwipeableConversationItem: ({ children }: { children: React.ReactNode }) => (
@@ -91,7 +94,7 @@ describe("ChatsScreen", () => {
     mockUseChat.mockReturnValue({
       conversations: [],
       loading: false,
-      refresh: mockRefresh,
+      loadConversations: mockLoadConversations,
     });
   });
 
@@ -100,7 +103,7 @@ describe("ChatsScreen", () => {
     mockUseChat.mockReturnValue({
       conversations: [],
       loading: true,
-      refresh: mockRefresh,
+      loadConversations: mockLoadConversations,
     });
 
     const { queryByText, UNSAFE_queryAllByType } = render(<ChatsScreen />);
@@ -140,7 +143,7 @@ describe("ChatsScreen", () => {
     mockUseChat.mockReturnValue({
       conversations: [conv1, conv2],
       loading: false,
-      refresh: mockRefresh,
+      loadConversations: mockLoadConversations,
     });
 
     const { getByTestId } = render(<ChatsScreen />);
@@ -159,7 +162,7 @@ describe("ChatsScreen", () => {
     mockUseChat.mockReturnValue({
       conversations: [conv],
       loading: false,
-      refresh: mockRefresh,
+      loadConversations: mockLoadConversations,
     });
 
     const { getByTestId } = render(<ChatsScreen />);
@@ -177,7 +180,7 @@ describe("ChatsScreen", () => {
     mockUseChat.mockReturnValue({
       conversations: [conv],
       loading: false,
-      refresh: mockRefresh,
+      loadConversations: mockLoadConversations,
     });
 
     const { getByTestId } = render(<ChatsScreen />);
@@ -193,7 +196,7 @@ describe("ChatsScreen", () => {
     mockUseChat.mockReturnValue({
       conversations: [conv],
       loading: false,
-      refresh: mockRefresh,
+      loadConversations: mockLoadConversations,
     });
 
     const { getByTestId } = render(<ChatsScreen />);
@@ -219,7 +222,7 @@ describe("ChatsScreen", () => {
     mockUseChat.mockReturnValue({
       conversations: [conv],
       loading: false,
-      refresh: mockRefresh,
+      loadConversations: mockLoadConversations,
     });
 
     const { getByTestId } = render(<ChatsScreen />);
@@ -234,7 +237,7 @@ describe("ChatsScreen", () => {
       refreshControl.props.onRefresh();
     });
 
-    expect(mockRefresh).toHaveBeenCalled();
+    expect(mockLoadConversations).toHaveBeenCalled();
   });
 
   // --- No last message fallback ---
@@ -246,7 +249,7 @@ describe("ChatsScreen", () => {
     mockUseChat.mockReturnValue({
       conversations: [conv],
       loading: false,
-      refresh: mockRefresh,
+      loadConversations: mockLoadConversations,
     });
 
     const { getByTestId } = render(<ChatsScreen />);
@@ -279,7 +282,7 @@ describe("ChatsScreen", () => {
     mockUseChat.mockReturnValue({
       conversations: [conv],
       loading: false,
-      refresh: mockRefresh,
+      loadConversations: mockLoadConversations,
     });
 
     const { getByTestId } = render(<ChatsScreen />);

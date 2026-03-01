@@ -50,6 +50,10 @@ export interface MessageContextMenuProps {
   onDelete?: (messageId: string) => void;
   /** Callback for forward action */
   onForward?: (messageId: string, messageText: string) => void;
+  /** Callback for translate action */
+  onTranslate?: (messageId: string, messageText: string) => void;
+  /** Whether this message is already translated */
+  isTranslated?: boolean;
 }
 
 interface MenuAction {
@@ -74,6 +78,8 @@ export function MessageContextMenu({
   onEdit,
   onDelete,
   onForward,
+  onTranslate,
+  isTranslated = false,
 }: MessageContextMenuProps) {
   const colors = useColors();
   const spacing = useSpacing();
@@ -131,6 +137,13 @@ export function MessageContextMenu({
     onClose();
   }, [messageId, messageText, onForward, onClose]);
 
+  const handleTranslate = useCallback(() => {
+    if (messageText) {
+      onTranslate?.(messageId, messageText);
+    }
+    onClose();
+  }, [messageId, messageText, onTranslate, onClose]);
+
   // Build actions list based on message ownership
   const actions: MenuAction[] = useMemo(() => {
     const items: MenuAction[] = [];
@@ -162,6 +175,16 @@ export function MessageContextMenu({
         label: t("chat.forward"),
         icon: "arrow-redo-outline",
         onPress: handleForward,
+      });
+    }
+
+    // Translate - available for all messages with text content
+    if (messageText && !isDeleted && onTranslate) {
+      items.push({
+        id: "translate",
+        label: isTranslated ? t("chat.showOriginal") : t("chat.translate"),
+        icon: isTranslated ? "eye-outline" : "globe-outline",
+        onPress: handleTranslate,
       });
     }
 
@@ -197,11 +220,14 @@ export function MessageContextMenu({
     onEdit,
     onDelete,
     onForward,
+    onTranslate,
+    isTranslated,
     handleReply,
     handleCopy,
     handleEdit,
     handleDelete,
     handleForward,
+    handleTranslate,
     t,
   ]);
 

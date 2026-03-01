@@ -11,6 +11,7 @@
 
 import { useI18n } from "@/providers/I18nProvider";
 import { useColors } from "@/providers/ThemeProvider";
+import { useToast } from "@/providers/ToastProvider";
 import {
   pickImage,
   pickVideo,
@@ -28,7 +29,6 @@ import { useRouter } from "expo-router";
 import { useCallback, useState } from "react";
 import {
   ActivityIndicator,
-  Alert,
   Dimensions,
   Image,
   KeyboardAvoidingView,
@@ -67,6 +67,7 @@ const VISIBILITY_OPTIONS: {
 export default function CreateStoryScreen() {
   const colors = useColors();
   const { t } = useI18n();
+  const { showToast } = useToast();
   const router = useRouter();
   const insets = useSafeAreaInsets();
 
@@ -94,9 +95,9 @@ export default function CreateStoryScreen() {
         setStep("compose");
       }
     } catch (error) {
-      Alert.alert(
-        t("common.error"),
+      showToast(
         t("stories.mediaPickError", { defaultValue: "Failed to select image" }),
+        "error",
       );
     }
   }, [t]);
@@ -110,9 +111,9 @@ export default function CreateStoryScreen() {
         setStep("compose");
       }
     } catch (error) {
-      Alert.alert(
-        t("common.error"),
+      showToast(
         t("stories.mediaPickError", { defaultValue: "Failed to select video" }),
+        "error",
       );
     }
   }, [t]);
@@ -126,9 +127,9 @@ export default function CreateStoryScreen() {
         setStep("compose");
       }
     } catch (error) {
-      Alert.alert(
-        t("common.error"),
+      showToast(
         t("stories.cameraError", { defaultValue: "Failed to capture photo" }),
+        "error",
       );
     }
   }, [t]);
@@ -142,9 +143,9 @@ export default function CreateStoryScreen() {
         setStep("compose");
       }
     } catch (error) {
-      Alert.alert(
-        t("common.error"),
+      showToast(
         t("stories.cameraError", { defaultValue: "Failed to capture video" }),
+        "error",
       );
     }
   }, [t]);
@@ -157,9 +158,9 @@ export default function CreateStoryScreen() {
   // ─── Create Story ───────────────────────────────────────────
   const handleCreate = useCallback(async () => {
     if (mode === "text" && !textContent.trim()) {
-      Alert.alert(
-        t("common.error"),
+      showToast(
         t("stories.emptyTextError", { defaultValue: "Please enter some text" }),
+        "warning",
       );
       return;
     }
@@ -178,9 +179,9 @@ export default function CreateStoryScreen() {
     if (result) {
       router.back();
     } else {
-      Alert.alert(
-        t("common.error"),
+      showToast(
         t("stories.createError", { defaultValue: "Failed to create story" }),
+        "error",
       );
     }
   }, [

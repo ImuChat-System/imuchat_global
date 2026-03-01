@@ -9,12 +9,12 @@
 
 import { useI18n } from "@/providers/I18nProvider";
 import { useTheme } from "@/providers/ThemeProvider";
+import { useToast } from "@/providers/ToastProvider";
 import { supabase } from "@/services/supabase";
 import { useUserStore } from "@/stores/user-store";
 import { Ionicons } from "@expo/vector-icons";
 import { useState } from "react";
 import {
-  Alert,
   Modal,
   ScrollView,
   StyleSheet,
@@ -88,6 +88,7 @@ export default function StatusPicker({
 }: StatusPickerProps) {
   const { theme } = useTheme();
   const { t } = useI18n();
+  const { showToast } = useToast();
   const { profile, updateProfile } = useUserStore();
 
   const [selectedEmoji, setSelectedEmoji] = useState<string | null>(
@@ -103,7 +104,7 @@ export default function StatusPicker({
 
   const handleSave = async () => {
     if (!profile?.id) {
-      Alert.alert(t("common.error"), t("statusPicker.noProfile"));
+      showToast(t("statusPicker.noProfile"), "error");
       return;
     }
 
@@ -141,10 +142,7 @@ export default function StatusPicker({
       onSave?.();
       onClose();
     } catch (err: any) {
-      Alert.alert(
-        t("common.error"),
-        err.message || t("statusPicker.saveError"),
-      );
+      showToast(err.message || t("statusPicker.saveError"), "error");
     } finally {
       setSaving(false);
     }

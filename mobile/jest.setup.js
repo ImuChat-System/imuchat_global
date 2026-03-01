@@ -68,8 +68,17 @@ jest.mock("expo-router", () => ({
 // Mock Expo Image Picker
 jest.mock("expo-image-picker", () => ({
   launchImageLibraryAsync: jest.fn(),
+  launchCameraAsync: jest.fn(),
+  requestMediaLibraryPermissionsAsync: jest.fn(() =>
+    Promise.resolve({ status: "granted" }),
+  ),
+  requestCameraPermissionsAsync: jest.fn(() =>
+    Promise.resolve({ status: "granted" }),
+  ),
   MediaTypeOptions: {
     Images: "Images",
+    Videos: "Videos",
+    All: "All",
   },
 }));
 
@@ -115,6 +124,38 @@ jest.mock("expo-clipboard", () => ({
   getStringAsync: jest.fn(),
 }));
 
+// Mock expo-linking (ESM module Jest can't parse)
+jest.mock("expo-linking", () => ({
+  parse: jest.fn(() => ({
+    scheme: "",
+    hostname: "",
+    path: "",
+    queryParams: {},
+  })),
+  createURL: jest.fn((path) => "imuchat://" + path),
+  openURL: jest.fn(),
+  canOpenURL: jest.fn(() => Promise.resolve(true)),
+  getInitialURL: jest.fn(() => Promise.resolve(null)),
+  addEventListener: jest.fn(() => ({ remove: jest.fn() })),
+}));
+
+// Mock @react-native-community/netinfo (NativeModule.RNCNetInfo is null in Jest)
+jest.mock("@react-native-community/netinfo", () => ({
+  addEventListener: jest.fn(() => jest.fn()),
+  fetch: jest.fn(() =>
+    Promise.resolve({
+      isConnected: true,
+      isInternetReachable: true,
+      type: "wifi",
+    }),
+  ),
+  useNetInfo: jest.fn(() => ({
+    isConnected: true,
+    isInternetReachable: true,
+    type: "wifi",
+  })),
+}));
+
 // Mock expo-av
 jest.mock("expo-av", () => ({
   Audio: {
@@ -123,15 +164,35 @@ jest.mock("expo-av", () => ({
       startAsync: jest.fn(),
       stopAndUnloadAsync: jest.fn(),
       getURI: jest.fn(() => "file://recording.m4a"),
-      getStatusAsync: jest.fn(() => ({ durationMillis: 3000 })),
+      getStatusAsync: jest.fn(() => ({
+        isRecording: true,
+        durationMillis: 3000,
+        metering: -30,
+      })),
     })),
     Sound: {
       createAsync: jest.fn(() => ({
-        sound: { playAsync: jest.fn(), unloadAsync: jest.fn() },
+        sound: {
+          playAsync: jest.fn(),
+          pauseAsync: jest.fn(),
+          stopAsync: jest.fn(),
+          unloadAsync: jest.fn(),
+          setPositionAsync: jest.fn(),
+          setVolumeAsync: jest.fn(),
+          setIsLoopingAsync: jest.fn(),
+          setStatusAsync: jest.fn(),
+          getStatusAsync: jest.fn(() => ({ isLoaded: true })),
+        },
       })),
     },
+    requestPermissionsAsync: jest.fn(() =>
+      Promise.resolve({ status: "granted" }),
+    ),
     setAudioModeAsync: jest.fn(),
     RecordingOptionsPresets: { HIGH_QUALITY: {} },
+    AndroidOutputFormat: { MPEG_4: 2 },
+    AndroidAudioEncoder: { AAC: 3 },
+    IOSAudioQuality: { HIGH: 127 },
   },
 }));
 
@@ -139,6 +200,18 @@ jest.mock("expo-av", () => ({
 jest.mock("expo-sharing", () => ({
   shareAsync: jest.fn(),
   isAvailableAsync: jest.fn(() => Promise.resolve(true)),
+}));
+
+// Mock react-native-safe-area-context (ESM import that Jest can't parse)
+jest.mock("react-native-safe-area-context", () => ({
+  SafeAreaProvider: ({ children }) => children,
+  SafeAreaView: ({ children }) => children,
+  useSafeAreaInsets: () => ({ top: 0, bottom: 0, left: 0, right: 0 }),
+  useSafeAreaFrame: () => ({ x: 0, y: 0, width: 390, height: 844 }),
+  initialWindowMetrics: {
+    frame: { x: 0, y: 0, width: 0, height: 0 },
+    insets: { top: 0, left: 0, right: 0, bottom: 0 },
+  },
 }));
 
 // Mock expo-file-system

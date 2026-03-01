@@ -10,6 +10,7 @@
 import { useAuth } from "@/providers/AuthProvider";
 import { useI18n } from "@/providers/I18nProvider";
 import { useColors, useSpacing } from "@/providers/ThemeProvider";
+import { useToast } from "@/providers/ToastProvider";
 import { createPost, CreatePostParams } from "@/services/social-feed";
 import * as ImagePicker from "expo-image-picker";
 import { useRouter } from "expo-router";
@@ -38,6 +39,7 @@ export default function CreatePostScreen() {
   const { t } = useI18n();
   const { user } = useAuth();
   const router = useRouter();
+  const { showToast } = useToast();
 
   const [content, setContent] = useState("");
   const [mediaUrls, setMediaUrls] = useState<string[]>([]);
@@ -51,19 +53,16 @@ export default function CreatePostScreen() {
   // Pick image from library
   const handlePickImage = useCallback(async () => {
     if (mediaUrls.length >= MAX_IMAGES) {
-      Alert.alert(
-        t("social.createPost.error"),
+      showToast(
         t("social.createPost.maxImages", { max: MAX_IMAGES }),
+        "warning",
       );
       return;
     }
 
     const permission = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (!permission.granted) {
-      Alert.alert(
-        t("social.createPost.permissionRequired"),
-        t("social.createPost.galleryPermission"),
-      );
+      showToast(t("social.createPost.galleryPermission"), "warning");
       return;
     }
 
@@ -100,13 +99,10 @@ export default function CreatePostScreen() {
       if (post) {
         router.back();
       } else {
-        Alert.alert(
-          t("social.createPost.error"),
-          t("social.createPost.failed"),
-        );
+        showToast(t("social.createPost.failed"), "error");
       }
     } catch (error) {
-      Alert.alert(t("social.createPost.error"), t("social.createPost.failed"));
+      showToast(t("social.createPost.failed"), "error");
     } finally {
       setIsSubmitting(false);
     }

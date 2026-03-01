@@ -3,6 +3,7 @@ import { SwipeableConversationItem } from "@/components/chat/SwipeableConversati
 import { useChat } from "@/hooks/useChat";
 import { useI18n } from "@/providers/I18nProvider";
 import { useColors, useSpacing } from "@/providers/ThemeProvider";
+import { useToast } from "@/providers/ToastProvider";
 import {
   archiveConversation,
   deleteConversation,
@@ -32,6 +33,7 @@ export default function ChatsScreen() {
   const colors = useColors();
   const spacing = useSpacing();
   const router = useRouter();
+  const { showToast } = useToast();
   const [newChatModalVisible, setNewChatModalVisible] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
   const [mutedConversations, setMutedConversations] = useState<Set<string>>(
@@ -57,10 +59,10 @@ export default function ChatsScreen() {
       try {
         await archiveConversation(conversationId);
         loadConversations?.();
-        Alert.alert(t("common.success"), t("chat.conversationArchived"));
+        showToast(t("chat.conversationArchived"), "success");
       } catch (error) {
         console.error("Archive error:", error);
-        Alert.alert(t("common.error"), t("common.genericError"));
+        showToast(t("common.genericError"), "error");
       }
     },
     [loadConversations, t],
@@ -82,7 +84,7 @@ export default function ChatsScreen() {
         });
       } catch (error) {
         console.error("Mute error:", error);
-        Alert.alert(t("common.error"), t("common.genericError"));
+        showToast(t("common.genericError"), "error");
       }
     },
     [mutedConversations, t],
@@ -104,7 +106,7 @@ export default function ChatsScreen() {
                 loadConversations?.();
               } catch (error) {
                 console.error("Delete error:", error);
-                Alert.alert(t("common.error"), t("common.genericError"));
+                showToast(t("common.genericError"), "error");
               }
             },
           },

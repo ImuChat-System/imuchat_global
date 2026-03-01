@@ -2,7 +2,6 @@ import { Stack, useRouter } from "expo-router";
 import { useState } from "react";
 import {
   ActivityIndicator,
-  Alert,
   Button,
   StyleSheet,
   Text,
@@ -14,6 +13,7 @@ import { SocialLoginButtons } from "@/components/auth/SocialLoginButtons";
 import { useAuth } from "@/hooks/useAuthV2";
 import { useI18n } from "@/providers/I18nProvider";
 import { useTheme } from "@/providers/ThemeProvider";
+import { useToast } from "@/providers/ToastProvider";
 
 export default function RegisterScreen() {
   const [email, setEmail] = useState("");
@@ -21,6 +21,7 @@ export default function RegisterScreen() {
   const router = useRouter();
   const { theme } = useTheme();
   const { t } = useI18n();
+  const { showToast } = useToast();
   const { signUp, loading } = useAuth();
 
   async function signUpWithEmail() {
@@ -29,20 +30,12 @@ export default function RegisterScreen() {
         displayName: email.split("@")[0], // Utilise la partie email comme nom par défaut
       });
 
-      Alert.alert(
-        t("auth.registrationSuccessTitle"),
-        t("auth.registrationSuccessMessage"),
-        [
-          {
-            text: t("common.ok"),
-            onPress: () => router.back(),
-          },
-        ],
-      );
+      showToast(t("auth.registrationSuccessMessage"), "success");
+      router.back();
     } catch (error) {
-      Alert.alert(
-        t("auth.error"),
+      showToast(
         error instanceof Error ? error.message : t("auth.registrationFailed"),
+        "error",
       );
     }
   }

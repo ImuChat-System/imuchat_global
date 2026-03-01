@@ -9,6 +9,7 @@
 import { useNetworkState } from "@/hooks/useNetworkState";
 import { useI18n } from "@/providers/I18nProvider";
 import { useColors, useSpacing } from "@/providers/ThemeProvider";
+import { useToast } from "@/providers/ToastProvider";
 import { useModulesStore } from "@/stores/modules-store";
 import type {
   SortOption,
@@ -69,6 +70,7 @@ export default function StoreScreen() {
   const colors = useColors();
   const spacing = useSpacing();
   const { t } = useI18n();
+  const { showToast } = useToast();
   const router = useRouter();
   const { isConnected: isOnline } = useNetworkState();
 
@@ -188,9 +190,9 @@ export default function StoreScreen() {
       setShowInstallModal(false);
       setSelectedModule(null);
     } catch (error) {
-      Alert.alert(
-        t("common.error"),
+      showToast(
         error instanceof Error ? error.message : t("store.installFailed"),
+        "error",
       );
     } finally {
       setInstalling(false);
@@ -214,11 +216,11 @@ export default function StoreScreen() {
               setShowInstallModal(false);
               setSelectedModule(null);
             } catch (error) {
-              Alert.alert(
-                t("common.error"),
+              showToast(
                 error instanceof Error
                   ? error.message
                   : t("store.uninstallFailed"),
+                "error",
               );
             }
           },

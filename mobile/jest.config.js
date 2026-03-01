@@ -9,7 +9,10 @@ module.exports = {
   transform: {
     "^.+\\.(js|jsx|ts|tsx)$": [
       "babel-jest",
-      { configFile: "./babel.config.js" },
+      {
+        configFile: "./babel.config.js",
+        plugins: ["@babel/plugin-transform-dynamic-import"],
+      },
     ],
   },
   moduleFileExtensions: ["ts", "tsx", "js", "jsx", "json", "node"],
@@ -39,6 +42,7 @@ module.exports = {
     "!**/node_modules/**",
     "!**/.expo/**",
     "!**/coverage/**",
+    "!**/e2e/**",
     "!jest.config.js",
     "!jest.setup.js",
   ],

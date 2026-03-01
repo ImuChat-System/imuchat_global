@@ -6,6 +6,7 @@
 
 import { useI18n } from "@/providers/I18nProvider";
 import { useColors, useSpacing } from "@/providers/ThemeProvider";
+import { useToast } from "@/providers/ToastProvider";
 import {
   requestCameraPermissions,
   requestMediaPermissions,
@@ -16,7 +17,6 @@ import * as ImagePicker from "expo-image-picker";
 import React, { useCallback, useState } from "react";
 import {
   ActivityIndicator,
-  Alert,
   Modal,
   Pressable,
   StyleSheet,
@@ -92,6 +92,7 @@ export function MediaPicker({
   const colors = useColors();
   const spacing = useSpacing();
   const { t } = useI18n();
+  const { showToast } = useToast();
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -115,10 +116,7 @@ export function MediaPicker({
     try {
       const hasPermission = await requestMediaPermissions();
       if (!hasPermission) {
-        Alert.alert(
-          t("components.permissionDenied"),
-          t("components.allowGalleryAccess"),
-        );
+        showToast(t("components.allowGalleryAccess"), "warning");
         return;
       }
 
@@ -167,7 +165,7 @@ export function MediaPicker({
       onMediaSelected(mediaFiles);
     } catch (error) {
       console.error("Error selecting images:", error);
-      Alert.alert(t("common.error"), t("components.cannotSelectImages"));
+      showToast(t("components.cannotSelectImages"), "error");
     } finally {
       setIsLoading(false);
     }
@@ -183,10 +181,7 @@ export function MediaPicker({
     try {
       const hasPermission = await requestCameraPermissions();
       if (!hasPermission) {
-        Alert.alert(
-          t("components.permissionDenied"),
-          t("components.allowCameraAccess"),
-        );
+        showToast(t("components.allowCameraAccess"), "warning");
         return;
       }
 
@@ -217,7 +212,7 @@ export function MediaPicker({
       onMediaSelected([mediaFile]);
     } catch (error) {
       console.error("Error taking photo:", error);
-      Alert.alert(t("common.error"), t("components.cannotTakePhoto"));
+      showToast(t("components.cannotTakePhoto"), "error");
     } finally {
       setIsLoading(false);
     }
@@ -233,10 +228,7 @@ export function MediaPicker({
     try {
       const hasPermission = await requestCameraPermissions();
       if (!hasPermission) {
-        Alert.alert(
-          t("components.permissionDenied"),
-          t("components.allowCameraAccess"),
-        );
+        showToast(t("components.allowCameraAccess"), "warning");
         return;
       }
 
@@ -267,7 +259,7 @@ export function MediaPicker({
       onMediaSelected([mediaFile]);
     } catch (error) {
       console.error("Error recording video:", error);
-      Alert.alert(t("common.error"), t("components.cannotRecordVideo"));
+      showToast(t("components.cannotRecordVideo"), "error");
     } finally {
       setIsLoading(false);
     }

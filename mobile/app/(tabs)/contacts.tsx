@@ -1,6 +1,7 @@
 import { useAuth } from "@/hooks/useAuth";
 import { useI18n } from "@/providers/I18nProvider";
 import { useColors } from "@/providers/ThemeProvider";
+import { useToast } from "@/providers/ToastProvider";
 import { supabase } from "@/services/supabase";
 import { useCallback, useEffect, useState } from "react";
 import {
@@ -54,6 +55,7 @@ export default function ContactsScreen() {
   const { user } = useAuth();
   const { t } = useI18n();
   const colors = useColors();
+  const { showToast } = useToast();
   const userId = user?.id;
 
   const [activeTab, setActiveTab] = useState<TabType>("friends");
@@ -180,7 +182,7 @@ export default function ContactsScreen() {
 
       setSearchResults((data || []).filter((u: any) => u.id !== userId));
     } catch (err) {
-      Alert.alert(t("common.error"), t("contacts.searchFailed"));
+      showToast(t("contacts.searchFailed"), "error");
     } finally {
       setSearchLoading(false);
     }
@@ -193,13 +195,10 @@ export default function ContactsScreen() {
         .insert({ contact_id: contactId, status: "pending" });
 
       if (error) throw error;
-      Alert.alert(t("common.success"), t("contacts.requestSent"));
+      showToast(t("contacts.requestSent"), "success");
       loadContacts();
     } catch (err: any) {
-      Alert.alert(
-        t("common.error"),
-        err?.message || t("contacts.cannotSendRequest"),
-      );
+      showToast(err?.message || t("contacts.cannotSendRequest"), "error");
     }
   };
 
@@ -211,7 +210,7 @@ export default function ContactsScreen() {
         .eq("id", requestId);
       loadContacts();
     } catch {
-      Alert.alert(t("common.error"), t("contacts.cannotAccept"));
+      showToast(t("contacts.cannotAccept"), "error");
     }
   };
 
@@ -220,7 +219,7 @@ export default function ContactsScreen() {
       await supabase.from("contacts").delete().eq("id", requestId);
       loadContacts();
     } catch {
-      Alert.alert(t("common.error"), t("contacts.cannotReject"));
+      showToast(t("contacts.cannotReject"), "error");
     }
   };
 
@@ -247,7 +246,7 @@ export default function ContactsScreen() {
                 .eq("contact_id", userId!);
               loadContacts();
             } catch {
-              Alert.alert(t("common.error"), t("contacts.cannotRemove"));
+              showToast(t("contacts.cannotRemove"), "error");
             }
           },
         },

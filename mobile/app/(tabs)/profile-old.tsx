@@ -1,11 +1,11 @@
 import Avatar from "@/components/Avatar";
 import { useI18n } from "@/providers/I18nProvider";
 import { useTheme } from "@/providers/ThemeProvider";
+import { useToast } from "@/providers/ToastProvider";
 import { supabase } from "@/services/supabase";
 import { Session } from "@supabase/supabase-js";
 import { useEffect, useState } from "react";
 import {
-  Alert,
   Button,
   ScrollView,
   StyleSheet,
@@ -24,6 +24,7 @@ export default function ProfileScreen() {
 
   const { theme } = useTheme();
   const { t } = useI18n();
+  const { showToast } = useToast();
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }: any) => {
@@ -62,7 +63,7 @@ export default function ProfileScreen() {
       }
     } catch (error) {
       if (error instanceof Error) {
-        Alert.alert(error.message);
+        showToast(error.message, "error");
       }
     } finally {
       setLoading(false);
@@ -99,10 +100,10 @@ export default function ProfileScreen() {
         throw error;
       }
 
-      Alert.alert(t("common.success"), t("profile.updated"));
+      showToast(t("profile.updated"), "success");
     } catch (error) {
       if (error instanceof Error) {
-        Alert.alert(error.message);
+        showToast(error.message, "error");
       }
     } finally {
       setLoading(false);

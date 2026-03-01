@@ -19,6 +19,7 @@
 
 import { useI18n } from "@/providers/I18nProvider";
 import { useColors } from "@/providers/ThemeProvider";
+import { useToast, type ToastType } from "@/providers/ToastProvider";
 import { createLogger } from "@/services/logger";
 import { MobileBridge, type RequestHandler } from "@/services/mobile-bridge";
 import {
@@ -96,6 +97,7 @@ export default function MiniAppHostMobile({
 
   const colors = useColors();
   const { t } = useI18n();
+  const { showToast } = useToast();
 
   // Résoudre l'URL d'entrée
   const entryUrl = resolveEntryUrl(manifest, baseUrl);
@@ -191,9 +193,14 @@ export default function MiniAppHostMobile({
                 message: string;
                 type?: string;
               };
-              // Sur mobile, on utilise Alert comme fallback.
-              // Un vrai toast system sera branché sur le provider global.
-              Alert.alert(manifest.name, toastData.message);
+              const toastType = (
+                ["success", "error", "warning", "info"].includes(
+                  toastData.type ?? "",
+                )
+                  ? toastData.type
+                  : "info"
+              ) as ToastType;
+              showToast(toastData.message, toastType);
               return true;
             }
             case "showModal": {

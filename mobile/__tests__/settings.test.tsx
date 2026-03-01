@@ -130,6 +130,11 @@ jest.mock("@/constants/theme-presets", () => ({
 const { Alert } = require("react-native");
 const alertSpy = jest.spyOn(Alert, "alert");
 
+const mockShowToast = jest.fn();
+jest.mock("@/providers/ToastProvider", () => ({
+  useToast: () => ({ showToast: mockShowToast, hideToast: jest.fn() }),
+}));
+
 import SettingsScreen from "@/app/(tabs)/settings";
 import { fireEvent, render, waitFor } from "@testing-library/react-native";
 
@@ -273,9 +278,9 @@ describe("SettingsScreen", () => {
     });
     fireEvent.changeText(getByTestId("input-new-password"), "ab");
     fireEvent.press(getByTestId("btn-change-password"));
-    expect(alertSpy).toHaveBeenCalledWith(
-      "common.error",
-      expect.stringContaining("settings.passwordMinLength"),
+    expect(mockShowToast).toHaveBeenCalledWith(
+      "settings.passwordMinLength",
+      "warning",
     );
   });
 

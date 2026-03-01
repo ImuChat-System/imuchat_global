@@ -2,7 +2,6 @@ import { Stack } from "expo-router";
 import { useState } from "react";
 import {
   ActivityIndicator,
-  Alert,
   Button,
   StyleSheet,
   Text,
@@ -13,23 +12,25 @@ import {
 import { useAuth } from "@/hooks/useAuthV2";
 import { useI18n } from "@/providers/I18nProvider";
 import { useTheme } from "@/providers/ThemeProvider";
+import { useToast } from "@/providers/ToastProvider";
 
 export default function ForgotPasswordScreen() {
   const [email, setEmail] = useState("");
   const [sent, setSent] = useState(false);
   const { theme } = useTheme();
   const { t } = useI18n();
+  const { showToast } = useToast();
   const { sendPasswordReset, loading } = useAuth();
 
   async function sendResetEmail() {
     try {
       await sendPasswordReset(email);
       setSent(true);
-      Alert.alert(t("auth.checkEmailTitle"), t("auth.checkEmailMessage"));
+      showToast(t("auth.checkEmailMessage"), "success");
     } catch (error) {
-      Alert.alert(
-        t("auth.error"),
+      showToast(
         error instanceof Error ? error.message : t("auth.failedResetEmail"),
+        "error",
       );
     }
   }

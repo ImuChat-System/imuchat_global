@@ -15,6 +15,7 @@ import Avatar from "@/components/Avatar";
 import { useAuth } from "@/providers/AuthProvider";
 import { useI18n } from "@/providers/I18nProvider";
 import { useTheme } from "@/providers/ThemeProvider";
+import { useToast } from "@/providers/ToastProvider";
 import { supabase } from "@/services/supabase";
 import {
   OnlineStatus,
@@ -65,6 +66,7 @@ export default function ProfileScreen() {
   const { user, session } = useAuth();
   const { theme } = useTheme();
   const { t } = useI18n();
+  const { showToast } = useToast();
   const { profile: storeProfile, setProfile } = useUserStore();
 
   const [loading, setLoading] = useState(true);
@@ -189,7 +191,7 @@ export default function ProfileScreen() {
   };
 
   const handleShareProfile = () => {
-    Alert.alert(t("common.comingSoon"), t("profile.shareComingSoon"));
+    showToast(t("profile.shareComingSoon"), "info");
   };
 
   // -----------------------------------------------------------------------

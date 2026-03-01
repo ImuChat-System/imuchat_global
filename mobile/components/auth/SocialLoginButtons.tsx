@@ -1,5 +1,6 @@
 import { useI18n } from "@/providers/I18nProvider";
 import { useColors } from "@/providers/ThemeProvider";
+import { useToast } from "@/providers/ToastProvider";
 import { supabase } from "@/services/supabase";
 import { Ionicons } from "@expo/vector-icons";
 import * as AppleAuthentication from "expo-apple-authentication";
@@ -8,7 +9,6 @@ import * as WebBrowser from "expo-web-browser";
 import { useCallback, useEffect, useState } from "react";
 import {
   ActivityIndicator,
-  Alert,
   Platform,
   StyleSheet,
   Text,
@@ -50,6 +50,7 @@ export function SocialLoginButtons({
 }: SocialLoginButtonsProps) {
   const colors = useColors();
   const { t } = useI18n();
+  const { showToast } = useToast();
   const [loadingGoogle, setLoadingGoogle] = useState(false);
   const [loadingApple, setLoadingApple] = useState(false);
   const [appleAuthAvailable, setAppleAuthAvailable] = useState(false);
@@ -104,9 +105,9 @@ export function SocialLoginButtons({
     } else if (googleResponse?.type === "error") {
       setLoadingGoogle(false);
       onLoginEnd?.();
-      Alert.alert(
-        t("auth.error"),
+      showToast(
         t("auth.socialLoginFailed", { defaultValue: "Social login failed" }),
+        "error",
       );
     }
   }, [googleResponse]);
@@ -123,9 +124,9 @@ export function SocialLoginButtons({
       // Success - AuthProvider will handle navigation
     } catch (error) {
       console.error("Google sign in error:", error);
-      Alert.alert(
-        t("auth.error"),
+      showToast(
         error instanceof Error ? error.message : t("auth.loginFailed"),
+        "error",
       );
     } finally {
       setLoadingGoogle(false);
@@ -135,19 +136,19 @@ export function SocialLoginButtons({
 
   const handleGooglePress = useCallback(async () => {
     if (!isGoogleConfigured) {
-      Alert.alert(
-        t("auth.error"),
+      showToast(
         "Google Sign-In is not configured. Please set up Google OAuth credentials.",
+        "error",
       );
       return;
     }
 
     if (!googleRequest) {
-      Alert.alert(
-        t("auth.error"),
+      showToast(
         t("auth.googleNotConfigured", {
           defaultValue: "Google login not configured",
         }),
+        "error",
       );
       return;
     }
@@ -191,9 +192,9 @@ export function SocialLoginButtons({
         // User cancelled, don't show error
       } else {
         console.error("Apple sign in error:", error);
-        Alert.alert(
-          t("auth.error"),
+        showToast(
           error instanceof Error ? error.message : t("auth.loginFailed"),
+          "error",
         );
       }
     } finally {

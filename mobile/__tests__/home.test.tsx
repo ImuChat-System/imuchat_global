@@ -264,7 +264,7 @@ describe("HomeScreen", () => {
       expect(getByTestId("home-screen")).toBeTruthy();
     });
     expect(consoleSpy).toHaveBeenCalledWith(
-      "[Home] conversations error:",
+      "[Home] load error:",
       expect.any(Error),
     );
     consoleSpy.mockRestore();

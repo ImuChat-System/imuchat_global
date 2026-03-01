@@ -21,10 +21,9 @@ import * as PodcastAPI from '@/services/podcast-api';
 import type {
     ListeningHistoryEntry,
     PlaybackSpeed,
-    PodcastChapter,
     PodcastEpisode,
     PodcastPlayerState,
-    PodcastShow,
+    PodcastShow
 } from '@/types/podcast';
 
 const logger = createLogger('PodcastStore');
@@ -107,7 +106,7 @@ export const usePodcastStore = create<PodcastState>()(
                 // Episode finished → mark played, play next in queue
                 if (status.didJustFinish && state.currentEpisode) {
                     get().markPlayed(state.currentEpisode.id);
-                    get().playNext().catch(() => {});
+                    get().playNext().catch(() => { });
                 }
             });
 
@@ -230,7 +229,7 @@ export const usePodcastStore = create<PodcastState>()(
                 // ─── Speed control ────────────────────────────────
                 setSpeed: (speed: PlaybackSpeed) => {
                     set({ playbackSpeed: speed });
-                    AudioPlayer.setRate(speed).catch(() => {});
+                    AudioPlayer.setRate(speed).catch(() => { });
                     logger.info(`Speed → ${speed}x`);
                 },
 

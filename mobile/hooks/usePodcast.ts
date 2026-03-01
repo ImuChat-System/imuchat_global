@@ -16,7 +16,6 @@
 
 import { useCallback, useState } from 'react';
 
-import * as PodcastAPI from '@/services/podcast-api';
 import { usePodcastStore } from '@/stores/podcast-store';
 import type { PlaybackSpeed, PodcastEpisode, PodcastShow } from '@/types/podcast';
 

@@ -9,41 +9,41 @@
  * Phase M5 — DEV-023 Module Podcasts
  */
 
-import { useColors } from '@/providers/ThemeProvider';
-import { Stack } from 'expo-router';
-import React from 'react';
+import { useColors } from "@/providers/ThemeProvider";
+import { Stack } from "expo-router";
+import React from "react";
 
 export default function PodcastsLayout() {
-    const colors = useColors();
+  const colors = useColors();
 
-    return (
-        <Stack
-            screenOptions={{
-                headerStyle: { backgroundColor: colors.surface },
-                headerTintColor: colors.text,
-                headerTitleStyle: { fontWeight: '600' },
-            }}
-        >
-            <Stack.Screen
-                name="index"
-                options={{
-                    title: '🎙️ Podcasts',
-                    headerLargeTitle: true,
-                }}
-            />
-            <Stack.Screen
-                name="show"
-                options={{
-                    title: 'Émission',
-                }}
-            />
-            <Stack.Screen
-                name="player"
-                options={{
-                    title: 'Lecteur',
-                    presentation: 'modal',
-                }}
-            />
-        </Stack>
-    );
+  return (
+    <Stack
+      screenOptions={{
+        headerStyle: { backgroundColor: colors.surface },
+        headerTintColor: colors.text,
+        headerTitleStyle: { fontWeight: "600" },
+      }}
+    >
+      <Stack.Screen
+        name="index"
+        options={{
+          title: "🎙️ Podcasts",
+          headerLargeTitle: true,
+        }}
+      />
+      <Stack.Screen
+        name="show"
+        options={{
+          title: "Émission",
+        }}
+      />
+      <Stack.Screen
+        name="player"
+        options={{
+          title: "Lecteur",
+          presentation: "modal",
+        }}
+      />
+    </Stack>
+  );
 }

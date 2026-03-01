@@ -9,17 +9,17 @@
  */
 
 import {
-    searchPodcasts,
-    getShowDetails,
     fetchEpisodesFromFeed,
-    parseRssItems,
+    getCategories,
+    getMockEpisodes,
+    getMockShows,
+    getShowDetails,
+    MOCK_EPISODES,
+    MOCK_SHOWS,
     parseChapters,
     parseDuration,
-    getMockShows,
-    getMockEpisodes,
-    getCategories,
-    MOCK_SHOWS,
-    MOCK_EPISODES,
+    parseRssItems,
+    searchPodcasts,
 } from '../podcast-api';
 
 // ─── Mocks ────────────────────────────────────────────────────

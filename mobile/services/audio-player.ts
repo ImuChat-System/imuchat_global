@@ -191,6 +191,22 @@ export async function setLooping(mode: RepeatMode): Promise<void> {
 }
 
 /**
+ * Change la vitesse de lecture (0.5 - 2.0).
+ * Utile pour les podcasts.
+ */
+export async function setRate(rate: number): Promise<void> {
+    if (!soundInstance) return;
+    try {
+        await soundInstance.setRateAsync(
+            Math.max(0.5, Math.min(2.0, rate)),
+            true, // shouldCorrectPitch
+        );
+    } catch (error) {
+        logger.error('Set rate failed:', error);
+    }
+}
+
+/**
  * Retourne true si une piste est actuellement chargée.
  */
 export function isLoaded(): boolean {

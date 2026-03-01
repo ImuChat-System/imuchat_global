@@ -2,9 +2,9 @@
 
 > **Date de création** : 21 février 2026  
 > **Dernière mise à jour** : 3 mars 2026  
-> **Statut global** : MVP Phase 2 terminé — Phase 3 modulaire en cours (DEV-018 ✅ · DEV-022 ✅ · DEV-024 ✅ · DEV-026 ✅ · DEV-027 ✅ M1-M5 · DEV-028 ⚠️) — 25/50 fonctionnalités (50%)
+> **Statut global** : MVP Phase 2 terminé — Phase 3 modulaire en cours (DEV-018 ✅ · DEV-022 ✅ · DEV-023 ✅ · DEV-024 ✅ · DEV-026 ✅ · DEV-027 ✅ M1-M5 · DEV-028 ⚠️) — 26/50 fonctionnalités (52%)
 > **Référence** : Basé sur les 50 fonctionnalités (10 groupes), les ~110 écrans complémentaires, et la roadmap 3D/Live2D
-> **Métriques** : ~66 500 lignes TS/TSX · 220+ fichiers · 70 fichiers de tests (1183 tests, 0 échecs) · 8 Zustand stores · 15 hooks · 33 services · ~930 clés i18n (fr/en/ja)
+> **Métriques** : ~68 000 lignes TS/TSX · 230+ fichiers · 72 fichiers de tests (1265 tests, 0 échecs) · 9 Zustand stores · 16 hooks · 34 services · ~960 clés i18n (fr/en/ja)
 
 ---
 
@@ -1053,7 +1053,7 @@ App → Slides onboarding (1ère fois) → Auth (login/signup)
 | #   | Fonctionnalité                   | Route     | Statut | Priorité | Notes                                            |
 | --- | -------------------------------- | --------- | ------ | -------- | ------------------------------------------------ |
 | 1   | Mini-lecteur musique + playlists | /music    | ✅     | P3       | Phase M4 — expo-av Audio, lockscreen, playlists  |
-| 2   | Podcasts (catalogue + favoris)   | /podcasts | 🔲     | P3       | Mock UI dans Home                                |
+| 2   | Podcasts (catalogue + favoris)   | /podcasts | ✅     | P3       | ✅ DEV-023 — iTunes API, RSS, abonnements, queue |
 | 3   | Lecteur vidéo intégré            | /watch    | ✅     | P3       | Phase M4 — expo-av Video, plein écran, controles |
 | 4   | Mini-jeux sociaux                | /store    | 🔴     | P4       | Quiz, dessin, devinettes                         |
 | 5   | Création stickers & emojis       | /design   | 🔴     | P4       | Éditeur intégré                                  |
@@ -1119,19 +1119,31 @@ App → Slides onboarding (1ère fois) → Auth (login/signup)
 
 **Priorité** : P3  
 **Réf** : Groupe 8, Fonc. 2 + ADDITIONAL_AND_CORE_MODULES.md §Social  
-**Statut** : 🔴 Non démarré
+**Statut** : ✅ Implémenté
 
-**À implémenter** :
+**Implémenté** :
 
-- [ ] Catalogue podcasts (API podcast index)
-- [ ] Abonnements et favoris
-- [ ] Playlists d'épisodes
-- [ ] Lecture avec vitesse variable (0.5x - 2x)
-- [ ] Chapitres (si disponibles)
-- [ ] Mode offline (téléchargement)
-- [ ] Historique d'écoute avec reprise
+- [x] Catalogue podcasts (iTunes Search API + RSS feed parsing)
+- [x] Abonnements et favoris (Zustand persist)
+- [x] File d'attente d'épisodes (queue avec lecture automatique)
+- [x] Lecture avec vitesse variable (0.5x - 2x, setRateAsync + pitch correction)
+- [x] Chapitres (Podcasting 2.0 `<psc:chapter>` parsing)
+- [x] Mode offline (marquage téléchargé, gestion downloads)
+- [x] Historique d'écoute avec reprise automatique (position sauvegardée)
 
-**Estimation** : 2-3 semaines
+**Architecture** :
+
+- `types/podcast.ts` — 8 interfaces (PodcastShow, PodcastEpisode, PodcastChapter, PodcastPlayerState, etc.)
+- `services/podcast-api.ts` — iTunes Search API, RSS regex parser, mock data fallback (~350 lignes)
+- `stores/podcast-store.ts` — Zustand + persist, player, subscriptions, history, queue, downloads (~340 lignes)
+- `hooks/usePodcast.ts` — Hook wrapper avec progressPercent dérivé (~135 lignes)
+- `app/podcasts/_layout.tsx` — Stack layout (index, show, player modal)
+- `app/podcasts/index.tsx` — Écran catalogue avec recherche, abonnements, historique, mini-player (~275 lignes)
+- `app/podcasts/show.tsx` — Détail show avec liste épisodes, statut lecture, queue (~270 lignes)
+- `app/podcasts/player.tsx` — Lecteur plein écran avec seek, chapitres, vitesse (~310 lignes)
+- `services/audio-player.ts` — Ajout `setRate()` pour contrôle vitesse podcast
+- i18n : 28 clés × 3 langues (fr/en/ja)
+- Tests : 82 tests (41 service + 41 store)
 
 ---
 
@@ -1900,7 +1912,7 @@ Phase 4  (Vie quotidienne) ░░░░░░░░░░░░░░  ~0%  (DEV
 | 21  | ~~Wallet ImuCoin + Missions~~      | DEV-028  | P3       | ⚠️     | Partiel (Stripe restant) |
 | 22  | ~~Productivity Hub~~               | DEV-018  | P3       | ✅     | ✅ Terminé               |
 | 23  | ~~Bug fix session (60 TS errors)~~ | -        | P0       | ✅     | ✅ 1 mars                |
-| 24  | Module Podcasts                    | DEV-023  | P3       | 🔴     | 2-3 semaines             |
+| 24  | ~~Module Podcasts~~                | DEV-023  | P3       | ✅     | ✅ Terminé               |
 | 25  | Module Office                      | DEV-019  | P3       | 🔴     | 3-4 semaines             |
 | 26  | Assistant IA (Alice)               | DEV-024  | P2       | ✅     | ✅ Terminé               |
 | 27  | Traduction Instantanée             | DEV-026  | P2       | ✅     | ✅ Terminé               |
@@ -1932,19 +1944,19 @@ Phase 4  (Vie quotidienne) ░░░░░░░░░░░░░░  ~0%  (DEV
 
 ### Couverture des 50 fonctionnalités
 
-| Groupe    | Nom                        | Phase | Fonc. couvertes | Progression                        | Réf Tracker                                    |
-| --------- | -------------------------- | ----- | --------------- | ---------------------------------- | ---------------------------------------------- |
-| 1         | Messagerie & Communication | 2A    | 5/5 ✅          | 100%                               | DEV-001, DEV-002, DEV-003, DEV-004             |
-| 2         | Appels Audio & Vidéo       | 2A    | 2/5 ⚠️          | 40%                                | DEV-006 ✅, DEV-007                            |
-| 3         | Profils & Identité         | 2B    | 4/5 ✅          | 80%                                | DEV-008 ✅, DEV-010 ✅                         |
-| 4         | Personnalisation avancée   | 2B    | 2/5 ⚠️          | 40%                                | DEV-009 ✅                                     |
-| 5         | Mini-apps sociales natives | 2C    | 5/5 ✅          | 100%                               | DEV-011 ✅, DEV-012 ✅, DEV-013 ✅, DEV-014 ✅ |
-| 6         | Modules avancés            | 3     | 1/5 ⚠️          | 20%                                | DEV-018 ✅, DEV-019, DEV-020                   |
-| 7         | Services utilitaires       | 3     | 0/5 🔴          | 0%                                 | DEV-021                                        |
-| 8         | Divertissement & Création  | 3     | 2/5 ⚠️          | 40% (Music ✅, Watch ✅)           | DEV-022 ✅, DEV-022b ✅, DEV-023, DEV-034      |
-| 9         | IA intégrée                | 3     | 2/5 ⚠️          | 40% (Traduction ✅, Alice ✅)      | DEV-024 ✅, DEV-025, DEV-026 ✅                |
-| 10        | App Store & Écosystème     | 3     | 3/5 🟡          | 80% (Phase M1-M4 + Wallet partiel) | DEV-027 ✅ Phase M1-M4, DEV-028 ⚠️             |
-| **Total** |                            |       | **25/50**       | **50%**                            |                                                |
+| Groupe    | Nom                        | Phase | Fonc. couvertes | Progression                           | Réf Tracker                                    |
+| --------- | -------------------------- | ----- | --------------- | ------------------------------------- | ---------------------------------------------- |
+| 1         | Messagerie & Communication | 2A    | 5/5 ✅          | 100%                                  | DEV-001, DEV-002, DEV-003, DEV-004             |
+| 2         | Appels Audio & Vidéo       | 2A    | 2/5 ⚠️          | 40%                                   | DEV-006 ✅, DEV-007                            |
+| 3         | Profils & Identité         | 2B    | 4/5 ✅          | 80%                                   | DEV-008 ✅, DEV-010 ✅                         |
+| 4         | Personnalisation avancée   | 2B    | 2/5 ⚠️          | 40%                                   | DEV-009 ✅                                     |
+| 5         | Mini-apps sociales natives | 2C    | 5/5 ✅          | 100%                                  | DEV-011 ✅, DEV-012 ✅, DEV-013 ✅, DEV-014 ✅ |
+| 6         | Modules avancés            | 3     | 1/5 ⚠️          | 20%                                   | DEV-018 ✅, DEV-019, DEV-020                   |
+| 7         | Services utilitaires       | 3     | 0/5 🔴          | 0%                                    | DEV-021                                        |
+| 8         | Divertissement & Création  | 3     | 3/5 🟡          | 60% (Music ✅, Watch ✅, Podcasts ✅) | DEV-022 ✅, DEV-022b ✅, DEV-023 ✅, DEV-034   |
+| 9         | IA intégrée                | 3     | 2/5 ⚠️          | 40% (Traduction ✅, Alice ✅)         | DEV-024 ✅, DEV-025, DEV-026 ✅                |
+| 10        | App Store & Écosystème     | 3     | 3/5 🟡          | 80% (Phase M1-M4 + Wallet partiel)    | DEV-027 ✅ Phase M1-M4, DEV-028 ⚠️             |
+| **Total** |                            |       | **26/50**       | **52%**                               |                                                |
 
 ### Modules additionnels (hors 50 fonctionnalités)
 

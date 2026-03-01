@@ -162,6 +162,7 @@ function RootLayoutNav() {
               options={{ headerShown: false }}
             />
             <Stack.Screen name="modal" options={{ presentation: "modal" }} />
+            <Stack.Screen name="alice" options={{ headerShown: false }} />
           </Stack>
           {/* Call manager must be inside ThemeProvider */}
           <CallManagerProvider />

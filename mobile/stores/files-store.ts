@@ -15,8 +15,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 
-import { createLogger } from '@/services/logger';
 import * as FilesAPI from '@/services/files-api';
+import { createLogger } from '@/services/logger';
 import type {
     Breadcrumb,
     CloudFile,

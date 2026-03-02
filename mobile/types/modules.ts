@@ -101,3 +101,66 @@ export interface BridgeMessage {
  * État de chargement d'une mini-app dans MiniAppHostMobile.
  */
 export type MiniAppLoadState = 'idle' | 'loading' | 'connected' | 'error';
+
+// ─── Reviews (table `module_reviews`) ─────────────────────
+
+/**
+ * Avis utilisateur sur un module (table `module_reviews`).
+ */
+export interface ModuleReview {
+    id: string;
+    module_id: string;
+    user_id: string;
+    rating: number; // 1-5
+    comment: string | null;
+    created_at: string;
+    /** Profil utilisateur joint (display_name, avatar_url) */
+    user_profile?: {
+        display_name: string | null;
+        avatar_url: string | null;
+    };
+}
+
+/**
+ * Formulaire de soumission d'un avis.
+ */
+export interface ReviewFormData {
+    rating: number; // 1-5
+    comment?: string;
+}
+
+/**
+ * Statistiques d'avis pour un module.
+ */
+export interface ReviewStats {
+    averageRating: number;
+    totalReviews: number;
+    distribution: Record<1 | 2 | 3 | 4 | 5, number>;
+}
+
+// ─── Recommandations ──────────────────────────────────────
+
+/**
+ * Section de recommandation dans le Store.
+ */
+export interface RecommendationSection {
+    key: 'trending' | 'top_rated' | 'new_releases' | 'for_you';
+    titleKey: string; // i18n key
+    modules: StoredModuleManifest[];
+}
+
+// ─── Notifications Store ──────────────────────────────────
+
+/**
+ * Notification liée au Store (nouveau module, mise à jour, etc.).
+ */
+export interface StoreNotification {
+    id: string;
+    type: 'new_module' | 'module_update' | 'review_reply' | 'price_drop';
+    moduleId: string;
+    moduleName: string;
+    moduleIcon: string;
+    message: string;
+    read: boolean;
+    createdAt: string;
+}

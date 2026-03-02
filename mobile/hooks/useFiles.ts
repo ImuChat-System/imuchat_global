@@ -8,13 +8,13 @@
 
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { useFilesStore } from '@/stores/files-store';
 import {
     formatFileSize,
     getFileColor,
     getFileIcon,
     isPreviewable,
 } from '@/services/files-api';
+import { useFilesStore } from '@/stores/files-store';
 import type {
     CloudFile,
     CloudFolder,

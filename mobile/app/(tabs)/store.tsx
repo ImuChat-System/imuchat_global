@@ -10,8 +10,14 @@ import { useNetworkState } from "@/hooks/useNetworkState";
 import { useI18n } from "@/providers/I18nProvider";
 import { useColors, useSpacing } from "@/providers/ThemeProvider";
 import { useToast } from "@/providers/ToastProvider";
+import {
+  hasNotificationPermissions,
+  requestNotificationPermissions,
+} from "@/services/store-notifications";
 import { useModulesStore } from "@/stores/modules-store";
 import type {
+  ModuleReview,
+  RecommendationSection,
   SortOption,
   StoredModuleManifest,
   StoreTab,
@@ -22,6 +28,7 @@ import {
   ActivityIndicator,
   Alert,
   Dimensions,
+  FlatList,
   Modal,
   RefreshControl,
   ScrollView,
@@ -84,6 +91,12 @@ export default function StoreScreen() {
   const [installing, setInstalling] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
 
+  // Review form state
+  const [reviewRating, setReviewRating] = useState(0);
+  const [reviewComment, setReviewComment] = useState("");
+  const [submittingReview, setSubmittingReview] = useState(false);
+  const [notificationsAsked, setNotificationsAsked] = useState(false);
+
   // Store Zustand
   const {
     catalog,
@@ -97,6 +110,19 @@ export default function StoreScreen() {
     isInstalled,
     isActive,
     runAutoInstall,
+    // Reviews
+    reviews,
+    reviewStats,
+    userReviews,
+    reviewsLoading,
+    loadReviews,
+    loadUserReview,
+    submitReview,
+    removeReview,
+    // Recommendations
+    recommendations,
+    recommendationsLoading,
+    fetchRecommendations,
   } = useModulesStore();
 
   // ─── Initial fetch ────────────────────────────────────────
@@ -104,17 +130,22 @@ export default function StoreScreen() {
     fetchCatalog();
     fetchInstalled();
     runAutoInstall();
+    fetchRecommendations();
   }, []);
 
   // ─── Pull-to-refresh ─────────────────────────────────────
   const handleRefresh = useCallback(async () => {
     setRefreshing(true);
     try {
-      await Promise.all([fetchCatalog(true), fetchInstalled(true)]);
+      await Promise.all([
+        fetchCatalog(true),
+        fetchInstalled(true),
+        fetchRecommendations(true),
+      ]);
     } finally {
       setRefreshing(false);
     }
-  }, [fetchCatalog, fetchInstalled]);
+  }, [fetchCatalog, fetchInstalled, fetchRecommendations]);
 
   // ─── Filtering & sorting ──────────────────────────────────
   const filtered = useMemo(() => {
@@ -241,6 +272,75 @@ export default function StoreScreen() {
     [router],
   );
 
+  // ─── Open module detail (loads reviews) ───────────────────
+  const handleOpenDetail = useCallback(
+    (module: StoredModuleManifest) => {
+      setSelectedModule(module);
+      setShowInstallModal(true);
+      loadReviews(module.id);
+      loadUserReview(module.id);
+      // Reset form
+      setReviewRating(0);
+      setReviewComment("");
+    },
+    [loadReviews, loadUserReview],
+  );
+
+  // ─── Submit review handler ────────────────────────────────
+  const handleSubmitReview = useCallback(async () => {
+    if (!selectedModule || reviewRating === 0) return;
+    setSubmittingReview(true);
+    try {
+      await submitReview(selectedModule.id, reviewRating, reviewComment);
+      showToast(t("store.reviewSubmitted"), "success");
+      setReviewComment("");
+      setReviewRating(0);
+    } catch (error) {
+      showToast(
+        error instanceof Error ? error.message : t("common.error"),
+        "error",
+      );
+    } finally {
+      setSubmittingReview(false);
+    }
+  }, [selectedModule, reviewRating, reviewComment, submitReview, t]);
+
+  // ─── Delete review handler ────────────────────────────────
+  const handleDeleteReview = useCallback(() => {
+    if (!selectedModule) return;
+    Alert.alert(t("store.deleteReview"), t("store.confirmDeleteReview"), [
+      { text: t("common.cancel"), style: "cancel" },
+      {
+        text: t("store.deleteReview"),
+        style: "destructive",
+        onPress: async () => {
+          try {
+            await removeReview(selectedModule.id);
+            showToast(t("store.reviewDeleted"), "success");
+          } catch {
+            showToast(t("common.error"), "error");
+          }
+        },
+      },
+    ]);
+  }, [selectedModule, removeReview, t]);
+
+  // ─── Notification prompt ──────────────────────────────────
+  const handleEnableNotifications = useCallback(async () => {
+    const granted = await requestNotificationPermissions();
+    if (granted) {
+      showToast(t("store.notificationsEnabled"), "success");
+    }
+    setNotificationsAsked(true);
+  }, [t]);
+
+  // Check notification status on mount
+  useEffect(() => {
+    hasNotificationPermissions().then((granted) => {
+      if (granted) setNotificationsAsked(true);
+    });
+  }, []);
+
   // ─── Format helpers ───────────────────────────────────────
   const formatDownloads = (count: number): string => {
     if (count >= 1000000) return `${(count / 1000000).toFixed(1)}M`;
@@ -279,8 +379,7 @@ export default function StoreScreen() {
           },
         ]}
         onPress={() => {
-          setSelectedModule(module);
-          setShowInstallModal(true);
+          handleOpenDetail(module);
         }}
         onLongPress={() => {
           if (installed && !module.is_core) {
@@ -291,6 +390,11 @@ export default function StoreScreen() {
         <View style={styles.itemIconWrap}>
           <Text style={styles.itemIcon}>{module.icon || "📦"}</Text>
           {module.is_verified && <Text style={styles.itemBadge}>✓</Text>}
+          {!module.is_verified && !module.is_core && (
+            <Text style={styles.thirdPartyBadge}>
+              {t("store.thirdPartyBadge")}
+            </Text>
+          )}
           {installed && (
             <View
               style={[
@@ -424,8 +528,7 @@ export default function StoreScreen() {
                 },
               ]}
               onPress={() => {
-                setSelectedModule(heroModule);
-                setShowInstallModal(true);
+                handleOpenDetail(heroModule);
               }}
             >
               <Text style={styles.heroIcon}>{heroModule.icon || "⭐"}</Text>
@@ -443,6 +546,75 @@ export default function StoreScreen() {
                 </Text>
               </View>
             </TouchableOpacity>
+          )}
+
+          {/* ── Notification prompt ─────────────────────────────── */}
+          {!notificationsAsked && (
+            <TouchableOpacity
+              testID="notification-prompt"
+              style={[
+                styles.notifBanner,
+                {
+                  backgroundColor: colors.primary + "10",
+                  borderColor: colors.primary + "30",
+                },
+              ]}
+              onPress={handleEnableNotifications}
+            >
+              <Text style={styles.notifIcon}>🔔</Text>
+              <View style={styles.notifInfo}>
+                <Text style={[styles.notifTitle, { color: colors.text }]}>
+                  {t("store.enableNotifications")}
+                </Text>
+                <Text style={[styles.notifDesc, { color: colors.textMuted }]}>
+                  {t("store.notificationsDesc")}
+                </Text>
+              </View>
+            </TouchableOpacity>
+          )}
+
+          {/* ── Recommendations sections ────────────────────────── */}
+          {recommendations.length > 0 && !search.trim() && tab === "all" && (
+            <View testID="recommendations">
+              {recommendations.map((section: RecommendationSection) => (
+                <View key={section.key} style={styles.recoSection}>
+                  <Text style={[styles.recoTitle, { color: colors.text }]}>
+                    {t(section.titleKey)}
+                  </Text>
+                  <FlatList
+                    horizontal
+                    showsHorizontalScrollIndicator={false}
+                    data={section.modules}
+                    keyExtractor={(item) => item.id}
+                    renderItem={({ item }) => (
+                      <TouchableOpacity
+                        style={[
+                          styles.recoCard,
+                          {
+                            backgroundColor: colors.surface,
+                            borderColor: colors.border,
+                          },
+                        ]}
+                        onPress={() => handleOpenDetail(item)}
+                      >
+                        <Text style={styles.recoIcon}>{item.icon || "📦"}</Text>
+                        <Text
+                          style={[styles.recoName, { color: colors.text }]}
+                          numberOfLines={1}
+                        >
+                          {item.name}
+                        </Text>
+                        <Text
+                          style={[styles.recoRating, { color: colors.primary }]}
+                        >
+                          ⭐ {item.rating.toFixed(1)}
+                        </Text>
+                      </TouchableOpacity>
+                    )}
+                  />
+                </View>
+              ))}
+            </View>
           )}
 
           {/* ── Search bar ──────────────────────────────────────── */}
@@ -703,6 +875,241 @@ export default function StoreScreen() {
                       ))}
                     </View>
                   )}
+
+                {/* ── Reviews Section ───────────────────────────── */}
+                <View style={styles.reviewsSection}>
+                  <Text
+                    style={[styles.reviewsSectionTitle, { color: colors.text }]}
+                  >
+                    {t("store.reviews")}
+                    {reviewStats[selectedModule.id] && (
+                      <Text
+                        style={{
+                          color: colors.textMuted,
+                          fontSize: 13,
+                          fontWeight: "400",
+                        }}
+                      >
+                        {" "}
+                        (
+                        {t("store.totalReviews", {
+                          count: reviewStats[selectedModule.id].totalReviews,
+                        })}
+                        )
+                      </Text>
+                    )}
+                  </Text>
+
+                  {/* Rating distribution bar */}
+                  {reviewStats[selectedModule.id] &&
+                    reviewStats[selectedModule.id].totalReviews > 0 && (
+                      <View style={styles.ratingDistribution}>
+                        {([5, 4, 3, 2, 1] as const).map((star) => {
+                          const stats = reviewStats[selectedModule.id];
+                          const count = stats.distribution[star] || 0;
+                          const pct =
+                            stats.totalReviews > 0
+                              ? (count / stats.totalReviews) * 100
+                              : 0;
+                          return (
+                            <View key={star} style={styles.ratingRow}>
+                              <Text
+                                style={[
+                                  styles.ratingLabel,
+                                  { color: colors.textMuted },
+                                ]}
+                              >
+                                {star}⭐
+                              </Text>
+                              <View
+                                style={[
+                                  styles.ratingBarBg,
+                                  { backgroundColor: colors.border },
+                                ]}
+                              >
+                                <View
+                                  style={[
+                                    styles.ratingBarFill,
+                                    {
+                                      width: `${pct}%`,
+                                      backgroundColor: colors.primary,
+                                    },
+                                  ]}
+                                />
+                              </View>
+                              <Text
+                                style={[
+                                  styles.ratingCount,
+                                  { color: colors.textMuted },
+                                ]}
+                              >
+                                {count}
+                              </Text>
+                            </View>
+                          );
+                        })}
+                      </View>
+                    )}
+
+                  {/* User review form (only for installed modules) */}
+                  {isInstalled(selectedModule.id) && (
+                    <View style={styles.reviewForm}>
+                      <Text
+                        style={[styles.reviewFormTitle, { color: colors.text }]}
+                      >
+                        {userReviews[selectedModule.id]
+                          ? t("store.editReview")
+                          : t("store.writeReview")}
+                      </Text>
+                      <View style={styles.starRow}>
+                        {[1, 2, 3, 4, 5].map((star) => (
+                          <TouchableOpacity
+                            key={star}
+                            onPress={() => setReviewRating(star)}
+                            style={styles.starBtn}
+                          >
+                            <Text
+                              style={[
+                                styles.starText,
+                                {
+                                  opacity:
+                                    star <=
+                                    (reviewRating ||
+                                      userReviews[selectedModule.id]?.rating ||
+                                      0)
+                                      ? 1
+                                      : 0.3,
+                                },
+                              ]}
+                            >
+                              ⭐
+                            </Text>
+                          </TouchableOpacity>
+                        ))}
+                      </View>
+                      <TextInput
+                        style={[
+                          styles.reviewInput,
+                          {
+                            backgroundColor: colors.background,
+                            color: colors.text,
+                            borderColor: colors.border,
+                          },
+                        ]}
+                        placeholder={t("store.reviewPlaceholder")}
+                        placeholderTextColor={colors.textMuted}
+                        value={
+                          reviewComment ||
+                          userReviews[selectedModule.id]?.comment ||
+                          ""
+                        }
+                        onChangeText={setReviewComment}
+                        multiline
+                        numberOfLines={3}
+                      />
+                      <View style={styles.reviewActions}>
+                        <TouchableOpacity
+                          testID="btn-submit-review"
+                          style={[
+                            styles.reviewSubmitBtn,
+                            {
+                              backgroundColor: colors.primary,
+                              opacity:
+                                reviewRating === 0 || submittingReview
+                                  ? 0.5
+                                  : 1,
+                            },
+                          ]}
+                          onPress={handleSubmitReview}
+                          disabled={reviewRating === 0 || submittingReview}
+                        >
+                          {submittingReview ? (
+                            <ActivityIndicator color="#fff" size="small" />
+                          ) : (
+                            <Text style={styles.reviewSubmitText}>
+                              {userReviews[selectedModule.id]
+                                ? t("store.editReview")
+                                : t("store.writeReview")}
+                            </Text>
+                          )}
+                        </TouchableOpacity>
+                        {userReviews[selectedModule.id] && (
+                          <TouchableOpacity
+                            testID="btn-delete-review"
+                            style={[
+                              styles.reviewDeleteBtn,
+                              { borderColor: "#ef4444" },
+                            ]}
+                            onPress={handleDeleteReview}
+                          >
+                            <Text style={{ color: "#ef4444", fontSize: 13 }}>
+                              {t("store.deleteReview")}
+                            </Text>
+                          </TouchableOpacity>
+                        )}
+                      </View>
+                    </View>
+                  )}
+
+                  {/* Recent reviews list */}
+                  {reviewsLoading ? (
+                    <ActivityIndicator
+                      size="small"
+                      color={colors.primary}
+                      style={{ marginTop: 12 }}
+                    />
+                  ) : (reviews[selectedModule.id] || []).length === 0 ? (
+                    <Text
+                      style={[
+                        styles.noReviewsText,
+                        { color: colors.textMuted },
+                      ]}
+                    >
+                      {t("store.noReviews")}
+                    </Text>
+                  ) : (
+                    (reviews[selectedModule.id] || [])
+                      .slice(0, 5)
+                      .map((review: ModuleReview) => (
+                        <View
+                          key={review.id}
+                          style={[
+                            styles.reviewCard,
+                            { borderBottomColor: colors.border },
+                          ]}
+                        >
+                          <View style={styles.reviewHeader}>
+                            <Text
+                              style={[
+                                styles.reviewAuthor,
+                                { color: colors.text },
+                              ]}
+                            >
+                              {review.user_profile?.display_name || "User"}
+                            </Text>
+                            <Text
+                              style={[
+                                styles.reviewDate,
+                                { color: colors.textMuted },
+                              ]}
+                            >
+                              {"⭐".repeat(review.rating)}
+                            </Text>
+                          </View>
+                          {review.comment && (
+                            <Text
+                              style={[
+                                styles.reviewComment,
+                                { color: colors.textMuted },
+                              ]}
+                            >
+                              {review.comment}
+                            </Text>
+                          )}
+                        </View>
+                      ))
+                  )}
+                </View>
 
                 {/* Action buttons */}
                 {isInstalled(selectedModule.id) ? (
@@ -1010,4 +1417,109 @@ const styles = StyleSheet.create({
   },
   offlineIcon: { fontSize: 18 },
   offlineText: { fontSize: 13, fontWeight: "600", flex: 1 },
+
+  // Third-party badge
+  thirdPartyBadge: {
+    fontSize: 8,
+    color: "#f59e0b",
+    fontWeight: "600",
+    marginTop: 2,
+  },
+
+  // Notification prompt
+  notifBanner: {
+    flexDirection: "row",
+    alignItems: "center",
+    borderRadius: 12,
+    borderWidth: 1,
+    padding: 14,
+    marginBottom: 12,
+    gap: 10,
+  },
+  notifIcon: { fontSize: 24 },
+  notifInfo: { flex: 1 },
+  notifTitle: { fontSize: 14, fontWeight: "600", marginBottom: 2 },
+  notifDesc: { fontSize: 12 },
+
+  // Recommendations
+  recoSection: { marginBottom: 16 },
+  recoTitle: { fontSize: 16, fontWeight: "700", marginBottom: 10 },
+  recoCard: {
+    width: 120,
+    borderRadius: 12,
+    borderWidth: 1,
+    padding: 12,
+    marginRight: 10,
+    alignItems: "center",
+  },
+  recoIcon: { fontSize: 32, marginBottom: 6 },
+  recoName: { fontSize: 12, fontWeight: "600", textAlign: "center" },
+  recoRating: { fontSize: 11, marginTop: 4 },
+
+  // Reviews section (modal)
+  reviewsSection: {
+    width: "100%",
+    paddingHorizontal: 4,
+    marginTop: 12,
+    marginBottom: 16,
+  },
+  reviewsSectionTitle: { fontSize: 16, fontWeight: "700", marginBottom: 10 },
+  ratingDistribution: { marginBottom: 12 },
+  ratingRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 3,
+    gap: 6,
+  },
+  ratingLabel: { fontSize: 11, width: 30, textAlign: "right" },
+  ratingBarBg: { flex: 1, height: 6, borderRadius: 3, overflow: "hidden" },
+  ratingBarFill: { height: 6, borderRadius: 3 },
+  ratingCount: { fontSize: 11, width: 24 },
+
+  // Review form
+  reviewForm: {
+    borderRadius: 10,
+    padding: 12,
+    marginBottom: 12,
+  },
+  reviewFormTitle: { fontSize: 13, fontWeight: "600", marginBottom: 8 },
+  starRow: { flexDirection: "row", gap: 6, marginBottom: 8 },
+  starBtn: { padding: 2 },
+  starText: { fontSize: 22 },
+  reviewInput: {
+    borderRadius: 8,
+    borderWidth: 1,
+    padding: 10,
+    fontSize: 13,
+    minHeight: 60,
+    textAlignVertical: "top",
+    marginBottom: 8,
+  },
+  reviewActions: { flexDirection: "row", gap: 8 },
+  reviewSubmitBtn: {
+    flex: 1,
+    paddingVertical: 10,
+    borderRadius: 10,
+    alignItems: "center",
+  },
+  reviewSubmitText: { color: "#fff", fontSize: 13, fontWeight: "600" },
+  reviewDeleteBtn: {
+    paddingVertical: 10,
+    paddingHorizontal: 14,
+    borderRadius: 10,
+    borderWidth: 1,
+    alignItems: "center",
+  },
+
+  // Review cards
+  noReviewsText: { textAlign: "center", fontSize: 13, marginVertical: 12 },
+  reviewCard: { paddingVertical: 10, borderBottomWidth: 1 },
+  reviewHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginBottom: 4,
+  },
+  reviewAuthor: { fontSize: 13, fontWeight: "600" },
+  reviewDate: { fontSize: 12 },
+  reviewComment: { fontSize: 12, lineHeight: 18 },
 });

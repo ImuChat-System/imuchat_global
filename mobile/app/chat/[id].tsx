@@ -1,6 +1,8 @@
 import MessageBubble from "@/components/MessageBubble";
-import MessageInput from "@/components/MessageInput";
+import MessageInput, { MessageInputHandle } from "@/components/MessageInput";
+import { BotCommandSuggestions } from "@/components/chat/BotCommandSuggestions";
 import ConversationPickerModal from "@/components/chat/ConversationPickerModal";
+import { useBots } from "@/hooks/useBots";
 import { useChat } from "@/hooks/useChat";
 import { useReactions } from "@/hooks/useReactions";
 import { useI18n } from "@/providers/I18nProvider";
@@ -55,12 +57,54 @@ export default function ChatRoomScreen() {
   });
 
   const flatListRef = useRef<FlatList>(null);
+  const messageInputRef = useRef<MessageInputHandle>(null);
   const { theme } = useTheme();
   const router = useRouter();
   const { t } = useI18n();
   const { showToast } = useToast();
   const [initiatingCall, setInitiatingCall] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
+
+  // ── Bots de groupe (DEV-025) ───────────────────────────────
+  const {
+    availableCommands,
+    handleMessage: handleBotMessage,
+    isCommand,
+  } = useBots(id);
+
+  const [inputText, setInputText] = useState("");
+  const showCommandSuggestions =
+    inputText.startsWith("/") && availableCommands.length > 0;
+
+  /** Intercepte les commandes bot avant l'envoi normal */
+  const handleSendWithBots = useCallback(
+    async (message: string, mediaUrl?: string, mediaType?: string) => {
+      if (isCommand(message) && currentUserId) {
+        // Envoyer la commande dans le chat pour la visibilité
+        handleSendMessage(message, mediaUrl, mediaType);
+        // Exécuter le bot
+        const result = await handleBotMessage(message, currentUserId, "User");
+        if (result) {
+          if (result.success && result.message) {
+            // Le bot a répondu — afficher via toast ou message système
+            showToast(`🤖 ${result.message.content}`, "info");
+          } else if (result.error) {
+            showToast(`⚠️ ${result.error}`, "warning");
+          }
+        }
+      } else {
+        handleSendMessage(message, mediaUrl, mediaType);
+      }
+      setInputText("");
+    },
+    [isCommand, currentUserId, handleSendMessage, handleBotMessage, showToast],
+  );
+
+  /** Quand l'utilisateur sélectionne une commande dans les suggestions */
+  const handleCommandSelect = useCallback((command: string) => {
+    messageInputRef.current?.setText(command);
+    messageInputRef.current?.focus();
+  }, []);
 
   // Pull-to-refresh handler
   const handleRefresh = useCallback(async () => {
@@ -371,11 +415,19 @@ export default function ChatRoomScreen() {
         </View>
       )}
 
+      {/* Bot command suggestions overlay */}
+      <BotCommandSuggestions
+        inputText={inputText}
+        commands={availableCommands}
+        onSelect={handleCommandSelect}
+        visible={showCommandSuggestions}
+      />
+
       <MessageInput
-        onSend={(message, mediaUrl, mediaType) =>
-          handleSendMessage(message, mediaUrl, mediaType)
-        }
+        ref={messageInputRef}
+        onSend={handleSendWithBots}
         onTyping={sendTypingIndicator}
+        onTextChange={setInputText}
         disabled={sending}
       />
 

@@ -38,11 +38,12 @@ jest.mock("@/services/logger", () => ({
 }));
 
 import {
+    addFileVersion,
+    clearCompletedTransfers,
     createFile,
     createFolder,
     createShareLink,
     createTransfer,
-    clearCompletedTransfers,
     deactivateShareLink,
     deleteFile,
     deleteFolder,
@@ -65,9 +66,9 @@ import {
     getMockFiles,
     getMockFolders,
     getRecentTransfers,
+    getSharedWithMe,
     getShareLinksForFile,
     getSharesForFile,
-    getSharedWithMe,
     getStorageUsage,
     getTrashedFiles,
     isPreviewable,
@@ -76,8 +77,8 @@ import {
     moveFilesToFolder,
     moveToTrash,
     removeShare,
-    restoreFromTrash,
     restoreFolder,
+    restoreFromTrash,
     searchFiles,
     shareFile,
     shareFolder,
@@ -89,7 +90,6 @@ import {
     updateFolder,
     updateSharePermission,
     updateTransferProgress,
-    addFileVersion,
 } from "../files-api";
 
 // ─── Helpers ──────────────────────────────────────────────────

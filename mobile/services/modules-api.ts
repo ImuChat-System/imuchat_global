@@ -7,7 +7,7 @@
 
 import { createLogger } from '@/services/logger';
 import { getCurrentUser, supabase } from '@/services/supabase';
-import type { StoredModuleManifest, UserInstalledModule } from '@/types/modules';
+import type { ModuleReview, ReviewStats, StoredModuleManifest, UserInstalledModule } from '@/types/modules';
 
 const logger = createLogger('ModulesAPI');
 
@@ -355,4 +355,193 @@ export async function updateModuleSettings(
         logger.error('Failed to update module settings:', error.message);
         throw new Error(`Failed to update module settings: ${error.message}`);
     }
+}
+
+// ─── Reviews (table `module_reviews`) ─────────────────────────
+
+/**
+ * Récupérer les avis d'un module, triés par date décroissante.
+ */
+export async function fetchModuleReviews(
+    moduleId: string,
+    limit = 20,
+    offset = 0,
+): Promise<ModuleReview[]> {
+    const { data, error } = await supabase
+        .from('module_reviews')
+        .select('*, user_profile:profiles(display_name, avatar_url)')
+        .eq('module_id', moduleId)
+        .order('created_at', { ascending: false })
+        .range(offset, offset + limit - 1);
+
+    if (error) {
+        logger.error(`Failed to fetch reviews for ${moduleId}:`, error.message);
+        throw new Error(`Failed to fetch reviews: ${error.message}`);
+    }
+    return (data ?? []) as ModuleReview[];
+}
+
+/**
+ * Récupérer l'avis de l'utilisateur courant pour un module.
+ */
+export async function fetchUserReview(moduleId: string): Promise<ModuleReview | null> {
+    const user = await getCurrentUser();
+    if (!user) return null;
+
+    const { data, error } = await supabase
+        .from('module_reviews')
+        .select('*')
+        .eq('module_id', moduleId)
+        .eq('user_id', user.id)
+        .maybeSingle();
+
+    if (error) {
+        logger.error(`Failed to fetch user review for ${moduleId}:`, error.message);
+        return null;
+    }
+    return data as ModuleReview | null;
+}
+
+/**
+ * Soumettre ou mettre à jour un avis (upsert sur UNIQUE(module_id, user_id)).
+ */
+export async function submitReview(
+    moduleId: string,
+    rating: number,
+    comment?: string,
+): Promise<ModuleReview> {
+    const user = await getCurrentUser();
+    if (!user) throw new Error('User not authenticated');
+
+    if (rating < 1 || rating > 5) throw new Error('Rating must be between 1 and 5');
+
+    const { data, error } = await supabase
+        .from('module_reviews')
+        .upsert(
+            {
+                module_id: moduleId,
+                user_id: user.id,
+                rating,
+                comment: comment || null,
+            },
+            { onConflict: 'module_id,user_id' },
+        )
+        .select('*')
+        .single();
+
+    if (error) {
+        logger.error('Failed to submit review:', error.message);
+        throw new Error(`Failed to submit review: ${error.message}`);
+    }
+    logger.info(`Review submitted for module ${moduleId}: ${rating}/5`);
+    return data as ModuleReview;
+}
+
+/**
+ * Supprimer l'avis de l'utilisateur courant pour un module.
+ */
+export async function deleteReview(moduleId: string): Promise<void> {
+    const user = await getCurrentUser();
+    if (!user) throw new Error('User not authenticated');
+
+    const { error } = await supabase
+        .from('module_reviews')
+        .delete()
+        .eq('module_id', moduleId)
+        .eq('user_id', user.id);
+
+    if (error) {
+        logger.error('Failed to delete review:', error.message);
+        throw new Error(`Failed to delete review: ${error.message}`);
+    }
+    logger.info(`Review deleted for module ${moduleId}`);
+}
+
+/**
+ * Calculer les statistiques d'avis pour un module.
+ */
+export async function fetchReviewStats(moduleId: string): Promise<ReviewStats> {
+    const { data, error } = await supabase
+        .from('module_reviews')
+        .select('rating')
+        .eq('module_id', moduleId);
+
+    if (error) {
+        logger.error(`Failed to fetch review stats for ${moduleId}:`, error.message);
+        throw new Error(`Failed to fetch review stats: ${error.message}`);
+    }
+
+    const reviews = data ?? [];
+    const distribution = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 } as Record<1 | 2 | 3 | 4 | 5, number>;
+    let total = 0;
+
+    for (const r of reviews) {
+        const key = r.rating as 1 | 2 | 3 | 4 | 5;
+        distribution[key] = (distribution[key] || 0) + 1;
+        total += r.rating;
+    }
+
+    return {
+        averageRating: reviews.length > 0 ? total / reviews.length : 0,
+        totalReviews: reviews.length,
+        distribution,
+    };
+}
+
+// ─── Recommandations ─────────────────────────────────────────
+
+/**
+ * Modules tendance : les plus téléchargés récemment + bonne note.
+ */
+export async function fetchTrendingModules(limit = 10): Promise<StoredModuleManifest[]> {
+    const { data, error } = await supabase
+        .from('modules')
+        .select('*')
+        .eq('is_published', true)
+        .gte('rating', 3.5)
+        .order('download_count', { ascending: false })
+        .limit(limit);
+
+    if (error) {
+        logger.error('Failed to fetch trending modules:', error.message);
+        throw new Error(`Failed to fetch trending modules: ${error.message}`);
+    }
+    return (data ?? []) as StoredModuleManifest[];
+}
+
+/**
+ * Modules les mieux notés.
+ */
+export async function fetchTopRatedModules(limit = 10): Promise<StoredModuleManifest[]> {
+    const { data, error } = await supabase
+        .from('modules')
+        .select('*')
+        .eq('is_published', true)
+        .gte('download_count', 5)
+        .order('rating', { ascending: false })
+        .limit(limit);
+
+    if (error) {
+        logger.error('Failed to fetch top rated modules:', error.message);
+        throw new Error(`Failed to fetch top rated modules: ${error.message}`);
+    }
+    return (data ?? []) as StoredModuleManifest[];
+}
+
+/**
+ * Nouvelles sorties : modules récemment publiés.
+ */
+export async function fetchNewReleases(limit = 10): Promise<StoredModuleManifest[]> {
+    const { data, error } = await supabase
+        .from('modules')
+        .select('*')
+        .eq('is_published', true)
+        .order('created_at', { ascending: false })
+        .limit(limit);
+
+    if (error) {
+        logger.error('Failed to fetch new releases:', error.message);
+        throw new Error(`Failed to fetch new releases: ${error.message}`);
+    }
+    return (data ?? []) as StoredModuleManifest[];
 }

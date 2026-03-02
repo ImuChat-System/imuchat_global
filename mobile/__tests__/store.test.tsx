@@ -97,6 +97,16 @@ const mockUninstall = jest.fn().mockResolvedValue(undefined);
 const mockIsInstalled = jest.fn().mockReturnValue(false);
 const mockIsActive = jest.fn().mockReturnValue(false);
 const mockRunAutoInstall = jest.fn().mockResolvedValue(undefined);
+const mockLoadReviews = jest.fn().mockResolvedValue(undefined);
+const mockLoadUserReview = jest.fn().mockResolvedValue(undefined);
+const mockSubmitReview = jest.fn().mockResolvedValue(undefined);
+const mockRemoveReview = jest.fn().mockResolvedValue(undefined);
+const mockFetchRecommendations = jest.fn().mockResolvedValue(undefined);
+
+jest.mock("@/services/store-notifications", () => ({
+  hasNotificationPermissions: jest.fn().mockResolvedValue(false),
+  requestNotificationPermissions: jest.fn().mockResolvedValue(true),
+}));
 
 jest.mock("@/stores/modules-store", () => ({
   useModulesStore: () => ({
@@ -111,6 +121,17 @@ jest.mock("@/stores/modules-store", () => ({
     isInstalled: mockIsInstalled,
     isActive: mockIsActive,
     runAutoInstall: mockRunAutoInstall,
+    reviews: {},
+    reviewStats: {},
+    userReviews: {},
+    reviewsLoading: false,
+    recommendations: [],
+    recommendationsLoading: false,
+    loadReviews: mockLoadReviews,
+    loadUserReview: mockLoadUserReview,
+    submitReview: mockSubmitReview,
+    removeReview: mockRemoveReview,
+    fetchRecommendations: mockFetchRecommendations,
   }),
 }));
 

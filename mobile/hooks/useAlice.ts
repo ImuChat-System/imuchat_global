@@ -17,14 +17,14 @@
 import { useCallback, useRef, useState } from "react";
 
 import {
-    sendMessageToAlice,
     getPersonas,
     getProviders,
+    sendMessageToAlice,
     validateProvider,
     type AliceChatResponse,
     type AlicePersona,
-    type AliceProviderInfo,
     type AliceProvider,
+    type AliceProviderInfo,
 } from "@/services/alice";
 import { useAliceStore } from "@/stores/alice-store";
 
@@ -158,14 +158,23 @@ export function useAlice(): UseAliceReturn {
 
     const retryLastMessage = useCallback(async () => {
         if (!lastUserMessageRef.current) return null;
-        // Remove the last assistant message if it was an error placeholder
         const conversation = store.getCurrentConversation();
         if (conversation && conversation.messages.length > 0) {
             const lastMsg =
                 conversation.messages[conversation.messages.length - 1];
+            // Remove the last assistant error/response so we can retry cleanly
+            if (lastMsg.role === "assistant") {
+                store.removeLastMessage(conversation.id);
+            }
+        }
+        // sendMessage will re-add the user message, so remove the existing one too
+        // Actually, we just re-call sendMessage which adds a new user message.
+        // To avoid duplication, let's pop the last user message first.
+        const conv = store.getCurrentConversation();
+        if (conv && conv.messages.length > 0) {
+            const lastMsg = conv.messages[conv.messages.length - 1];
             if (lastMsg.role === "user") {
-                // The assistant never responded — just resend
-                return sendMessage(lastUserMessageRef.current);
+                store.removeLastMessage(conv.id);
             }
         }
         return sendMessage(lastUserMessageRef.current);

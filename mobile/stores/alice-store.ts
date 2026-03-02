@@ -16,8 +16,8 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 
-import { createLogger } from "@/services/logger";
 import type { AliceMessage, AliceProvider } from "@/services/alice";
+import { createLogger } from "@/services/logger";
 
 const logger = createLogger("AliceStore");
 
@@ -71,6 +71,7 @@ export interface AliceState {
     clearAllConversations: () => void;
     setCurrentConversation: (id: string | null) => void;
     addMessage: (conversationId: string, message: AliceMessage) => void;
+    removeLastMessage: (conversationId: string) => void;
     updateConversationTitle: (id: string, title: string) => void;
 
     // === Actions — Persona ===
@@ -213,6 +214,20 @@ export const useAliceStore = create<AliceState>()(
                             ...c,
                             messages: updatedMessages,
                             title,
+                            updatedAt: new Date().toISOString(),
+                        };
+                    }),
+                }));
+            },
+
+            removeLastMessage: (conversationId) => {
+                set((state) => ({
+                    conversations: state.conversations.map((c) => {
+                        if (c.id !== conversationId) return c;
+                        if (c.messages.length === 0) return c;
+                        return {
+                            ...c,
+                            messages: c.messages.slice(0, -1),
                             updatedAt: new Date().toISOString(),
                         };
                     }),

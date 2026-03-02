@@ -14,15 +14,23 @@ import { createJSONStorage, persist } from 'zustand/middleware';
 
 import { createLogger } from '@/services/logger';
 import {
+    deleteReview as apiDeleteReview,
     installModule as apiInstallModule,
     searchModules as apiSearchModules,
     setModuleActive as apiSetModuleActive,
+    submitReview as apiSubmitReview,
     uninstallModule as apiUninstallModule,
     autoInstallDefaultModules,
     fetchModuleCatalog,
+    fetchModuleReviews,
+    fetchNewReleases,
+    fetchReviewStats,
+    fetchTopRatedModules,
+    fetchTrendingModules,
     fetchUserModules,
+    fetchUserReview,
 } from '@/services/modules-api';
-import type { StoredModuleManifest, UserInstalledModule } from '@/types/modules';
+import type { ModuleReview, RecommendationSection, ReviewStats, StoredModuleManifest, UserInstalledModule } from '@/types/modules';
 
 const logger = createLogger('ModulesStore');
 
@@ -48,6 +56,17 @@ interface ModulesState {
     // --- Auto-install ---
     autoInstallComplete: boolean;
 
+    // --- Reviews ---
+    reviews: Record<string, ModuleReview[]>;
+    reviewStats: Record<string, ReviewStats>;
+    userReviews: Record<string, ModuleReview | null>;
+    reviewsLoading: boolean;
+
+    // --- Recommandations ---
+    recommendations: RecommendationSection[];
+    recommendationsLoading: boolean;
+    recommendationsFetchedAt: number | null;
+
     // --- Actions catalogue ---
     fetchCatalog: (force?: boolean) => Promise<void>;
     searchCatalog: (query: string) => Promise<StoredModuleManifest[]>;
@@ -60,6 +79,15 @@ interface ModulesState {
     install: (moduleId: string, permissions?: string[]) => Promise<void>;
     uninstall: (moduleId: string) => Promise<void>;
     toggleActive: (moduleId: string, active: boolean) => Promise<void>;
+
+    // --- Actions reviews ---
+    loadReviews: (moduleId: string) => Promise<void>;
+    loadUserReview: (moduleId: string) => Promise<void>;
+    submitReview: (moduleId: string, rating: number, comment?: string) => Promise<void>;
+    removeReview: (moduleId: string) => Promise<void>;
+
+    // --- Actions recommandations ---
+    fetchRecommendations: (force?: boolean) => Promise<void>;
 
     // --- Helpers ---
     isInstalled: (moduleId: string) => boolean;
@@ -83,6 +111,13 @@ const initialState = {
     installedError: null as string | null,
     installedFetchedAt: null as number | null,
     autoInstallComplete: false,
+    reviews: {} as Record<string, ModuleReview[]>,
+    reviewStats: {} as Record<string, ReviewStats>,
+    userReviews: {} as Record<string, ModuleReview | null>,
+    reviewsLoading: false,
+    recommendations: [] as RecommendationSection[],
+    recommendationsLoading: false,
+    recommendationsFetchedAt: null as number | null,
 };
 
 export const useModulesStore = create<ModulesState>()(
@@ -232,6 +267,134 @@ export const useModulesStore = create<ModulesState>()(
                 }
             },
 
+            // ─── Load reviews ─────────────────────────────────
+            loadReviews: async (moduleId: string) => {
+                set({ reviewsLoading: true });
+                try {
+                    const [reviews, stats] = await Promise.all([
+                        fetchModuleReviews(moduleId),
+                        fetchReviewStats(moduleId),
+                    ]);
+                    set(state => ({
+                        reviews: { ...state.reviews, [moduleId]: reviews },
+                        reviewStats: { ...state.reviewStats, [moduleId]: stats },
+                        reviewsLoading: false,
+                    }));
+                } catch (error) {
+                    logger.error(`Failed to load reviews for ${moduleId}:`, error);
+                    set({ reviewsLoading: false });
+                }
+            },
+
+            // ─── Load user review ─────────────────────────────
+            loadUserReview: async (moduleId: string) => {
+                try {
+                    const review = await fetchUserReview(moduleId);
+                    set(state => ({
+                        userReviews: { ...state.userReviews, [moduleId]: review },
+                    }));
+                } catch (error) {
+                    logger.error(`Failed to load user review for ${moduleId}:`, error);
+                }
+            },
+
+            // ─── Submit review ────────────────────────────────
+            submitReview: async (moduleId: string, rating: number, comment?: string) => {
+                try {
+                    const review = await apiSubmitReview(moduleId, rating, comment);
+                    set(state => {
+                        // Update reviews list
+                        const existing = state.reviews[moduleId] || [];
+                        const filtered = existing.filter(r => r.user_id !== review.user_id);
+                        return {
+                            reviews: { ...state.reviews, [moduleId]: [review, ...filtered] },
+                            userReviews: { ...state.userReviews, [moduleId]: review },
+                        };
+                    });
+                    // Refresh stats
+                    const stats = await fetchReviewStats(moduleId);
+                    set(state => ({
+                        reviewStats: { ...state.reviewStats, [moduleId]: stats },
+                    }));
+                    logger.info(`Review submitted for ${moduleId}`);
+                } catch (error) {
+                    logger.error(`Failed to submit review for ${moduleId}:`, error);
+                    throw error;
+                }
+            },
+
+            // ─── Remove review ────────────────────────────────
+            removeReview: async (moduleId: string) => {
+                try {
+                    await apiDeleteReview(moduleId);
+                    set(state => {
+                        const existing = state.reviews[moduleId] || [];
+                        const userReview = state.userReviews[moduleId];
+                        return {
+                            reviews: {
+                                ...state.reviews,
+                                [moduleId]: userReview
+                                    ? existing.filter(r => r.id !== userReview.id)
+                                    : existing,
+                            },
+                            userReviews: { ...state.userReviews, [moduleId]: null },
+                        };
+                    });
+                    // Refresh stats
+                    const stats = await fetchReviewStats(moduleId);
+                    set(state => ({
+                        reviewStats: { ...state.reviewStats, [moduleId]: stats },
+                    }));
+                    logger.info(`Review removed for ${moduleId}`);
+                } catch (error) {
+                    logger.error(`Failed to remove review for ${moduleId}:`, error);
+                    throw error;
+                }
+            },
+
+            // ─── Fetch recommendations ────────────────────────
+            fetchRecommendations: async (force = false) => {
+                const state = get();
+                if (
+                    !force &&
+                    state.recommendationsFetchedAt &&
+                    Date.now() - state.recommendationsFetchedAt < CATALOG_CACHE_TTL &&
+                    state.recommendations.length > 0
+                ) {
+                    return;
+                }
+
+                set({ recommendationsLoading: true });
+                try {
+                    const [trending, topRated, newReleases] = await Promise.all([
+                        fetchTrendingModules(8),
+                        fetchTopRatedModules(8),
+                        fetchNewReleases(8),
+                    ]);
+
+                    const sections: RecommendationSection[] = [];
+                    if (trending.length > 0) {
+                        sections.push({ key: 'trending', titleKey: 'store.trending', modules: trending });
+                    }
+                    if (topRated.length > 0) {
+                        sections.push({ key: 'top_rated', titleKey: 'store.topRated', modules: topRated });
+                    }
+                    if (newReleases.length > 0) {
+                        sections.push({ key: 'new_releases', titleKey: 'store.newReleases', modules: newReleases });
+                    }
+
+                    set({
+                        recommendations: sections,
+                        recommendationsLoading: false,
+                        recommendationsFetchedAt: Date.now(),
+                    });
+                    logger.info(`Recommendations fetched: ${sections.length} sections`);
+                } catch (error) {
+                    logger.error('Failed to fetch recommendations:', error);
+                    set({ recommendationsLoading: false });
+                }
+            },
+
             // ─── Helpers ───────────────────────────────────────
             isInstalled: (moduleId: string) => {
                 return get().installedModules.some(m => m.module_id === moduleId);
@@ -265,6 +428,8 @@ export const useModulesStore = create<ModulesState>()(
                 installedModules: state.installedModules,
                 installedFetchedAt: state.installedFetchedAt,
                 autoInstallComplete: state.autoInstallComplete,
+                recommendations: state.recommendations,
+                recommendationsFetchedAt: state.recommendationsFetchedAt,
             }),
         },
     ),

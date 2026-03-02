@@ -9,6 +9,7 @@ import { useI18n } from "@/providers/I18nProvider";
 import { useColors, useSpacing } from "@/providers/ThemeProvider";
 import { useWalletStore } from "@/stores/wallet-store";
 import { Ionicons } from "@expo/vector-icons";
+import { useRouter } from "expo-router";
 import React, { useCallback, useEffect, useState } from "react";
 import {
   ActivityIndicator,
@@ -27,6 +28,7 @@ export default function WalletScreen() {
   const colors = useColors();
   const spacing = useSpacing();
   const { t } = useI18n();
+  const router = useRouter();
 
   const {
     balance,
@@ -93,7 +95,7 @@ export default function WalletScreen() {
         <TouchableOpacity
           testID="btn-topup"
           style={styles.balanceActionBtn}
-          onPress={() => setActiveSection("topup")}
+          onPress={() => router.push("/wallet/topup")}
         >
           <Ionicons name="card-outline" size={24} color="#fff" />
           <Text style={styles.balanceActionText}>
@@ -315,33 +317,10 @@ export default function WalletScreen() {
         );
 
       case "topup":
-        return (
-          <View testID="topup-section">
-            <Text style={[styles.sectionTitle, { color: colors.text }]}>
-              {t("wallet.topupTitle") || "Recharger ImuCoins"}
-            </Text>
-            <View
-              style={[
-                styles.topupCard,
-                { backgroundColor: colors.surface, borderColor: colors.border },
-              ]}
-            >
-              <Ionicons name="card-outline" size={48} color={colors.primary} />
-              <Text style={[styles.topupText, { color: colors.textMuted }]}>
-                {t("wallet.topupComingSoon") ||
-                  "Le rechargement via Stripe sera disponible prochainement"}
-              </Text>
-              <TouchableOpacity
-                testID="btn-topup-notify"
-                style={[styles.topupBtn, { backgroundColor: colors.primary }]}
-              >
-                <Text style={styles.topupBtnText}>
-                  {t("wallet.notifyMe") || "Me prévenir"}
-                </Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        );
+        // Navigate to the dedicated topup screen
+        router.push("/wallet/topup");
+        setActiveSection("overview");
+        return null;
 
       default:
         // Overview: recent txs + active missions
@@ -384,6 +363,52 @@ export default function WalletScreen() {
               .filter((m) => m.status !== "claimed")
               .slice(0, 2)
               .map(renderMission)}
+
+            {/* Quick links: Subscription & Payment methods */}
+            <View style={styles.quickLinksRow}>
+              <TouchableOpacity
+                testID="btn-subscription"
+                style={[
+                  styles.quickLinkCard,
+                  {
+                    backgroundColor: colors.surface,
+                    borderColor: colors.border,
+                  },
+                ]}
+                onPress={() => router.push("/wallet/subscription")}
+              >
+                <Ionicons name="star" size={24} color="#f59e0b" />
+                <Text style={[styles.quickLinkLabel, { color: colors.text }]}>
+                  {t("wallet.subscription") || "ImuChat Pro"}
+                </Text>
+                <Text
+                  style={[styles.quickLinkDesc, { color: colors.textMuted }]}
+                >
+                  {t("wallet.manageSub") || "Gérer abonnement"}
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                testID="btn-payment-methods"
+                style={[
+                  styles.quickLinkCard,
+                  {
+                    backgroundColor: colors.surface,
+                    borderColor: colors.border,
+                  },
+                ]}
+                onPress={() => router.push("/wallet/payment-methods")}
+              >
+                <Ionicons name="card" size={24} color={colors.primary} />
+                <Text style={[styles.quickLinkLabel, { color: colors.text }]}>
+                  {t("wallet.paymentMethods") || "Paiements"}
+                </Text>
+                <Text
+                  style={[styles.quickLinkDesc, { color: colors.textMuted }]}
+                >
+                  {t("wallet.manageCards") || "Gérer cartes"}
+                </Text>
+              </TouchableOpacity>
+            </View>
           </View>
         );
     }
@@ -611,6 +636,23 @@ const styles = StyleSheet.create({
     borderRadius: 20,
   },
   topupBtnText: { color: "#fff", fontWeight: "600", fontSize: 14 },
+
+  // Quick links
+  quickLinksRow: {
+    flexDirection: "row",
+    gap: 12,
+    marginTop: 20,
+  },
+  quickLinkCard: {
+    flex: 1,
+    borderRadius: 14,
+    borderWidth: 1,
+    padding: 16,
+    alignItems: "center",
+    gap: 6,
+  },
+  quickLinkLabel: { fontSize: 14, fontWeight: "600" },
+  quickLinkDesc: { fontSize: 11, textAlign: "center" },
 
   // Error
   errorBanner: {

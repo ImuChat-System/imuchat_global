@@ -144,6 +144,43 @@ jest.mock("@/services/logger", () => ({
     }),
 }));
 
+// ─── Mock content-filter ──────────────────────────────────────
+
+var mockAnalyzeMessage = jest.fn(() => ({
+    passed: true,
+    violations: [],
+    score: 0,
+    suggestedAction: null,
+    flagged: false,
+}));
+
+var mockGetDefaultModerationConfig = jest.fn(() => ({
+    wordFilterEnabled: false,
+    bannedWords: [],
+    wordFilterAction: "delete_message",
+    linkFilterEnabled: false,
+    allowedDomains: [],
+    linkFilterAction: "warn",
+    spamLimitPerMinute: 15,
+    spamAction: "mute",
+    floodThreshold: 5,
+    muteDurationMinutes: 10,
+    warnBeforeAction: true,
+    maxWarnings: 3,
+    aiModerationEnabled: false,
+}));
+
+var mockIncrementWarnings = jest.fn(() => 1);
+
+var mockIsAutoModerationActive = jest.fn(() => false);
+
+jest.mock("@/services/content-filter", () => ({
+    analyzeMessage: (...args) => mockAnalyzeMessage(...args),
+    getDefaultModerationConfig: (...args) => mockGetDefaultModerationConfig(...args),
+    incrementWarnings: (...args) => mockIncrementWarnings(...args),
+    isAutoModerationActive: (...args) => mockIsAutoModerationActive(...args),
+}));
+
 // ─── Helpers ──────────────────────────────────────────────────
 
 function resetStore() {
@@ -497,5 +534,157 @@ describe("reset / clearError", () => {
 
         store.clearError();
         expect(useBotsStore.getState().error).toBeNull();
+    });
+});
+
+// ============================================================================
+// AUTO-MODÉRATION
+// ============================================================================
+
+describe("Auto-modération — updateAutoModConfig", () => {
+    it("crée une config pour une conversation", () => {
+        const store = useBotsStore.getState();
+        store.updateAutoModConfig("conv-1", { wordFilterEnabled: true });
+
+        const state = useBotsStore.getState();
+        expect(state.autoModerationConfigs["conv-1"]).toBeDefined();
+        expect(state.autoModerationConfigs["conv-1"].wordFilterEnabled).toBe(true);
+    });
+
+    it("merge avec la config existante", () => {
+        const store = useBotsStore.getState();
+        store.updateAutoModConfig("conv-1", { wordFilterEnabled: true });
+        store.updateAutoModConfig("conv-1", { linkFilterEnabled: true });
+
+        const config = useBotsStore.getState().autoModerationConfigs["conv-1"];
+        expect(config.wordFilterEnabled).toBe(true);
+        expect(config.linkFilterEnabled).toBe(true);
+    });
+
+    it("isole les configs par conversation", () => {
+        const store = useBotsStore.getState();
+        store.updateAutoModConfig("conv-a", { wordFilterEnabled: true });
+        store.updateAutoModConfig("conv-b", { linkFilterEnabled: true });
+
+        const state = useBotsStore.getState();
+        expect(state.autoModerationConfigs["conv-a"].wordFilterEnabled).toBe(true);
+        expect(state.autoModerationConfigs["conv-a"].linkFilterEnabled).toBe(false);
+        expect(state.autoModerationConfigs["conv-b"].linkFilterEnabled).toBe(true);
+    });
+});
+
+describe("Auto-modération — getAutoModConfig", () => {
+    it("retourne la config par défaut si aucune n'existe", () => {
+        const store = useBotsStore.getState();
+        var config = store.getAutoModConfig("conv-unknown");
+        expect(config).toBeDefined();
+        expect(mockGetDefaultModerationConfig).toHaveBeenCalled();
+    });
+
+    it("retourne la config existante", () => {
+        const store = useBotsStore.getState();
+        store.updateAutoModConfig("conv-1", { spamLimitPerMinute: 5 });
+        var config = store.getAutoModConfig("conv-1");
+        expect(config.spamLimitPerMinute).toBe(5);
+    });
+});
+
+describe("Auto-modération — analyzeIncomingMessage", () => {
+    it("appelle analyzeMessage avec la bonne config", () => {
+        const store = useBotsStore.getState();
+        store.updateAutoModConfig("conv-1", { wordFilterEnabled: true });
+        store.analyzeIncomingMessage("test message", "conv-1", "user-1");
+
+        expect(mockAnalyzeMessage).toHaveBeenCalled();
+    });
+
+    it("met à jour lastAnalysisResult", () => {
+        const store = useBotsStore.getState();
+        store.analyzeIncomingMessage("safe message", "conv-2", "user-2");
+
+        expect(useBotsStore.getState().lastAnalysisResult).toBeDefined();
+    });
+
+    it("met à jour les stats quand un message est bloqué", () => {
+        mockAnalyzeMessage.mockReturnValueOnce({
+            passed: false,
+            violations: [{ type: "profanity", severity: 2 }],
+            score: 50,
+            suggestedAction: "mute",
+            flagged: false,
+        });
+
+        const store = useBotsStore.getState();
+        store.analyzeIncomingMessage("bad message", "conv-3", "user-3");
+
+        var stats = useBotsStore.getState().autoModStats["conv-3"];
+        expect(stats).toBeDefined();
+        expect(stats.blocked).toBe(1);
+    });
+
+    it("incrémente warned quand action = warn", () => {
+        mockAnalyzeMessage.mockReturnValueOnce({
+            passed: false,
+            violations: [{ type: "spam", severity: 2 }],
+            score: 30,
+            suggestedAction: "warn",
+            flagged: false,
+        });
+
+        const store = useBotsStore.getState();
+        store.analyzeIncomingMessage("spam msg", "conv-4", "user-4");
+
+        var stats = useBotsStore.getState().autoModStats["conv-4"];
+        expect(stats.warned).toBe(1);
+        expect(mockIncrementWarnings).toHaveBeenCalledWith("user-4", "conv-4");
+    });
+});
+
+describe("Auto-modération — isAutoModActive", () => {
+    it("retourne false si aucune config", () => {
+        const store = useBotsStore.getState();
+        expect(store.isAutoModActive("conv-none")).toBe(false);
+    });
+
+    it("délègue à isAutoModerationActive quand config existe", () => {
+        mockIsAutoModerationActive.mockReturnValue(true);
+        const store = useBotsStore.getState();
+        store.updateAutoModConfig("conv-1", { wordFilterEnabled: true });
+
+        expect(store.isAutoModActive("conv-1")).toBe(true);
+    });
+});
+
+describe("Auto-modération — resetAutoModConfig", () => {
+    it("supprime la config d'une conversation", () => {
+        const store = useBotsStore.getState();
+        store.updateAutoModConfig("conv-1", { wordFilterEnabled: true });
+        store.resetAutoModConfig("conv-1");
+
+        expect(useBotsStore.getState().autoModerationConfigs["conv-1"]).toBeUndefined();
+    });
+
+    it("ne touche pas les autres conversations", () => {
+        const store = useBotsStore.getState();
+        store.updateAutoModConfig("conv-a", { wordFilterEnabled: true });
+        store.updateAutoModConfig("conv-b", { linkFilterEnabled: true });
+        store.resetAutoModConfig("conv-a");
+
+        expect(useBotsStore.getState().autoModerationConfigs["conv-a"]).toBeUndefined();
+        expect(useBotsStore.getState().autoModerationConfigs["conv-b"]).toBeDefined();
+    });
+});
+
+describe("Auto-modération — reset inclut auto-mod", () => {
+    it("reset vide aussi les configs auto-mod et stats", () => {
+        const store = useBotsStore.getState();
+        store.updateAutoModConfig("conv-1", { wordFilterEnabled: true });
+
+        store.reset();
+
+        const state = useBotsStore.getState();
+        expect(state.autoModerationConfigs).toEqual({});
+        expect(state.autoModStats).toEqual({});
+        expect(state.lastAnalysisResult).toBeNull();
     });
 });

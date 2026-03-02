@@ -28,6 +28,13 @@ import {
     updateBotStatus,
 } from '@/services/bots-api';
 
+import {
+    analyzeMessage,
+    getDefaultModerationConfig,
+    incrementWarnings,
+    isAutoModerationActive,
+} from '@/services/content-filter';
+
 import type {
     BotCommandResult,
     BotDefinition,
@@ -35,6 +42,8 @@ import type {
     BotInstance,
     BotStatus,
     BotsSection,
+    ContentAnalysisResult,
+    ModerationBotConfig,
     ModerationLog,
     QuizSession,
 } from '@/types/bots';
@@ -55,6 +64,14 @@ interface BotsStore {
     currentConversationId: string | null;
     isLoading: boolean;
     error: string | null;
+
+    // Auto-modération state
+    /** Configs d'auto-modération par conversationId */
+    autoModerationConfigs: Record<string, ModerationBotConfig>;
+    /** Dernier résultat d'analyse (pour feedback UI) */
+    lastAnalysisResult: ContentAnalysisResult | null;
+    /** Statistiques d'auto-modération par conversation */
+    autoModStats: Record<string, { blocked: number; warned: number; flagged: number }>;
 
     // Catalog actions
     loadCatalog: () => Promise<void>;
@@ -83,6 +100,22 @@ interface BotsStore {
 
     // Moderation actions
     loadModerationLogs: (conversationId: string) => Promise<void>;
+
+    // Auto-modération actions
+    /** Mettre à jour la config d'auto-modération d'une conversation */
+    updateAutoModConfig: (conversationId: string, config: Partial<ModerationBotConfig>) => void;
+    /** Obtenir la config d'auto-modération pour une conversation */
+    getAutoModConfig: (conversationId: string) => ModerationBotConfig;
+    /** Analyser un message entrant (retourne le résultat) */
+    analyzeIncomingMessage: (
+        content: string,
+        conversationId: string,
+        userId: string,
+    ) => ContentAnalysisResult;
+    /** Vérifier si l'auto-modération est active pour une conversation */
+    isAutoModActive: (conversationId: string) => boolean;
+    /** Réinitialiser la config d'auto-modération d'une conversation */
+    resetAutoModConfig: (conversationId: string) => void;
 
     // Events
     loadBotEvents: (instanceId: string) => Promise<void>;
@@ -114,6 +147,9 @@ export const useBotsStore = create<BotsStore>()(
             currentConversationId: null,
             isLoading: false,
             error: null,
+            autoModerationConfigs: {},
+            lastAnalysisResult: null,
+            autoModStats: {},
 
             // ── Catalogue ────────────────────────────────────────────
             loadCatalog: async () => {
@@ -261,6 +297,64 @@ export const useBotsStore = create<BotsStore>()(
                 }
             },
 
+            // ── Auto-modération ──────────────────────────────────────
+            updateAutoModConfig: (conversationId, config) => {
+                const { autoModerationConfigs } = get();
+                const existing = autoModerationConfigs[conversationId] ?? getDefaultModerationConfig();
+                set({
+                    autoModerationConfigs: {
+                        ...autoModerationConfigs,
+                        [conversationId]: { ...existing, ...config },
+                    },
+                });
+            },
+
+            getAutoModConfig: (conversationId) => {
+                return get().autoModerationConfigs[conversationId] ?? getDefaultModerationConfig();
+            },
+
+            analyzeIncomingMessage: (content, conversationId, userId) => {
+                const config = get().getAutoModConfig(conversationId);
+                const result = analyzeMessage(content, config, userId, conversationId);
+
+                // Mettre à jour les stats
+                if (!result.passed) {
+                    const { autoModStats } = get();
+                    const stats = autoModStats[conversationId] ?? { blocked: 0, warned: 0, flagged: 0 };
+
+                    if (result.suggestedAction === 'warn') {
+                        stats.warned += 1;
+                        incrementWarnings(userId, conversationId);
+                    } else if (result.flagged) {
+                        stats.flagged += 1;
+                    } else {
+                        stats.blocked += 1;
+                    }
+
+                    set({
+                        lastAnalysisResult: result,
+                        autoModStats: { ...autoModStats, [conversationId]: { ...stats } },
+                    });
+                } else {
+                    set({ lastAnalysisResult: result });
+                }
+
+                return result;
+            },
+
+            isAutoModActive: (conversationId) => {
+                const config = get().autoModerationConfigs[conversationId];
+                if (!config) return false;
+                return isAutoModerationActive(config);
+            },
+
+            resetAutoModConfig: (conversationId) => {
+                const { autoModerationConfigs } = get();
+                const updatedConfigs = { ...autoModerationConfigs };
+                delete updatedConfigs[conversationId];
+                set({ autoModerationConfigs: updatedConfigs });
+            },
+
             // ── Events ───────────────────────────────────────────────
             loadBotEvents: async (instanceId) => {
                 try {
@@ -306,15 +400,20 @@ export const useBotsStore = create<BotsStore>()(
                 currentConversationId: null,
                 isLoading: false,
                 error: null,
+                autoModerationConfigs: {},
+                lastAnalysisResult: null,
+                autoModStats: {},
             }),
         }),
         {
             name: 'imuchat-bots-store',
             storage: createJSONStorage(() => AsyncStorage),
             partialize: (state) => ({
-                // Persister seulement le catalogue et les bots installés
+                // Persister seulement le catalogue, les bots installés, et les configs auto-mod
                 catalog: state.catalog,
                 installedBots: state.installedBots,
+                autoModerationConfigs: state.autoModerationConfigs,
+                autoModStats: state.autoModStats,
             }),
         },
     ),

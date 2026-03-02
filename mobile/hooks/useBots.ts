@@ -18,6 +18,8 @@ import type {
     BotInstance,
     BotStatus,
     BotsSection,
+    ContentAnalysisResult,
+    ModerationBotConfig,
 } from '@/types/bots';
 import { useCallback, useEffect, useMemo } from 'react';
 
@@ -170,6 +172,46 @@ export function useBots(conversationId?: string) {
         }
     }, [conversationId]);
 
+    // ── Auto-modération ──────────────────────────────────────────
+
+    const autoModConfig = useMemo((): ModerationBotConfig => {
+        if (!conversationId) return store.getAutoModConfig('');
+        return store.getAutoModConfig(conversationId);
+    }, [conversationId, store.autoModerationConfigs]);
+
+    const autoModStats = useMemo(() => {
+        if (!conversationId) return { blocked: 0, warned: 0, flagged: 0 };
+        return store.autoModStats[conversationId] ?? { blocked: 0, warned: 0, flagged: 0 };
+    }, [conversationId, store.autoModStats]);
+
+    const isAutoModActive = useMemo((): boolean => {
+        if (!conversationId) return false;
+        return store.isAutoModActive(conversationId);
+    }, [conversationId, store.autoModerationConfigs]);
+
+    const lastAnalysisResult = useMemo(() => store.lastAnalysisResult, [store.lastAnalysisResult]);
+
+    const updateAutoModConfig = useCallback(
+        (config: Partial<ModerationBotConfig>) => {
+            if (!conversationId) return;
+            store.updateAutoModConfig(conversationId, config);
+        },
+        [conversationId],
+    );
+
+    const analyzeMessage = useCallback(
+        (content: string, userId: string): ContentAnalysisResult | null => {
+            if (!conversationId) return null;
+            return store.analyzeIncomingMessage(content, conversationId, userId);
+        },
+        [conversationId],
+    );
+
+    const resetAutoMod = useCallback(() => {
+        if (!conversationId) return;
+        store.resetAutoModConfig(conversationId);
+    }, [conversationId]);
+
     // ── Events ───────────────────────────────────────────────────
 
     const botEvents = useMemo(() => store.recentEvents, [store.recentEvents]);
@@ -228,6 +270,15 @@ export function useBots(conversationId?: string) {
 
         // Modération
         loadModerationLogs,
+
+        // Auto-modération
+        autoModConfig,
+        autoModStats,
+        isAutoModActive,
+        lastAnalysisResult,
+        updateAutoModConfig,
+        analyzeMessage,
+        resetAutoMod,
 
         // Events
         loadBotEvents,

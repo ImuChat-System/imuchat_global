@@ -2,9 +2,9 @@
 
 > **Date de création** : 21 février 2026  
 > **Dernière mise à jour** : 5 mars 2026  
-> **Statut global** : MVP Phase 2 terminé — Phase 3 modulaire en cours (DEV-018 ✅ · DEV-019 ✅ · DEV-020 ✅ · DEV-022 ✅ · DEV-023 ✅ · DEV-024 ✅ · DEV-025s ✅ · DEV-026 ✅ · DEV-027 ✅ M1-M5 complet · DEV-028 ⚠️) — 31/50 fonctionnalités (62%)
+> **Statut global** : MVP Phase 2 terminé — Phase 3 modulaire en cours (DEV-018 ✅ · DEV-019 ✅ · DEV-020 ✅ · DEV-022 ✅ · DEV-023 ✅ · DEV-024 ✅ · DEV-025s ✅ · DEV-026 ✅ · DEV-027 ✅ M1-M5 complet · DEV-028 ✅) — 33/50 fonctionnalités (66%)
 > **Référence** : Basé sur les 50 fonctionnalités (10 groupes), les ~110 écrans complémentaires, et la roadmap 3D/Live2D
-> **Métriques** : ~73 000 lignes TS/TSX · 275+ fichiers · 82 fichiers de tests (1763 tests, 0 échecs) · 12 Zustand stores · 18 hooks · 38 services · ~1522 clés i18n (fr/en/ja)
+> **Métriques** : ~73 000 lignes TS/TSX · 275+ fichiers · 87 fichiers de tests (1911 tests, 0 échecs) · 12 Zustand stores · 18 hooks · 42 services · ~1627 clés i18n (fr/en/ja)
 
 ---
 
@@ -1178,7 +1178,7 @@ App → Slides onboarding (1ère fois) → Auth (login/signup)
 | 1   | Chatbot multi-personas             | /ai          | ✅     | P2       | ✅ DEV-024 Terminé            |
 | 2   | Suggestions intelligentes réponses | /suggestions | ✅     | P3       | ✅ DEV-025s Terminé (NLP/LLM) |
 | 3   | Résumé automatisé conversations    | /suggestions | ✅     | P3       | ✅ DEV-025s Terminé (LLM)     |
-| 4   | Modération automatique groupes     | /bots        | 🔴     | P3       | Détection spam / toxicité     |
+| 4   | Modération automatique groupes     | /bots        | ✅     | P3       | ✅ Content filter + auto-mod  |
 | 5   | Traduction instantanée chats       | /chat        | ✅     | P2       | ✅ DEV-026 Terminé            |
 
 ### DEV-024 : Assistant IA (Alice) (/ai)
@@ -1422,11 +1422,39 @@ App → Slides onboarding (1ère fois) → Auth (login/signup)
 
 ---
 
+### Modération automatique groupes (Groupe 9, Fonc. 4)
+
+**Priorité** : P3  
+**Réf** : Groupe 9, Fonc. 4 — Détection spam / toxicité  
+**Statut** : ✅ Implémenté
+
+**Implémenté** :
+
+- [x] **Content Filter Service** — `services/content-filter.ts` (~380 lig.) : analyse on-device des messages en temps réel
+  - Détection profanité multi-langue (FR/EN/JA regex avec word-boundary)
+  - Détection hate speech (patterns racisme/homophobie/etc.)
+  - Anti-spam (rate-limiting par utilisateur/conversation, fenêtre 60s)
+  - Anti-flood (détection messages identiques consécutifs)
+  - Filtre links (whitelist domaines autorisés)
+  - Scoring pondéré par sévérité (0-100, seuils configurables)
+  - Tracking utilisateurs en mémoire avec TTL 5min + cleanup automatique
+- [x] **Types** — `ContentViolationType` enum (7 types), `ContentViolation`, `ContentAnalysisResult`, `UserMessageTracker` dans `types/bots.ts`
+- [x] **Store Zustand** — `autoModerationConfigs`, `lastAnalysisResult`, `autoModStats` + 5 actions (updateAutoModConfig, getAutoModConfig, analyzeIncomingMessage, isAutoModActive, resetAutoModConfig) dans `stores/bots-store.ts`
+- [x] **Hook** — 7 nouvelles propriétés auto-mod dans `hooks/useBots.ts` (autoModConfig, autoModStats, isAutoModActive, analyzeMessage, etc.)
+- [x] **UI Config** — `app/bots/auto-moderation.tsx` (~500 lig.) : écran admin complet avec filtres mots/liens, anti-spam/flood, avertissements, IA modération
+- [x] **Navigation** — Stack.Screen ajouté dans `app/bots/_layout.tsx`
+- [x] **i18n** — 20+ clés `groupBots.autoMod` × 3 locales (fr/en/ja)
+- [x] **Tests** — 51 nouveaux tests (39 content-filter + 12 store auto-mod) → 83 suites, 1814 tests, 0 échecs
+
+**Estimation** : ✅ Complet — Filtre contenu local, config admin, intégration store/hook
+
+---
+
 ### DEV-028 : Paiement & Portefeuille
 
 **Priorité** : P3  
 **Réf** : Groupe 10, Fonc. 5  
-**Statut** : ⚠️ Partiel — ImuWallet + ImuCoin + Missions implémentés (Phase M4)
+**Statut** : ✅ Complet — ImuWallet + ImuCoin + Missions + Stripe + Abonnements + IAP
 
 **Implémenté (Phase M4)** :
 
@@ -1437,21 +1465,38 @@ App → Slides onboarding (1ère fois) → Auth (login/signup)
 - [x] Store Zustand persist — `stores/wallet-store.ts` (balance, transactions, missions, loading states)
 - [x] i18n — 17 clés fr/en/ja (section wallet)
 
-**À implémenter** :
+**Implémenté (Session Stripe)** :
 
-- [ ] Intégration Stripe (cartes, Apple Pay, Google Pay) — stub `createTopupSession()`
-- [ ] Achats in-app (thèmes, modules premium, avatars)
-- [ ] Abonnements ImuChat Pro
-- [ ] Monnaie virtuelle ImuCoin étendue (gamification avancée)
+- [x] Types étendus — `types/wallet.ts` (+15 types : PaymentMethod, TopupPackage, CheckoutSession, SubscriptionPlan, UserSubscription, InAppItem, PurchaseReceipt, PaymentState, etc.)
+- [x] Service Stripe — `services/payment-api.ts` (426 lig.) : 10 fonctions (fetchTopupPackages, createCheckoutSession, getCheckoutStatus, fetchPaymentMethods, createSetupIntent, removePaymentMethod, setDefaultPaymentMethod, requestCashout, getPackagePrice, formatPrice)
+- [x] Service Abonnements — `services/subscription-api.ts` (404 lig.) : 12 fonctions (fetchSubscriptionPlans, subscribeToPlan, cancelSubscription, resumeSubscription, changePlan, getPlanPrice, getYearlySavings, isSubscriptionActive, isInTrial, getDaysRemaining, getPlanByTier, fetchCurrentSubscription)
+- [x] Service IAP — `services/iap-service.ts` (343 lig.) : 7 fonctions (fetchIAPCatalog, fetchIAPByCategory, fetchPurchasedItems, purchaseItem, restorePurchases, isItemPurchased, getPurchasedByCategory)
+- [x] Store étendu — `stores/wallet-store.ts` (661 lig.) : +17 actions, +8 champs état (paymentMethods, topupPackages, subscription, iapCatalog, purchasedItems, etc.)
+- [x] Layout wallet — `app/wallet/_layout.tsx` (Stack 4 écrans : index, topup, subscription, payment-methods)
+- [x] Écran Topup — `app/wallet/topup.tsx` (~230 lig.) : 5 packs, sélection devise, bonus %, Stripe checkout via Linking
+- [x] Écran Abonnements — `app/wallet/subscription.tsx` (~280 lig.) : Free/Pro/Premium, toggle mensuel/annuel, trial banner
+- [x] Écran Moyens de paiement — `app/wallet/payment-methods.tsx` (~240 lig.) : liste cartes, ajout SetupIntent, suppression, défaut
+- [x] Wallet index mis à jour — navigation vers topup/subscription/payment-methods via expo-router
+- [x] i18n étendu — +45 clés fr/en/ja (sections payment, subscription, IAP)
+- [x] Tests — 4 fichiers, 97 tests (payment-api 24, subscription-api 30, iap-service 22, wallet-store-payment 21)
 
-**Fichiers créés** :
+**Architecture Stripe** : Mobile → Supabase Edge Functions → Stripe API (clé secrète côté serveur uniquement)
 
-- `types/wallet.ts`
-- `services/wallet-api.ts`
-- `stores/wallet-store.ts`
-- `app/wallet/index.tsx`
+**Fichiers créés/modifiés** :
 
-## **Estimation restante** : 2-3 semaines (Stripe + achats in-app + abonnements)
+- `types/wallet.ts` (modifié, +15 types)
+- `services/payment-api.ts` (nouveau, 426 lig.)
+- `services/subscription-api.ts` (nouveau, 404 lig.)
+- `services/iap-service.ts` (nouveau, 343 lig.)
+- `stores/wallet-store.ts` (modifié, 661 lig.)
+- `app/wallet/_layout.tsx` (nouveau)
+- `app/wallet/topup.tsx` (nouveau)
+- `app/wallet/subscription.tsx` (nouveau)
+- `app/wallet/payment-methods.tsx` (nouveau)
+- `services/__tests__/payment-api.test.ts` (nouveau, 24 tests)
+- `services/__tests__/subscription-api.test.ts` (nouveau, 30 tests)
+- `services/__tests__/iap-service.test.ts` (nouveau, 22 tests)
+- `stores/__tests__/wallet-store-payment.test.ts` (nouveau, 21 tests)
 
 ### Écrans complémentaires Phase 3
 
@@ -1944,7 +1989,7 @@ Phase 2A (Communication)  █████████████░  ~90% fait 
 Phase 2B (Profils)         █████████████░  ~90% (DEV-008 ✅, DEV-009 ✅, DEV-010 ✅)
 Phase 2C (Social)          ██████████████  100% (DEV-011→014 tous ✅)
 Phase 2D (Auth/Sécurité)   █████████████░  ~90% (DEV-015→017 ✅, config dashboard)
-Phase 3  (Modules/IA)      ██████░░░░░░░░  ~42% (DEV-018 ✅, DEV-022 ✅, DEV-022b ✅, DEV-024 ✅, DEV-025s ✅, DEV-026 ✅, DEV-027 ✅ M1-M5, DEV-028 ⚠️)
+Phase 3  (Modules/IA)      ███████░░░░░░░  ~50% (DEV-018 ✅, DEV-022 ✅, DEV-022b ✅, DEV-024 ✅, DEV-025s ✅, DEV-026 ✅, DEV-027 ✅ M1-M5, DEV-028 ✅, Auto-mod ✅)
 Phase 4  (Vie quotidienne) ░░░░░░░░░░░░░░  ~0%  (DEV-029 à DEV-035)
 ```
 
@@ -1981,19 +2026,19 @@ Phase 4  (Vie quotidienne) ░░░░░░░░░░░░░░  ~0%  (DEV
 
 ### Sprint 4 — Phase 3 (Modules natifs + Store)
 
-| #   | Tâche                                      | Réf      | Priorité | Statut | Estimation               |
-| --- | ------------------------------------------ | -------- | -------- | ------ | ------------------------ |
-| 17  | ~~Store M1-M5 (Supabase+WebView+Reviews)~~ | DEV-027  | P3       | ✅     | ✅ Phases M1-M5 complet  |
-| 18  | ~~Module Music (expo-av Audio)~~           | DEV-022  | P3       | ✅     | ✅ Phase M4              |
-| 19  | ~~Module Watch (expo-av Video)~~           | DEV-022b | P3       | ✅     | ✅ Phase M4              |
-| 20  | ~~Home feed connecté~~                     | -        | P2       | ✅     | ✅ Phase M4              |
-| 21  | ~~Wallet ImuCoin + Missions~~              | DEV-028  | P3       | ⚠️     | Partiel (Stripe restant) |
-| 22  | ~~Productivity Hub~~                       | DEV-018  | P3       | ✅     | ✅ Terminé               |
-| 23  | ~~Bug fix session (60 TS errors)~~         | -        | P0       | ✅     | ✅ 1 mars                |
-| 24  | ~~Module Podcasts~~                        | DEV-023  | P3       | ✅     | ✅ Terminé               |
-| 25  | ~~Module Office~~                          | DEV-019  | P3       | ✅     | ✅ Terminé               |
-| 26  | Assistant IA (Alice)                       | DEV-024  | P2       | ✅     | ✅ Terminé               |
-| 27  | Traduction Instantanée                     | DEV-026  | P2       | ✅     | ✅ Terminé               |
+| #   | Tâche                                      | Réf      | Priorité | Statut | Estimation                   |
+| --- | ------------------------------------------ | -------- | -------- | ------ | ---------------------------- |
+| 17  | ~~Store M1-M5 (Supabase+WebView+Reviews)~~ | DEV-027  | P3       | ✅     | ✅ Phases M1-M5 complet      |
+| 18  | ~~Module Music (expo-av Audio)~~           | DEV-022  | P3       | ✅     | ✅ Phase M4                  |
+| 19  | ~~Module Watch (expo-av Video)~~           | DEV-022b | P3       | ✅     | ✅ Phase M4                  |
+| 20  | ~~Home feed connecté~~                     | -        | P2       | ✅     | ✅ Phase M4                  |
+| 21  | ~~Wallet ImuCoin + Stripe + IAP~~          | DEV-028  | P3       | ✅     | Complet (Stripe + Abo + IAP) |
+| 22  | ~~Productivity Hub~~                       | DEV-018  | P3       | ✅     | ✅ Terminé                   |
+| 23  | ~~Bug fix session (60 TS errors)~~         | -        | P0       | ✅     | ✅ 1 mars                    |
+| 24  | ~~Module Podcasts~~                        | DEV-023  | P3       | ✅     | ✅ Terminé                   |
+| 25  | ~~Module Office~~                          | DEV-019  | P3       | ✅     | ✅ Terminé                   |
+| 26  | Assistant IA (Alice)                       | DEV-024  | P2       | ✅     | ✅ Terminé                   |
+| 27  | Traduction Instantanée                     | DEV-026  | P2       | ✅     | ✅ Terminé                   |
 
 ### Backlog infrastructure
 
@@ -2022,19 +2067,19 @@ Phase 4  (Vie quotidienne) ░░░░░░░░░░░░░░  ~0%  (DEV
 
 ### Couverture des 50 fonctionnalités
 
-| Groupe    | Nom                        | Phase | Fonc. couvertes | Progression                                               | Réf Tracker                                    |
-| --------- | -------------------------- | ----- | --------------- | --------------------------------------------------------- | ---------------------------------------------- |
-| 1         | Messagerie & Communication | 2A    | 5/5 ✅          | 100%                                                      | DEV-001, DEV-002, DEV-003, DEV-004             |
-| 2         | Appels Audio & Vidéo       | 2A    | 2/5 ⚠️          | 40%                                                       | DEV-006 ✅, DEV-007                            |
-| 3         | Profils & Identité         | 2B    | 4/5 ✅          | 80%                                                       | DEV-008 ✅, DEV-010 ✅                         |
-| 4         | Personnalisation avancée   | 2B    | 2/5 ⚠️          | 40%                                                       | DEV-009 ✅                                     |
-| 5         | Mini-apps sociales natives | 2C    | 5/5 ✅          | 100%                                                      | DEV-011 ✅, DEV-012 ✅, DEV-013 ✅, DEV-014 ✅ |
-| 6         | Modules avancés            | 3     | 3/5 🟡          | 60%                                                       | DEV-018 ✅, DEV-019 ✅, DEV-020 ✅             |
-| 7         | Services utilitaires       | 3     | 0/5 🔴          | 0%                                                        | DEV-021                                        |
-| 8         | Divertissement & Création  | 3     | 3/5 🟡          | 60% (Music ✅, Watch ✅, Podcasts ✅)                     | DEV-022 ✅, DEV-022b ✅, DEV-023 ✅, DEV-034   |
-| 9         | IA intégrée                | 3     | 4/5 ✅          | 80% (Alice ✅, Suggestions ✅, Résumés ✅, Traduction ✅) | DEV-024 ✅, DEV-025s ✅, DEV-025, DEV-026 ✅   |
-| 10        | App Store & Écosystème     | 3     | 4/5 ✅          | 90% (Phase M1-M5 complet + Wallet partiel)                | DEV-027 ✅ Phase M1-M5, DEV-028 ⚠️             |
-| **Total** |                            |       | **31/50**       | **62%**                                                   |                                                |
+| Groupe    | Nom                        | Phase | Fonc. couvertes | Progression                                                             | Réf Tracker                                      |
+| --------- | -------------------------- | ----- | --------------- | ----------------------------------------------------------------------- | ------------------------------------------------ |
+| 1         | Messagerie & Communication | 2A    | 5/5 ✅          | 100%                                                                    | DEV-001, DEV-002, DEV-003, DEV-004               |
+| 2         | Appels Audio & Vidéo       | 2A    | 2/5 ⚠️          | 40%                                                                     | DEV-006 ✅, DEV-007                              |
+| 3         | Profils & Identité         | 2B    | 4/5 ✅          | 80%                                                                     | DEV-008 ✅, DEV-010 ✅                           |
+| 4         | Personnalisation avancée   | 2B    | 2/5 ⚠️          | 40%                                                                     | DEV-009 ✅                                       |
+| 5         | Mini-apps sociales natives | 2C    | 5/5 ✅          | 100%                                                                    | DEV-011 ✅, DEV-012 ✅, DEV-013 ✅, DEV-014 ✅   |
+| 6         | Modules avancés            | 3     | 3/5 🟡          | 60%                                                                     | DEV-018 ✅, DEV-019 ✅, DEV-020 ✅               |
+| 7         | Services utilitaires       | 3     | 0/5 🔴          | 0%                                                                      | DEV-021                                          |
+| 8         | Divertissement & Création  | 3     | 3/5 🟡          | 60% (Music ✅, Watch ✅, Podcasts ✅)                                   | DEV-022 ✅, DEV-022b ✅, DEV-023 ✅, DEV-034     |
+| 9         | IA intégrée                | 3     | 5/5 ✅          | 100% (Alice ✅, Suggestions ✅, Résumés ✅, Traduction ✅, Auto-mod ✅) | DEV-024 ✅, DEV-025s ✅, DEV-026 ✅, Auto-mod ✅ |
+| 10        | App Store & Écosystème     | 3     | 5/5 ✅          | 100% (Phase M1-M5 complet + Wallet + Stripe + IAP)                      | DEV-027 ✅ Phase M1-M5, DEV-028 ✅               |
+| **Total** |                            |       | **33/50**       | **66%**                                                                 |                                                  |
 
 ### Modules additionnels (hors 50 fonctionnalités)
 

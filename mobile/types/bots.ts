@@ -51,6 +51,17 @@ export enum ModerationAction {
     FLAG = 'flag',
 }
 
+/** Type de violation détectée par le filtre de contenu */
+export enum ContentViolationType {
+    PROFANITY = 'profanity',
+    SPAM = 'spam',
+    FLOOD = 'flood',
+    HATE_SPEECH = 'hate_speech',
+    HARASSMENT = 'harassment',
+    LINK = 'link',
+    CUSTOM_WORD = 'custom_word',
+}
+
 /** Type de question dans un quiz */
 export enum QuizQuestionType {
     MULTIPLE_CHOICE = 'multiple_choice',
@@ -213,6 +224,42 @@ export interface ModerationLog {
     createdAt: string;
     /** Exécuté automatiquement ou manuellement */
     isAutomatic: boolean;
+}
+
+/** Violation de contenu détectée */
+export interface ContentViolation {
+    /** Type de violation */
+    type: ContentViolationType;
+    /** Sévérité (1 = basse, 5 = critique) */
+    severity: number;
+    /** Patterns/mots ayant déclenché la violation */
+    matchedPatterns: string[];
+    /** Message descriptif */
+    message: string;
+}
+
+/** Résultat de l'analyse de contenu (retour du filtre) */
+export interface ContentAnalysisResult {
+    /** Le message a-t-il passé le filtre ? */
+    passed: boolean;
+    /** Liste des violations détectées */
+    violations: ContentViolation[];
+    /** Score de risque (0 = sûr, 100 = très dangereux) */
+    score: number;
+    /** Action suggérée (null si le message passe) */
+    suggestedAction: ModerationAction | null;
+    /** Le message doit-il être signalé pour review ? */
+    flagged: boolean;
+}
+
+/** Suivi des messages d'un utilisateur pour détection spam/flood */
+export interface UserMessageTracker {
+    /** Horodatages des derniers messages */
+    timestamps: number[];
+    /** Derniers contenus pour détection de flood (messages identiques) */
+    recentContents: string[];
+    /** Nombre d'avertissements accumulés */
+    warningCount: number;
 }
 
 // ============================================================================

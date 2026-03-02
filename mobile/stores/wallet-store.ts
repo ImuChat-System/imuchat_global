@@ -1,8 +1,9 @@
 /**
- * Wallet Store — Phase M4
+ * Wallet Store — Phase M4 + DEV-028 Stripe
  *
  * Zustand + AsyncStorage persist pour ImuWallet
- * Gère balance, transactions, missions, et actions send/claim
+ * Gère balance, transactions, missions, send/claim
+ * + Payment methods, top-up Stripe, subscriptions, in-app purchases
  */
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -17,10 +18,44 @@ import {
     sendImucoins,
 } from "@/services/wallet-api";
 
+import {
+    createCheckoutSession,
+    fetchPaymentMethods,
+    fetchTopupPackages,
+    getCheckoutStatus,
+    removePaymentMethod,
+    setDefaultPaymentMethod,
+} from "@/services/payment-api";
+
+import {
+    fetchIAPCatalog,
+    fetchPurchasedItems,
+    purchaseItem,
+    restorePurchases,
+} from "@/services/iap-service";
+
+import {
+    cancelSubscription,
+    changePlan,
+    fetchCurrentSubscription,
+    fetchSubscriptionPlans,
+    resumeSubscription,
+    subscribeToPlan,
+} from "@/services/subscription-api";
+
 import type {
+    BillingInterval,
+    CheckoutSession,
+    CurrencyCode,
+    InAppItem,
     Mission,
+    PaymentMethod,
+    PurchaseReceipt,
+    SubscriptionPlan,
+    TopupPackage,
     Transaction,
     TransactionType,
+    UserSubscription,
     WalletBalance,
 } from "@/types/wallet";
 
@@ -154,7 +189,24 @@ interface WalletStore {
     isLoading: boolean;
     error: string | null;
 
-    // Actions
+    // Payment methods
+    paymentMethods: PaymentMethod[];
+    topupPackages: TopupPackage[];
+    currentCheckout: CheckoutSession | null;
+
+    // Subscriptions
+    subscription: UserSubscription | null;
+    availablePlans: SubscriptionPlan[];
+
+    // In-App Purchases
+    iapCatalog: InAppItem[];
+    purchasedItems: PurchaseReceipt[];
+
+    // Loading states
+    paymentLoading: boolean;
+    paymentError: string | null;
+
+    // Core actions
     loadWallet: () => Promise<void>;
     refreshBalance: () => Promise<void>;
     loadTransactions: () => Promise<void>;
@@ -163,9 +215,34 @@ interface WalletStore {
     claim: (missionId: string) => Promise<boolean>;
     clearError: () => void;
 
+    // Payment actions
+    loadPaymentMethods: () => Promise<void>;
+    addPaymentMethod: () => Promise<{ clientSecret: string } | null>;
+    removeMethod: (methodId: string) => Promise<boolean>;
+    setDefaultMethod: (methodId: string) => Promise<boolean>;
+    loadTopupPackages: () => Promise<void>;
+    startTopup: (packageId: string, currency?: CurrencyCode) => Promise<CheckoutSession | null>;
+    checkTopupStatus: (sessionId: string) => Promise<void>;
+
+    // Subscription actions
+    loadSubscription: () => Promise<void>;
+    loadPlans: () => Promise<void>;
+    subscribe: (planId: string, interval?: BillingInterval, currency?: CurrencyCode) => Promise<string | null>;
+    cancelSub: () => Promise<boolean>;
+    resumeSub: () => Promise<boolean>;
+    changeSub: (newPlanId: string, interval?: BillingInterval) => Promise<boolean>;
+
+    // IAP actions
+    loadIAPCatalog: () => Promise<void>;
+    loadPurchases: () => Promise<void>;
+    purchase: (itemId: string) => Promise<PurchaseReceipt | null>;
+    restoreAllPurchases: () => Promise<void>;
+    isItemOwned: (itemId: string) => boolean;
+
     // Helpers
     getTransactionIcon: (type: TransactionType) => string;
     formatAmount: (amount: number) => string;
+    clearPaymentError: () => void;
 }
 
 // ─── Zustand store ────────────────────────────────────────────────
@@ -177,6 +254,17 @@ export const useWalletStore = create<WalletStore>()(
             missions: [],
             isLoading: false,
             error: null,
+
+            // Payment state
+            paymentMethods: [],
+            topupPackages: [],
+            currentCheckout: null,
+            subscription: null,
+            availablePlans: [],
+            iapCatalog: [],
+            purchasedItems: [],
+            paymentLoading: false,
+            paymentError: null,
 
             // ── Load everything ──────────────────────────────────────
             loadWallet: async () => {
@@ -287,6 +375,259 @@ export const useWalletStore = create<WalletStore>()(
 
             clearError: () => set({ error: null }),
 
+            // ══════════════════════════════════════════════════════════
+            // PAYMENT METHODS
+            // ══════════════════════════════════════════════════════════
+
+            loadPaymentMethods: async () => {
+                set({ paymentLoading: true, paymentError: null });
+                try {
+                    const methods = await fetchPaymentMethods();
+                    set({ paymentMethods: methods, paymentLoading: false });
+                } catch (err) {
+                    console.warn("[WalletStore] loadPaymentMethods error:", err);
+                    set({ paymentLoading: false, paymentError: (err as Error).message });
+                }
+            },
+
+            addPaymentMethod: async () => {
+                try {
+                    const { createSetupIntent } = await import("@/services/payment-api");
+                    const result = await createSetupIntent();
+                    if (result) {
+                        return { clientSecret: result.clientSecret };
+                    }
+                    return null;
+                } catch (err) {
+                    set({ paymentError: (err as Error).message });
+                    return null;
+                }
+            },
+
+            removeMethod: async (methodId) => {
+                try {
+                    const ok = await removePaymentMethod(methodId);
+                    if (ok) {
+                        set({
+                            paymentMethods: get().paymentMethods.filter((m) => m.id !== methodId),
+                        });
+                    }
+                    return ok;
+                } catch (err) {
+                    set({ paymentError: (err as Error).message });
+                    return false;
+                }
+            },
+
+            setDefaultMethod: async (methodId) => {
+                try {
+                    const ok = await setDefaultPaymentMethod(methodId);
+                    if (ok) {
+                        set({
+                            paymentMethods: get().paymentMethods.map((m) => ({
+                                ...m,
+                                isDefault: m.id === methodId,
+                            })),
+                        });
+                    }
+                    return ok;
+                } catch (err) {
+                    set({ paymentError: (err as Error).message });
+                    return false;
+                }
+            },
+
+            // ══════════════════════════════════════════════════════════
+            // TOP-UP / CHECKOUT
+            // ══════════════════════════════════════════════════════════
+
+            loadTopupPackages: async () => {
+                try {
+                    const packages = await fetchTopupPackages();
+                    set({ topupPackages: packages });
+                } catch (err) {
+                    console.warn("[WalletStore] loadTopupPackages error:", err);
+                }
+            },
+
+            startTopup: async (packageId, currency = "EUR") => {
+                set({ paymentLoading: true, paymentError: null });
+                try {
+                    const session = await createCheckoutSession(packageId, currency);
+                    set({ currentCheckout: session, paymentLoading: false });
+                    return session;
+                } catch (err) {
+                    set({ paymentLoading: false, paymentError: (err as Error).message });
+                    return null;
+                }
+            },
+
+            checkTopupStatus: async (sessionId) => {
+                try {
+                    const status = await getCheckoutStatus(sessionId);
+                    if (status === "completed") {
+                        // Refresh balance after successful topup
+                        const balance = await fetchBalance();
+                        if (balance) set({ balance });
+                        set({ currentCheckout: null });
+                    } else if (status) {
+                        const current = get().currentCheckout;
+                        if (current) {
+                            set({ currentCheckout: { ...current, status } });
+                        }
+                    }
+                } catch (err) {
+                    console.warn("[WalletStore] checkTopupStatus error:", err);
+                }
+            },
+
+            // ══════════════════════════════════════════════════════════
+            // SUBSCRIPTIONS
+            // ══════════════════════════════════════════════════════════
+
+            loadSubscription: async () => {
+                try {
+                    const sub = await fetchCurrentSubscription();
+                    set({ subscription: sub });
+                } catch (err) {
+                    console.warn("[WalletStore] loadSubscription error:", err);
+                }
+            },
+
+            loadPlans: async () => {
+                try {
+                    const plans = await fetchSubscriptionPlans();
+                    set({ availablePlans: plans });
+                } catch (err) {
+                    console.warn("[WalletStore] loadPlans error:", err);
+                }
+            },
+
+            subscribe: async (planId, interval = "month", currency = "EUR") => {
+                set({ paymentLoading: true, paymentError: null });
+                try {
+                    const result = await subscribeToPlan(planId, interval, currency);
+                    set({ paymentLoading: false });
+                    if (result) {
+                        return result.url;
+                    }
+                    return null;
+                } catch (err) {
+                    set({ paymentLoading: false, paymentError: (err as Error).message });
+                    return null;
+                }
+            },
+
+            cancelSub: async () => {
+                set({ paymentLoading: true, paymentError: null });
+                try {
+                    const ok = await cancelSubscription();
+                    if (ok) {
+                        const sub = get().subscription;
+                        if (sub) {
+                            set({ subscription: { ...sub, cancelAtPeriodEnd: true } });
+                        }
+                    }
+                    set({ paymentLoading: false });
+                    return ok;
+                } catch (err) {
+                    set({ paymentLoading: false, paymentError: (err as Error).message });
+                    return false;
+                }
+            },
+
+            resumeSub: async () => {
+                set({ paymentLoading: true, paymentError: null });
+                try {
+                    const ok = await resumeSubscription();
+                    if (ok) {
+                        const sub = get().subscription;
+                        if (sub) {
+                            set({ subscription: { ...sub, cancelAtPeriodEnd: false } });
+                        }
+                    }
+                    set({ paymentLoading: false });
+                    return ok;
+                } catch (err) {
+                    set({ paymentLoading: false, paymentError: (err as Error).message });
+                    return false;
+                }
+            },
+
+            changeSub: async (newPlanId, interval = "month") => {
+                set({ paymentLoading: true, paymentError: null });
+                try {
+                    const ok = await changePlan(newPlanId, interval);
+                    if (ok) {
+                        // Reload subscription to get updated data
+                        const sub = await fetchCurrentSubscription();
+                        set({ subscription: sub });
+                    }
+                    set({ paymentLoading: false });
+                    return ok;
+                } catch (err) {
+                    set({ paymentLoading: false, paymentError: (err as Error).message });
+                    return false;
+                }
+            },
+
+            // ══════════════════════════════════════════════════════════
+            // IN-APP PURCHASES
+            // ══════════════════════════════════════════════════════════
+
+            loadIAPCatalog: async () => {
+                try {
+                    const catalog = await fetchIAPCatalog();
+                    set({ iapCatalog: catalog });
+                } catch (err) {
+                    console.warn("[WalletStore] loadIAPCatalog error:", err);
+                }
+            },
+
+            loadPurchases: async () => {
+                try {
+                    const items = await fetchPurchasedItems();
+                    set({ purchasedItems: items });
+                } catch (err) {
+                    console.warn("[WalletStore] loadPurchases error:", err);
+                }
+            },
+
+            purchase: async (itemId) => {
+                set({ paymentLoading: true, paymentError: null });
+                try {
+                    const receipt = await purchaseItem(itemId);
+                    if (receipt) {
+                        set({
+                            purchasedItems: [receipt, ...get().purchasedItems],
+                        });
+                    }
+                    set({ paymentLoading: false });
+                    return receipt;
+                } catch (err) {
+                    set({ paymentLoading: false, paymentError: (err as Error).message });
+                    return null;
+                }
+            },
+
+            restoreAllPurchases: async () => {
+                set({ paymentLoading: true, paymentError: null });
+                try {
+                    const restored = await restorePurchases();
+                    set({ purchasedItems: restored, paymentLoading: false });
+                } catch (err) {
+                    set({ paymentLoading: false, paymentError: (err as Error).message });
+                }
+            },
+
+            isItemOwned: (itemId) => {
+                return get().purchasedItems.some(
+                    (receipt) => receipt.itemId === itemId && receipt.isActive,
+                );
+            },
+
+            clearPaymentError: () => set({ paymentError: null }),
+
             // ── Helpers ──────────────────────────────────────────────
             getTransactionIcon: (type) => {
                 const icons: Record<TransactionType, string> = {
@@ -311,6 +652,8 @@ export const useWalletStore = create<WalletStore>()(
             storage: createJSONStorage(() => AsyncStorage),
             partialize: (state) => ({
                 balance: state.balance,
+                subscription: state.subscription,
+                purchasedItems: state.purchasedItems,
             }),
         },
     ),

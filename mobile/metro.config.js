@@ -58,11 +58,14 @@ module.exports = (async () => {
 
   // 6. Exclure les dossiers des autres workspace packages pour les performances
   //    (on les résout via les symlinks, pas besoin de les scanner entièrement)
+  //    + Exclure les fichiers de test du bundle (Metro les inclut sinon via require.context)
   const workspacePackages = ["web-app", "desktop-app", "site-vitrine", "infra"];
   config.resolver.blockList = [
     ...workspacePackages.map(
       (pkg) => new RegExp(`${workspaceRoot}/${pkg}/node_modules/.*`),
     ),
+    /__tests__\/.*/,
+    /.*\.test\.(ts|tsx|js|jsx)$/,
   ];
 
   return config;

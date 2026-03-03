@@ -2,9 +2,9 @@
 
 > **Date de création** : 21 février 2026  
 > **Dernière mise à jour** : 6 mars 2026  
-> **Statut global** : MVP Phase 2 terminé — Phase 3 modulaire en cours (DEV-018 ✅ · DEV-019 ✅ · DEV-020 ✅ · DEV-022 ✅ · DEV-023 ✅ · DEV-024 ✅ · DEV-025 ✅ · DEV-025s ✅ · DEV-026 ✅ · DEV-027 ✅ M1-M5 complet · DEV-028 ✅ · DEV-029 ✅ · DEV-030 ✅ · DEV-031 ✅ · DEV-032 ✅ · DEV-033 ✅ · Store Dev ✅ · DEV-035 IA Admin ✅ · DEV-036 Analytics ✅) — 41/50 fonctionnalités (82%)
+> **Statut global** : MVP Phase 2 terminé — Phase 3 modulaire en cours (DEV-018 ✅ · DEV-019 ✅ · DEV-020 ✅ · DEV-022 ✅ · DEV-023 ✅ · DEV-024 ✅ · DEV-025 ✅ · DEV-025s ✅ · DEV-026 ✅ · DEV-027 ✅ M1-M5 complet · DEV-028 ✅ · DEV-029 ✅ · DEV-030 ✅ · DEV-031 ✅ · DEV-032 ✅ · DEV-033 ✅ · Store Dev ✅ · DEV-035 IA Admin ✅ · DEV-036 Analytics ✅ · DEV-037 File Manager ✅) — 42/50 fonctionnalités (84%)
 > **Référence** : Basé sur les 50 fonctionnalités (10 groupes), les ~110 écrans complémentaires, et la roadmap 3D/Live2D
-> **Métriques** : ~80 000 lignes TS/TSX · 340+ fichiers · 99 fichiers de tests (2246 tests, 0 échecs) · 19 Zustand stores · 21 hooks · 43 services · ~2565 clés i18n (fr/en/ja)
+> **Métriques** : ~80 000 lignes TS/TSX · 340+ fichiers · 101 fichiers de tests (2296 tests, 0 échecs) · 20 Zustand stores · 21 hooks · 43 services · ~2630 clés i18n (fr/en/ja)
 
 ---
 
@@ -1697,7 +1697,7 @@ App → Slides onboarding (1ère fois) → Auth (login/signup)
 | Store Dev & Créateurs       | ~11      | P3       | ✅ 10 sous-écrans, 43 tests              |
 | IA Administration           | ~7       | P3       | ✅ DEV-035 — 7 sous-écrans, 50 tests     |
 | Analytics & Insights        | ~7       | P3       | ✅ DEV-036 — 7 sous-écrans, 47 tests     |
-| Gestion fichiers / stockage | ~7       | P3       | Drive personnel, sync multi-device       |
+| Gestion fichiers / stockage | ~7       | P3       | ✅ DEV-037 — 7 sous-écrans, 50 tests     |
 | Paramètres globaux avancés  | ~9       | P2       | ✅ DEV-030 — 9 sous-écrans, 36 tests     |
 | Support & Assistance        | ~8       | P2       | ✅ DEV-031 — 8 sous-écrans, 36 tests     |
 | Gamification                | ~6       | P3       | ✅ DEV-032 — 6 sous-écrans, 28 tests     |
@@ -2519,6 +2519,47 @@ mobile/
 
 ---
 
+### Session 6 mars 2026 — File Manager & Storage (DEV-037)
+
+**Objectif** : Drive personnel — gestion fichiers, dossiers, favoris, corbeille, partage, synchronisation multi-device, upload
+
+**Réalisations** :
+
+1. ✅ Types complets (`types/file-manager.ts` ~212 lignes — FileItem, FolderItem, FSItem, StorageQuota, StorageBreakdown, ShareRequest, SyncDevice, SyncSettings, UploadItem, FileManagerState)
+2. ✅ Store Zustand v5 + persist (`stores/file-manager-store.ts` ~447 lignes — 20+ actions, mock data generators, persist sortBy/sortOrder/viewMode/syncSettings)
+3. ✅ Layout Stack + 7 écrans dans `app/file-manager/` :
+   - `index.tsx` — Hub : barre stockage, breakdown par type, fichiers récents, 6 cartes navigation
+   - `my-files.tsx` — Navigateur fichiers, breadcrumbs, recherche, tri, vue grille/liste, dossiers
+   - `shared.tsx` — Fichiers partagés, badges permission (view/edit/admin), expiration, révocation
+   - `favorites.tsx` — Fichiers favoris avec toggle étoile
+   - `trash.tsx` — Corbeille : restauration, vidage avec confirmation Alert
+   - `sync.tsx` — Sync now, liste appareils (pastilles statut), 5 toggles sync, sélecteur fréquence
+   - `upload.tsx` — File picker, queue d'upload avec barres de progression, nettoyage terminés
+4. ✅ i18n : ~65 clés par langue (fr/en/ja) — section `fileManager`
+5. ✅ Carte navigation dans settings.tsx (📁 après Analytics)
+6. ✅ 50 nouveaux tests (27 store + 23 écrans), tous passants
+7. ✅ 0 erreurs TypeScript sur tous les fichiers
+
+**Fichiers créés (12)** :
+
+- `types/file-manager.ts`
+- `stores/file-manager-store.ts`
+- `app/file-manager/_layout.tsx`, `index.tsx`, `my-files.tsx`, `shared.tsx`, `favorites.tsx`
+- `app/file-manager/trash.tsx`, `sync.tsx`, `upload.tsx`
+- `__tests__/file-manager-store.test.ts` (27 tests)
+- `__tests__/file-manager-screens.test.tsx` (23 tests)
+
+**Fichiers modifiés (4)** :
+
+- `i18n/fr.json` (+~65 clés fileManager)
+- `i18n/en.json` (+~65 clés fileManager)
+- `i18n/ja.json` (+~65 clés fileManager)
+- `app/(tabs)/settings.tsx` (ajout carte navigation 📁)
+
+**Baseline finale** : 101 suites · 2296 tests · 0 échecs (+2 suites, +50 tests)
+
+---
+
 ### Session en cours — DEV-015 OAuth + DEV-010 Onboarding
 
 **Objectif** : Configurer OAuth Google + Apple Sign-In + Flow d'onboarding post-signup
@@ -2797,8 +2838,9 @@ mobile/
 | `docs/IMUCOMPANION_ROADMAP_WEBAPP.md`     | Roadmap web-app ImuCompanion (6 phases, ~21 sem.)   |
 | `docs/IMUCOMPANION_ROADMAP_DESKTOP.md`    | Roadmap desktop ImuCompanion (6 phases, ~20 sem.)   |
 | `docs/Progression_Mobile.md`              | Progression mobile vs web détaillée par semaine     |
-| `WEBAPP_TODO_TRACKER.md`                  | Tracker équivalent côté web-app                     |
+| `web-app/WEBAPP_TODO_TRACKER.md`          | Tracker équivalent côté web-app                     |
+| `web-app/MVP_PHASE_2_WEBAPP_STORE.md`     | Tracker Phase 2 côté web-app                        |
 
 ---
 
-_Document mis à jour — 6 mars 2026 — Phase 3 modulaire en cours (82% des 50 fonctionnalités — 41/50) — Tests : 99 suites, 2246 tests, 0 échecs_
+_Document mis à jour — 6 mars 2026 — Phase 3 modulaire en cours (84% des 50 fonctionnalités — 42/50) — Tests : 101 suites, 2296 tests, 0 échecs_

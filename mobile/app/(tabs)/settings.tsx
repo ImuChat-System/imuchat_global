@@ -1696,6 +1696,46 @@ export default function SettingsScreen() {
         </View>
       </TouchableOpacity>
 
+      {/* ===== FILE MANAGER & STORAGE ===== */}
+      <TouchableOpacity
+        activeOpacity={0.7}
+        onPress={() => router.push("/file-manager" as any)}
+      >
+        <View
+          style={[
+            styles.card,
+            {
+              backgroundColor: theme.colors.surface,
+              flexDirection: "row",
+              alignItems: "center",
+              gap: 12,
+              padding: 14,
+            },
+          ]}
+        >
+          <Text style={{ fontSize: 22 }}>📁</Text>
+          <View style={{ flex: 1 }}>
+            <Text style={[styles.labelText, { color: theme.colors.text }]}>
+              {t("fileManager.settingsCard")}
+            </Text>
+            <Text
+              style={{
+                fontSize: 12,
+                color: theme.colors.textMuted,
+                marginTop: 2,
+              }}
+            >
+              {t("fileManager.settingsCardDesc")}
+            </Text>
+          </View>
+          <Ionicons
+            name="chevron-forward"
+            size={20}
+            color={theme.colors.textMuted}
+          />
+        </View>
+      </TouchableOpacity>
+
       {/* ===== ABOUT ===== */}
       <SectionHeader title={t("settings.about")} color={theme.colors.text} />
 

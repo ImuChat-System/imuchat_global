@@ -2,9 +2,9 @@
 
 > **Date de création** : 21 février 2026  
 > **Dernière mise à jour** : 5 mars 2026  
-> **Statut global** : MVP Phase 2 terminé — Phase 3 modulaire en cours (DEV-018 ✅ · DEV-019 ✅ · DEV-020 ✅ · DEV-022 ✅ · DEV-023 ✅ · DEV-024 ✅ · DEV-025 ✅ · DEV-025s ✅ · DEV-026 ✅ · DEV-027 ✅ M1-M5 complet · DEV-028 ✅ · DEV-029 ✅ · DEV-030 ✅ · DEV-031 ✅) — 36/50 fonctionnalités (72%)
+> **Statut global** : MVP Phase 2 terminé — Phase 3 modulaire en cours (DEV-018 ✅ · DEV-019 ✅ · DEV-020 ✅ · DEV-022 ✅ · DEV-023 ✅ · DEV-024 ✅ · DEV-025 ✅ · DEV-025s ✅ · DEV-026 ✅ · DEV-027 ✅ M1-M5 complet · DEV-028 ✅ · DEV-029 ✅ · DEV-030 ✅ · DEV-031 ✅ · DEV-032 ✅) — 37/50 fonctionnalités (74%)
 > **Référence** : Basé sur les 50 fonctionnalités (10 groupes), les ~110 écrans complémentaires, et la roadmap 3D/Live2D
-> **Métriques** : ~78 000 lignes TS/TSX · 310+ fichiers · 91 fichiers de tests (2052 tests, 0 échecs) · 15 Zustand stores · 20 hooks · 43 services · ~1960 clés i18n (fr/en/ja)
+> **Métriques** : ~80 000 lignes TS/TSX · 325+ fichiers · 92 fichiers de tests (2080 tests, 0 échecs) · 16 Zustand stores · 21 hooks · 43 services · ~2155 clés i18n (fr/en/ja)
 
 ---
 
@@ -1635,6 +1635,33 @@ App → Slides onboarding (1ère fois) → Auth (login/signup)
 - `i18n/ja.json` (+~155 clés support)
 - `app/(tabs)/settings.tsx` (ajout carte navigation support)
 
+### DEV-032 : Gamification ✅
+
+**Date** : 7 mars 2026
+**Statut** : ✅ Complet — 6 sous-écrans, 28 tests, 0 échecs
+
+**Fichiers créés** (13) :
+
+- `types/gamification.ts` — 25+ types (XPEvent, UserLevel, Badge, Mission, Leaderboard, AvatarSkin, ShopSection, etc.)
+- `stores/gamification-store.ts` — Zustand v5 + persist, ~20 actions
+- `hooks/useGamification.ts` — Façade hook, 5 valeurs calculées (levelProgress, unlockedBadgesCount, activeMissionsCount, claimableMissionsCount, ownedSkinsCount)
+- `app/gamification/_layout.tsx` — Stack layout, 7 écrans
+- `app/gamification/index.tsx` — Hub avec carte niveau + 6 liens navigation + statistiques rapides
+- `app/gamification/xp-levels.tsx` — Profil XP, barre progression, historique gains
+- `app/gamification/badges.tsx` — Collection badges grille, filtre rareté, détail au tap
+- `app/gamification/missions.tsx` — Missions daily/weekly/special, progression, claim reward
+- `app/gamification/leaderboards.tsx` — Classement global/amis/communauté, sélecteur de période
+- `app/gamification/avatar.tsx` — Aperçu avatar, sélection catégorie, équipement skins possédés
+- `app/gamification/shop.tsx` — Boutique skins, onglets all/featured/owned, achat avec confirmation
+- `stores/__tests__/gamification-store.test.ts` — 28 tests (XP, badges, missions, leaderboard, shop, skins, rewards, reset)
+
+**Fichiers modifiés** :
+
+- `i18n/fr.json` (+~65 clés gamification)
+- `i18n/en.json` (+~65 clés gamification)
+- `i18n/ja.json` (+~65 clés gamification)
+- `app/(tabs)/settings.tsx` (ajout carte navigation gamification 🎮)
+
 ### Écrans complémentaires Phase 3
 
 | Catégorie                   | # Écrans | Priorité | Notes                                |
@@ -1646,7 +1673,7 @@ App → Slides onboarding (1ère fois) → Auth (login/signup)
 | Gestion fichiers / stockage | ~7       | P3       | Drive personnel, sync multi-device   |
 | Paramètres globaux avancés  | ~9       | P2       | ✅ DEV-030 — 9 sous-écrans, 36 tests |
 | Support & Assistance        | ~8       | P2       | ✅ DEV-031 — 8 sous-écrans, 36 tests |
-| Gamification                | ~6       | P3       | XP, badges, missions, classements    |
+| Gamification                | ~6       | P3       | ✅ DEV-032 — 6 sous-écrans, 28 tests |
 
 ---
 
@@ -2126,7 +2153,7 @@ Phase 2A (Communication)  █████████████░  ~90% fait 
 Phase 2B (Profils)         █████████████░  ~90% (DEV-008 ✅, DEV-009 ✅, DEV-010 ✅)
 Phase 2C (Social)          ██████████████  100% (DEV-011→014 tous ✅)
 Phase 2D (Auth/Sécurité)   █████████████░  ~90% (DEV-015→017 ✅, config dashboard)
-Phase 3  (Modules/IA)      ██████████░░░░  ~65% (DEV-018 ✅, DEV-022 ✅, DEV-022b ✅, DEV-024 ✅, DEV-025 ✅, DEV-025s ✅, DEV-026 ✅, DEV-027 ✅ M1-M5, DEV-028 ✅, DEV-030 ✅, DEV-031 ✅, Auto-mod ✅)
+Phase 3  (Modules/IA)      ███████████░░░  ~70% (DEV-018 ✅, DEV-022 ✅, DEV-022b ✅, DEV-024 ✅, DEV-025 ✅, DEV-025s ✅, DEV-026 ✅, DEV-027 ✅ M1-M5, DEV-028 ✅, DEV-030 ✅, DEV-031 ✅, DEV-032 ✅, Auto-mod ✅)
 Phase 4  (Vie quotidienne) ░░░░░░░░░░░░░░  ~0%  (DEV-029 à DEV-035)
 ```
 

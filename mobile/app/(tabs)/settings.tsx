@@ -1500,6 +1500,45 @@ export default function SettingsScreen() {
         </View>
       </TouchableOpacity>
 
+      {/* ── Gamification ─────────────────────────────────────────── */}
+      <TouchableOpacity
+        onPress={() => router.push("/gamification" as any)}
+        activeOpacity={0.7}
+      >
+        <View
+          style={[
+            styles.card,
+            {
+              backgroundColor: theme.colors.surface,
+              flexDirection: "row",
+              alignItems: "center",
+              gap: 12,
+            },
+          ]}
+        >
+          <Text style={{ fontSize: 22 }}>🎮</Text>
+          <View style={{ flex: 1 }}>
+            <Text style={[styles.labelText, { color: theme.colors.text }]}>
+              {t("gamification.title")}
+            </Text>
+            <Text
+              style={{
+                fontSize: 12,
+                color: theme.colors.textMuted,
+                marginTop: 2,
+              }}
+            >
+              {t("gamification.subtitle")}
+            </Text>
+          </View>
+          <Ionicons
+            name="chevron-forward"
+            size={20}
+            color={theme.colors.textMuted}
+          />
+        </View>
+      </TouchableOpacity>
+
       {/* ===== ABOUT ===== */}
       <SectionHeader title={t("settings.about")} color={theme.colors.text} />
 

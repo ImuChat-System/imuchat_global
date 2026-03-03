@@ -1427,6 +1427,79 @@ export default function SettingsScreen() {
         </View>
       </View>
 
+      {/* ===== ADVANCED SETTINGS ===== */}
+      <SectionHeader
+        title={t("advancedSettings.title")}
+        color={theme.colors.text}
+      />
+
+      <TouchableOpacity
+        testID="btn-advanced-settings"
+        style={[
+          styles.card,
+          { backgroundColor: theme.colors.surface, padding: 16 },
+        ]}
+        onPress={() => router.push("/settings" as any)}
+        activeOpacity={0.7}
+      >
+        <View style={{ flexDirection: "row", alignItems: "center", gap: 12 }}>
+          <Text style={{ fontSize: 22 }}>⚙️</Text>
+          <View style={{ flex: 1 }}>
+            <Text style={[styles.labelText, { color: theme.colors.text }]}>
+              {t("advancedSettings.title")}
+            </Text>
+            <Text
+              style={{
+                fontSize: 12,
+                color: theme.colors.textMuted,
+                marginTop: 2,
+              }}
+            >
+              Notifications, performance, accessibilité, intégrations…
+            </Text>
+          </View>
+          <Ionicons
+            name="chevron-forward"
+            size={20}
+            color={theme.colors.textMuted}
+          />
+        </View>
+      </TouchableOpacity>
+
+      {/* ===== SUPPORT & ASSISTANCE ===== */}
+      <TouchableOpacity
+        testID="nav-support"
+        style={[
+          styles.card,
+          { backgroundColor: theme.colors.surface, padding: 16 },
+        ]}
+        onPress={() => router.push("/support" as any)}
+        activeOpacity={0.7}
+      >
+        <View style={{ flexDirection: "row", alignItems: "center", gap: 12 }}>
+          <Text style={{ fontSize: 22 }}>🆘</Text>
+          <View style={{ flex: 1 }}>
+            <Text style={[styles.labelText, { color: theme.colors.text }]}>
+              {t("support.title")}
+            </Text>
+            <Text
+              style={{
+                fontSize: 12,
+                color: theme.colors.textMuted,
+                marginTop: 2,
+              }}
+            >
+              {t("support.helpCenterSub")}
+            </Text>
+          </View>
+          <Ionicons
+            name="chevron-forward"
+            size={20}
+            color={theme.colors.textMuted}
+          />
+        </View>
+      </TouchableOpacity>
+
       {/* ===== ABOUT ===== */}
       <SectionHeader title={t("settings.about")} color={theme.colors.text} />
 

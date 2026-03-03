@@ -2,9 +2,9 @@
 
 > **Date de création** : 21 février 2026  
 > **Dernière mise à jour** : 5 mars 2026  
-> **Statut global** : MVP Phase 2 terminé — Phase 3 modulaire en cours (DEV-018 ✅ · DEV-019 ✅ · DEV-020 ✅ · DEV-022 ✅ · DEV-023 ✅ · DEV-024 ✅ · DEV-025s ✅ · DEV-026 ✅ · DEV-027 ✅ M1-M5 complet · DEV-028 ✅ · DEV-029 ✅) — 34/50 fonctionnalités (68%)
+> **Statut global** : MVP Phase 2 terminé — Phase 3 modulaire en cours (DEV-018 ✅ · DEV-019 ✅ · DEV-020 ✅ · DEV-022 ✅ · DEV-023 ✅ · DEV-024 ✅ · DEV-025 ✅ · DEV-025s ✅ · DEV-026 ✅ · DEV-027 ✅ M1-M5 complet · DEV-028 ✅ · DEV-029 ✅ · DEV-030 ✅ · DEV-031 ✅) — 36/50 fonctionnalités (72%)
 > **Référence** : Basé sur les 50 fonctionnalités (10 groupes), les ~110 écrans complémentaires, et la roadmap 3D/Live2D
-> **Métriques** : ~74 800 lignes TS/TSX · 285+ fichiers · 89 fichiers de tests (1980 tests, 0 échecs) · 13 Zustand stores · 18 hooks · 43 services · ~1657 clés i18n (fr/en/ja)
+> **Métriques** : ~78 000 lignes TS/TSX · 310+ fichiers · 91 fichiers de tests (2052 tests, 0 échecs) · 15 Zustand stores · 20 hooks · 43 services · ~1960 clés i18n (fr/en/ja)
 
 ---
 
@@ -1301,18 +1301,36 @@ App → Slides onboarding (1ère fois) → Auth (login/signup)
 
 **Priorité** : P3  
 **Réf** : ADDITIONAL_AND_CORE_MODULES.md §IA  
-**Statut** : 🔴 Non démarré
+**Statut** : ✅ Implémenté
 
-**À implémenter** :
+**Implémenté** :
 
-- [ ] Framework bots modulaire
-- [ ] Bot modération (auto-kick, mute, warnings)
-- [ ] Bot quiz (questions/réponses dans les groupes)
-- [ ] Bot animation (GIFs, jeux, polls)
-- [ ] Bots spécialisés (gaming, études, business)
-- [ ] Marketplace bots
+- [x] Framework bots modulaire (types complets, 9 enums, 20+ interfaces)
+- [x] Bot modération ImuGuard (warn, mute, kick, ban, modlogs, auto-mod)
+- [x] Bot quiz ImuQuiz (start/stop/skip, answer, leaderboard, scores temps réel)
+- [x] Bot animation ImuFun (GIFs, blagues, faits du jour, sondages)
+- [x] Bot utilitaire ImuTools (rappels, stats groupe, notes partagées, help)
+- [x] Marketplace bots (placeholder + catalogue officiel)
 
-**Estimation** : 2-3 semaines
+**Fichiers créés/modifiés** :
+
+- `types/bots.ts` — 427 lignes : types complets (9 enums, 20+ interfaces)
+- `services/bots-api.ts` — 1595 lignes : 4 bots officiels, CRUD Supabase, command dispatch, quiz engine, moderation logs
+- `services/content-filter.ts` — 490 lignes : filtre on-device (profanité, spam, flood, liens, hate speech)
+- `stores/bots-store.ts` — 421 lignes : Zustand store persist (catalog, install, quiz, auto-mod, events)
+- `hooks/useBots.ts` — 293 lignes : hook React façade complet
+- `app/bots/_layout.tsx` — Stack navigation layout
+- `app/bots/index.tsx` — Écran principal (catalogue + installés, recherche, install)
+- `app/bots/[id].tsx` — Détail bot (config, commandes, toggle status, install/uninstall)
+- `app/bots/auto-moderation.tsx` — Config auto-modération (filtres, seuils, actions)
+- `app/bots/moderation.tsx` — Logs de modération
+- `app/bots/marketplace.tsx` — Marketplace (placeholder post-MVP)
+- `i18n/fr.json`, `en.json`, `ja.json` — 49 clés groupBots × 3 langues
+- `services/__tests__/bots-api.test.ts` — 45 tests service API
+- `services/__tests__/content-filter.test.ts` — 38 tests content filter
+- `stores/__tests__/bots-store.test.ts` — 34 tests store
+
+**Tests** : 117 nouveaux tests (45 API + 38 content-filter + 34 store), suite complète 1980/1980 ✅
 
 ---
 
@@ -1521,18 +1539,114 @@ App → Slides onboarding (1ère fois) → Auth (login/signup)
 - `services/__tests__/iap-service.test.ts` (nouveau, 22 tests)
 - `stores/__tests__/wallet-store-payment.test.ts` (nouveau, 21 tests)
 
+### DEV-030 : Paramètres Globaux Avancés ✅
+
+**Priorité** : P2  
+**Réf** : OTHERS_SCREENS.md §9, OTHERS_SCREENS_FONCTIONNALITIES.md §9  
+**Statut** : ✅ Complet — 9 sous-écrans, store Zustand, hook façade, i18n 3 langues, 36 tests
+
+**Architecture** :
+
+- [x] Types complets — `types/advanced-settings.ts` (8+ interfaces, 9+ union types, état agrégé)
+- [x] Store Zustand v5 — `stores/advanced-settings-store.ts` (399 lig.) avec persist AsyncStorage, 20+ actions
+- [x] Hook façade — `hooks/useAdvancedSettings.ts` (~270 lig.) avec useCallback/useMemo, computed helpers
+- [x] Layout Stack — `app/settings/_layout.tsx` (10 écrans)
+- [x] Hub paramètres — `app/settings/index.tsx` (9 liens, sous-titres dynamiques)
+
+**Sous-écrans implémentés** :
+
+- [x] Notifications granulaires — `app/settings/notifications.tsx` : 8 canaux (messages, groupes, appels, communautés, feed, events, bots, système) avec enable/sound/vibration/badge, heures calmes, groupNotifications, showPreview
+- [x] Son & Audio — `app/settings/sound.tsx` : volume master ±, 3 toggles, grille 8 sons d'ambiance, volume ambiant
+- [x] Performance — `app/settings/performance.tsx` : 4 modes radio (auto/low/balanced/high), 5 toggles détaillés, cache avec Alert confirmation
+- [x] Données & Stockage — `app/settings/data-usage.tsx` : data saver, 4 types média × 3 politiques (always/wifi/never), compression, sync contacts
+- [x] Accessibilité — `app/settings/accessibility.tsx` : réduire mouvement, taille police (4 niveaux), gras, contraste (3 modes), daltonisme (4 modes), lecteur d'écran, sous-titres auto, audio mono
+- [x] Langues — `app/settings/languages.tsx` : 3 langues (fr/en/ja) avec radio, auto-translate, préférences contenu
+- [x] Région — `app/settings/region.tsx` : timezone auto-detect + 8 fuseaux, format date (3 options), format heure (24h/12h), premier jour semaine
+- [x] Intégrations — `app/settings/integrations.tsx` : CRUD clés API (masquage), 10 providers (google, github, notion, slack, discord, trello, jira, openai, spotify, custom), connect/disconnect/toggle
+- [x] Webhooks — `app/settings/webhooks.tsx` : CRUD webhooks, cartes expandables, grille 9 événements, URL input, enable/disable
+
+**i18n** : ~150 clés `advancedSettings.*` ajoutées en fr/en/ja  
+**Navigation** : Carte "Paramètres avancés" ajoutée dans `app/(tabs)/settings.tsx` avant la section ABOUT  
+**Tests** : `stores/__tests__/advanced-settings-store.test.ts` — 36 tests (10 describe blocks, 0 échecs)
+
+**Fichiers créés** :
+
+- `types/advanced-settings.ts` (nouveau)
+- `stores/advanced-settings-store.ts` (nouveau, 399 lig.)
+- `hooks/useAdvancedSettings.ts` (nouveau, ~270 lig.)
+- `app/settings/_layout.tsx` (nouveau)
+- `app/settings/index.tsx` (nouveau)
+- `app/settings/notifications.tsx` (nouveau)
+- `app/settings/sound.tsx` (nouveau)
+- `app/settings/performance.tsx` (nouveau)
+- `app/settings/data-usage.tsx` (nouveau)
+- `app/settings/accessibility.tsx` (nouveau)
+- `app/settings/languages.tsx` (nouveau)
+- `app/settings/region.tsx` (nouveau)
+- `app/settings/integrations.tsx` (nouveau)
+- `app/settings/webhooks.tsx` (nouveau)
+- `stores/__tests__/advanced-settings-store.test.ts` (nouveau, 36 tests)
+
+**Fichiers modifiés** :
+
+- `i18n/fr.json` (+~150 clés advancedSettings)
+- `i18n/en.json` (+~150 clés advancedSettings)
+- `i18n/ja.json` (+~150 clés advancedSettings)
+- `app/(tabs)/settings.tsx` (ajout carte navigation paramètres avancés)
+
+### DEV-031 : Support & Assistance ✅
+
+**Date** : 6 mars 2026
+**Statut** : ✅ Complet — 8 sous-écrans, 36 tests, 0 échecs
+**Réf** : OTHERS_SCREENS.md §10, OTHERS_SCREENS_FONCTIONNALITIES.md §10
+
+**Écrans créés** (8 sous-écrans + hub + layout) :
+
+1. Centre d'aide — recherche articles, 8 catégories, expand/collapse, tags, helpful count
+2. FAQ interactive — recherche, filtre catégorie, accordéon Q&A
+3. Tickets support — CRUD complet, badges statut/priorité, thread messages, formulaire création
+4. Chat support humain — démarrage, file d'attente, messages temps réel, fin avec confirmation, notation 5 emoji
+5. Statut incidents plateforme — bannière statut global, incidents actifs avec sévérité, timeline updates, services affectés
+6. Roadmap publique — filtres statut/catégorie, vote/unvote avec compteur, target quarter
+7. Feedback utilisateur — mood picker 5 emoji, type feedback, formulaire titre+corps, historique
+8. Beta features toggle — indicateur stabilité, switch toggle, stats enabled/disabled, warning
+
+**Fichiers créés** (14) :
+
+- `types/support.ts` — 30+ types/interfaces (articles, tickets, chat, incidents, roadmap, feedback, beta)
+- `stores/support-store.ts` — Zustand v5 + persist (AsyncStorage), ~25 actions
+- `hooks/useSupport.ts` — Façade hook, 5 valeurs calculées
+- `app/support/_layout.tsx` — Stack layout, 9 écrans
+- `app/support/index.tsx` — Hub avec 8 cartes navigation, badges dynamiques
+- `app/support/help-center.tsx` — Base de connaissances
+- `app/support/faq.tsx` — FAQ interactive
+- `app/support/tickets.tsx` — Gestion tickets + messages
+- `app/support/chat-support.tsx` — Chat temps réel
+- `app/support/incidents.tsx` — Statut incidents plateforme
+- `app/support/roadmap.tsx` — Roadmap publique + vote
+- `app/support/feedback.tsx` — Formulaire feedback structuré
+- `app/support/beta-features.tsx` — Toggle beta features
+- `stores/__tests__/support-store.test.ts` — 36 tests unitaires
+
+**Fichiers modifiés** :
+
+- `i18n/fr.json` (+~155 clés support)
+- `i18n/en.json` (+~155 clés support)
+- `i18n/ja.json` (+~155 clés support)
+- `app/(tabs)/settings.tsx` (ajout carte navigation support)
+
 ### Écrans complémentaires Phase 3
 
-| Catégorie                   | # Écrans | Priorité | Notes                                        |
-| --------------------------- | -------- | -------- | -------------------------------------------- |
-| Wallet & Monétisation       | ~10      | P3       | ImuBank, ImuCoin, abonnements                |
-| Store Dev & Créateurs       | ~11      | P3       | Soumission apps, éditeur thèmes              |
-| IA Administration           | ~7       | P3       | Personas, mémoire IA, audit                  |
-| Analytics & Insights        | ~7       | P3       | Dashboard métriques, export CSV              |
-| Gestion fichiers / stockage | ~7       | P3       | Drive personnel, sync multi-device           |
-| Paramètres globaux avancés  | ~9       | P2       | Notifications granulaires, A11Y, performance |
-| Support & Assistance        | ~8       | P2       | Centre d'aide, tickets, FAQ                  |
-| Gamification                | ~6       | P3       | XP, badges, missions, classements            |
+| Catégorie                   | # Écrans | Priorité | Notes                                |
+| --------------------------- | -------- | -------- | ------------------------------------ |
+| Wallet & Monétisation       | ~10      | P3       | ImuBank, ImuCoin, abonnements        |
+| Store Dev & Créateurs       | ~11      | P3       | Soumission apps, éditeur thèmes      |
+| IA Administration           | ~7       | P3       | Personas, mémoire IA, audit          |
+| Analytics & Insights        | ~7       | P3       | Dashboard métriques, export CSV      |
+| Gestion fichiers / stockage | ~7       | P3       | Drive personnel, sync multi-device   |
+| Paramètres globaux avancés  | ~9       | P2       | ✅ DEV-030 — 9 sous-écrans, 36 tests |
+| Support & Assistance        | ~8       | P2       | ✅ DEV-031 — 8 sous-écrans, 36 tests |
+| Gamification                | ~6       | P3       | XP, badges, missions, classements    |
 
 ---
 
@@ -1795,7 +1909,7 @@ App → Slides onboarding (1ère fois) → Auth (login/signup)
 | ------------------------ | ----- | ------------------------------------------------------------------------------------------------------------------------------- | ------ | ----- | ------------------ |
 | **Assistant IA (Alice)** | /ai   | Chat conversationnel, conseiller perso (santé, études, style, pro), génération contenu (texte, image, résumé), prompts personas | ✅     | 3     | DEV-024 ✅         |
 | **ImuCompanion Engine**  | /ai   | Assistant IA incarné Live2D, avatar animé, FSM émotionnelle, lip sync, archétypes, personnalisation                             | 🔴     | 3-5   | DEV-036 (~27 sem.) |
-| **Bots de groupe**       | /bots | Bots modération, quiz, animation, bots spécialisés (gaming, études, business)                                                   | 🔴     | 3     | 2-3 semaines       |
+| **Bots de groupe**       | /bots | Bots modération, quiz, animation, bots spécialisés (gaming, études, business)                                                   | ✅     | 3     | DEV-025 ✅         |
 
 ### 7. TRANSVERSAL — Présent partout
 
@@ -2012,7 +2126,7 @@ Phase 2A (Communication)  █████████████░  ~90% fait 
 Phase 2B (Profils)         █████████████░  ~90% (DEV-008 ✅, DEV-009 ✅, DEV-010 ✅)
 Phase 2C (Social)          ██████████████  100% (DEV-011→014 tous ✅)
 Phase 2D (Auth/Sécurité)   █████████████░  ~90% (DEV-015→017 ✅, config dashboard)
-Phase 3  (Modules/IA)      ███████░░░░░░░  ~50% (DEV-018 ✅, DEV-022 ✅, DEV-022b ✅, DEV-024 ✅, DEV-025s ✅, DEV-026 ✅, DEV-027 ✅ M1-M5, DEV-028 ✅, Auto-mod ✅)
+Phase 3  (Modules/IA)      ██████████░░░░  ~65% (DEV-018 ✅, DEV-022 ✅, DEV-022b ✅, DEV-024 ✅, DEV-025 ✅, DEV-025s ✅, DEV-026 ✅, DEV-027 ✅ M1-M5, DEV-028 ✅, DEV-030 ✅, DEV-031 ✅, Auto-mod ✅)
 Phase 4  (Vie quotidienne) ░░░░░░░░░░░░░░  ~0%  (DEV-029 à DEV-035)
 ```
 

@@ -254,12 +254,17 @@ export interface Invoice {
 // ─── Creator Settings ─────────────────────────────────────────────
 export interface CreatorPayoutSettings {
     userId: string;
-    payoutMethod: "bank_transfer" | "paypal" | "none";
+    payoutMethod: "bank_transfer" | "paypal" | "crypto" | "none";
     payoutDetails: string;
+    iban?: string;
+    paypalEmail?: string;
+    cryptoAddress?: string;
     taxId?: string;
     taxCountry?: string;
+    autoPayout: boolean;
     autoPayoutEnabled: boolean;
     autoPayoutThreshold: number;
+    preferredCurrency: CurrencyCode;
     currency: CurrencyCode;
 }
 

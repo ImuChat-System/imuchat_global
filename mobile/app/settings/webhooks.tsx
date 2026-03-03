@@ -92,8 +92,11 @@ export default function WebhooksSettingsScreen() {
       name: newName.trim(),
       url: newUrl.trim(),
       events: newEvents,
-      enabled: true,
+      secret: `whsec_${Date.now()}`,
+      isActive: true,
       createdAt: new Date().toISOString(),
+      lastTriggeredAt: null,
+      failureCount: 0,
     });
     setNewName("");
     setNewUrl("");
@@ -173,7 +176,7 @@ export default function WebhooksSettingsScreen() {
                 </Text>
               </View>
               <Switch
-                value={wh.enabled}
+                value={wh.isActive}
                 onValueChange={(v) => toggleWebhook(wh.id, v)}
                 trackColor={{ false: colors.border, true: colors.primary }}
               />

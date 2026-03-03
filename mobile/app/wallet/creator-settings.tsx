@@ -46,7 +46,7 @@ export default function CreatorSettingsScreen() {
 
   const {
     creatorSettings,
-    walletLoading,
+    isLoading: walletLoading,
     loadCreatorSettings,
     updateCreatorSettings,
   } = useWalletStore();

@@ -8,11 +8,7 @@
 import { useAdvancedSettings } from "@/hooks/useAdvancedSettings";
 import { useI18n } from "@/providers/I18nProvider";
 import { useColors } from "@/providers/ThemeProvider";
-import type {
-  ColorBlindMode,
-  ContrastMode,
-  FontSizeScale,
-} from "@/types/advanced-settings";
+import type { ContrastMode, FontSizeScale } from "@/types/advanced-settings";
 import React from "react";
 import {
   ScrollView,

@@ -166,7 +166,7 @@ export function useAdvancedSettings() {
 
     const toggleIntegration = useCallback(
         (id: string, enabled: boolean) =>
-            store.updateIntegration(id, { enabled }),
+            store.updateIntegration(id, { isConnected: enabled }),
         [store.updateIntegration],
     );
 
@@ -198,7 +198,7 @@ export function useAdvancedSettings() {
     );
 
     const toggleWebhook = useCallback(
-        (id: string, enabled: boolean) => store.updateWebhook(id, { enabled }),
+        (id: string, enabled: boolean) => store.updateWebhook(id, { isActive: enabled }),
         [store.updateWebhook],
     );
 

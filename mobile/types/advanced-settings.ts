@@ -209,6 +209,8 @@ export type IntegrationProvider =
     | "trello"
     | "jira"
     | "zapier"
+    | "openai"
+    | "spotify"
     | "custom";
 
 export interface Integration {
@@ -228,13 +230,16 @@ export interface Integration {
 export type WebhookEvent =
     | "message.new"
     | "message.updated"
+    | "message.edited"
     | "message.deleted"
     | "user.joined"
     | "user.left"
     | "call.started"
     | "call.ended"
     | "story.created"
-    | "group.updated";
+    | "group.updated"
+    | "bot.command"
+    | "file.uploaded";
 
 export interface Webhook {
     id: string;

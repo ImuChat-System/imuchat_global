@@ -72,6 +72,10 @@ export default function IntegrationsSettingsScreen() {
       name: newKeyName.trim(),
       key: newKeyValue.trim(),
       createdAt: new Date().toISOString(),
+      lastUsedAt: null,
+      expiresAt: null,
+      scopes: [],
+      isActive: true,
     });
     setNewKeyName("");
     setNewKeyValue("");
@@ -96,14 +100,17 @@ export default function IntegrationsSettingsScreen() {
   const handleConnectProvider = (provider: IntegrationProvider) => {
     const existing = integrations.find((i) => i.provider === provider);
     if (existing) {
-      toggleIntegration(existing.id, !existing.enabled);
+      toggleIntegration(existing.id, !existing.isConnected);
       return;
     }
     addIntegration({
       id: `int-${Date.now()}`,
       provider,
-      enabled: true,
+      name: PROVIDERS.find((p) => p.id === provider)?.name ?? provider,
+      isConnected: true,
       connectedAt: new Date().toISOString(),
+      scopes: [],
+      avatarUrl: null,
     });
   };
 
@@ -243,7 +250,7 @@ export default function IntegrationsSettingsScreen() {
                 {connected ? (
                   <View style={styles.providerActions}>
                     <Switch
-                      value={connected.enabled}
+                      value={connected.isConnected}
                       onValueChange={(v) => toggleIntegration(connected.id, v)}
                       trackColor={{
                         false: colors.border,

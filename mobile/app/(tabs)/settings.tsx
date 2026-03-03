@@ -1617,6 +1617,85 @@ export default function SettingsScreen() {
         </View>
       </TouchableOpacity>
 
+      {/* ── IA Administration ─────────────────────────────────── */}
+      <TouchableOpacity
+        onPress={() => router.push("/ai-admin" as any)}
+        activeOpacity={0.7}
+      >
+        <View
+          style={[
+            styles.card,
+            {
+              backgroundColor: theme.colors.surface,
+              flexDirection: "row",
+              alignItems: "center",
+              gap: 12,
+            },
+          ]}
+        >
+          <Text style={{ fontSize: 22 }}>🤖</Text>
+          <View style={{ flex: 1 }}>
+            <Text style={[styles.labelText, { color: theme.colors.text }]}>
+              {t("aiAdmin.title")}
+            </Text>
+            <Text
+              style={{
+                fontSize: 12,
+                color: theme.colors.textMuted,
+                marginTop: 2,
+              }}
+            >
+              {t("aiAdmin.subtitle")}
+            </Text>
+          </View>
+          <Ionicons
+            name="chevron-forward"
+            size={20}
+            color={theme.colors.textMuted}
+          />
+        </View>
+      </TouchableOpacity>
+
+      {/* ===== ANALYTICS & INSIGHTS ===== */}
+      <TouchableOpacity
+        activeOpacity={0.7}
+        onPress={() => router.push("/analytics-insights" as any)}
+      >
+        <View
+          style={[
+            styles.card,
+            {
+              backgroundColor: theme.colors.surface,
+              flexDirection: "row",
+              alignItems: "center",
+              gap: 12,
+              padding: 14,
+            },
+          ]}
+        >
+          <Text style={{ fontSize: 22 }}>📊</Text>
+          <View style={{ flex: 1 }}>
+            <Text style={[styles.labelText, { color: theme.colors.text }]}>
+              {t("analyticsInsights.title")}
+            </Text>
+            <Text
+              style={{
+                fontSize: 12,
+                color: theme.colors.textMuted,
+                marginTop: 2,
+              }}
+            >
+              {t("analyticsInsights.subtitle")}
+            </Text>
+          </View>
+          <Ionicons
+            name="chevron-forward"
+            size={20}
+            color={theme.colors.textMuted}
+          />
+        </View>
+      </TouchableOpacity>
+
       {/* ===== ABOUT ===== */}
       <SectionHeader title={t("settings.about")} color={theme.colors.text} />
 

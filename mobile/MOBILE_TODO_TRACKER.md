@@ -2,9 +2,9 @@
 
 > **Date de création** : 21 février 2026  
 > **Dernière mise à jour** : 6 mars 2026  
-> **Statut global** : MVP Phase 2 terminé — Phase 3 modulaire en cours (DEV-018 ✅ · DEV-019 ✅ · DEV-020 ✅ · DEV-022 ✅ · DEV-023 ✅ · DEV-024 ✅ · DEV-025 ✅ · DEV-025s ✅ · DEV-026 ✅ · DEV-027 ✅ M1-M5 complet · DEV-028 ✅ · DEV-029 ✅ · DEV-030 ✅ · DEV-031 ✅ · DEV-032 ✅ · DEV-033 ✅ · Store Dev ✅) — 39/50 fonctionnalités (78%)
+> **Statut global** : MVP Phase 2 terminé — Phase 3 modulaire en cours (DEV-018 ✅ · DEV-019 ✅ · DEV-020 ✅ · DEV-022 ✅ · DEV-023 ✅ · DEV-024 ✅ · DEV-025 ✅ · DEV-025s ✅ · DEV-026 ✅ · DEV-027 ✅ M1-M5 complet · DEV-028 ✅ · DEV-029 ✅ · DEV-030 ✅ · DEV-031 ✅ · DEV-032 ✅ · DEV-033 ✅ · Store Dev ✅ · DEV-035 IA Admin ✅ · DEV-036 Analytics ✅) — 41/50 fonctionnalités (82%)
 > **Référence** : Basé sur les 50 fonctionnalités (10 groupes), les ~110 écrans complémentaires, et la roadmap 3D/Live2D
-> **Métriques** : ~80 000 lignes TS/TSX · 330+ fichiers · 95 fichiers de tests (2149 tests, 0 échecs) · 17 Zustand stores · 21 hooks · 43 services · ~2370 clés i18n (fr/en/ja)
+> **Métriques** : ~80 000 lignes TS/TSX · 340+ fichiers · 99 fichiers de tests (2246 tests, 0 échecs) · 19 Zustand stores · 21 hooks · 43 services · ~2565 clés i18n (fr/en/ja)
 
 ---
 
@@ -81,9 +81,9 @@
 
 **Actions restantes (dashboard)** :
 
-- [ ] Configurer Google comme provider OAuth dans Supabase Dashboard
-- [ ] Configurer Apple comme provider OAuth dans Supabase Dashboard
-- [ ] Vérifier Google OAuth Consent Screen dans Google Cloud Console
+- [x] Configurer Google comme provider OAuth dans Supabase Dashboard
+- [x] Configurer Apple comme provider OAuth dans Supabase Dashboard
+- [x] Vérifier Google OAuth Consent Screen dans Google Cloud Console
 
 **Estimation restante** : ~1h (configuration dashboard uniquement)
 
@@ -1695,8 +1695,8 @@ App → Slides onboarding (1ère fois) → Auth (login/signup)
 | --------------------------- | -------- | -------- | ---------------------------------------- |
 | Wallet & Monétisation       | ~10      | P3       | ✅ DEV-033 — 6 nouveaux écrans, 26 tests |
 | Store Dev & Créateurs       | ~11      | P3       | ✅ 10 sous-écrans, 43 tests              |
-| IA Administration           | ~7       | P3       | Personas, mémoire IA, audit              |
-| Analytics & Insights        | ~7       | P3       | Dashboard métriques, export CSV          |
+| IA Administration           | ~7       | P3       | ✅ DEV-035 — 7 sous-écrans, 50 tests     |
+| Analytics & Insights        | ~7       | P3       | ✅ DEV-036 — 7 sous-écrans, 47 tests     |
 | Gestion fichiers / stockage | ~7       | P3       | Drive personnel, sync multi-device       |
 | Paramètres globaux avancés  | ~9       | P2       | ✅ DEV-030 — 9 sous-écrans, 36 tests     |
 | Support & Assistance        | ~8       | P2       | ✅ DEV-031 — 8 sous-écrans, 36 tests     |
@@ -2437,6 +2437,88 @@ mobile/
 
 ---
 
+### Session 6 mars 2026 — Analytics & Insights (DEV-036)
+
+**Objectif** : Dashboard métriques complet — engagement, communication, social, stockage, heatmap activité, export CSV/JSON
+
+**Réalisations** :
+
+1. ✅ Types complets (`types/analytics-insights.ts` ~203 lignes — 16+ types/interfaces)
+2. ✅ Store Zustand v5 + persist (`stores/analytics-insights-store.ts` ~364 lignes — 12 actions, mock data generators, persist period+exports)
+3. ✅ Layout Stack + 7 écrans dans `app/analytics-insights/` :
+   - `index.tsx` — Hub overview (sélecteur période, grille stats, streak, cartes navigation)
+   - `engagement.tsx` — Sessions, minutes actives, temps moyen, pic d'activité
+   - `communication.tsx` — Messages envoyés/reçus, appels, top contacts
+   - `social.tsx` — Followers, engagement rate, top posts
+   - `storage.tsx` — Usage stockage par catégorie, tendance
+   - `heatmap.tsx` — Grille 7×24 intensité activité, légende
+   - `export.tsx` — Config export CSV/JSON, sélecteur scope/période, historique
+4. ✅ i18n : ~95 clés par langue (fr/en/ja) — section `analyticsInsights`
+5. ✅ Carte navigation dans settings.tsx (📊 après IA Admin)
+6. ✅ 47 nouveaux tests (30 store + 17 écrans), tous passants
+7. ✅ 0 erreurs TypeScript sur tous les fichiers
+
+**Fichiers créés (12)** :
+
+- `types/analytics-insights.ts`
+- `stores/analytics-insights-store.ts`
+- `app/analytics-insights/_layout.tsx`, `index.tsx`, `engagement.tsx`, `communication.tsx`
+- `app/analytics-insights/social.tsx`, `storage.tsx`, `heatmap.tsx`, `export.tsx`
+- `__tests__/analytics-insights-store.test.ts` (30 tests)
+- `__tests__/analytics-insights-screens.test.tsx` (17 tests)
+
+**Fichiers modifiés (4)** :
+
+- `i18n/fr.json` (+~95 clés analyticsInsights)
+- `i18n/en.json` (+~95 clés analyticsInsights)
+- `i18n/ja.json` (+~95 clés analyticsInsights)
+- `app/(tabs)/settings.tsx` (ajout carte navigation 📊)
+
+**Baseline finale** : 99 suites · 2246 tests · 0 échecs (+2 suites, +47 tests)
+
+---
+
+### Session 6 mars 2026 — IA Administration (DEV-035)
+
+**Objectif** : Portail d'administration IA — personas, mémoire IA, audit, permissions outils, auto-résumé, modération
+
+**Réalisations** :
+
+1. ✅ Types complets (`types/ai-admin.ts` ~170 lignes — 16 types/interfaces)
+2. ✅ Store Zustand v5 + persist (`stores/ai-admin-store.ts` ~420 lignes — toggle global, personas CRUD, memory CRUD, audit log, permissions outils, auto-summary, modération)
+3. ✅ Layout Stack + 7 écrans dans `app/ai-admin/` :
+   - `index.tsx` — Hub IA admin (toggle global, 6 cartes navigation)
+   - `personas.tsx` — Liste personas + formulaire création (7 built-in, CRUD custom)
+   - `memory.tsx` — Mémoire IA (filtre catégorie, toggle, suppression sélective/totale)
+   - `audit-log.tsx` — Journal audit IA (filtre sévérité, toggle, clear)
+   - `permissions.tsx` — Permissions outils IA (9 outils, toggle + confirmation)
+   - `auto-summary.tsx` — Configuration résumé auto (fréquence, longueur, langue)
+   - `moderation.tsx` — Modération IA (toggle global, niveau global, 7 règles catégorisées)
+4. ✅ i18n : ~100 clés par langue (fr/en/ja) — section `aiAdmin`
+5. ✅ Carte navigation dans settings.tsx (🤖 après Dev Store)
+6. ✅ 50 nouveaux tests (38 store + 12 écrans), tous passants
+7. ✅ 0 erreurs TypeScript sur tous les fichiers
+
+**Fichiers créés (12)** :
+
+- `types/ai-admin.ts`
+- `stores/ai-admin-store.ts`
+- `app/ai-admin/_layout.tsx`, `index.tsx`, `personas.tsx`, `memory.tsx`, `audit-log.tsx`
+- `app/ai-admin/permissions.tsx`, `auto-summary.tsx`, `moderation.tsx`
+- `stores/__tests__/ai-admin-store.test.ts` (38 tests)
+- `app/__tests__/ai-admin-screens.test.tsx` (12 tests)
+
+**Fichiers modifiés (4)** :
+
+- `i18n/fr.json` (+~100 clés aiAdmin)
+- `i18n/en.json` (+~100 clés aiAdmin)
+- `i18n/ja.json` (+~100 clés aiAdmin)
+- `app/(tabs)/settings.tsx` (ajout carte navigation 🤖)
+
+**Baseline finale** : 97 suites · 2199 tests · 0 échecs (+2 suites, +50 tests)
+
+---
+
 ### Session en cours — DEV-015 OAuth + DEV-010 Onboarding
 
 **Objectif** : Configurer OAuth Google + Apple Sign-In + Flow d'onboarding post-signup
@@ -2719,4 +2801,4 @@ mobile/
 
 ---
 
-_Document mis à jour — 6 mars 2026 — Phase 3 modulaire en cours (78% des 50 fonctionnalités — 39/50) — Tests : 95 suites, 2149 tests, 0 échecs_
+_Document mis à jour — 6 mars 2026 — Phase 3 modulaire en cours (82% des 50 fonctionnalités — 41/50) — Tests : 99 suites, 2246 tests, 0 échecs_

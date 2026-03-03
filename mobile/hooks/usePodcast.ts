@@ -16,7 +16,7 @@
 
 import { useCallback, useState } from 'react';
 
-import { usePodcastStore } from '@/stores/podcast-store';
+import { usePodcastStore, type PodcastState } from '@/stores/podcast-store';
 import type { PlaybackSpeed, PodcastEpisode, PodcastShow } from '@/types/podcast';
 
 // ============================================================================
@@ -32,11 +32,11 @@ export interface UsePodcastReturn {
     durationMs: number;
     isBuffering: boolean;
     playbackSpeed: PlaybackSpeed;
-    chapters: ReturnType<typeof usePodcastStore>['chapters'];
+    chapters: PodcastState['chapters'];
 
     // --- Library ---
     subscriptions: PodcastShow[];
-    listeningHistory: ReturnType<typeof usePodcastStore>['listeningHistory'];
+    listeningHistory: PodcastState['listeningHistory'];
     downloadedEpisodes: PodcastEpisode[];
     episodeQueue: PodcastEpisode[];
 

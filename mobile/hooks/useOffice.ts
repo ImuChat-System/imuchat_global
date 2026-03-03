@@ -17,6 +17,7 @@
 
 import { useCallback, useEffect, useState } from 'react';
 
+import type { OfficeState } from '@/stores/office-store';
 import { useOfficeStore } from '@/stores/office-store';
 import type {
     DocumentSortOption,
@@ -38,7 +39,7 @@ export interface UseOfficeReturn {
     filteredDocuments: OfficeDocument[];
     recentDocuments: OfficeDocument[];
     favoriteDocuments: OfficeDocument[];
-    currentDocument: ReturnType<typeof useOfficeStore>['currentDocument'];
+    currentDocument: OfficeState['currentDocument'];
     documentCounts: Record<OfficeDocumentType | 'all', number>;
 
     // --- Folders ---
@@ -46,17 +47,17 @@ export interface UseOfficeReturn {
     currentFolderId: string | null;
 
     // --- Journal ---
-    journalEntries: ReturnType<typeof useOfficeStore>['journalEntries'];
-    currentJournalEntry: ReturnType<typeof useOfficeStore>['currentJournalEntry'];
+    journalEntries: OfficeState['journalEntries'];
+    currentJournalEntry: OfficeState['currentJournalEntry'];
 
     // --- PDF ---
-    pdfDocuments: ReturnType<typeof useOfficeStore>['pdfDocuments'];
-    currentPdf: ReturnType<typeof useOfficeStore>['currentPdf'];
+    pdfDocuments: OfficeState['pdfDocuments'];
+    currentPdf: OfficeState['currentPdf'];
 
     // --- Signatures ---
-    signatures: ReturnType<typeof useOfficeStore>['signatures'];
-    signatureRequests: ReturnType<typeof useOfficeStore>['signatureRequests'];
-    defaultSignature: ReturnType<typeof useOfficeStore>['signatures'][number] | null;
+    signatures: OfficeState['signatures'];
+    signatureRequests: OfficeState['signatureRequests'];
+    defaultSignature: OfficeState['signatures'][number] | null;
 
     // --- UI ---
     isLoading: boolean;
@@ -82,14 +83,14 @@ export interface UseOfficeReturn {
     setCurrentFolder: (folderId: string | null) => void;
 
     // --- Journal Actions ---
-    createJournalEntry: (title: string, content?: string, mood?: JournalMood) => Promise<ReturnType<typeof useOfficeStore>['journalEntries'][number]>;
-    updateJournalEntry: (id: string, updates: Partial<Pick<ReturnType<typeof useOfficeStore>['journalEntries'][number], 'title' | 'content' | 'blocks' | 'mood' | 'tags'>>) => Promise<void>;
+    createJournalEntry: (title: string, content?: string, mood?: JournalMood) => Promise<OfficeState['journalEntries'][number]>;
+    updateJournalEntry: (id: string, updates: Partial<Pick<OfficeState['journalEntries'][number], 'title' | 'content' | 'blocks' | 'mood' | 'tags'>>) => Promise<void>;
     deleteJournalEntry: (id: string) => Promise<void>;
     openJournalEntry: (id: string) => void;
     closeJournalEntry: () => void;
 
     // --- PDF Actions ---
-    addPdfDocument: (title: string, fileUri: string, pageCount?: number, fileSize?: number) => Promise<ReturnType<typeof useOfficeStore>['pdfDocuments'][number]>;
+    addPdfDocument: (title: string, fileUri: string, pageCount?: number, fileSize?: number) => Promise<OfficeState['pdfDocuments'][number]>;
     updatePdfPage: (id: string, page: number) => Promise<void>;
     addPdfAnnotation: (pdfId: string, annotation: Omit<PdfAnnotation, 'id' | 'created_at'>) => Promise<void>;
     removePdfAnnotation: (pdfId: string, annotationId: string) => Promise<void>;
@@ -99,7 +100,7 @@ export interface UseOfficeReturn {
     closePdf: () => void;
 
     // --- Signature Actions ---
-    createSignature: (name: string, svgPath: string, pngBase64: string) => Promise<ReturnType<typeof useOfficeStore>['signatures'][number]>;
+    createSignature: (name: string, svgPath: string, pngBase64: string) => Promise<OfficeState['signatures'][number]>;
     deleteSignature: (id: string) => Promise<void>;
     setDefaultSignature: (id: string) => Promise<void>;
     signDocument: (documentId: string, documentTitle: string, signerName: string, signatureId: string) => Promise<void>;

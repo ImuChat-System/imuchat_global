@@ -30,7 +30,7 @@ const logger = createLogger('PodcastStore');
 
 // ─── Interfaces ───────────────────────────────────────────────
 
-interface PodcastState extends PodcastPlayerState {
+export interface PodcastState extends PodcastPlayerState {
     // --- Bibliothèque ---
     subscriptions: PodcastShow[];
     listeningHistory: ListeningHistoryEntry[];

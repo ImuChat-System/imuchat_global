@@ -33,7 +33,7 @@ const logger = createLogger('OfficeStore');
 
 // ─── Interfaces ─────────────────────────────────────────────
 
-interface OfficeState {
+export interface OfficeState {
     // Documents
     documents: OfficeDocument[];
     folders: OfficeFolder[];

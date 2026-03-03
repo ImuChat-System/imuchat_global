@@ -40,9 +40,9 @@ function generateSlideHTML(
   slide: PresentationSlide,
   theme: PresentationTheme,
 ): string {
-  const bg = theme.colors.background;
-  const text = theme.colors.text;
-  const accent = theme.colors.accent;
+  const bg = theme.colors?.background ?? theme.background_color;
+  const text = theme.colors?.text ?? theme.text_color;
+  const accent = theme.colors?.accent ?? theme.primary_color;
 
   return `
 <!DOCTYPE html>
@@ -52,7 +52,7 @@ function generateSlideHTML(
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
-    font-family: ${theme.fontFamily}, -apple-system, sans-serif;
+    font-family: ${theme.fontFamily ?? theme.font_family}, -apple-system, sans-serif;
     background: ${bg};
     color: ${text};
     display: flex;

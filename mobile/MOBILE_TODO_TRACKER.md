@@ -2,9 +2,9 @@
 
 > **Date de création** : 21 février 2026  
 > **Dernière mise à jour** : 5 mars 2026  
-> **Statut global** : MVP Phase 2 terminé — Phase 3 modulaire en cours (DEV-018 ✅ · DEV-019 ✅ · DEV-020 ✅ · DEV-022 ✅ · DEV-023 ✅ · DEV-024 ✅ · DEV-025s ✅ · DEV-026 ✅ · DEV-027 ✅ M1-M5 complet · DEV-028 ✅) — 33/50 fonctionnalités (66%)
+> **Statut global** : MVP Phase 2 terminé — Phase 3 modulaire en cours (DEV-018 ✅ · DEV-019 ✅ · DEV-020 ✅ · DEV-022 ✅ · DEV-023 ✅ · DEV-024 ✅ · DEV-025s ✅ · DEV-026 ✅ · DEV-027 ✅ M1-M5 complet · DEV-028 ✅ · DEV-029 ✅) — 34/50 fonctionnalités (68%)
 > **Référence** : Basé sur les 50 fonctionnalités (10 groupes), les ~110 écrans complémentaires, et la roadmap 3D/Live2D
-> **Métriques** : ~73 000 lignes TS/TSX · 275+ fichiers · 87 fichiers de tests (1911 tests, 0 échecs) · 12 Zustand stores · 18 hooks · 42 services · ~1627 clés i18n (fr/en/ja)
+> **Métriques** : ~74 800 lignes TS/TSX · 285+ fichiers · 89 fichiers de tests (1980 tests, 0 échecs) · 13 Zustand stores · 18 hooks · 43 services · ~1657 clés i18n (fr/en/ja)
 
 ---
 
@@ -1044,13 +1044,13 @@ App → Slides onboarding (1ère fois) → Auth (login/signup)
 
 ### Groupe 7 — Services utilitaires publics
 
-| #   | Fonctionnalité                       | Route     | Statut | Priorité | Notes                  |
-| --- | ------------------------------------ | --------- | ------ | -------- | ---------------------- |
-| 1   | Horaires métro/tram/bus avec alertes | /mobility | 🔴     | P4       | API transport + géoloc |
-| 2   | Info trafic routier temps réel       | /mobility | 🔴     | P4       | API traffic            |
-| 3   | Numéros d'urgence géolocalisés       | /mobility | 🔴     | P3       | Base locale            |
-| 4   | Annuaire services publics            | /mobility | 🔴     | P4       | CAF, CPAM, etc.        |
-| 5   | Suivi colis multi-transporteurs      | /mobility | 🔴     | P3       | API tracking           |
+| #   | Fonctionnalité                       | Route      | Statut | Priorité | Notes                                                  |
+| --- | ------------------------------------ | ---------- | ------ | -------- | ------------------------------------------------------ |
+| 1   | Horaires métro/tram/bus avec alertes | /mobility  | 🔴     | P4       | API transport + géoloc                                 |
+| 2   | Info trafic routier temps réel       | /mobility  | 🔴     | P4       | API traffic                                            |
+| 3   | Numéros d'urgence géolocalisés       | /emergency | ✅     | P3       | DEV-029 — Base locale, 40+ pays, géoloc auto, 69 tests |
+| 4   | Annuaire services publics            | /mobility  | 🔴     | P4       | CAF, CPAM, etc.                                        |
+| 5   | Suivi colis multi-transporteurs      | /mobility  | 🔴     | P3       | API tracking                                           |
 
 ### DEV-021 : Module Mobility (/mobility)
 
@@ -1069,6 +1069,29 @@ App → Slides onboarding (1ère fois) → Auth (login/signup)
 - [ ] Suivi colis multi-transporteurs
 
 **Estimation** : 3-4 semaines
+
+---
+
+### DEV-029 : Numéros d'urgence géolocalisés ✅
+
+**Priorité** : P3  
+**Réf** : Groupe 7 — Services utilitaires publics, fonctionnalité n°3  
+**Statut** : ✅ Terminé  
+**Durée** : ~2 heures
+
+**Implémenté** :
+
+- ✅ `types/emergency.ts` (146 lig.) — 12 catégories (police, pompiers, médical, etc.)
+- ✅ `services/emergency-api.ts` (626 lig.) — Base locale 40+ pays, géolocalisation auto via expo-location, appel direct
+- ✅ `stores/emergency-store.ts` (150 lig.) — Zustand + persist (favoris, pays détecté, catégorie)
+- ✅ `app/emergency/_layout.tsx` (44 lig.) — Stack layout (index + country detail)
+- ✅ `app/emergency/index.tsx` (421 lig.) — Liste pays, recherche, filtre continent, détection GPS
+- ✅ `app/emergency/country.tsx` (399 lig.) — Numéros par catégorie, bouton appel, favoris
+- ✅ i18n : ~30 clés × 3 locales (fr/en/ja) — continents + catégories
+- ✅ `__mocks__/expo-location.js` — Mock Jest global
+
+**Tests** : 69 tests (40 service + 29 store), 0 échecs  
+**Fichiers** : 9 fichiers créés, ~1800 lignes
 
 ---
 
@@ -2075,11 +2098,11 @@ Phase 4  (Vie quotidienne) ░░░░░░░░░░░░░░  ~0%  (DEV
 | 4         | Personnalisation avancée   | 2B    | 2/5 ⚠️          | 40%                                                                     | DEV-009 ✅                                       |
 | 5         | Mini-apps sociales natives | 2C    | 5/5 ✅          | 100%                                                                    | DEV-011 ✅, DEV-012 ✅, DEV-013 ✅, DEV-014 ✅   |
 | 6         | Modules avancés            | 3     | 3/5 🟡          | 60%                                                                     | DEV-018 ✅, DEV-019 ✅, DEV-020 ✅               |
-| 7         | Services utilitaires       | 3     | 0/5 🔴          | 0%                                                                      | DEV-021                                          |
+| 7         | Services utilitaires       | 3     | 1/5 🟡          | 20% (Urgences ✅)                                                       | DEV-021, DEV-029 ✅                              |
 | 8         | Divertissement & Création  | 3     | 3/5 🟡          | 60% (Music ✅, Watch ✅, Podcasts ✅)                                   | DEV-022 ✅, DEV-022b ✅, DEV-023 ✅, DEV-034     |
 | 9         | IA intégrée                | 3     | 5/5 ✅          | 100% (Alice ✅, Suggestions ✅, Résumés ✅, Traduction ✅, Auto-mod ✅) | DEV-024 ✅, DEV-025s ✅, DEV-026 ✅, Auto-mod ✅ |
 | 10        | App Store & Écosystème     | 3     | 5/5 ✅          | 100% (Phase M1-M5 complet + Wallet + Stripe + IAP)                      | DEV-027 ✅ Phase M1-M5, DEV-028 ✅               |
-| **Total** |                            |       | **33/50**       | **66%**                                                                 |                                                  |
+| **Total** |                            |       | **34/50**       | **68%**                                                                 |                                                  |
 
 ### Modules additionnels (hors 50 fonctionnalités)
 

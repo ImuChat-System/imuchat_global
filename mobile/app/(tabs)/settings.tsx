@@ -1556,6 +1556,10 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "500",
   },
+  rowSubtitle: {
+    fontSize: 12,
+    marginTop: 2,
+  },
   valueText: {
     fontSize: 15,
   },

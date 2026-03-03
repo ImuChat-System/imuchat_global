@@ -31,6 +31,7 @@ module.exports = {
     "^expo-image-manipulator$": "<rootDir>/__mocks__/expo-image-manipulator.js",
     "^expo-av$": "<rootDir>/__mocks__/expo-av.js",
     "^expo-notifications$": "<rootDir>/__mocks__/expo-notifications.js",
+    "^expo-location$": "<rootDir>/__mocks__/expo-location.js",
     "^expo-file-system/legacy$":
       "<rootDir>/__mocks__/expo-file-system/legacy.js",
     "^@react-native/js-polyfills/(.*)$": "<rootDir>/__mocks__/empty.js",

@@ -85,9 +85,9 @@ export default function ChatRoomScreen() {
         // Exécuter le bot
         const result = await handleBotMessage(message, currentUserId, "User");
         if (result) {
-          if (result.success && result.message) {
+          if (result.success && result.response) {
             // Le bot a répondu — afficher via toast ou message système
-            showToast(`🤖 ${result.message.content}`, "info");
+            showToast(`🤖 ${result.response}`, "info");
           } else if (result.error) {
             showToast(`⚠️ ${result.error}`, "warning");
           }

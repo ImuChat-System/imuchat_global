@@ -22,6 +22,7 @@ import { useI18n } from "@/providers/I18nProvider";
 import { useColors, useSpacing } from "@/providers/ThemeProvider";
 import { useToast } from "@/providers/ToastProvider";
 import { useFilesStore } from "@/stores/files-store";
+import type { SharePermission } from "@/types/files";
 
 const PERMISSIONS = ["view", "comment", "edit", "admin"] as const;
 
@@ -96,7 +97,7 @@ export default function FileShareScreen() {
 
   const handleCreateLink = useCallback(async () => {
     if (!id) return;
-    await createShareLink(id);
+    await createShareLink(id, null, "view" as SharePermission);
     showToast(t("files.linkCreated"), "success");
   }, [id, createShareLink, showToast, t]);
 

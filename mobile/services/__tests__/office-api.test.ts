@@ -669,12 +669,12 @@ describe("Spreadsheet Helpers", () => {
         const data = createEmptySpreadsheet(5, 3);
         expect(data.rows).toBe(5);
         expect(data.cols).toBe(3);
-        expect(data.cells).toHaveLength(15);
+        expect(Object.keys(data.cells)).toHaveLength(15);
         expect(data.column_widths).toHaveLength(3);
         expect(data.row_heights).toHaveLength(5);
         expect(data.sheet_name).toBe("Feuille 1");
         // Check a specific cell
-        const cell = data.cells[0];
+        const cell = data.cells["A1"];
         expect(cell.row).toBe(0);
         expect(cell.col).toBe(0);
         expect(cell.value).toBe("");
@@ -688,15 +688,15 @@ describe("Spreadsheet Helpers", () => {
 
 describe("evaluateFormula", () => {
     // Helper: 3x3 grid where A1=10, A2=20, A3=30, B1=5, B2=15
-    function getCellValue(row, col) {
+    function getCellValue(key) {
         const grid = {
-            "0,0": "10",
-            "1,0": "20",
-            "2,0": "30",
-            "0,1": "5",
-            "1,1": "15",
+            "A1": "10",
+            "A2": "20",
+            "A3": "30",
+            "B1": "5",
+            "B2": "15",
         };
-        return grid[row + "," + col] || "";
+        return grid[key] || "";
     }
 
     test("returns formula unchanged if no = prefix", () => {
@@ -772,7 +772,7 @@ describe("evaluateFormula", () => {
     });
 
     test("division by zero", () => {
-        const zeroCell = (r, c) => (r === 0 && c === 1 ? "0" : "10");
+        const zeroCell = (key) => (key === "B1" ? "0" : "10");
         expect(evaluateFormula("=A1/B1", zeroCell)).toBe("#DIV/0");
     });
 

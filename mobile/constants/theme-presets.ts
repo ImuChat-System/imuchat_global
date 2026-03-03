@@ -43,12 +43,18 @@ export interface ThemeColors {
     warningHover: string;
     error: string;
     errorHover: string;
+    danger: string;
     info: string;
     infoHover: string;
+
+    // Surfaces
+    card: string;
 
     // Text
     text: string;
     textMuted: string;
+    textSecondary: string;
+    secondaryText: string;
     textSubtle: string;
     textDisabled: string;
 
@@ -105,12 +111,18 @@ const lightColors: ThemeColors = {
     warningHover: "#fbbf24",
     error: "#ef4444",
     errorHover: "#f87171",
+    danger: "#ef4444",
     info: "#3b82f6",
     infoHover: "#60a5fa",
+
+    // Surfaces
+    card: "#ffffff",
 
     // Text
     text: "#1f2937",
     textMuted: "rgba(31,41,55,0.7)",
+    textSecondary: "rgba(31,41,55,0.6)",
+    secondaryText: "rgba(31,41,55,0.6)",
     textSubtle: "rgba(31,41,55,0.5)",
     textDisabled: "rgba(31,41,55,0.35)",
 
@@ -158,12 +170,18 @@ const darkColors: ThemeColors = {
     warningHover: "#fbbf24",
     error: "#ef4444",
     errorHover: "#f87171",
+    danger: "#ef4444",
     info: "#3b82f6",
     infoHover: "#60a5fa",
+
+    // Surfaces
+    card: "#1a1425",
 
     // Text
     text: "#ffffff",
     textMuted: "rgba(255,255,255,0.6)",
+    textSecondary: "rgba(255,255,255,0.55)",
+    secondaryText: "rgba(255,255,255,0.55)",
     textSubtle: "rgba(255,255,255,0.4)",
     textDisabled: "rgba(255,255,255,0.25)",
 
@@ -211,12 +229,18 @@ const kawaiiColors: ThemeColors = {
     warningHover: "#fde68a",
     error: "#fca5a5",
     errorHover: "#fecaca",
+    danger: "#fca5a5",
     info: "#93c5fd",
     infoHover: "#bfdbfe",
+
+    // Surfaces
+    card: "#fff0f3",
 
     // Text
     text: "#831843",
     textMuted: "rgba(131,24,67,0.7)",
+    textSecondary: "rgba(131,24,67,0.6)",
+    secondaryText: "rgba(131,24,67,0.6)",
     textSubtle: "rgba(131,24,67,0.5)",
     textDisabled: "rgba(131,24,67,0.35)",
 
@@ -264,12 +288,18 @@ const proColors: ThemeColors = {
     warningHover: "#fbbf24",
     error: "#ef4444",
     errorHover: "#f87171",
+    danger: "#ef4444",
     info: "#0ea5e9",
     infoHover: "#38bdf8",
+
+    // Surfaces
+    card: "#1e293b",
 
     // Text
     text: "#f1f5f9",
     textMuted: "rgba(241,245,249,0.7)",
+    textSecondary: "rgba(241,245,249,0.6)",
+    secondaryText: "rgba(241,245,249,0.6)",
     textSubtle: "rgba(241,245,249,0.5)",
     textDisabled: "rgba(241,245,249,0.35)",
 
@@ -317,12 +347,18 @@ const neonColors: ThemeColors = {
     warningHover: "#fde047",
     error: "#f87171",
     errorHover: "#fca5a5",
+    danger: "#f87171",
     info: "#60a5fa",
     infoHover: "#93c5fd",
+
+    // Surfaces
+    card: "#15002a",
 
     // Text
     text: "#f0fdf4",
     textMuted: "rgba(240,253,244,0.75)",
+    textSecondary: "rgba(240,253,244,0.65)",
+    secondaryText: "rgba(240,253,244,0.65)",
     textSubtle: "rgba(240,253,244,0.5)",
     textDisabled: "rgba(240,253,244,0.3)",
 
@@ -370,12 +406,18 @@ const oceanColors: ThemeColors = {
     warningHover: "#fcd34d",
     error: "#f87171",
     errorHover: "#fca5a5",
+    danger: "#f87171",
     info: "#38bdf8",
     infoHover: "#7dd3fc",
+
+    // Surfaces
+    card: "#022c22",
 
     // Text
     text: "#f0fdfa",
     textMuted: "rgba(240,253,250,0.75)",
+    textSecondary: "rgba(240,253,250,0.65)",
+    secondaryText: "rgba(240,253,250,0.65)",
     textSubtle: "rgba(240,253,250,0.5)",
     textDisabled: "rgba(240,253,250,0.3)",
 

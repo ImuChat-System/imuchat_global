@@ -94,7 +94,7 @@ export default function JournalScreen() {
     if (currentJournalEntry) {
       setEditTitle(currentJournalEntry.title);
       setEditContent(currentJournalEntry.content || "");
-      setEditMood(currentJournalEntry.mood);
+      setEditMood(currentJournalEntry.mood ?? "neutral");
       setEditId(currentJournalEntry.id);
       setMode("edit");
     }

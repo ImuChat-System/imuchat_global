@@ -26,7 +26,7 @@ import {
     type AliceProvider,
     type AliceProviderInfo,
 } from "@/services/alice";
-import { useAliceStore } from "@/stores/alice-store";
+import { useAliceStore, type AliceConversation, type AliceState } from "@/stores/alice-store";
 
 // ============================================================================
 // TYPES
@@ -36,12 +36,10 @@ export interface UseAliceReturn {
     // --- State ---
     isLoading: boolean;
     error: string | null;
-    currentConversation: ReturnType<
-        ReturnType<typeof useAliceStore>["getCurrentConversation"]
-    >;
-    conversations: ReturnType<typeof useAliceStore>["conversations"];
+    currentConversation: AliceConversation | undefined;
+    conversations: AliceState["conversations"];
     selectedPersona: string;
-    providerSettings: ReturnType<typeof useAliceStore>["providerSettings"];
+    providerSettings: AliceState["providerSettings"];
 
     // --- Chat Actions ---
     sendMessage: (text: string) => Promise<AliceChatResponse | null>;
@@ -124,7 +122,7 @@ export function useAlice(): UseAliceReturn {
                     providerConfig: {
                         apiKey: store.providerSettings.apiKey || undefined,
                         baseUrl: store.providerSettings.baseUrl || undefined,
-                        model: store.providerSettings.model || undefined,
+                        model: store.providerSettings.model || "gpt-4o-mini",
                     },
                     history,
                 });
@@ -245,11 +243,11 @@ export function useAlice(): UseAliceReturn {
         try {
             setIsLoading(true);
             setError(null);
-            const result = await validateProvider({
-                provider: store.providerSettings.provider as AliceProvider,
-                apiKey: store.providerSettings.apiKey || undefined,
-                baseUrl: store.providerSettings.baseUrl || undefined,
-            });
+            const result = await validateProvider(
+                store.providerSettings.provider as AliceProvider,
+                store.providerSettings.apiKey || undefined,
+                store.providerSettings.baseUrl || undefined,
+            );
             return result.valid;
         } catch (err: unknown) {
             const message =

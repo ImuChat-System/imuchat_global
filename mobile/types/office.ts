@@ -93,9 +93,11 @@ export interface CellFormat {
 }
 
 export interface SpreadsheetData {
-    cells: SpreadsheetCell[];
+    cells: Record<string, SpreadsheetCell>;
     rows: number;
     cols: number;
+    /** Alias for cols — used in some UI components */
+    columns?: number;
     column_widths: number[];
     row_heights: number[];
     sheet_name: string;
@@ -129,6 +131,13 @@ export interface PresentationTheme {
     background_color: string;
     text_color: string;
     font_family: string;
+    /** Convenience aliases used by UI components */
+    colors?: {
+        background: string;
+        text: string;
+        accent: string;
+    };
+    fontFamily?: string;
 }
 
 // ─── PDF ────────────────────────────────────────────────────
@@ -189,12 +198,14 @@ export interface SignatureData {
 }
 
 export interface SignatureRequest {
+    id: string;
     document_id: string;
     document_title: string;
     signer_name: string;
     signature_id: string | null;
     signed_at: string | null;
     status: 'pending' | 'signed' | 'rejected';
+    created_at: string;
 }
 
 // ─── Export ─────────────────────────────────────────────────

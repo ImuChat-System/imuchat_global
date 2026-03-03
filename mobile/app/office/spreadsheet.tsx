@@ -42,7 +42,7 @@ function generateSpreadsheetHTML(
   },
 ): string {
   const rows = data.rows;
-  const cols = data.columns;
+  const cols = data.columns ?? data.cols;
 
   // Build column letters
   const colLetters = Array.from({ length: cols }, (_, i) =>
@@ -224,7 +224,7 @@ export default function SpreadsheetScreen() {
       next.cells[selectedCell] = {
         ...(next.cells[selectedCell] || {}),
         value,
-        formula: formulaInput.startsWith("=") ? formulaInput : undefined,
+        formula: formulaInput.startsWith("=") ? formulaInput : null,
       };
       return next;
     });

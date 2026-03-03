@@ -95,7 +95,10 @@ export default function PdfViewerScreen() {
             : type === "underline"
               ? "#4A90D9"
               : "#FF9500",
-        position: { x: 0, y: 0, width: 100, height: 20 },
+        position_x: 0,
+        position_y: 0,
+        width: 100,
+        height: 20,
       });
       setShowAnnotationMenu(false);
       showToast(t("office.annotationAdded"), "success");

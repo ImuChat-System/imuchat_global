@@ -29,6 +29,7 @@ import type {
     PresentationSlide,
     SignatureData,
     SignatureRequest,
+    SpreadsheetCell,
     SpreadsheetData
 } from '@/types/office';
 
@@ -55,7 +56,7 @@ function now(): string {
     return new Date().toISOString();
 }
 
-function countWords(text: string): number {
+export function countWords(text: string): number {
     if (!text || !text.trim()) return 0;
     return text.trim().split(/\s+/).length;
 }
@@ -491,6 +492,8 @@ export async function signDocument(
     signatureId: string,
 ): Promise<SignatureRequest> {
     const req: SignatureRequest = {
+        id: generateId(),
+        created_at: now(),
         document_id: documentId,
         document_title: documentTitle,
         signer_name: signerName,
@@ -639,10 +642,11 @@ export function createEmptySpreadsheet(rows: number, cols: number): SpreadsheetD
         type: 'text',
     };
 
-    const cells = [];
+    const cells: Record<string, SpreadsheetCell> = {};
     for (let r = 0; r < rows; r++) {
         for (let c = 0; c < cols; c++) {
-            cells.push({ row: r, col: c, value: '', formula: null, format: { ...defaultFormat } });
+            const key = String.fromCharCode(65 + c) + (r + 1);
+            cells[key] = { row: r, col: c, value: '', formula: null, format: { ...defaultFormat } };
         }
     }
 
@@ -656,10 +660,13 @@ export function createEmptySpreadsheet(rows: number, cols: number): SpreadsheetD
     };
 }
 
-export function evaluateFormula(formula: string, getCellValue: (row: number, col: number) => string): string {
+export function evaluateFormula(formula: string, getCellValue: (key: string) => string | number): string {
     if (!formula || !formula.startsWith('=')) return formula;
 
     const expr = formula.slice(1).toUpperCase();
+
+    // Helper to convert row/col indices to key
+    const toKey = (r: number, c: number) => String.fromCharCode(65 + c) + (r + 1);
 
     // SUM(A1:A5)
     const sumMatch = expr.match(/^SUM\(([A-Z])(\d+):([A-Z])(\d+)\)$/);
@@ -671,7 +678,7 @@ export function evaluateFormula(formula: string, getCellValue: (row: number, col
         let sum = 0;
         for (let r = row1; r <= row2; r++) {
             for (let c = col1; c <= col2; c++) {
-                const val = parseFloat(getCellValue(r, c));
+                const val = parseFloat(String(getCellValue(toKey(r, c))));
                 if (!isNaN(val)) sum += val;
             }
         }
@@ -689,7 +696,7 @@ export function evaluateFormula(formula: string, getCellValue: (row: number, col
         let count = 0;
         for (let r = row1; r <= row2; r++) {
             for (let c = col1; c <= col2; c++) {
-                const val = parseFloat(getCellValue(r, c));
+                const val = parseFloat(String(getCellValue(toKey(r, c))));
                 if (!isNaN(val)) {
                     sum += val;
                     count++;
@@ -709,7 +716,7 @@ export function evaluateFormula(formula: string, getCellValue: (row: number, col
         let count = 0;
         for (let r = row1; r <= row2; r++) {
             for (let c = col1; c <= col2; c++) {
-                const val = getCellValue(r, c);
+                const val = String(getCellValue(toKey(r, c)));
                 if (val && val.trim() !== '') count++;
             }
         }
@@ -726,7 +733,7 @@ export function evaluateFormula(formula: string, getCellValue: (row: number, col
         let min = Infinity;
         for (let r = row1; r <= row2; r++) {
             for (let c = col1; c <= col2; c++) {
-                const val = parseFloat(getCellValue(r, c));
+                const val = parseFloat(String(getCellValue(toKey(r, c))));
                 if (!isNaN(val) && val < min) min = val;
             }
         }
@@ -743,7 +750,7 @@ export function evaluateFormula(formula: string, getCellValue: (row: number, col
         let max = -Infinity;
         for (let r = row1; r <= row2; r++) {
             for (let c = col1; c <= col2; c++) {
-                const val = parseFloat(getCellValue(r, c));
+                const val = parseFloat(String(getCellValue(toKey(r, c))));
                 if (!isNaN(val) && val > max) max = val;
             }
         }
@@ -753,22 +760,14 @@ export function evaluateFormula(formula: string, getCellValue: (row: number, col
     // Simple cell reference: A1
     const cellRef = expr.match(/^([A-Z])(\d+)$/);
     if (cellRef) {
-        const c = cellRef[1].charCodeAt(0) - 65;
-        const r = parseInt(cellRef[2], 10) - 1;
-        return getCellValue(r, c);
+        return String(getCellValue(cellRef[1] + cellRef[2]));
     }
 
     // Simple arithmetic: =A1+B1, =A1*B1, etc.
     const arithMatch = expr.match(/^([A-Z])(\d+)\s*([+\-*/])\s*([A-Z])(\d+)$/);
     if (arithMatch) {
-        const v1 = parseFloat(getCellValue(
-            parseInt(arithMatch[2], 10) - 1,
-            arithMatch[1].charCodeAt(0) - 65,
-        ));
-        const v2 = parseFloat(getCellValue(
-            parseInt(arithMatch[5], 10) - 1,
-            arithMatch[4].charCodeAt(0) - 65,
-        ));
+        const v1 = parseFloat(String(getCellValue(arithMatch[1] + arithMatch[2])));
+        const v2 = parseFloat(String(getCellValue(arithMatch[4] + arithMatch[5])));
         if (isNaN(v1) || isNaN(v2)) return '#ERR';
         switch (arithMatch[3]) {
             case '+': return (v1 + v2).toString();

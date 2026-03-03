@@ -182,7 +182,7 @@ describe("Emergency Store — selectCountry", function () {
 
     it("resets selectedCategory", function () {
         getStore().setCategory("police");
-        expect(getStore().selectedCategory).toBe("police"); l
+        expect(getStore().selectedCategory).toBe("police");
 
         getStore().selectCountry("IT");
         expect(getStore().selectedCategory).toBeNull();

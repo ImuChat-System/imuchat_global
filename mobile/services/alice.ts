@@ -197,7 +197,10 @@ async function callLocalProvider(
     request: AliceChatRequest,
 ): Promise<AliceChatResponse> {
     const { providerConfig, message, history = [], persona } = request;
-    const baseUrl = providerConfig.baseUrl!;
+    if (!providerConfig || !providerConfig.baseUrl) {
+        throw new Error('providerConfig with baseUrl is required for local provider');
+    }
+    const baseUrl = providerConfig.baseUrl;
 
     log.info(`Direct call to local provider: ${baseUrl}/${providerConfig.model}`);
 

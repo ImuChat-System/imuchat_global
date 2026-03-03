@@ -1,10 +1,10 @@
 # 📱 Mobile App - Tracker Complet des Tâches (MVP Phase 2 Élargi + Phase 3 Modulaire)
 
 > **Date de création** : 21 février 2026  
-> **Dernière mise à jour** : 5 mars 2026  
-> **Statut global** : MVP Phase 2 terminé — Phase 3 modulaire en cours (DEV-018 ✅ · DEV-019 ✅ · DEV-020 ✅ · DEV-022 ✅ · DEV-023 ✅ · DEV-024 ✅ · DEV-025 ✅ · DEV-025s ✅ · DEV-026 ✅ · DEV-027 ✅ M1-M5 complet · DEV-028 ✅ · DEV-029 ✅ · DEV-030 ✅ · DEV-031 ✅ · DEV-032 ✅) — 37/50 fonctionnalités (74%)
+> **Dernière mise à jour** : 6 mars 2026  
+> **Statut global** : MVP Phase 2 terminé — Phase 3 modulaire en cours (DEV-018 ✅ · DEV-019 ✅ · DEV-020 ✅ · DEV-022 ✅ · DEV-023 ✅ · DEV-024 ✅ · DEV-025 ✅ · DEV-025s ✅ · DEV-026 ✅ · DEV-027 ✅ M1-M5 complet · DEV-028 ✅ · DEV-029 ✅ · DEV-030 ✅ · DEV-031 ✅ · DEV-032 ✅ · DEV-033 ✅ · Store Dev ✅) — 39/50 fonctionnalités (78%)
 > **Référence** : Basé sur les 50 fonctionnalités (10 groupes), les ~110 écrans complémentaires, et la roadmap 3D/Live2D
-> **Métriques** : ~80 000 lignes TS/TSX · 325+ fichiers · 92 fichiers de tests (2080 tests, 0 échecs) · 16 Zustand stores · 21 hooks · 43 services · ~2155 clés i18n (fr/en/ja)
+> **Métriques** : ~80 000 lignes TS/TSX · 330+ fichiers · 95 fichiers de tests (2149 tests, 0 échecs) · 17 Zustand stores · 21 hooks · 43 services · ~2370 clés i18n (fr/en/ja)
 
 ---
 
@@ -1662,18 +1662,45 @@ App → Slides onboarding (1ère fois) → Auth (login/signup)
 - `i18n/ja.json` (+~65 clés gamification)
 - `app/(tabs)/settings.tsx` (ajout carte navigation gamification 🎮)
 
+### DEV-033 : Wallet & Monétisation ✅
+
+**Date** : 7 mars 2026
+**Statut** : ✅ Complet — 6 nouveaux écrans, 26 tests, 0 échecs
+**Note** : Extension de l'infrastructure wallet existante (Phase M4 / DEV-028)
+
+**Fichiers créés** (7) :
+
+- `app/wallet/transactions.tsx` — Historique complet avec filtres par type, recherche, FlatList
+- `app/wallet/withdraw.tsx` — Retrait / cashout avec vérification KYC, calcul de frais, sélection de méthode
+- `app/wallet/invoices.tsx` — Factures & reçus avec filtres par type, téléchargement PDF, badges de statut
+- `app/wallet/manage-subscriptions.tsx` — Gestion des abonnements avec plan actuel, période, annuler/reprendre
+- `app/wallet/payment-modal.tsx` — Modal de paiement sécurisé (sélection méthode, résumé, confirmation)
+- `app/wallet/creator-settings.tsx` — Paramètres créateur (méthode versement, IBAN/PayPal/crypto, fiscal, auto-payout, devise)
+- `stores/__tests__/wallet-store-dev033.test.ts` — 26 tests (withdrawals, invoices, KYC, creator settings, transaction filters, edge cases)
+
+**Fichiers modifiés** (6) :
+
+- `types/wallet.ts` (+~80 lignes : WithdrawalRequest, KYCInfo, Invoice, CreatorPayoutSettings, TransactionFilter)
+- `stores/wallet-store.ts` (+~270 lignes : 9 nouvelles actions, mock data, état étendu)
+- `app/wallet/_layout.tsx` (+6 Stack.Screen entries)
+- `app/wallet/index.tsx` (+~50 lignes : 4 nouvelles cartes quick links vers les nouveaux écrans)
+- `i18n/fr.json` (+~100 clés wallet DEV-033)
+- `i18n/en.json` (+~100 clés wallet DEV-033)
+- `i18n/ja.json` (+~100 clés wallet DEV-033)
+- `app/(tabs)/settings.tsx` (ajout carte navigation wallet 💰)
+
 ### Écrans complémentaires Phase 3
 
-| Catégorie                   | # Écrans | Priorité | Notes                                |
-| --------------------------- | -------- | -------- | ------------------------------------ |
-| Wallet & Monétisation       | ~10      | P3       | ImuBank, ImuCoin, abonnements        |
-| Store Dev & Créateurs       | ~11      | P3       | Soumission apps, éditeur thèmes      |
-| IA Administration           | ~7       | P3       | Personas, mémoire IA, audit          |
-| Analytics & Insights        | ~7       | P3       | Dashboard métriques, export CSV      |
-| Gestion fichiers / stockage | ~7       | P3       | Drive personnel, sync multi-device   |
-| Paramètres globaux avancés  | ~9       | P2       | ✅ DEV-030 — 9 sous-écrans, 36 tests |
-| Support & Assistance        | ~8       | P2       | ✅ DEV-031 — 8 sous-écrans, 36 tests |
-| Gamification                | ~6       | P3       | ✅ DEV-032 — 6 sous-écrans, 28 tests |
+| Catégorie                   | # Écrans | Priorité | Notes                                    |
+| --------------------------- | -------- | -------- | ---------------------------------------- |
+| Wallet & Monétisation       | ~10      | P3       | ✅ DEV-033 — 6 nouveaux écrans, 26 tests |
+| Store Dev & Créateurs       | ~11      | P3       | ✅ 10 sous-écrans, 43 tests              |
+| IA Administration           | ~7       | P3       | Personas, mémoire IA, audit              |
+| Analytics & Insights        | ~7       | P3       | Dashboard métriques, export CSV          |
+| Gestion fichiers / stockage | ~7       | P3       | Drive personnel, sync multi-device       |
+| Paramètres globaux avancés  | ~9       | P2       | ✅ DEV-030 — 9 sous-écrans, 36 tests     |
+| Support & Assistance        | ~8       | P2       | ✅ DEV-031 — 8 sous-écrans, 36 tests     |
+| Gamification                | ~6       | P3       | ✅ DEV-032 — 6 sous-écrans, 28 tests     |
 
 ---
 
@@ -2153,7 +2180,7 @@ Phase 2A (Communication)  █████████████░  ~90% fait 
 Phase 2B (Profils)         █████████████░  ~90% (DEV-008 ✅, DEV-009 ✅, DEV-010 ✅)
 Phase 2C (Social)          ██████████████  100% (DEV-011→014 tous ✅)
 Phase 2D (Auth/Sécurité)   █████████████░  ~90% (DEV-015→017 ✅, config dashboard)
-Phase 3  (Modules/IA)      ███████████░░░  ~70% (DEV-018 ✅, DEV-022 ✅, DEV-022b ✅, DEV-024 ✅, DEV-025 ✅, DEV-025s ✅, DEV-026 ✅, DEV-027 ✅ M1-M5, DEV-028 ✅, DEV-030 ✅, DEV-031 ✅, DEV-032 ✅, Auto-mod ✅)
+Phase 3  (Modules/IA)      ████████████░░░  ~75% (DEV-018 ✅, DEV-022 ✅, DEV-022b ✅, DEV-024 ✅, DEV-025 ✅, DEV-025s ✅, DEV-026 ✅, DEV-027 ✅ M1-M5, DEV-028 ✅, DEV-030 ✅, DEV-031 ✅, DEV-032 ✅, DEV-033 ✅, Auto-mod ✅)
 Phase 4  (Vie quotidienne) ░░░░░░░░░░░░░░  ~0%  (DEV-029 à DEV-035)
 ```
 
@@ -2360,6 +2387,55 @@ mobile/
 ---
 
 ## 📝 Notes de Session
+
+### Session 6 mars 2026 — Store Dev & Créateurs
+
+**Objectif** : Portail développeur/créateur complet — soumission apps, éditeur thèmes, analytics, API keys, documentation
+
+**Réalisations** :
+
+1. ✅ Types complets (`types/dev-store.ts` ~260 lignes — 22 types/interfaces)
+2. ✅ Store Zustand v5 + persist (`stores/dev-store-store.ts` ~390 lignes — CRUD submissions, themes, profile, analytics, API keys, webhooks)
+3. ✅ Layout Stack + 10 écrans dans `app/dev-store/` :
+   - `index.tsx` — Hub dashboard (stats, quick actions, activité récente)
+   - `my-apps.tsx` — Liste apps soumises avec StatusBadge (7 statuts)
+   - `submit-app.tsx` — Formulaire soumission (catégories, permissions, prix)
+   - `app-detail.tsx` — Détail soumission + versions + actions
+   - `my-themes.tsx` — Grille 2 colonnes thèmes créés
+   - `theme-editor.tsx` — Éditeur visuel (11 tokens couleur, light/dark, preview)
+   - `creator-profile.tsx` — Profil créateur + KYC (4 statuts)
+   - `analytics.tsx` — Dashboard analytics avec sélecteur période + tendances
+   - `api-keys.tsx` — Gestion clés API (création, révocation, permissions)
+   - `documentation.tsx` — Docs développeur (8 sections accordéon)
+4. ✅ i18n : ~110 clés par langue (fr/en/ja) — section `devStore`
+5. ✅ Carte navigation dans settings.tsx (🛍️ après wallet)
+6. ✅ 43 nouveaux tests (25 store + 18 écrans), tous passants
+7. ✅ Bug fix : `updateProfile` crée un profil si null (au lieu de retourner null)
+8. ✅ Fix : `KeyboardAvoidingView` → `View` dans submit-app.tsx (compatibilité test renderer)
+
+**Fichiers créés (13)** :
+
+- `types/dev-store.ts`
+- `stores/dev-store-store.ts`
+- `app/dev-store/_layout.tsx`, `index.tsx`, `my-apps.tsx`, `submit-app.tsx`, `app-detail.tsx`
+- `app/dev-store/my-themes.tsx`, `theme-editor.tsx`, `creator-profile.tsx`
+- `app/dev-store/analytics.tsx`, `api-keys.tsx`, `documentation.tsx`
+
+**Fichiers tests créés (2)** :
+
+- `stores/__tests__/dev-store-store.test.ts` (25 tests)
+- `app/__tests__/dev-store-screens.test.tsx` (18 tests)
+
+**Fichiers modifiés (4)** :
+
+- `i18n/fr.json` (+~110 clés devStore)
+- `i18n/en.json` (+~110 clés devStore)
+- `i18n/ja.json` (+~110 clés devStore)
+- `app/(tabs)/settings.tsx` (ajout carte navigation 🛍️)
+
+**Baseline finale** : 95 suites · 2149 tests · 0 échecs (+2 suites, +43 tests)
+
+---
 
 ### Session en cours — DEV-015 OAuth + DEV-010 Onboarding
 
@@ -2643,4 +2719,4 @@ mobile/
 
 ---
 
-_Document mis à jour — 3 mars 2026 — Phase 3 modulaire en cours (46% des 50 fonctionnalités — 23/50) — Tests : 72,43% couverture_
+_Document mis à jour — 6 mars 2026 — Phase 3 modulaire en cours (78% des 50 fonctionnalités — 39/50) — Tests : 95 suites, 2149 tests, 0 échecs_

@@ -409,6 +409,100 @@ export default function WalletScreen() {
                 </Text>
               </TouchableOpacity>
             </View>
+
+            {/* DEV-033 — Quick links row 2: new wallet screens */}
+            <View style={[styles.quickLinksRow, { marginTop: 10 }]}>
+              <TouchableOpacity
+                testID="btn-transactions"
+                style={[
+                  styles.quickLinkCard,
+                  {
+                    backgroundColor: colors.surface,
+                    borderColor: colors.border,
+                  },
+                ]}
+                onPress={() => router.push("/wallet/transactions" as any)}
+              >
+                <Ionicons name="receipt-outline" size={24} color="#6366f1" />
+                <Text style={[styles.quickLinkLabel, { color: colors.text }]}>
+                  {t("wallet.historyTitle") || "Historique"}
+                </Text>
+                <Text
+                  style={[styles.quickLinkDesc, { color: colors.textMuted }]}
+                >
+                  {t("wallet.historyDesc") || "Toutes les transactions"}
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                testID="btn-withdraw"
+                style={[
+                  styles.quickLinkCard,
+                  {
+                    backgroundColor: colors.surface,
+                    borderColor: colors.border,
+                  },
+                ]}
+                onPress={() => router.push("/wallet/withdraw" as any)}
+              >
+                <Ionicons name="cash-outline" size={24} color="#10b981" />
+                <Text style={[styles.quickLinkLabel, { color: colors.text }]}>
+                  {t("wallet.withdrawTitle") || "Retrait"}
+                </Text>
+                <Text
+                  style={[styles.quickLinkDesc, { color: colors.textMuted }]}
+                >
+                  {t("wallet.withdrawDesc") || "Encaisser vos gains"}
+                </Text>
+              </TouchableOpacity>
+            </View>
+            <View style={[styles.quickLinksRow, { marginTop: 10 }]}>
+              <TouchableOpacity
+                testID="btn-invoices"
+                style={[
+                  styles.quickLinkCard,
+                  {
+                    backgroundColor: colors.surface,
+                    borderColor: colors.border,
+                  },
+                ]}
+                onPress={() => router.push("/wallet/invoices" as any)}
+              >
+                <Ionicons
+                  name="document-text-outline"
+                  size={24}
+                  color="#f59e0b"
+                />
+                <Text style={[styles.quickLinkLabel, { color: colors.text }]}>
+                  {t("wallet.invoicesTitle") || "Factures"}
+                </Text>
+                <Text
+                  style={[styles.quickLinkDesc, { color: colors.textMuted }]}
+                >
+                  {t("wallet.invoicesDesc") || "Reçus & factures"}
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                testID="btn-creator-settings"
+                style={[
+                  styles.quickLinkCard,
+                  {
+                    backgroundColor: colors.surface,
+                    borderColor: colors.border,
+                  },
+                ]}
+                onPress={() => router.push("/wallet/creator-settings" as any)}
+              >
+                <Ionicons name="settings-outline" size={24} color="#8b5cf6" />
+                <Text style={[styles.quickLinkLabel, { color: colors.text }]}>
+                  {t("wallet.creatorTitle") || "Créateur"}
+                </Text>
+                <Text
+                  style={[styles.quickLinkDesc, { color: colors.textMuted }]}
+                >
+                  {t("wallet.creatorDesc") || "Paiements & fiscal"}
+                </Text>
+              </TouchableOpacity>
+            </View>
           </View>
         );
     }

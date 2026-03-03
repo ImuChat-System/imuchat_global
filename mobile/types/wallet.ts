@@ -204,6 +204,76 @@ export interface PurchaseReceipt {
     isActive: boolean;
 }
 
+// ─── Withdrawal / Cashout ─────────────────────────────────────────
+export type WithdrawalStatus = "pending" | "processing" | "completed" | "rejected";
+
+export interface WithdrawalRequest {
+    id: string;
+    userId: string;
+    amount: number;
+    currency: CurrencyCode;
+    targetMethod: "bank_transfer" | "paypal";
+    targetDetails: string;
+    status: WithdrawalStatus;
+    fee: number;
+    netAmount: number;
+    requestedAt: string;
+    processedAt?: string;
+    rejectionReason?: string;
+}
+
+// ─── KYC ──────────────────────────────────────────────────────────
+export type KYCStatus = "not_started" | "pending" | "verified" | "rejected";
+
+export interface KYCInfo {
+    status: KYCStatus;
+    submittedAt?: string;
+    verifiedAt?: string;
+    rejectionReason?: string;
+    documentType?: "id_card" | "passport" | "driver_license";
+}
+
+// ─── Invoice / Receipt ────────────────────────────────────────────
+export type InvoiceType = "topup" | "subscription" | "purchase" | "withdrawal";
+
+export interface Invoice {
+    id: string;
+    userId: string;
+    type: InvoiceType;
+    referenceId: string;
+    description: string;
+    amount: number;
+    currency: CurrencyCode;
+    tax: number;
+    total: number;
+    status: "paid" | "pending" | "refunded";
+    issuedAt: string;
+    pdfUrl?: string;
+}
+
+// ─── Creator Settings ─────────────────────────────────────────────
+export interface CreatorPayoutSettings {
+    userId: string;
+    payoutMethod: "bank_transfer" | "paypal" | "none";
+    payoutDetails: string;
+    taxId?: string;
+    taxCountry?: string;
+    autoPayoutEnabled: boolean;
+    autoPayoutThreshold: number;
+    currency: CurrencyCode;
+}
+
+// ─── Transaction Filter ──────────────────────────────────────────
+export type TransactionFilterType = "all" | TransactionType;
+
+export interface TransactionFilter {
+    type: TransactionFilterType;
+    status?: TransactionStatus;
+    dateFrom?: string;
+    dateTo?: string;
+    search?: string;
+}
+
 // ─── Extended Wallet State ────────────────────────────────────────
 export interface PaymentState {
     paymentMethods: PaymentMethod[];
@@ -215,4 +285,8 @@ export interface PaymentState {
     iapCatalog: InAppItem[];
     paymentLoading: boolean;
     paymentError: string | null;
+    withdrawals: WithdrawalRequest[];
+    invoices: Invoice[];
+    kycInfo: KYCInfo | null;
+    creatorSettings: CreatorPayoutSettings | null;
 }

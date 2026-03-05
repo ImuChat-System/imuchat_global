@@ -86,7 +86,7 @@ Clé pour ton écosystème.
 
 Si ImuChat devient plateforme.
 
-### 👨‍💻 Côté développeur
+## 👨‍💻 Côté développeur
 
 * Écran Soumission d’application
 * Écran Upload assets Store
@@ -96,7 +96,7 @@ Si ImuChat devient plateforme.
 * Écran Revenus développeur
 * Écran Validation KYC créateur
 
-### 🎨 Côté créateur de thèmes
+## 🎨 Côté créateur de thèmes
 
 * Écran Éditeur visuel de thème
 * Écran Preview multi-device

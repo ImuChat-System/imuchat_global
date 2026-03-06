@@ -4,7 +4,7 @@ import tseslint from 'typescript-eslint'
 import { defineConfig, globalIgnores } from 'eslint/config'
 
 export default defineConfig([
-  // Ignore build outputs and dependencies
+  // Ignore build outputs, dependencies, and sub-projects with their own ESLint config
   globalIgnores([
     '**/node_modules/**',
     '**/dist/**',
@@ -12,6 +12,14 @@ export default defineConfig([
     '**/.next/**',
     '**/coverage/**',
     '**/*.d.ts',
+    // Sub-projects with their own ESLint config
+    'web-app/**',
+    'mobile/**',
+    'mobile-app/**',
+    'desktop-app/**',
+    'ui-kit/**',
+    'site-vitrine/**',
+    'imu-miniapps/**',
   ]),
   {
     files: ['**/*.{ts,tsx}'],

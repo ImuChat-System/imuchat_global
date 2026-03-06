@@ -76,6 +76,12 @@ importers:
       globals:
         specifier: ^16.5.0
         version: 16.5.0
+      lint-staged:
+        specifier: ^16.2.7
+        version: 16.2.7
+      prettier:
+        specifier: ^3.8.1
+        version: 3.8.1
       typescript-eslint:
         specifier: ^8.56.0
         version: 8.56.0(eslint@10.0.2(jiti@2.6.1))(typescript@5.9.3)

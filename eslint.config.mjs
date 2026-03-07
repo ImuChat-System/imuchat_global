@@ -1,7 +1,7 @@
 import js from '@eslint/js'
+import { defineConfig, globalIgnores } from 'eslint/config'
 import globals from 'globals'
 import tseslint from 'typescript-eslint'
-import { defineConfig, globalIgnores } from 'eslint/config'
 
 export default defineConfig([
   // Ignore build outputs, dependencies, and sub-projects with their own ESLint config

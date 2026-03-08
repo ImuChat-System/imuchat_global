@@ -1,9 +1,11 @@
 # 🖥️ ROADMAP GLOBAL — Desktop App ImuChat · Consolidée
 
-**Date de création :** 8 mars 2026  
+**Date de création :** 8 mars 2026 · **Mise à jour :** 8 mars 2026  
 **Documents source :**  
 - `ROADMAP_DESKTOP_FOUNDATIONS.md` — 12 sprints · Architecture, Auth, Chat, Appels, Contacts, Settings, Thèmes, Tests, Build  
-- `ROADMAP_DESKTOP_FEATURES_NATIVE.md` — 14 sprints · UI Kit, Store, Wallet, Office, Feed, IA, Companion, Sécurité, Perf  
+- `ROADMAP_DESKTOP_FEATURES_NATIVE.md` — 18 sprints · UI Kit, Store, Wallet, Office, Feed, IA, Companion, Sécurité, Perf, **Gaming, Arena, Finance, Companion Full**  
+- `IMUCOMPANION_ROADMAP_DESKTOP.md` — 6 phases · IC-D1 à IC-D6 (intégré dans B-18)  
+**Roadmaps domaines intégrées :** `docs/games/`, `docs/contests/`, `docs/finance/`  
 **Stack :** Electron 30 · Vite 5 · React 18 · TypeScript 5 · electron-builder 24  
 **État actuel :** ~5% — Shell uniquement
 
@@ -14,14 +16,17 @@
 ```
 ┌────────────────────────────────────────────────────────────┐
 │              ROADMAP DESKTOP GLOBAL                        │
-│             (ce document — 52 semaines)                    │
+│             (ce document — 60 semaines)                    │
 ├────────────────────────────┬───────────────────────────────┤
 │   Phase A : Foundations    │   Phase B : Features/Natif    │
-│   12 sprints · 24 sem     │   14 sprints · 28 sem         │
-│   5 phases                 │   6 phases                    │
+│   12 sprints · 24 sem     │   18 sprints · 36 sem         │
+│   5 phases                 │   7 phases (+ cross-domain)   │
 ├────────────────────────────┴───────────────────────────────┤
 │           Exécution séquentielle (A puis B)                │
 │      avec chevauchement possible à partir de A-Sprint 8   │
+├────────────────────────────────────────────────────────────┤
+│    Roadmaps domaines intégrées :                            │
+│    🎮 Gaming Hub · 🏆 ImuArena · 💰 Finance · 🤖 Companion │
 └────────────────────────────────────────────────────────────┘
 ```
 
@@ -141,26 +146,62 @@
 
 ---
 
+### 🟣 Q5 — Gaming, Arena, Finance & Companion Full (Semaines 53-60)
+
+> **Objectif :** Intégrations cross-domain — 95% parité web, app feature-complete
+
+#### Features/Natif Phase 7
+
+| Sem. | Sprint | Phase | Focus |
+|:----:|:------:|-------|-------|
+| 53-54 | B-15 | Gaming Hub | Catalogue jeux, profil gaming, mini-games BrowserView, Game Mode (powerSaveBlocker), Voice Chat gaming, Guildes |
+| 55-56 | B-16 | ImuArena | Arena Hub 6 catégories, participation D&D natif, votes, leaderboards temps réel, saisons, brackets |
+| 57-58 | B-17 | Finance Hub | Finance dashboard (graphes recharts), KYC desktop, P2P chat, cartes virtuelles, épargne, contest economy, export PDF |
+| 59-60 | B-18 | Companion Full | Companion enrichi : déclencheurs cross-domain (Gaming/Arena/Finance), FSM complète, TTS natif desktop, archétypes, skins, overlay cross-domain |
+
+**Objectifs Q5 :**
+- ✅ Gaming Hub desktop (catalogue + BrowserView + Game Mode natif)
+- ✅ ImuArena desktop (6 catégories + drag & drop soumission natif)
+- ✅ Finance Hub desktop (KYC + P2P + cartes + export PDF/CSV natif)
+- ✅ ImuCompanion Full (déclencheurs cross-domain + TTS natif + overlay)
+- ✅ ~95% parité features web
+
+**Convergence Q5 :**
+
+- B-15 (Gaming) dépend de `ROADMAP_GAMING_HUB.md` Phases 1-3 (API, catalogue, SDK)
+- B-16 (Arena) dépend de `ROADMAP_IMUARENA_HUB.md` Phases 1-4 + `ROADMAP_LEAGUES_SEASONS.md` Phases 1-3
+- B-17 (Finance) dépend de `ROADMAP_IMUBANK_WALLET.md` Phases 1-3 + B-4 (Wallet Stripe)
+- B-18 (Companion) dépend de `IMUCOMPANION_ROADMAP_DESKTOP.md` IC-D1 à IC-D6 + B-11 (Companion base)
+- B-17 requis par B-16 (prize pools Arena)
+
+---
+
 ## Métriques globales consolidées
 
-| Métrique | État actuel | Fin Q1 | Fin Q2 | Fin Q3 | Fin Q4 |
-|----------|:-----------:|:------:|:------:|:------:|:------:|
-| **Complétion globale** | ~5% | 40% | 90% MVP | 80% full | 95% full |
-| **Lignes de code** | ~1100 | ~10000 | ~22000 | ~35000 | ~45000 |
-| **Pages fonctionnelles** | 0/9 MVP | 5/9 | 9/9 | 19/22 | 22/22 |
-| **Auth** | ❌ | ✅ | ✅ | ✅ | ✅ |
-| **Chat temps réel** | ❌ | ✅ | ✅ | ✅ | ✅ |
-| **Appels audio/vidéo** | ❌ | ❌ | ✅ | ✅ | ✅ |
-| **Screen share** | ❌ | ❌ | ✅ | ✅ | ✅ |
-| **Thèmes** | Dark only | 1 (dark) | 8 × 2 | 8 × 2 | 8 × 2 |
-| **i18n** | ❌ | ❌ | FR + EN | FR + EN | FR + EN + JA |
-| **Tests** | 0% | 0% | > 50% | > 60% | > 70% |
-| **Notifications natives** | ❌ | ✅ | ✅ (rich) | ✅ | ✅ (quick reply) |
-| **Parité web features** | 0% | ~25% | ~35% | ~65% | ~85% |
-| **Code partagé** | 0% | 0% | 30% | 40% | 50% |
-| **Startup time** | < 5s | < 3s | < 2.5s | < 2.5s | < 2s |
-| **Memory idle** | < 200MB | < 300MB | < 250MB | < 220MB | < 200MB |
-| **Distribution** | Dev only | Dev only | macOS+Win+Linux | Idem | + App Stores |
+| Métrique | État actuel | Fin Q1 | Fin Q2 | Fin Q3 | Fin Q4 | Fin Q5 |
+|----------|:-----------:|:------:|:------:|:------:|:------:|:------:|
+| **Complétion globale** | ~5% | 40% | 90% MVP | 80% full | 95% full | 100% full |
+| **Lignes de code** | ~1100 | ~10000 | ~22000 | ~35000 | ~45000 | ~55000 |
+| **Pages fonctionnelles** | 0/9 MVP | 5/9 | 9/9 | 19/22 | 22/22 | 30+ |
+| **Auth** | ❌ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| **Chat temps réel** | ❌ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| **Appels audio/vidéo** | ❌ | ❌ | ✅ | ✅ | ✅ | ✅ |
+| **Screen share** | ❌ | ❌ | ✅ | ✅ | ✅ | ✅ |
+| **Thèmes** | Dark only | 1 (dark) | 8 × 2 | 8 × 2 | 8 × 2 | 8 × 2 |
+| **i18n** | ❌ | ❌ | FR + EN | FR + EN | FR + EN + JA | FR + EN + JA |
+| **Tests** | 0% | 0% | > 50% | > 60% | > 70% | > 75% |
+| **Notifications natives** | ❌ | ✅ | ✅ (rich) | ✅ | ✅ (quick reply) | ✅ |
+| **Parité web features** | 0% | ~25% | ~35% | ~65% | ~85% | ~95% |
+| **Code partagé** | 0% | 0% | 30% | 40% | 50% | 55% |
+| **Startup time** | < 5s | < 3s | < 2.5s | < 2.5s | < 2s | < 2s |
+| **Memory idle** | < 200MB | < 300MB | < 250MB | < 220MB | < 200MB | < 220MB* |
+| **Distribution** | Dev only | Dev only | macOS+Win+Linux | Idem | + App Stores | App Stores |
+| **Gaming Hub** | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
+| **ImuArena** | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
+| **Finance Hub** | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
+| **ImuCompanion Full** | ❌ | ❌ | ❌ | ❌ | Basique (B-11) | ✅ |
+
+> *\*Mémoire peut temporairement augmenter avec Live2D + BrowserView Gaming (lazy unload)*
 
 ---
 
@@ -183,6 +224,15 @@
 | **QA** | 1 dev part-time | Tests, E2E, beta testing |
 | **Total Q3-Q4** | **3-4 devs** | |
 
+### Q5 (Cross-Domain — équipe fusionnée + domaines)
+
+| Rôle | Développeurs | Focus |
+|------|:------------:|-------|
+| **Desktop Lead** | 1 dev senior | Natif avancé (BrowserView, TTS natif, overlay) |
+| **Frontend** | 2 devs | Gaming, Arena, Finance, Companion |
+| **API domaines** | ↔ équipes Gaming/Arena/Finance | Endpoints, SDK |
+| **Total Q5** | **3 devs** + coordination domaines | |
+
 ---
 
 ## Risques & Mitigations
@@ -197,6 +247,10 @@
 | R6 | Mac App Store sandbox limitations | 🟡 Moyen | Moyenne | MAS != DMG build. Certaines features (global shortcuts, file sync) limitées dans MAS sandbox |
 | R7 | Portage trop lent, parité jamais atteinte | 🟠 Élevé | Moyenne | Prioritiser les features les plus utilisées, partager le code max |
 | R8 | desktopCapturer nécessite permissions spéciales | 🟡 Moyen | Basse | Screen Recording permission macOS, documenter pour l'utilisateur |
+| R9 | Dépendance API Gaming/Arena non prêtes | 🟠 Élevé | Moyenne | Mock API domaines dès Q4, intégration réelle Q5 |
+| R10 | KYC compliance desktop multi-pays | 🟠 Élevé | Haute | Dialog natif fichier + Onfido, limiter à 2-3 pays MVP |
+| R11 | BrowserView Gaming performances/sécurité | 🟡 Moyen | Moyenne | Sandbox strict, process isolation, CSP gaming |
+| R12 | Bundle size avec Live2D + Gaming assets | 🟡 Moyen | Haute | Lazy load, CDN assets, delta OTA updates |
 
 ---
 
@@ -216,7 +270,12 @@
 | **M10 — Social** | S38 | Feed, Stories, Events, Discover |
 | **M11 — IA** | S42 | Alice + Companion Live2D |
 | **M12 — Sécurisé & Performant** | S46 | CSP, secure storage, start < 2s, mem < 200MB |
-| **🏁 Desktop App 1.0** | S52 | Production, sécurisée, feature-rich, multi-OS, App Stores |
+| **🏁 Desktop App 1.0 Core** | S52 | Production, sécurisée, feature-rich, multi-OS, App Stores |
+| **M13 — Gaming Hub Desktop** | S54 | Catalogue, BrowserView mini-games, Game Mode natif, guildes |
+| **M14 — ImuArena Desktop** | S56 | 6 catégories, D&D soumission, votes, leaderboards, saisons |
+| **M15 — Finance Hub Desktop** | S58 | KYC, P2P, cartes virtuelles, épargne, export PDF/CSV natif |
+| **M16 — ImuCompanion Full** | S60 | Déclencheurs cross-domain, FSM, TTS natif, overlay |
+| **🏁 Desktop App 2.0 Complète** | S60 | Feature-complete avec Gaming, Arena, Finance, Companion intégrés |
 
 ---
 
@@ -229,7 +288,12 @@
 | MVP Release | M1-M4 — S10 | M7 — S24 | 14 sem |
 | Store complet | M9 — S24 | M8 — S28 | 4 sem |
 | IA intégrée | M12 — S32 | M11 — S42 | 10 sem |
-| App 1.0 | S34 | S52 | 18 sem |
+| Gaming Hub | M13 — S36 (Web) | M13 — S54 | 18 sem |
+| ImuArena | M14 — S38 (Web) | M14 — S56 | 18 sem |
+| Finance Hub | M15 — S40 (Web) | M15 — S58 | 18 sem |
+| ImuCompanion Full | M16 — S42 (Web) | M16 — S60 | 18 sem |
+| App 1.0 Core | S34 | S52 | 18 sem |
+| App 2.0 Complète | S42 | S60 | 18 sem |
 
 > **Note :** Le delta diminue progressivement grâce au code sharing croissant (50% en Q4). Les features portées bénéficient du travail déjà fait sur la web-app.
 
@@ -239,12 +303,14 @@
 
 | Paramètre | Valeur |
 |-----------|--------|
-| **Sprints totaux** | 26 (12 Foundations + 14 Features/Natif) |
-| **Durée totale** | ~52 semaines (~12 mois) |
-| **Équipe recommandée** | 2 devs (Q1-Q2) → 3-4 devs (Q3-Q4) |
-| **Effort estimé** | ~3500-4500 heures-dev |
+| **Sprints totaux** | 30 (12 Foundations + 18 Features/Natif) |
+| **Durée totale** | ~60 semaines (~15 mois) |
+| **Équipe recommandée** | 2 devs (Q1-Q2) → 3-4 devs (Q3-Q4) → 3 devs + coord (Q5) |
+| **Effort estimé** | ~4500-5500 heures-dev |
 | **MVP Release** | Semaine 24 (mois 6) |
-| **App 1.0** | Semaine 52 (mois 12) |
-| **Milestones** | 12 |
-| **Parité web cible** | ~85% |
-| **Résultat** | Desktop App ImuChat 1.0 — Native Electron, multi-OS, feature-rich, sécurisée, performante |
+| **App 1.0 Core** | Semaine 52 (mois 12) |
+| **App 2.0 Complète** | Semaine 60 (mois 15) |
+| **Milestones** | 16 (12 core + 4 cross-domain) |
+| **Parité web cible** | ~95% |
+| **Roadmaps domaines** | Gaming Hub · ImuArena · ImuBank/Economy · ImuCompanion |
+| **Résultat** | Desktop App ImuChat 2.0 — Native Electron, multi-OS, feature-complete avec Gaming, Arena, Finance & Companion |

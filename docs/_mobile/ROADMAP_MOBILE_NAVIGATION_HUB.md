@@ -3,7 +3,8 @@
 **Date de création :** 8 mars 2026  
 **Document source :** `Vision_Structure_Mobile_v2.md`  
 **Stack :** Expo SDK 52+ · expo-router · Zustand · Supabase · react-native-reanimated  
-**État actuel :** 6 onglets existants (42/50 features, 84%) — Home 50% mock, FAB inexistant, Widgets inexistants
+**État actuel :** 6 onglets existants (42/50 features, 84%) — Home 50% mock, FAB inexistant, Widgets inexistants  
+**Roadmaps domaines intégrées :** `docs/games/`, `docs/contests/`, `docs/finance/`, `IMUCOMPANION_ROADMAP_MOBILE.md`
 
 ---
 
@@ -17,7 +18,8 @@
 | 4 | Personnalisation Avancée & IA | 2 | 4 semaines |
 | 5 | Onglets Enrichis (Social, Watch, Profil) | 3 | 6 semaines |
 | 6 | Polish, Accessibilité & Performance | 2 | 4 semaines |
-| **Total** | | **15 sprints** | **30 semaines** |
+| 7 | Intégrations Cross-Domain (Gaming, Arena, Finance, Companion) | 4 | 8 semaines |
+| **Total** | | **19 sprints** | **38 semaines** |
 
 ---
 
@@ -322,6 +324,99 @@
 
 ---
 
+## Phase 7 — Intégrations Cross-Domain (Sprints 16-19)
+
+### Sprint 16 · Gaming Hub Mobile
+
+**Objectif :** Intégrer le Gaming Hub dans la navigation mobile
+
+| Tâche | Description | Priorité |
+|-------|-------------|----------|
+| **Gaming Tab / Section** | Route `app/(tabs)/gaming.tsx` ou section dédiée dans Discover — catalogue jeux, catégories, recherche | P0 |
+| **Gaming Profile** | Écran profil gaming : stats, XP, badges, historique parties dans `app/gaming/profile.tsx` | P0 |
+| **Mini-games inline** | WebView sandboxée pour mini-jeux web (postMessage communication) | P1 |
+| **Game Mode** | `hooks/useGameMode.ts` — status auto "En jeu", notifications réduites, ne pas déranger | P1 |
+| **FAB contextuel gaming** | FAB sur l’écran Gaming : actions spécifiques (🎮 Chercher partie, 👥 Rejoindre guilde, 📢 Inviter) | P1 |
+| **Widget Gaming enrichi** | Mettre à jour le widget Gaming (Sprint A8) avec données réelles : dernière partie, rang, amis en ligne | P1 |
+
+**Dépendances :** `ROADMAP_GAMING_HUB.md` Phases 1-3 (API Gaming + Game Launcher + données catalogue)
+
+**Livrables Sprint 16 :**
+
+- Gaming Hub mobile naviguable avec catalogue et recherche
+- Profil gaming avec stats et badges
+- Game Mode activable
+- Widget Gaming avec données réelles
+
+### Sprint 17 · ImuArena Mobile
+
+**Objectif :** Concours et compétitions sur mobile
+
+| Tâche | Description | Priorité |
+|-------|-------------|----------|
+| **Arena Hub mobile** | Route `app/arena/index.tsx` — 6 catégories (Gaming/Créatif/Tech/Quiz/Story/Visual), concours actifs, trending | P0 |
+| **Contest Detail** | Écran détail concours : règles, timeline, soumissions, classement en temps réel | P0 |
+| **Participation mobile** | Flow natif de soumission adapté par catégorie (caméra/galerie pour Visual, éditeur texte pour Story, upload pour Tech) | P0 |
+| **Votes & Jury** | Interface de vote mobile (swipe cards), grille jury, mécanisme anti-fraude | P1 |
+| **Leaderboards** | Classements en temps réel (Supabase Realtime), saisons, ligues | P1 |
+| **Widget Arena enrichi** | Mettre à jour widget Arena (Sprint A8) : prochain concours, rang, compte à rebours | P1 |
+| **Push Notifications** | Notifications push pour début/fin concours, résultats, promotions ligues | P1 |
+
+**Dépendances :** `ROADMAP_IMUARENA_HUB.md` Phases 1-4, `ROADMAP_LEAGUES_SEASONS.md` Phases 1-3
+
+**Livrables Sprint 17 :**
+
+- Arena Hub mobile avec 6 catégories fonctionnelles
+- Flow de participation natif
+- Votes et classements en temps réel
+
+### Sprint 18 · Finance Hub Mobile
+
+**Objectif :** Finance complète et P2P dans le chat mobile
+
+| Tâche | Description | Priorité |
+|-------|-------------|----------|
+| **Finance Dashboard** | Route `app/finance/index.tsx` — solde, graphes (react-native-svg-charts), transactions récentes | P0 |
+| **KYC mobile** | Flow KYC natif niveaux 0-2 (caméra + ID scan via expo-camera, liveness check) | P0 |
+| **P2P enrichi chat** | Bulle chat spéciale : envoyer ImuCoins, split bill, cagnottes dans les conversations | P0 |
+| **Cartes virtuelles** | Écran gestion cartes virtuelles (Stripe Issuing), solde, gel/dégel, limites | P1 |
+| **Épargne & Coffres** | Coffres d’épargne (objectifs, progression visuelle), transferts vers/depuis wallet | P1 |
+| **Contest Economy** | Intégration prize pools Arena + frais d’entrée concours dans le wallet | P1 |
+| **Biométrie** | Face ID / Touch ID pour transactions > seuil configurable | P0 |
+
+**Dépendances :** `ROADMAP_IMUBANK_WALLET.md` Phases 1-3, `ROADMAP_IMUECONOMY_MONETISATION.md` Phases A-B, Sprint A13 (Profil Wallet)
+
+**Livrables Sprint 18 :**
+
+- Finance dashboard mobile complet
+- KYC natif avec caméra
+- P2P dans le chat, cartes virtuelles, épargne
+- Biométrie pour transactions sensibles
+
+### Sprint 19 · ImuCompanion Mobile Full
+
+**Objectif :** Intégrer ImuCompanion (avatar Live2D) dans l’expérience mobile
+
+| Tâche | Description | Priorité |
+|-------|-------------|----------|
+| **Companion Store** | `stores/companion-store.ts` — état avatar, personnalisation, archétype actif | P0 |
+| **Companion Panel** | Bottom sheet animé avec canvas Live2D (react-native-skia ou WebView bridge) | P0 |
+| **Behaviour Engine FSM** | Machine à états : idle, listening, speaking, celebrating, thinking, sleeping | P0 |
+| **TTS / STT mobile** | expo-speech pour TTS + react-native-voice pour reconnaissance vocale | P1 |
+| **Déclencheurs cross-domain** | Companion réagit aux événements : Gaming→conseils stratégiques, Arena→encouragements, Finance→alertes budget, Chat→suggestions | P1 |
+| **Archétypes** | Personnalisation de la personnalité du Companion (Playful, Studious, Sporty, etc.) | P2 |
+| **Skins Premium** | Skins achetables dans le Store, appliqués sur le canvas Live2D | P2 |
+
+**Dépendances :** `IMUCOMPANION_ROADMAP_MOBILE.md` IC-M1 à IC-M6, Sprint A10 (Alice IA)
+
+**Livrables Sprint 19 :**
+
+- ImuCompanion Live2D animé accessible en bottom sheet
+- FSM complète avec déclencheurs cross-domain
+- TTS/STT mobile, archétypes, skins
+
+---
+
 ## Dépendances & Risques
 
 ### Dépendances inter-phases
@@ -332,6 +427,12 @@
 | home-config-store | Phase 1 Sprint 1 | Phases 3 et 4 | Bloquant |
 | FAB | Phase 2 | Phase 5 (ImuFeed) | Fort |
 | Widget registry | Phase 3 Sprint 6 | Phase 3 Sprint 8 | Fort |
+| Widgets Gaming/Arena | Phase 3 Sprint 8 | Phase 7 Sprints 16-17 | Fort (données réelles) |
+| Alice IA (Phase 4) | Sprint 10 | Sprint 19 (Companion) | Fort |
+| API Gaming externe | `ROADMAP_GAMING_HUB.md` Phase 1-3 | Sprint 16 | Bloquant |
+| API Arena externe | `ROADMAP_IMUARENA_HUB.md` Phase 1-4 | Sprint 17 | Bloquant |
+| API Finance externe | `ROADMAP_IMUBANK_WALLET.md` Phase 1-3 | Sprint 18 | Bloquant |
+| ImuCompanion SDK | `IMUCOMPANION_ROADMAP_MOBILE.md` IC-M1-6 | Sprint 19 | Fort |
 
 ### Risques identifiés
 
@@ -341,6 +442,10 @@
 | Complexité drag & drop | Élevé | Moyen | Utiliser `react-native-gesture-handler` + `reanimated` (libraries prouvées) |
 | Sync Supabase config | Faible | Moyen | Offline-first avec sync en arrière-plan |
 | 6 thèmes à maintenir | Moyen | Faible | Design tokens via `useColors()` (déjà en place) |
+| Performance Live2D mobile | Élevé | Élevé | WebView bridge ou react-native-skia, lazy load, désactiver sur low-end |
+| KYC compliance mobile | Moyen | Élevé | expo-camera + Onfido SDK, limiter pays MVP |
+| API domaines non prêtes | Moyen | Élevé | Mock API dès Phase 6, intégration réelle Phase 7 |
+| Bundle size avec Gaming/Live2D | Moyen | Moyen | Dynamic imports, OTA updates, lazy hydration |
 
 ---
 
@@ -355,3 +460,7 @@
 | Crash-free rate | > 99.5% | Sentry / Crashlytics |
 | Accessibilité score | WCAG AA | Audit a11y |
 | Tests coverage | ≥ 80% | Jest |
+| Gaming Hub usage | ≥ 25% des users actifs | Analytics |
+| Arena participation | ≥ 10% des users en concours actif | Analytics |
+| Finance txn / jour | ≥ 50 transactions P2P / 1000 users | Backend logs |
+| Companion activation | ≥ 30% des users ouvrent le Companion | Analytics |

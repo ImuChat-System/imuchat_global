@@ -17,7 +17,8 @@
 | 4 | Store, Wallet & Monétisation | 2 | 4 semaines |
 | 5 | Animations, UX Polish & PWA | 2 | 4 semaines |
 | 6 | Admin, Analytics & IA | 2 | 4 semaines |
-| **Total** | | **16 sprints** | **32 semaines** |
+| 7 | Gaming, Arena, Finance & Companion | 4 | 8 semaines |
+| **Total** | | **20 sprints** | **40 semaines** |
 
 ---
 
@@ -384,6 +385,104 @@
 
 ---
 
+## Phase 7 — Gaming, Arena, Finance & Companion (Sprints 17-20)
+
+> Intégration native des domaines transverses dans la web-app. Chaque sprint s'appuie sur les roadmaps dédiées (`docs/games/`, `docs/contests/`, `docs/finance/`) et la roadmap ImuCompanion (`IMUCOMPANION_ROADMAP_WEBAPP.md`).
+
+### Sprint 17 · Gaming Hub Web
+
+**Objectif :** Page Gaming Hub intégrée — profil gamer, mini-jeux, voice gaming
+
+| Tâche | Description | Priorité | Fichiers |
+|-------|-------------|:--------:|----------|
+| **Gaming Hub page** | Créer la page Gaming Hub : catalogue mini-jeux, trending, catégories (casual, compétitif, social), recherche. Refs `ROADMAP_GAMING_HUB.md` Phase 1-2 | 🟡 P1 | `app/[locale]/gaming/page.tsx`, `components/gaming/GamingHub.tsx` |
+| **Gaming Profile** | Section profil gamer : niveau, XP gaming, jeux favoris, stats (parties jouées, victoires, temps), badges gaming | 🟡 P1 | `components/gaming/GamingProfile.tsx`, `services/gaming-api.ts` |
+| **Mini-jeux inline** | Framework mini-jeux web : embed HTML5 Games dans iframe sandboxée, communication postMessage, score reporting | 🟡 P1 | `components/gaming/MiniGameFrame.tsx`, `lib/game-bridge.ts` |
+| **Game Mode Web** | Mode "En Partie" : statut automatique, notifications réduites, timer session. Refs `ROADMAP_GAME_MODE.md` Phase 1 | 🟢 P2 | `components/gaming/GameModeToggle.tsx`, `hooks/useGameMode.ts` |
+| **Voice Chat Gaming** | Salons vocaux dédiés gaming (intégration Stream Voice) : séparation canal voix texte, push-to-talk, overlay mini | 🟢 P2 | `components/gaming/VoiceChannel.tsx` |
+| **Guildes & Clans** | Pages guildes : créer/rejoindre, classement guilde, chat guilde, événements guilde. Refs `ROADMAP_GAMING_HUB.md` Phase 3 | 🟢 P2 | `app/[locale]/gaming/guilds/`, `components/gaming/GuildCard.tsx` |
+
+**Livrables Sprint 17 :**
+- ✅ Page Gaming Hub avec catalogue et recherche
+- ✅ Profil gamer avec stats et badges
+- ✅ Mini-jeux HTML5 jouables dans la web-app
+- ✅ Mode gaming avec statut auto
+
+**Dépendance :** `docs/games/ROADMAP_GAMING_HUB.md` Phases 1-3
+
+---
+
+### Sprint 18 · ImuArena — Contests & Compétitions
+
+**Objectif :** Intégrer ImuArena dans la web-app — concours, votes, classements, saisons
+
+| Tâche | Description | Priorité | Fichiers |
+|-------|-------------|:--------:|----------|
+| **Arena Hub page** | Page principale ImuArena : concours en cours, catégories (Gaming, Créatif, Tech, Quiz, Story, Visual), filtres (statut, catégorie, rewards). Refs `ROADMAP_IMUARENA_HUB.md` Phase 1-2 | 🟡 P1 | `app/[locale]/arena/page.tsx`, `components/arena/ArenaHub.tsx` |
+| **Contest Detail** | Page détail concours : règles, timeline, soumissions, participants, prize pool, jury. Tabs responsive | 🟡 P1 | `app/[locale]/arena/[contestId]/page.tsx`, `components/arena/ContestDetail.tsx` |
+| **Participation flow** | Flow soumission : upload, preview, confirmation. Adapté selon catégorie (texte/image/vidéo/code/quiz) | 🟡 P1 | `components/arena/SubmissionForm.tsx`, `services/arena-api.ts` |
+| **Votes & Jury** | Système de votes : grille soumissions, vote modal (1-10 ou like), résultats temps réel, anti-fraude. Refs `ROADMAP_IMUARENA_HUB.md` Phase 3 | 🟡 P1 | `components/arena/VotingGrid.tsx`, `components/arena/JuryPanel.tsx` |
+| **Leaderboards & Saisons** | Classements Arena : global, par catégorie, par saison. Profil Arena (rang, points, badges, historique). Refs `ROADMAP_LEAGUES_SEASONS.md` Phase 1-3 | 🟡 P1 | `components/arena/Leaderboard.tsx`, `components/arena/SeasonBanner.tsx` |
+| **Brackets Gaming** | Brackets de tournois gaming : arbre de matchs, résultats live, bracket viewer responsive. Refs `ROADMAP_IMUARENA_HUB.md` Phase 4 | 🟢 P2 | `components/arena/TournamentBracket.tsx` |
+
+**Livrables Sprint 18 :**
+- ✅ Page Arena avec 6 catégories de concours
+- ✅ Flow complet : browse → participer → voter → résultats
+- ✅ Leaderboards et saisons fonctionnels
+- ✅ Brackets de tournois gaming
+
+**Dépendance :** `docs/contests/ROADMAP_IMUARENA_HUB.md` Phases 1-4, `docs/contests/ROADMAP_LEAGUES_SEASONS.md` Phases 1-3
+
+---
+
+### Sprint 19 · Finance Hub Web — Wallet, KYC & P2P Enrichi
+
+**Objectif :** Finance Hub complet — wallet avancé, KYC, P2P dans le chat, cartes, épargne
+
+| Tâche | Description | Priorité | Fichiers |
+|-------|-------------|:--------:|----------|
+| **Finance Hub page** | Dashboard financier : solde wallet, graphe historique, transactions récentes, accès rapides (envoyer, recevoir, top-up). Refs `ROADMAP_IMUBANK_WALLET.md` Phase 2 | 🟡 P1 | `app/[locale]/finance/page.tsx`, `components/finance/FinanceHub.tsx` |
+| **KYC flow** | Parcours KYC multi-niveaux : Niveau 0 (email), Niveau 1 (identité basique), Niveau 2 (vérification photo/vidéo via Onfido). Déblocage progressif des features | 🟡 P1 | `components/finance/KycFlow.tsx`, `services/kyc-api.ts` |
+| **P2P enrichi** | Transfert P2P dans le chat : bouton "Envoyer ImuCoins" dans le message input, split bill en groupe, cagnottes de groupe. Refs `ROADMAP_IMUBANK_WALLET.md` Phase 2 Sprint 7-8 | 🟡 P1 | `components/chat/SendMoneyModal.tsx`, `components/finance/SplitBill.tsx` |
+| **Cartes virtuelles** | Page cartes : émission carte virtuelle (Stripe Issuing), activation/désactivation, limites, Apple Pay / Google Pay. Refs `ROADMAP_IMUBANK_WALLET.md` Phase 3 | 🟢 P2 | `components/finance/VirtualCard.tsx` |
+| **Épargne & Coffres** | Coffres d'épargne : créer un coffre (objectif, deadline), règles automatiques (arrondi, % revenus), suivi progression | 🟢 P2 | `components/finance/SavingsVault.tsx` |
+| **Contest Economy** | Intégration économie concours : prize pools visibles, frais d'entrée via wallet, distribution automatique gains. Refs `ROADMAP_CONTEST_ECONOMY.md` Phase 1-2 | 🟡 P1 | `components/finance/ContestPrizeFund.tsx`, `services/contest-economy-api.ts` |
+
+**Livrables Sprint 19 :**
+- ✅ Finance Hub avec dashboard complet
+- ✅ KYC multi-niveaux fonctionnel
+- ✅ P2P dans le chat + Split Bill
+- ✅ Économie des concours (prize pools, distribution)
+
+**Dépendance :** `docs/finance/ROADMAP_IMUBANK_WALLET.md` Phases 1-3, `docs/finance/ROADMAP_IMUECONOMY_MONETISATION.md` Phases A-B
+
+---
+
+### Sprint 20 · ImuCompanion — Intégration Consolidée
+
+**Objectif :** Intégration complète du companion IA incarné dans la web-app — consolidation de `IMUCOMPANION_ROADMAP_WEBAPP.md` IC-W1 à IC-W6
+
+| Tâche | Description | Priorité | Fichiers |
+|-------|-------------|:--------:|----------|
+| **Companion Store & Hook** | `companion-store.ts` (Zustand), `useCompanion()` hook, `CompanionResponse` types. Refs IC-W1 | 🟡 P1 | `stores/companion-store.ts`, `hooks/useCompanion.ts`, `types/companion.ts` |
+| **Panel 3 colonnes** | Panneau companion dans la 3ème colonne du layout desktop, collapsible, accessible via Cmd+J. Refs IC-W1 | 🟡 P1 | `components/companion/CompanionPanel.tsx`, `components/layout/ThreeColumnLayout.tsx` |
+| **Live2D WebGL** | Canvas Live2D : chargement modèle .model3.json, rendu WebGL, animations idle/talk/think/happy. Lazy-loadé. Refs IC-W2 | 🟡 P1 | `components/companion/Live2DCanvas.tsx`, `lib/live2d-loader.ts` |
+| **Behaviour Engine** | FSM comportemental : idle → talking → thinking → celebrating → sleeping. Transitions contextuelles. Refs IC-W3 | 🟡 P1 | `services/companion-fsm.ts`, `services/companion-proactive.ts` |
+| **Web Speech TTS/STT** | Intégration Web Speech API : TTS pour les réponses companion, STT pour les commandes vocales, lip sync basique. Refs IC-W4 | 🟢 P2 | `lib/web-speech.ts`, `components/companion/LipSync.tsx` |
+| **Déclencheurs cross-domain** | Companion contextuel : dans Gaming → conseils de jeu, dans Arena → encouragements, dans Finance → alertes budget, dans Chat → suggestions. Refs IC-W3 + IC-W6 | 🟡 P1 | `services/companion-triggers.ts` |
+| **Archétypes & Personnalisation** | Sélection d'archétype visuel (Assistant Pro, Professeur, Coach, Mascotte), skins premium via Store. Refs IC-W5 | 🟢 P2 | `components/companion/ArchetypeSelector.tsx`, `services/companion-skins-api.ts` |
+
+**Livrables Sprint 20 :**
+- ✅ Companion IA incarné avec Live2D dans la web-app
+- ✅ Panel companion dans le layout 3 colonnes
+- ✅ Behaviour engine contextuel (Gaming, Arena, Finance, Chat)
+- ✅ TTS/STT via Web Speech API
+- ✅ Archétypes personnalisables
+
+**Dépendance :** `IMUCOMPANION_ROADMAP_WEBAPP.md` IC-W1 à IC-W6
+
+---
+
 ## Dépendances inter-sprints
 
 ```
@@ -397,13 +496,29 @@ Sprint 8 (Chat avancé) ──→ Sprint 10 (Real-time) ──→ Sprint 14 (PWA
                                │
 Sprint 9 (Appels avancés) ─────┘
 
-Sprint 11 (Store/Wallet) ──→ Sprint 12 (Monétisation)
+Sprint 11 (Store/Wallet) ──→ Sprint 12 (Monétisation) ──→ Sprint 19 (Finance Hub)
 
 Sprint 13 (Animations) [indépendant — peut démarrer à tout moment]
 
 Sprint 15 (Admin) [indépendant après Sprint 4]
-Sprint 16 (IA) [indépendant après Sprint 8]
+Sprint 16 (IA) [indépendant après Sprint 8] ──→ Sprint 20 (Companion Full)
+
+Sprint 17 (Gaming Hub) ──→ Sprint 18 (Arena/Contests)
+                                      │
+Sprint 19 (Finance Hub) ─────────→ Sprint 18 (Arena prize pools)
+Sprint 20 (Companion) — déclencheurs contextuels requièrent Sprint 17, 18, 19
 ```
+
+### Dépendances avec les roadmaps domaines
+
+| Sprint Features/UX | Roadmap domaine requise | Phase minimum requise |
+|---------------------|------------------------|:---------------------:|
+| Sprint 17 (Gaming) | `ROADMAP_GAMING_HUB.md` | Phase 1-2 (API + Gaming Module) |
+| Sprint 18 (Arena) | `ROADMAP_IMUARENA_HUB.md` | Phase 1-3 (API + Contests + Votes) |
+| Sprint 18 (Arena) | `ROADMAP_LEAGUES_SEASONS.md` | Phase 1-2 (Rangs + Saisons) |
+| Sprint 19 (Finance) | `ROADMAP_IMUBANK_WALLET.md` | Phase 1-3 (Wallet + KYC + Cartes) |
+| Sprint 19 (Finance) | `ROADMAP_CONTEST_ECONOMY.md` | Phase 1-2 (Prize pools) |
+| Sprint 20 (Companion) | `IMUCOMPANION_ROADMAP_WEBAPP.md` | IC-W1 à IC-W6 (intégralité) |
 
 ---
 
@@ -421,12 +536,16 @@ Sprint 16 (IA) [indépendant après Sprint 8]
 
 ## KPIs globaux
 
-| Métrique | Actuel | Phase 2 | Phase 4 | Phase 6 |
-|----------|:------:|:-------:|:-------:|:-------:|
-| **Routes fonctionnelles** | 38+ | 45+ | 50+ | 55+ |
-| **Modules implémentés** | ~30 | 35 | 40 | 45 |
-| **Couverture i18n** | ~60% | 100% | 100% | 100% |
-| **Chat features** | Basique | +7 features | Complet | Complet + IA |
-| **Store completeness** | 70% | 85% | 95% | 100% |
-| **Lighthouse perf mobile** | Non mesuré | 80+ | 85+ | 90+ |
-| **PWA installable** | Partiel | Partiel | Complet | Complet + offline |
+| Métrique | Actuel | Phase 2 | Phase 4 | Phase 6 | Phase 7 |
+|----------|:------:|:-------:|:-------:|:-------:|:-------:|
+| **Routes fonctionnelles** | 38+ | 45+ | 50+ | 55+ | 65+ |
+| **Modules implémentés** | ~30 | 35 | 40 | 45 | 52+ |
+| **Couverture i18n** | ~60% | 100% | 100% | 100% | 100% |
+| **Chat features** | Basique | +7 features | Complet | Complet + IA | + P2P finance |
+| **Store completeness** | 70% | 85% | 95% | 100% | 100% |
+| **Lighthouse perf mobile** | Non mesuré | 80+ | 85+ | 90+ | 90+ |
+| **PWA installable** | Partiel | Partiel | Complet | Complet + offline | Complet + offline |
+| **Gaming Hub** | ❌ | ❌ | ❌ | ❌ | ✅ Hub + mini-jeux + guildes |
+| **ImuArena** | ❌ | ❌ | ❌ | ❌ | ✅ Contests + votes + saisons |
+| **Finance Hub** | Basique | Basique | Store/Wallet | +Monétisation | ✅ KYC + P2P + cartes + épargne |
+| **ImuCompanion** | ❌ | ❌ | ❌ | IA basique | ✅ Live2D + FSM + TTS + cross-domain |

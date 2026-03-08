@@ -1,11 +1,13 @@
 # 🗺️ ROADMAP MOBILE GLOBAL — Application Mobile ImuChat
 
-**Date de création :** 8 mars 2026  
+**Date de création :** 8 mars 2026 · **Mise à jour :** 8 mars 2026  
 **Documents sources :**
 
 - `Vision_Structure_Mobile_v2.md` → `ROADMAP_MOBILE_NAVIGATION_HUB.md`
 - `ImuFeed_VIDEO_v2.md` → `ROADMAP_IMUFEED_VIDEO.md`
+- `IMUCOMPANION_ROADMAP_MOBILE.md` → intégré dans Axe C (Sprint C4)
 
+**Roadmaps domaines intégrées :** `docs/games/`, `docs/contests/`, `docs/finance/`  
 **Stack :** Expo SDK 52+ · expo-router · expo-av / expo-video · Zustand · Supabase · React Native Reanimated  
 **État actuel :** 42/50 features (84%) · ~80 000 lignes TS/TSX · 2296 tests · M1-M4 complets
 
@@ -13,17 +15,19 @@
 
 ## 1. Vue d'ensemble consolidée
 
-L'application mobile ImuChat se développe sur **2 axes parallèles** :
+L'application mobile ImuChat se développe sur **3 axes parallèles** :
 
 | Axe | Roadmap | Sprints | Durée |
 |-----|---------|:-------:|:-----:|
-| **A** — Navigation, Hub & UX | `ROADMAP_MOBILE_NAVIGATION_HUB.md` | 15 | 30 sem. |
+| **A** — Navigation, Hub & UX | `ROADMAP_MOBILE_NAVIGATION_HUB.md` | 19 | 38 sem. |
 | **B** — ImuFeed Vidéo | `ROADMAP_IMUFEED_VIDEO.md` | 24 | 48 sem. |
+| **C** — Intégrations Cross-Domain | Gaming · Arena · Finance · Companion | 4 | 8 sem. |
 
-**Durée totale (parallélisée) :** ~48 semaines (12 mois)  
-**Sprints totaux :** 39 sprints cumulés
+**Durée totale (parallélisée) :** ~52 semaines (13 mois)  
+**Sprints totaux :** 47 sprints cumulés
 
-> Les deux axes se développent en parallèle avec des points de convergence critiques.
+> Les trois axes se développent en parallèle avec des points de convergence critiques.
+> L'Axe C démarre après la Phase 6 de l'Axe A (S31+) et s'exécute en parallèle avec l'Axe B T4.
 
 ---
 
@@ -72,16 +76,24 @@ L'application mobile ImuChat se développe sur **2 axes parallèles** :
 
 ### T4 — Intégration & Scale (Semaines 37-48)
 
-| Semaine | Axe A | Axe B (ImuFeed Vidéo) |
-|:-------:|-------|------------------------|
-| 37-38 | — | **Sprint B19** — IA recommandation avancée (re-ranking, diversité, cold start) |
-| 39-40 | — | **Sprint B20** — Scalabilité (preload, adaptive bitrate, PiP, CDN) |
-| 41-42 | — | **Sprint B21** — Partage DM/Chat + Preview inline |
-| 43-44 | — | **Sprint B22** — Watch Party ImuFeed + Cross-post communautés |
-| 45-46 | — | **Sprint B23** — Intégrations Home/Store/Arena + Notifications |
-| 47-48 | — | **Sprint B24** — Contrôle parental + Challenges + Tests finaux |
+| Semaine | Axe A | Axe B (ImuFeed Vidéo) | Axe C (Cross-Domain) |
+|:-------:|-------|------------------------|----------------------|
+| 37-38 | — | **Sprint B19** — IA recommandation avancée (re-ranking, diversité, cold start) | **Sprint C1** — Gaming Hub Mobile (catalogue, profil gaming, mini-games inline, game mode, widget enrichi) |
+| 39-40 | — | **Sprint B20** — Scalabilité (preload, adaptive bitrate, PiP, CDN) | **Sprint C2** — ImuArena Mobile (6 catégories, participation native, votes, leaderboards, saisons, push) |
+| 41-42 | — | **Sprint B21** — Partage DM/Chat + Preview inline | **Sprint C3** — Finance Hub Mobile (dashboard, KYC natif, P2P chat, cartes virtuelles, épargne, biométrie) |
+| 43-44 | — | **Sprint B22** — Watch Party ImuFeed + Cross-post communautés | **Sprint C4** — ImuCompanion Mobile (Live2D, FSM, TTS/STT, déclencheurs cross-domain, archétypes, skins) |
+| 45-46 | — | **Sprint B23** — Intégrations Home/Store/Arena + Notifications | — |
+| 47-48 | — | **Sprint B24** — Contrôle parental + Challenges + Tests finaux | — |
 
-**🎯 Milestone T4 (FINAL) :** ImuFeed totalement intégré dans l'écosystème ImuChat ✅
+**🎯 Milestone T4 (FINAL) :** ImuFeed totalement intégré dans l'écosystème ImuChat ✅ + **Gaming Hub + ImuArena + Finance Hub + ImuCompanion intégrés ✅**
+
+**Convergence T4 Cross-Domain :**
+
+- Sprint C1 (Gaming) dépend de `ROADMAP_GAMING_HUB.md` Phases 1-3 + widgets Sprint A8
+- Sprint C2 (Arena) dépend de `ROADMAP_IMUARENA_HUB.md` Phases 1-4 + `ROADMAP_LEAGUES_SEASONS.md` Phases 1-3
+- Sprint C3 (Finance) dépend de `ROADMAP_IMUBANK_WALLET.md` Phases 1-3 + Sprint A13 (Profil Wallet) + Sprint B14 (Monétisation créateur)
+- Sprint C4 (Companion) dépend de `IMUCOMPANION_ROADMAP_MOBILE.md` IC-M1 à IC-M6 + Sprint A10 (Alice IA)
+- Sprint B23 (Intégrations Home/Store/Arena) bénéficie directement de C1/C2/C3
 
 ---
 
@@ -89,13 +101,18 @@ L'application mobile ImuChat se développe sur **2 axes parallèles** :
 
 Les deux roadmaps ne sont pas indépendantes. Voici les points critiques où elles se croisent :
 
-| # | Axe A | Axe B | Nature | Semaine |
-|---|-------|-------|--------|:-------:|
-| 1 | Sprint A12 — Sous-onglet Social [ImuFeed] | Sprint B2+ — Feed vertical | **Intégration du feed ImuFeed dans la nouvelle structure Social** | 25-26 |
-| 2 | Sprint A8 — Widget ImuFeed Trending | Sprint B8 — Trending page | **Widget Home affichant les trending ImuFeed** | 15-16 |
-| 3 | Sprint A13 — Watch Party tab | Sprint B22 — Watch Party ImuFeed | **Unification du Watch Party pour vidéos classiques ET ImuFeed** | 27-28 / 43-44 |
-| 4 | Sprint A14 — Profil Analytics | Sprint B13 — Dashboard créateur | **Section créateur dans le profil enrichi** | 29-30 |
-| 5 | Sprint A10 — Usage tracking | Sprint B7 — Analytics comportemental | **Données comportementales partagées pour IA** | 19-20 |
+| # | Axe A | Axe B | Axe C | Nature | Semaine |
+|---|-------|-------|-------|--------|:-------:|
+| 1 | Sprint A12 — Sous-onglet Social [ImuFeed] | Sprint B2+ — Feed vertical | — | **Intégration du feed ImuFeed dans la nouvelle structure Social** | 25-26 |
+| 2 | Sprint A8 — Widget ImuFeed Trending | Sprint B8 — Trending page | — | **Widget Home affichant les trending ImuFeed** | 15-16 |
+| 3 | Sprint A13 — Watch Party tab | Sprint B22 — Watch Party ImuFeed | — | **Unification du Watch Party pour vidéos classiques ET ImuFeed** | 27-28 / 43-44 |
+| 4 | Sprint A14 — Profil Analytics | Sprint B13 — Dashboard créateur | — | **Section créateur dans le profil enrichi** | 29-30 |
+| 5 | Sprint A10 — Usage tracking | Sprint B7 — Analytics comportemental | — | **Données comportementales partagées pour IA** | 19-20 |
+| 6 | Sprint A8 — Widgets Gaming/Arena | — | Sprint C1/C2 | **Widgets avec données réelles Gaming + Arena** | 37-40 |
+| 7 | Sprint A14 — Profil Wallet | — | Sprint C3 | **Section Finance enrichie dans le profil** | 41-42 |
+| 8 | Sprint A10 — Alice IA | — | Sprint C4 | **ImuCompanion remplace/étend Alice dans le Home** | 43-44 |
+| 9 | — | Sprint B14 — Monétisation | Sprint C3 | **Contest Economy + Prize Pools liés au wallet Finance** | 41-42 |
+| 10 | — | Sprint B23 — Intégrations | Sprint C1/C2/C3 | **ImuFeed intègre Gaming, Arena et Store dans ses modules** | 45-46 |
 
 ---
 
@@ -113,6 +130,11 @@ Les deux roadmaps ne sont pas indépendantes. Voici les points critiques où ell
 | **M8 — Monétisation** | Pourboires + Abonnements créateur | S28 | ImuCoins, dashboard revenus |
 | **M9 — IA Avancée** | Recommandation avancée + modération IA | S38 | Cold start, diversité, modération auto |
 | **M10 — Full Integration** | ImuFeed intégré dans tout l'écosystème | S48 | Chat, Home, Store, Arena, contrôle parental |
+| **M11 — Gaming Hub Mobile** | Gaming Hub, profil gaming, mini-games inline, game mode | S38 | Catalogue naviguable, stats, widget enrichi |
+| **M12 — ImuArena Mobile** | 6 catégories concours, participation native, votes | S40 | Flow soumission, leaderboards temps réel, push |
+| **M13 — Finance Hub Mobile** | Dashboard finance, KYC, P2P chat, cartes, épargne | S42 | Biométrie, contest economy, transactions end-to-end |
+| **M14 — ImuCompanion Mobile** | Live2D, FSM, TTS/STT, déclencheurs cross-domain | S44 | Companion réactif, archétypes, skins premium |
+| **🏁 Mobile 2.0 Complète** | App mobile feature-complete avec tous les domaines intégrés | S48 | Gaming + Arena + Finance + Companion + ImuFeed unifiés |
 
 ---
 
@@ -126,11 +148,13 @@ Les deux roadmaps ne sont pas indépendantes. Voici les points critiques où ell
 | **Squad ImuFeed** | 2 dev RN senior + 1 dev backend + 1 designer | Axe B : Feed, Upload, Éditeur, Algo |
 | **QA partagée** | 1 QA | Tests manuels + e2e sur les deux axes |
 
-### Phase convergence (T3-T4) — Squad unique élargie
+### Phase convergence (T3-T4) — Squad unique élargie + domaines
 
 | Squad | Effectif | Focus |
 |-------|:--------:|-------|
 | **Squad Mobile Uni** | 3 dev RN + 1 dev backend + 1 designer + 1 QA | Intégration, Live, IA, Scale |
+| **Squad Cross-Domain** | 2 dev RN | Axe C : Gaming, Arena, Finance, Companion (T4 S37-44) |
+| **API domaines** | ↔ équipes Gaming/Arena/Finance | Endpoints, SDK, données |
 
 ---
 
@@ -147,6 +171,11 @@ Les deux roadmaps ne sont pas indépendantes. Voici les points critiques où ell
 | Fragmentation Android camera | Moyen | Moyen | expo-camera abstraction, testing multi-device | B |
 | Charge backend Supabase | Moyen | Élevé | Indexes, cache, pagination, Edge Functions | A + B |
 | Coordination 2 squads | Moyen | Moyen | Stand-ups croisés hebdo, types partagés | A + B |
+| Dépendance API Gaming non prête | Moyen | Élevé | Mock API Gaming dès T3, intégration réelle T4 | C |
+| KYC compliance mobile multi-pays | Moyen | Élevé | expo-camera + Onfido SDK, limiter à 2-3 pays MVP | C |
+| Performance Live2D mobile | Élevé | Élevé | WebView bridge ou react-native-skia, lazy load, désactiver low-end | C |
+| Anti-fraude votes Arena mobile | Moyen | Moyen | Rate limiting + captcha + analyse comportementale | C |
+| Bundle size avec Gaming + Live2D | Moyen | Moyen | Dynamic imports, EAS OTA, lazy hydration | C |
 
 ---
 
@@ -175,6 +204,10 @@ Les deux roadmaps ne sont pas indépendantes. Voici les points critiques où ell
 | FAB usage / session | ≥ 1.5 taps / session | T1+ |
 | ImuFeed DAU / Total DAU | ≥ 40% | T3+ |
 | Modération false positive | < 5% | T3+ |
+| Gaming Hub usage mobile | ≥ 25% des users actifs | T4 |
+| Arena participation mobile | ≥ 10% des users en concours actif | T4 |
+| Finance txn P2P / jour | ≥ 50 / 1000 users actifs | T4 |
+| Companion activation | ≥ 30% des users ouvrent le Companion | T4 |
 
 ---
 
@@ -186,4 +219,13 @@ Les deux roadmaps ne sont pas indépendantes. Voici les points critiques où ell
 | [ImuFeed_VIDEO_v2.md](docs/_mobile/ImuFeed_VIDEO_v2.md) | Document enrichi — Feed vidéo, Éditeur, Créateurs, Live, IA, Architecture | ✅ Créé |
 | [ROADMAP_MOBILE_NAVIGATION_HUB.md](docs/_mobile/ROADMAP_MOBILE_NAVIGATION_HUB.md) | 15 sprints · 6 phases · 30 semaines — Home, FAB, Widgets, Personnalisation IA, Onglets | ✅ Créé |
 | [ROADMAP_IMUFEED_VIDEO.md](docs/_mobile/ROADMAP_IMUFEED_VIDEO.md) | 24 sprints · 7 phases · 48 semaines — Feed, Upload, Éditeur, Social, Créateurs, Live, IA, Integration | ✅ Créé |
-| [ROADMAP_MOBILE_GLOBAL.md](docs/_mobile/ROADMAP_MOBILE_GLOBAL.md) | Vue consolidée — Timeline unifiée, convergences, milestones, risques, KPIs | ✅ Créé |
+| [ROADMAP_MOBILE_GLOBAL.md](docs/_mobile/ROADMAP_MOBILE_GLOBAL.md) | Vue consolidée — Timeline unifiée, convergences, milestones, risques, KPIs | ✅ Créé · MaJ |
+
+### Roadmaps domaines intégrées (Axe C)
+
+| Fichier source | Intégration | Sprint |
+|---------------|------------|:------:|
+| `docs/games/ROADMAP_GAMING_HUB.md` | Catalogue, profil gaming, mini-games, Game Mode | C1 |
+| `docs/contests/ROADMAP_IMUARENA_HUB.md` + `ROADMAP_LEAGUES_SEASONS.md` | Arena Hub 6 catégories, votes, leaderboards, saisons | C2 |
+| `docs/finance/ROADMAP_IMUBANK_WALLET.md` + `ROADMAP_IMUECONOMY_MONETISATION.md` | Finance dashboard, KYC, P2P, cartes, épargne | C3 |
+| `docs/_mobile/IMUCOMPANION_ROADMAP_MOBILE.md` | Live2D, FSM, TTS/STT, cross-domain triggers | C4 |

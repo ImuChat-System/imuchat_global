@@ -22,6 +22,11 @@ jest.mock("expo-router", () => {
   };
 });
 
+jest.mock("@/components/FloatingActionButton", () => {
+  const React = require("react");
+  return () => React.createElement("View", { testID: "fab-mock" });
+});
+
 import TabLayout from "../(tabs)/_layout";
 
 function renderLayout() {

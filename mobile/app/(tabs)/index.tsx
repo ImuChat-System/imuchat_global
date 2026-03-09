@@ -1,17 +1,27 @@
 /**
- * HomeScreen — Parité web hometab
- * Sections : HeroCarousel, Stories, FriendsCard, ExplorerGrid, PodcastWidget
+ * HomeScreen — Home Hub configurable (Sprint S2)
+ * Sections dynamiques via SectionManager + composants S2
  */
 
+import HomeSearchBar from "@/components/home/HomeSearchBar";
+import HomeSkeleton from "@/components/home/HomeSkeleton";
+import MyModulesRow from "@/components/home/MyModulesRow";
+import QuickActionsGrid from "@/components/home/QuickActionsGrid";
+import type { SectionRenderers } from "@/components/home/SectionManager";
+import SectionManager from "@/components/home/SectionManager";
+import SocialActivity from "@/components/home/SocialActivity";
+import TrendingSection from "@/components/home/TrendingSection";
 import { useAuth } from "@/providers/AuthProvider";
 import { useI18n } from "@/providers/I18nProvider";
 import { useColors, useSpacing } from "@/providers/ThemeProvider";
 import { Conversation, getConversations } from "@/services/messaging";
 import { openMiniApp } from "@/services/miniapp-deeplink";
 import { fetchFeed, toggleLike, type Post } from "@/services/social-feed";
+import { useHomeConfigStore } from "@/stores/home-config-store";
 import { useModulesStore } from "@/stores/modules-store";
 import { useStoriesStore } from "@/stores/stories-store";
 import { Ionicons } from "@expo/vector-icons";
+import { useRouter } from "expo-router";
 import React, {
   useCallback,
   useEffect,
@@ -324,6 +334,14 @@ export default function HomeScreen() {
     return t("common.daysAgo", { count: Math.floor(hrs / 24) });
   }, []);
 
+  // ─── Edit mode ─────────────────────────────────────────────
+  const { isEditing, setEditing } = useHomeConfigStore();
+  const toggleEditing = useCallback(
+    () => setEditing(!isEditing),
+    [isEditing, setEditing],
+  );
+  const router = useRouter();
+
   // ═══════════════════════════════════════════════════════════════
   // SUB-COMPONENTS (inline for test simplicity)
   // ═══════════════════════════════════════════════════════════════
@@ -504,46 +522,16 @@ export default function HomeScreen() {
   );
 
   // ═══════════════════════════════════════════════════════════════
-  // RENDER
+  // SECTION RENDERERS
   // ═══════════════════════════════════════════════════════════════
 
-  if (loading) {
-    return (
-      <View
-        testID="home-loading"
-        style={[styles.center, { backgroundColor: colors.background }]}
-      >
-        <ActivityIndicator size="large" color={colors.primary} />
-      </View>
-    );
-  }
+  const renderers: SectionRenderers = useMemo(
+    () => ({
+      // ── S2 : Search Bar ─────────────────────────
+      search_bar: <HomeSearchBar />,
 
-  return (
-    <ScrollView
-      testID="home-screen"
-      style={[styles.container, { backgroundColor: colors.background }]}
-      refreshControl={
-        <RefreshControl
-          refreshing={refreshing}
-          onRefresh={handleRefresh}
-          tintColor={colors.primary}
-        />
-      }
-    >
-      <View style={[styles.content, { padding: spacing.lg }]}>
-        {/* Header */}
-        <Text style={[styles.title, { color: colors.text }]}>
-          {t("home.title")}
-        </Text>
-        <Text style={[styles.subtitle, { color: colors.textMuted }]}>
-          {t("home.welcome")}
-          {user?.user_metadata?.username
-            ? `, ${user.user_metadata.username}`
-            : ""}{" "}
-          {t("home.welcomeSuffix")}
-        </Text>
-
-        {/* ── 1. Hero Carousel ───────────────────────────────── */}
+      // ── S1 : Hero Carousel ──────────────────────
+      hero_carousel: (
         <View testID="hero-carousel" style={styles.heroContainer}>
           <FlatList
             ref={heroRef}
@@ -563,7 +551,6 @@ export default function HomeScreen() {
               setHeroIndex(idx);
             }}
           />
-          {/* Dots */}
           <View testID="hero-dots" style={styles.heroDots}>
             {HERO_SLIDES.map((s, i) => (
               <View
@@ -579,23 +566,296 @@ export default function HomeScreen() {
             ))}
           </View>
         </View>
+      ),
 
-        {/* ── 2. Stories Carousel ────────────────────────────── */}
-        <Text style={[styles.sectionTitle, { color: colors.text }]}>
-          {t("home.stories")}
-        </Text>
-        <FlatList
-          testID="story-carousel"
-          data={stories}
-          renderItem={renderStoryAvatar}
-          keyExtractor={(i) => i.id}
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          style={styles.storyList}
-        />
+      // ── S1 : Stories ────────────────────────────
+      stories: (
+        <>
+          <Text style={[styles.sectionTitle, { color: colors.text }]}>
+            {t("home.stories")}
+          </Text>
+          <FlatList
+            testID="story-carousel"
+            data={stories}
+            renderItem={renderStoryAvatar}
+            keyExtractor={(i) => i.id}
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            style={styles.storyList}
+          />
+        </>
+      ),
 
-        {/* ── 2b. My Mini-Apps ───────────────────────────────── */}
-        {myApps.length > 0 && (
+      // ── S2 : Social Activity (stories + recent posts) ──
+      social_activity: <SocialActivity />,
+
+      // ── S1 : Quick Actions ──────────────────────
+      quick_actions: <QuickActionsGrid />,
+
+      // ── S2 : My Modules Row ─────────────────────
+      my_modules: <MyModulesRow />,
+
+      // ── S2 : Trending ───────────────────────────
+      trending: <TrendingSection />,
+
+      // ── Friends Card ────────────────────────────
+      friends_card: (
+        <>
+          <View style={styles.sectionHeader}>
+            <Text style={[styles.sectionTitle, { color: colors.text }]}>
+              {t("home.recentConversations")}
+            </Text>
+            <TouchableOpacity testID="btn-see-all-convs">
+              <Text style={[styles.seeAll, { color: colors.primary }]}>
+                {t("home.seeAll")}
+              </Text>
+            </TouchableOpacity>
+          </View>
+          <View
+            testID="friends-card"
+            style={[
+              styles.friendsCard,
+              { backgroundColor: colors.surface, borderColor: colors.border },
+            ]}
+          >
+            {conversations.length === 0 ? (
+              <Text
+                testID="no-conversations"
+                style={[styles.emptyText, { color: colors.textMuted }]}
+              >
+                {t("chat.noConversation")}
+              </Text>
+            ) : (
+              conversations.map((c, i) => renderConversation(c, i))
+            )}
+          </View>
+        </>
+      ),
+
+      // ── Feed Preview ────────────────────────────
+      feed_preview: (
+        <>
+          <View style={styles.sectionHeader}>
+            <Text style={[styles.sectionTitle, { color: colors.text }]}>
+              {t("home.feed") || "Feed"}
+            </Text>
+            <TouchableOpacity testID="btn-see-all-feed">
+              <Text style={[styles.seeAll, { color: colors.primary }]}>
+                {t("home.seeAll")}
+              </Text>
+            </TouchableOpacity>
+          </View>
+          <View testID="social-feed">
+            {feedLoading && feedPosts.length === 0 ? (
+              <ActivityIndicator
+                size="small"
+                color={colors.primary}
+                style={{ padding: 20 }}
+              />
+            ) : feedPosts.length === 0 ? (
+              <Text
+                testID="no-feed"
+                style={[styles.emptyText, { color: colors.textMuted }]}
+              >
+                {t("home.noFeed") || "Aucun post pour le moment"}
+              </Text>
+            ) : (
+              feedPosts.map((post) => {
+                const authorName =
+                  post.author.displayName ||
+                  post.author.username ||
+                  t("common.user");
+                return (
+                  <View
+                    key={post.id}
+                    testID={`feed-post-${post.id}`}
+                    style={[
+                      styles.feedCard,
+                      {
+                        backgroundColor: colors.surface,
+                        borderColor: colors.border,
+                      },
+                    ]}
+                  >
+                    <View style={styles.feedHeader}>
+                      <View
+                        style={[
+                          styles.feedAvatar,
+                          { backgroundColor: colors.primary + "20" },
+                        ]}
+                      >
+                        <Text
+                          style={[
+                            styles.feedAvatarText,
+                            { color: colors.primary },
+                          ]}
+                        >
+                          {authorName.charAt(0).toUpperCase()}
+                        </Text>
+                      </View>
+                      <View style={styles.feedAuthorInfo}>
+                        <Text
+                          style={[
+                            styles.feedAuthorName,
+                            { color: colors.text },
+                          ]}
+                        >
+                          {authorName}
+                        </Text>
+                        <Text
+                          style={[styles.feedTime, { color: colors.textMuted }]}
+                        >
+                          {formatTime(post.createdAt)}
+                        </Text>
+                      </View>
+                      {post.type !== "post" && (
+                        <View
+                          style={[
+                            styles.feedTypeBadge,
+                            { backgroundColor: colors.primary + "15" },
+                          ]}
+                        >
+                          <Text
+                            style={[
+                              styles.feedTypeBadgeText,
+                              { color: colors.primary },
+                            ]}
+                          >
+                            {post.type === "news" ? "📰" : "📢"}
+                          </Text>
+                        </View>
+                      )}
+                    </View>
+                    <Text
+                      style={[styles.feedContent, { color: colors.text }]}
+                      numberOfLines={4}
+                    >
+                      {post.content}
+                    </Text>
+                    <View style={styles.feedActions}>
+                      <TouchableOpacity
+                        testID={`like-post-${post.id}`}
+                        style={styles.feedActionBtn}
+                        onPress={() => handleToggleLike(post)}
+                      >
+                        <Ionicons
+                          name={post.isLiked ? "heart" : "heart-outline"}
+                          size={18}
+                          color={post.isLiked ? "#ef4444" : colors.textMuted}
+                        />
+                        <Text
+                          style={[
+                            styles.feedActionText,
+                            {
+                              color: post.isLiked
+                                ? "#ef4444"
+                                : colors.textMuted,
+                            },
+                          ]}
+                        >
+                          {post.likesCount}
+                        </Text>
+                      </TouchableOpacity>
+                      <TouchableOpacity style={styles.feedActionBtn}>
+                        <Ionicons
+                          name="chatbubble-outline"
+                          size={16}
+                          color={colors.textMuted}
+                        />
+                        <Text
+                          style={[
+                            styles.feedActionText,
+                            { color: colors.textMuted },
+                          ]}
+                        >
+                          {post.commentsCount}
+                        </Text>
+                      </TouchableOpacity>
+                      <TouchableOpacity style={styles.feedActionBtn}>
+                        <Ionicons
+                          name="share-outline"
+                          size={16}
+                          color={colors.textMuted}
+                        />
+                        <Text
+                          style={[
+                            styles.feedActionText,
+                            { color: colors.textMuted },
+                          ]}
+                        >
+                          {post.sharesCount}
+                        </Text>
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                );
+              })
+            )}
+          </View>
+        </>
+      ),
+
+      // ── ImuFeed Preview ─────────────────────────
+      imufeed_preview: (
+        <TouchableOpacity
+          testID="imufeed-preview"
+          style={[
+            styles.imufeedPreview,
+            { backgroundColor: colors.surface, borderColor: colors.border },
+          ]}
+          onPress={() => router.push("/imufeed")}
+          activeOpacity={0.8}
+        >
+          <View style={styles.imufeedPreviewContent}>
+            <Ionicons name="videocam" size={32} color={colors.primary} />
+            <View style={styles.imufeedPreviewText}>
+              <Text
+                style={[styles.imufeedPreviewTitle, { color: colors.text }]}
+              >
+                ImuFeed
+              </Text>
+              <Text
+                style={[styles.imufeedPreviewDesc, { color: colors.textMuted }]}
+              >
+                {t("home.imufeedDesc") || "Découvrez les vidéos tendance"}
+              </Text>
+            </View>
+            <Ionicons
+              name="chevron-forward"
+              size={24}
+              color={colors.textMuted}
+            />
+          </View>
+        </TouchableOpacity>
+      ),
+
+      // ── Explorer Grid ───────────────────────────
+      explorer_grid: (
+        <>
+          <Text style={[styles.sectionTitle, { color: colors.text }]}>
+            Explorer
+          </Text>
+          <View testID="explorer-grid" style={styles.explorerGrid}>
+            {EXPLORER_ITEMS.map(renderExplorerItem)}
+          </View>
+        </>
+      ),
+
+      // ── Podcasts ────────────────────────────────
+      podcast_widget: (
+        <>
+          <Text style={[styles.sectionTitle, { color: colors.text }]}>
+            Podcasts
+          </Text>
+          <View testID="podcast-widget">
+            {MOCK_PODCASTS.map(renderPodcast)}
+          </View>
+        </>
+      ),
+
+      // ── My Mini-Apps (legacy) ───────────────────
+      mini_apps:
+        myApps.length > 0 ? (
           <>
             <View style={styles.sectionHeader}>
               <Text style={[styles.sectionTitle, { color: colors.text }]}>
@@ -640,205 +900,77 @@ export default function HomeScreen() {
               ))}
             </ScrollView>
           </>
-        )}
+        ) : null,
+    }),
+    [
+      colors,
+      spacing,
+      t,
+      heroIndex,
+      stories,
+      conversations,
+      feedPosts,
+      feedLoading,
+      myApps,
+      handleToggleLike,
+      formatTime,
+      router,
+    ],
+  );
 
-        {/* ── 3. Friends / Recent Conversations ─────────────── */}
-        <View style={styles.sectionHeader}>
-          <Text style={[styles.sectionTitle, { color: colors.text }]}>
-            {t("home.recentConversations")}
-          </Text>
-          <TouchableOpacity testID="btn-see-all-convs">
-            <Text style={[styles.seeAll, { color: colors.primary }]}>
-              {t("home.seeAll")}
-            </Text>
-          </TouchableOpacity>
-        </View>
-        <View
-          testID="friends-card"
-          style={[
-            styles.friendsCard,
-            { backgroundColor: colors.surface, borderColor: colors.border },
-          ]}
-        >
-          {conversations.length === 0 ? (
-            <Text
-              testID="no-conversations"
-              style={[styles.emptyText, { color: colors.textMuted }]}
-            >
-              {t("chat.noConversation")}
-            </Text>
-          ) : (
-            conversations.map((c, i) => renderConversation(c, i))
-          )}
-        </View>
+  // ═══════════════════════════════════════════════════════════════
+  // RENDER
+  // ═══════════════════════════════════════════════════════════════
 
-        {/* ── 4. Social Feed (real Supabase data) ────────── */}
-        <View style={styles.sectionHeader}>
-          <Text style={[styles.sectionTitle, { color: colors.text }]}>
-            {t("home.feed") || "Feed"}
-          </Text>
-          <TouchableOpacity testID="btn-see-all-feed">
-            <Text style={[styles.seeAll, { color: colors.primary }]}>
-              {t("home.seeAll")}
+  if (loading) {
+    return <HomeSkeleton />;
+  }
+
+  return (
+    <ScrollView
+      testID="home-screen"
+      style={[styles.container, { backgroundColor: colors.background }]}
+      refreshControl={
+        <RefreshControl
+          refreshing={refreshing}
+          onRefresh={handleRefresh}
+          tintColor={colors.primary}
+        />
+      }
+    >
+      <View style={[styles.content, { padding: spacing.lg }]}>
+        {/* Header */}
+        <View style={styles.headerRow}>
+          <View style={styles.headerLeft}>
+            <Text style={[styles.title, { color: colors.text }]}>
+              {t("home.title")}
             </Text>
-          </TouchableOpacity>
-        </View>
-        <View testID="social-feed">
-          {feedLoading && feedPosts.length === 0 ? (
-            <ActivityIndicator
-              size="small"
-              color={colors.primary}
-              style={{ padding: 20 }}
+            <Text style={[styles.subtitle, { color: colors.textMuted }]}>
+              {t("home.welcome")}
+              {user?.user_metadata?.username
+                ? `, ${user.user_metadata.username}`
+                : ""}{" "}
+              {t("home.welcomeSuffix")}
+            </Text>
+          </View>
+          <TouchableOpacity
+            testID="btn-edit-home"
+            onPress={toggleEditing}
+            style={[styles.editToggle, { backgroundColor: colors.surface }]}
+            accessibilityLabel={
+              isEditing ? t("home.doneEditing") : t("home.editHome")
+            }
+          >
+            <Ionicons
+              name={isEditing ? "checkmark" : "options-outline"}
+              size={20}
+              color={isEditing ? colors.primary : colors.textMuted}
             />
-          ) : feedPosts.length === 0 ? (
-            <Text
-              testID="no-feed"
-              style={[styles.emptyText, { color: colors.textMuted }]}
-            >
-              {t("home.noFeed") || "Aucun post pour le moment"}
-            </Text>
-          ) : (
-            feedPosts.map((post) => {
-              const authorName =
-                post.author.displayName ||
-                post.author.username ||
-                t("common.user");
-              return (
-                <View
-                  key={post.id}
-                  testID={`feed-post-${post.id}`}
-                  style={[
-                    styles.feedCard,
-                    {
-                      backgroundColor: colors.surface,
-                      borderColor: colors.border,
-                    },
-                  ]}
-                >
-                  <View style={styles.feedHeader}>
-                    <View
-                      style={[
-                        styles.feedAvatar,
-                        { backgroundColor: colors.primary + "20" },
-                      ]}
-                    >
-                      <Text
-                        style={[
-                          styles.feedAvatarText,
-                          { color: colors.primary },
-                        ]}
-                      >
-                        {authorName.charAt(0).toUpperCase()}
-                      </Text>
-                    </View>
-                    <View style={styles.feedAuthorInfo}>
-                      <Text
-                        style={[styles.feedAuthorName, { color: colors.text }]}
-                      >
-                        {authorName}
-                      </Text>
-                      <Text
-                        style={[styles.feedTime, { color: colors.textMuted }]}
-                      >
-                        {formatTime(post.createdAt)}
-                      </Text>
-                    </View>
-                    {post.type !== "post" && (
-                      <View
-                        style={[
-                          styles.feedTypeBadge,
-                          { backgroundColor: colors.primary + "15" },
-                        ]}
-                      >
-                        <Text
-                          style={[
-                            styles.feedTypeBadgeText,
-                            { color: colors.primary },
-                          ]}
-                        >
-                          {post.type === "news" ? "📰" : "📢"}
-                        </Text>
-                      </View>
-                    )}
-                  </View>
-                  <Text
-                    style={[styles.feedContent, { color: colors.text }]}
-                    numberOfLines={4}
-                  >
-                    {post.content}
-                  </Text>
-                  <View style={styles.feedActions}>
-                    <TouchableOpacity
-                      testID={`like-post-${post.id}`}
-                      style={styles.feedActionBtn}
-                      onPress={() => handleToggleLike(post)}
-                    >
-                      <Ionicons
-                        name={post.isLiked ? "heart" : "heart-outline"}
-                        size={18}
-                        color={post.isLiked ? "#ef4444" : colors.textMuted}
-                      />
-                      <Text
-                        style={[
-                          styles.feedActionText,
-                          {
-                            color: post.isLiked ? "#ef4444" : colors.textMuted,
-                          },
-                        ]}
-                      >
-                        {post.likesCount}
-                      </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.feedActionBtn}>
-                      <Ionicons
-                        name="chatbubble-outline"
-                        size={16}
-                        color={colors.textMuted}
-                      />
-                      <Text
-                        style={[
-                          styles.feedActionText,
-                          { color: colors.textMuted },
-                        ]}
-                      >
-                        {post.commentsCount}
-                      </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.feedActionBtn}>
-                      <Ionicons
-                        name="share-outline"
-                        size={16}
-                        color={colors.textMuted}
-                      />
-                      <Text
-                        style={[
-                          styles.feedActionText,
-                          { color: colors.textMuted },
-                        ]}
-                      >
-                        {post.sharesCount}
-                      </Text>
-                    </TouchableOpacity>
-                  </View>
-                </View>
-              );
-            })
-          )}
+          </TouchableOpacity>
         </View>
 
-        {/* ── 5. Explorer Grid ───────────────────────────────── */}
-        <Text style={[styles.sectionTitle, { color: colors.text }]}>
-          Explorer
-        </Text>
-        <View testID="explorer-grid" style={styles.explorerGrid}>
-          {EXPLORER_ITEMS.map(renderExplorerItem)}
-        </View>
-
-        {/* ── 6. Podcasts ────────────────────────────────────── */}
-        <Text style={[styles.sectionTitle, { color: colors.text }]}>
-          Podcasts
-        </Text>
-        <View testID="podcast-widget">{MOCK_PODCASTS.map(renderPodcast)}</View>
+        {/* Dynamic Sections via SectionManager */}
+        <SectionManager renderers={renderers} showEditControls={isEditing} />
 
         {/* Bottom spacer */}
         <View style={{ height: 40 }} />
@@ -854,6 +986,22 @@ const styles = StyleSheet.create({
   container: { flex: 1 },
   center: { flex: 1, justifyContent: "center", alignItems: "center" },
   content: {},
+  headerRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "flex-start",
+    marginBottom: 4,
+  },
+  headerLeft: { flex: 1 },
+  editToggle: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    justifyContent: "center",
+    alignItems: "center",
+    marginLeft: 12,
+    marginTop: 4,
+  },
   title: { fontSize: 32, fontWeight: "bold", marginBottom: 4 },
   subtitle: { fontSize: 16, marginBottom: 20 },
   sectionTitle: {
@@ -1054,4 +1202,20 @@ const styles = StyleSheet.create({
   podcastTitle: { fontSize: 14, fontWeight: "600" },
   podcastAuthor: { fontSize: 12, marginTop: 2 },
   podcastDuration: { fontSize: 12 },
+
+  // ImuFeed preview
+  imufeedPreview: {
+    borderRadius: 12,
+    borderWidth: 1,
+    padding: 16,
+    marginBottom: 16,
+  },
+  imufeedPreviewContent: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 12,
+  },
+  imufeedPreviewText: { flex: 1 },
+  imufeedPreviewTitle: { fontSize: 18, fontWeight: "700" },
+  imufeedPreviewDesc: { fontSize: 13, marginTop: 2 },
 });

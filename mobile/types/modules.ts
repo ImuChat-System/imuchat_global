@@ -7,6 +7,7 @@
  * Manifest d'un module tel que stocké en DB (table `modules`).
  */
 export interface StoredModuleManifest {
+    downloads: number;
     id: string;
     name: string;
     version: string;
@@ -35,6 +36,10 @@ export interface StoredModuleManifest {
     download_count: number;
     rating: number;
     price: number | null;
+    /** Couleur thème du module */
+    color: string | null;
+    /** Type de module */
+    type: 'miniapp' | 'native' | 'widget';
     created_at: string;
     updated_at: string;
 }

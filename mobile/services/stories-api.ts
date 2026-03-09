@@ -88,6 +88,7 @@ export interface CreateStoryInput {
 }
 
 export interface StoryUserGroup {
+    user: any;
     user_id: string;
     username: string;
     display_name: string | null;

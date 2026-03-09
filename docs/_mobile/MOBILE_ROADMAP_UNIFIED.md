@@ -32,6 +32,9 @@
 │     Axe C — Cross-Domain (4 sprints · 8 sem · après convergence)│
 ├──────────────────────────────────────────────────────────────────┤
 │     ImuCompanion Engine (6 phases · ~27 sem · à partir de S33)   │
+├──────────────────────────────────────────────────────────────────┤
+│     Guardian Angel Mobile (6 phases GA-M1→GA-M6 · ~24 sem)      │
+│     → Roadmap dédiée : ROADMAP_GUARDIAN_ANGEL_MOBILE.md          │
 └──────────────────────────────────────────────────────────────────┘
 ```
 
@@ -315,6 +318,7 @@
 | **M13 — Live2D Rendu** | S40 | Avatar Live2D natif, animations, expressions |
 | **M14 — Cross-Domain** | S50 | Gaming Hub, ImuArena, Finance Hub intégrés |
 | **M15 — ImuCompanion Full** | S56 | FSM, TTS, archétypes, appel avatar, offline |
+| **M16 — Guardian Angel** | ~S33 | Module sécurité IA native — voir `ROADMAP_GUARDIAN_ANGEL_MOBILE.md` |
 | **🏁 Mobile App 2.0** | S60 | Feature-complete : ImuFeed, Cross-Domain, Companion |
 
 ---

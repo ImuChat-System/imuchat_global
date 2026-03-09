@@ -17,7 +17,8 @@
  │   ├── ROADMAP_MOBILE_GLOBAL.md              ← Vue consolidée 3 axes (supercédé par UNIFIED)
  │   ├── ROADMAP_MOBILE_NAVIGATION_HUB.md      ← Détail Axe A · 19 sprints
  │   ├── ROADMAP_IMUFEED_VIDEO.md              ← Détail Axe B · 24 sprints
- │   └── IMUCOMPANION_ROADMAP_MOBILE.md        ← Spécialisé Companion · 6 phases
+ │   ├── IMUCOMPANION_ROADMAP_MOBILE.md        ← Spécialisé Companion · 6 phases
+ │   └── ROADMAP_GUARDIAN_ANGEL_MOBILE.md       ← Spécialisé Guardian Angel · 6 phases
  │
  └── 📚 Documents de référence / archivés
      ├── Vision_Structure_Mobile_v2.md          ← Wireframes détaillés, mapping 120+ écrans
@@ -36,6 +37,7 @@
 | **ROADMAP_MOBILE_NAVIGATION_HUB.md** | 🟢 Actif | Tâches détaillées Axe A (fichiers, composants) | Implémentation Home Hub, FAB, Widgets, Onglets |
 | **ROADMAP_IMUFEED_VIDEO.md** | 🟢 Actif | Tâches détaillées Axe B (ImuFeed Video) | Implémentation feed, upload, éditeur, live |
 | **IMUCOMPANION_ROADMAP_MOBILE.md** | 🟢 Actif | Roadmap spécialisée ImuCompanion | Implémentation Live2D, FSM, TTS, archétypes |
+| **ROADMAP_GUARDIAN_ANGEL_MOBILE.md** | 🟢 Actif | Roadmap spécialisée Guardian Angel | 6 phases GA-M1→GA-M6, 12 sprints, ~24 sem, sécurité IA native |
 | **Vision_Structure_Mobile_v2.md** | 🟡 Référence | Wireframes enrichis, mapping 120+ écrans, UX cible | Design UI/UX, spécifications écrans |
 | **Vision_Structure_Mobile.md** | 🔴 Archivé | Vision initiale — entièrement supercédé par v2 | Ne pas consulter, garder pour historique |
 | **ImuFeed_VIDEO_v2.md** | 🟡 Référence | Spec détaillée : algo recommandation, DB schema, modération | Spécifications techniques ImuFeed avancées |

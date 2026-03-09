@@ -21,6 +21,7 @@ docs/_web/
 ├── FRONTEND_AUDIT_SUPERAPP.md           🔵 Référence — audit détaillé 15 sections
 ├── AUDIT_MISSING_SCREENS.md             🟢 Actif — écrans manquants & couverture
 ├── IMUCOMPANION_ROADMAP_WEBAPP.md       🟢 Actif — roadmap spécialisée Companion
+├── ROADMAP_GUARDIAN_ANGEL_WEB.md        🟢 Actif — roadmap spécialisée Guardian Angel
 └── MVP_PHASE_5_NICE_TO_HAVE.md          🔵 Référence — backlog nice-to-have
 ```
 
@@ -37,6 +38,7 @@ docs/_web/
 | **FRONTEND_AUDIT_SUPERAPP.md** | 🔵 Référence | Audit technique | Note B-, 15 catégories, 90+ tâches identifiées |
 | **AUDIT_MISSING_SCREENS.md** | 🟢 Actif | Couverture fonctionnelle | 117 routes, 28 absentes, 15 partielles, 19/50 features |
 | **IMUCOMPANION_ROADMAP_WEBAPP.md** | 🟢 Actif | Spécialisé ImuCompanion | 6 phases IC-W1→IC-W6, ~21 sem, WebGL Live2D |
+| **ROADMAP_GUARDIAN_ANGEL_WEB.md** | 🟢 Actif | Spécialisé Guardian Angel | 6 phases GA-W1→GA-W6, 12 sprints, ~24 sem, sécurité IA |
 | **MVP_PHASE_5_NICE_TO_HAVE.md** | 🔵 Référence | Backlog post-MVP | 6 sprints A-F, ~16 sem, features optionnelles |
 
 ---

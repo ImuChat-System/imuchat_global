@@ -15,6 +15,7 @@
 | **🏛️ `DESKTOP_ARCHITECTURE_GUIDE.md`** | Architecture technique cible : structure de fichiers, patterns, intégration des packages partagés, code samples. | ✅ Actif |
 | **🔄 `DESKTOP_REUSE_MATRIX.md`** | Matrice de réutilisation : ce qui est importable directement, à adapter, ou à créer. Score ~95%. | ✅ Actif |
 | **🤖 `IMUCOMPANION_ROADMAP_DESKTOP.md`** | Roadmap détaillée ImuCompanion (IC-D1→IC-D6, ~20 sem). Référencé depuis UNIFIED S23 et S30. | ✅ Actif (sous-roadmap) |
+| **🛡️ `ROADMAP_GUARDIAN_ANGEL_DESKTOP.md`** | Roadmap détaillée Guardian Angel (GA-D1→GA-D6, ~24 sem). Module sécurité IA, SOS, navigation, cyber. | ✅ Actif (sous-roadmap) |
 
 ### Documents archivés (supersédés)
 
@@ -96,7 +97,8 @@ DESKTOP_INDEX.md (ce fichier)
 2. **Pour les patterns de code** → Consulter `DESKTOP_ARCHITECTURE_GUIDE.md`
 3. **Pour savoir quoi importer** → Consulter `DESKTOP_REUSE_MATRIX.md`
 4. **Pour le Companion spécifiquement** → Consulter `IMUCOMPANION_ROADMAP_DESKTOP.md`
-5. **Pour l'historique d'une décision** → Consulter les documents archivés
+5. **Pour Guardian Angel** → Consulter `ROADMAP_GUARDIAN_ANGEL_DESKTOP.md`
+6. **Pour l'historique d'une décision** → Consulter les documents archivés
 
 ---
 

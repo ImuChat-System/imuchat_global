@@ -42,6 +42,9 @@ Phase C : Features (Post-MVP) ... S13→S30    (36 sem)
   ├─ C6 : Sécurité & Perf        S24-S26    (6 sem)
   └─ C7 : Cross-Domain           S27-S30    (8 sem)
                                   ─── 🏁 APP 2.0 COMPLÈTE ───
+Phase D : Guardian Angel ........ post-S23   (~24 sem)
+  → Roadmap dédiée : ROADMAP_GUARDIAN_ANGEL_DESKTOP.md
+  └─ GA-D1→GA-D6 : Sécurité IA, SOS, Carte, Voyage, Famille, Cyber
 ```
 
 ---
@@ -814,6 +817,7 @@ import { CallsModule } from '@imuchat/platform-core/client'
 | M10 — Sécurité validée | S24 | 48 | CSP, IPC audit, sandboxing, audit dépendances |
 | M11 — **App 1.0 Core** | S26 | 52 | Perf optimisée, distribution avancée, crash reporting |
 | M12 — **App 2.0 Complète** | S30 | 60 | Gaming + Arena + Finance + Companion Full |
+| M13 — **Guardian Angel** | post-S23 | — | Module sécurité IA — voir `ROADMAP_GUARDIAN_ANGEL_DESKTOP.md` |
 
 ---
 

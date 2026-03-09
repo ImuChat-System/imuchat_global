@@ -33,6 +33,9 @@
 ├─────────────────────────────────────────────────────────────────────┤
 │   ImuCompanion Web (6 phases IC-W1→IC-W6 · ~21 sem · dès S31)       │
 ├─────────────────────────────────────────────────────────────────────┤
+│   Guardian Angel Web (6 phases GA-W1→GA-W6 · ~24 sem · dès ~S33)    │
+│   → Roadmap dédiée : ROADMAP_GUARDIAN_ANGEL_WEB.md                   │
+├─────────────────────────────────────────────────────────────────────┤
 │   Nice-to-have Backlog (6 sprints A-F · ~16 sem · post S44)         │
 └─────────────────────────────────────────────────────────────────────┘
 ```
@@ -346,6 +349,7 @@
 | **M11 — Gaming + Arena** | S36 | Gaming Hub, ImuArena 6 catégories |
 | **M12 — Finance Hub** | S38 | KYC, wallet avancé, P2P, cartes |
 | **M13 — ImuCompanion Full** | S44 | FSM, TTS, archétypes, appel avatar |
+| **M14 — Guardian Angel** | ~S33 | Module sécurité IA — voir `ROADMAP_GUARDIAN_ANGEL_WEB.md` |
 | **🏁 Web App 2.0** | S44 | Feature-complete : 96% features, Cross-Domain, Companion |
 
 ---

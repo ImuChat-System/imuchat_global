@@ -13,20 +13,20 @@ export type VideoVisibility = 'public' | 'followers' | 'private';
 
 /** Catégorie de contenu */
 export type VideoCategory =
-    | 'entertainment'
-    | 'education'
-    | 'music'
-    | 'gaming'
-    | 'sports'
-    | 'cooking'
-    | 'fashion'
-    | 'tech'
-    | 'comedy'
-    | 'art'
-    | 'anime'
-    | 'travel'
-    | 'pets'
-    | 'other';
+  | 'entertainment'
+  | 'education'
+  | 'music'
+  | 'gaming'
+  | 'sports'
+  | 'cooking'
+  | 'fashion'
+  | 'tech'
+  | 'comedy'
+  | 'art'
+  | 'anime'
+  | 'travel'
+  | 'pets'
+  | 'other';
 
 /** Type de réaction */
 export type FeedReactionType = 'like' | 'love' | 'haha' | 'wow' | 'fire' | 'sad';
@@ -38,93 +38,99 @@ export type FeedSource = 'for_you' | 'following' | 'trending' | 'explore';
 
 /** Auteur d'une vidéo */
 export interface VideoAuthor {
-    id: string;
-    username: string;
-    display_name: string | null;
-    avatar_url: string | null;
-    is_verified: boolean;
-    followers_count: number;
-    is_following: boolean;
+  id: string;
+  username: string;
+  display_name: string | null;
+  avatar_url: string | null;
+  is_verified: boolean;
+  followers_count: number;
+  is_following: boolean;
 }
 
 /** Musique/son utilisé dans une vidéo */
 export interface VideoSound {
-    id: string;
-    title: string;
-    artist: string;
-    audio_url: string;
-    artwork_url: string | null;
-    duration_ms: number;
-    usage_count: number;
+  id: string;
+  title: string;
+  artist: string;
+  audio_url: string;
+  artwork_url: string | null;
+  duration_ms: number;
+  usage_count: number;
+  /** Genre musical (ajouté S9) */
+  genre: string;
+  /** Son original d'une vidéo (ajouté S9) */
+  is_original: boolean;
+  /** Vidéo source pour les sons originaux */
+  original_video_id: string | null;
 }
 
 /** Hashtag */
 export interface VideoHashtag {
-    id: string;
-    name: string;
-    usage_count: number;
-    is_trending: boolean;
+  id: string;
+  name: string;
+  usage_count: number;
+  is_trending: boolean;
 }
 
 /** Vidéo ImuFeed */
 export interface ImuFeedVideo {
-    id: string;
-    author: VideoAuthor;
-    /** URL de la vidéo (Supabase Storage / CDN) */
-    video_url: string;
-    /** URL de la miniature */
-    thumbnail_url: string | null;
-    /** Description / caption */
-    caption: string;
-    /** Durée en ms (max 180000 = 3 min) */
-    duration_ms: number;
-    /** Largeur pixels */
-    width: number;
-    /** Hauteur pixels */
-    height: number;
-    /** Son utilisé */
-    sound: VideoSound | null;
-    /** Hashtags */
-    hashtags: VideoHashtag[];
-    /** Catégorie */
-    category: VideoCategory;
-    /** Visibilité */
-    visibility: VideoVisibility;
-    /** Statut */
-    status: VideoStatus;
-    /** Statistiques */
-    likes_count: number;
-    comments_count: number;
-    shares_count: number;
-    views_count: number;
-    bookmarks_count: number;
-    /** État utilisateur */
-    is_liked: boolean;
-    is_bookmarked: boolean;
-    /** Permettre commentaires */
-    allow_comments: boolean;
-    /** Permettre duos */
-    allow_duet: boolean;
-    /** Vidéo d'origine si c'est un duo/remix */
-    original_video_id: string | null;
-    created_at: string;
-    updated_at: string;
+  id: string;
+  author: VideoAuthor;
+  /** URL de la vidéo (Supabase Storage / CDN) */
+  video_url: string;
+  /** URL de la miniature */
+  thumbnail_url: string | null;
+  /** Description / caption */
+  caption: string;
+  /** Durée en ms (max 180000 = 3 min) */
+  duration_ms: number;
+  /** Largeur pixels */
+  width: number;
+  /** Hauteur pixels */
+  height: number;
+  /** Son utilisé */
+  sound: VideoSound | null;
+  /** Hashtags */
+  hashtags: VideoHashtag[];
+  /** Catégorie */
+  category: VideoCategory;
+  /** Visibilité */
+  visibility: VideoVisibility;
+  /** Statut */
+  status: VideoStatus;
+  /** Statistiques */
+  likes_count: number;
+  comments_count: number;
+  shares_count: number;
+  views_count: number;
+  bookmarks_count: number;
+  /** État utilisateur */
+  is_liked: boolean;
+  is_bookmarked: boolean;
+  /** Permettre commentaires */
+  allow_comments: boolean;
+  /** Permettre duos */
+  allow_duet: boolean;
+  /** Vidéo d'origine si c'est un duo/remix */
+  original_video_id: string | null;
+  created_at: string;
+  updated_at: string;
 }
 
 /** Commentaire sur une vidéo */
 export interface FeedComment {
-    id: string;
-    video_id: string;
-    author: VideoAuthor;
-    content: string;
-    likes_count: number;
-    is_liked: boolean;
-    /** Réponse à un autre commentaire */
-    parent_id: string | null;
-    replies_count: number;
-    /** Épinglé par le créateur */
-    is_pinned: boolean;
-    created_at: string;
+  id: string;
+  video_id: string;
+  author: VideoAuthor;
+  content: string;
+  likes_count: number;
+  is_liked: boolean;
+  /** Réponse à un autre commentaire */
+  parent_id: string | null;
+  replies_count: number;
+  /** Épinglé par le créateur */
+  is_pinned: boolean;
+  created_at: string;
 }
 
 /** Tri des commentaires */
@@ -135,179 +141,282 @@ export type CommentReportReason = 'spam' | 'harassment' | 'hate_speech' | 'misin
 
 /** Données d'upload vidéo */
 export interface VideoUploadData {
-    /** URI locale du fichier vidéo */
-    uri: string;
-    caption: string;
-    category: VideoCategory;
-    visibility: VideoVisibility;
-    hashtags: string[];
-    sound_id?: string;
-    allow_comments: boolean;
-    allow_duet: boolean;
-    /** URI locale de la miniature custom */
-    thumbnail_uri?: string;
+  /** URI locale du fichier vidéo */
+  uri: string;
+  caption: string;
+  category: VideoCategory;
+  visibility: VideoVisibility;
+  hashtags: string[];
+  sound_id?: string;
+  allow_comments: boolean;
+  allow_duet: boolean;
+  /** URI locale de la miniature custom */
+  thumbnail_uri?: string;
 }
 
 /** Progression d'upload */
 export interface UploadProgress {
-    video_id: string;
-    stage: 'compressing' | 'uploading' | 'processing' | 'complete' | 'error';
-    percent: number;
-    error?: string;
+  video_id: string;
+  stage: 'compressing' | 'uploading' | 'processing' | 'complete' | 'error';
+  percent: number;
+  error?: string;
 }
 
 // ─── Feed State ───────────────────────────────────────────────
 
 /** État du player vidéo dans le feed */
 export interface FeedPlayerState {
-    /** Index de la vidéo visible */
-    currentIndex: number;
-    /** Video ID en cours */
-    currentVideoId: string | null;
-    /** En pause */
-    isPaused: boolean;
-    /** Muet */
-    isMuted: boolean;
-    /** Position de lecture en ms */
-    positionMs: number;
+  /** Index de la vidéo visible */
+  currentIndex: number;
+  /** Video ID en cours */
+  currentVideoId: string | null;
+  /** En pause */
+  isPaused: boolean;
+  /** Muet */
+  isMuted: boolean;
+  /** Position de lecture en ms */
+  positionMs: number;
 }
 
 /** Page de résultats du feed */
 export interface FeedPage {
-    videos: ImuFeedVideo[];
-    cursor: string | null;
-    hasMore: boolean;
+  videos: ImuFeedVideo[];
+  cursor: string | null;
+  hasMore: boolean;
 }
 
 /** Résultat de recherche dans le feed */
 export interface FeedSearchResult {
-    videos: ImuFeedVideo[];
-    hashtags: VideoHashtag[];
-    authors: VideoAuthor[];
+  videos: ImuFeedVideo[];
+  hashtags: VideoHashtag[];
+  authors: VideoAuthor[];
 }
 
 // ─── Explore & Trending Types (Sprint S8B) ────────────────────
 
 /** Score trending d'un hashtag (calculé) */
 export interface TrendingHashtagScore {
-    hashtag_id: string;
-    name: string;
-    /** usage_24h × 2 + unique_creators × 5 + views × 0.001 + accélération × 10 */
-    score: number;
-    usage_24h: number;
-    unique_creators: number;
-    views: number;
-    /** Ratio usage_24h / usage_48h_to_24h */
-    acceleration: number;
+  hashtag_id: string;
+  name: string;
+  /** usage_24h × 2 + unique_creators × 5 + views × 0.001 + accélération × 10 */
+  score: number;
+  usage_24h: number;
+  unique_creators: number;
+  views: number;
+  /** Ratio usage_24h / usage_48h_to_24h */
+  acceleration: number;
 }
 
 /** Créateur populaire (classement hebdomadaire) */
 export interface TopCreator {
-    id: string;
-    username: string;
-    display_name: string | null;
-    avatar_url: string | null;
-    is_verified: boolean;
-    followers_count: number;
-    /** Likes reçus cette semaine */
-    weekly_likes: number;
-    /** Nombre de vidéos postées cette semaine */
-    weekly_videos: number;
-    is_following: boolean;
+  id: string;
+  username: string;
+  display_name: string | null;
+  avatar_url: string | null;
+  is_verified: boolean;
+  followers_count: number;
+  /** Likes reçus cette semaine */
+  weekly_likes: number;
+  /** Nombre de vidéos postées cette semaine */
+  weekly_videos: number;
+  is_following: boolean;
 }
 
 /** Section de la page Explore */
 export type ExploreSectionType =
-    | 'trending_hashtags'
-    | 'top_creators'
-    | 'top_videos'
-    | 'active_challenges';
+  | 'trending_hashtags'
+  | 'top_creators'
+  | 'top_videos'
+  | 'active_challenges';
 
 /** Section Explore avec données chargées */
 export interface ExploreSection {
-    type: ExploreSectionType;
-    title: string;
-    data: TrendingHashtagScore[] | TopCreator[] | ImuFeedVideo[];
+  type: ExploreSectionType;
+  title: string;
+  data: TrendingHashtagScore[] | TopCreator[] | ImuFeedVideo[];
 }
 
 /** Données complètes de la page Explore */
 export interface ExploreFeedData {
-    trendingHashtags: TrendingHashtagScore[];
-    topCreators: TopCreator[];
-    topVideos: ImuFeedVideo[];
-    activeChallenges: VideoHashtag[];
+  trendingHashtags: TrendingHashtagScore[];
+  topCreators: TopCreator[];
+  topVideos: ImuFeedVideo[];
+  activeChallenges: VideoHashtag[];
 }
 
 /** Page de feed par catégorie */
 export interface CategoryFeedPage {
-    category: VideoCategory;
-    videos: ImuFeedVideo[];
-    cursor: string | null;
-    hasMore: boolean;
-    totalCount: number;
+  category: VideoCategory;
+  videos: ImuFeedVideo[];
+  cursor: string | null;
+  hasMore: boolean;
+  totalCount: number;
 }
 
 // ─── Algorithm Types (Sprint S7) ──────────────────────────────
 
 /** Événement d'engagement lors du visionnage */
 export interface ViewEngagement {
-    video_id: string;
-    user_id: string;
-    watch_duration_ms: number;
-    completed: boolean;
-    /** Swipe rapide (< 2s) = signal négatif */
-    quick_skip: boolean;
-    /** Re-watch (vidéo déjà vue) */
-    is_rewatch: boolean;
-    source: FeedSource;
-    created_at: string;
+  video_id: string;
+  user_id: string;
+  watch_duration_ms: number;
+  completed: boolean;
+  /** Swipe rapide (< 2s) = signal négatif */
+  quick_skip: boolean;
+  /** Re-watch (vidéo déjà vue) */
+  is_rewatch: boolean;
+  source: FeedSource;
+  created_at: string;
 }
 
 /** Profil d'intérêts utilisateur pour le feed */
 export interface UserInterest {
-    user_id: string;
-    /** Catégories pondérées par engagement */
-    category_weights: Record<VideoCategory, number>;
-    /** Hashtags pondérés par engagement */
-    hashtag_weights: Record<string, number>;
-    /** Créateurs favoris (par engagement) */
-    top_creator_ids: string[];
-    updated_at: string;
+  user_id: string;
+  /** Catégories pondérées par engagement */
+  category_weights: Record<VideoCategory, number>;
+  /** Hashtags pondérés par engagement */
+  hashtag_weights: Record<string, number>;
+  /** Créateurs favoris (par engagement) */
+  top_creator_ids: string[];
+  updated_at: string;
 }
 
 /** Score d'engagement d'une vidéo */
 export interface VideoEngagementScore {
-    video_id: string;
-    /** Score composite : views × completion_rate × likes × comments */
-    engagement_score: number;
-    /** Taux de complétion moyen (0-1) */
-    completion_rate: number;
-    /** Score de fraîcheur (décroît avec le temps) */
-    freshness_score: number;
-    /** Score final (engagement × freshness × relevance) */
-    final_score: number;
+  video_id: string;
+  /** Score composite : views × completion_rate × likes × comments */
+  engagement_score: number;
+  /** Taux de complétion moyen (0-1) */
+  completion_rate: number;
+  /** Score de fraîcheur (décroît avec le temps) */
+  freshness_score: number;
+  /** Score final (engagement × freshness × relevance) */
+  final_score: number;
 }
 
 /** Signal "Pas intéressé" */
 export interface NotInterestedSignal {
-    video_id: string;
-    user_id: string;
-    reason: 'not_interested' | 'repetitive' | 'inappropriate';
-    created_at: string;
+  video_id: string;
+  user_id: string;
+  reason: 'not_interested' | 'repetitive' | 'inappropriate';
+  created_at: string;
 }
 
 /** Paramètres de configuration de l'algorithme "Pour Toi" */
 export interface ForYouConfig {
-    /** Poids pour les vidéos d'abonnements (0-1) */
-    subscriptions_weight: number;
-    /** Poids pour les vidéos similaires aux intérêts (0-1) */
-    similar_weight: number;
-    /** Poids pour les vidéos trending (0-1) */
-    trending_weight: number;
-    /** Nombre max de candidats en phase recall */
-    recall_limit: number;
-    /** Nombre max de résultats finaux */
-    result_limit: number;
+  /** Poids pour les vidéos d'abonnements (0-1) */
+  subscriptions_weight: number;
+  /** Poids pour les vidéos similaires aux intérêts (0-1) */
+  similar_weight: number;
+  /** Poids pour les vidéos trending (0-1) */
+  trending_weight: number;
+  /** Nombre max de candidats en phase recall */
+  recall_limit: number;
+  /** Nombre max de résultats finaux */
+  result_limit: number;
+}
+
+// ─── Video Editor Types (Sprint S10B) ─────────────────────────
+
+/** Catégorie de filtre vidéo */
+export type VideoFilterCategory = 'classic' | 'manga' | 'ambiance';
+
+/** Filtre vidéo applicable */
+export interface VideoFilter {
+  id: string;
+  name: string;
+  category: VideoFilterCategory;
+  /** Paramètres CSS-like pour l'aperçu (brightness, contrast, etc.) */
+  previewStyle: {
+    brightness?: number;
+    contrast?: number;
+    saturate?: number;
+    hueRotate?: number;
+    sepia?: number;
+    opacity?: number;
+  };
+  /** Icon ou thumbnail pour la sélection */
+  thumbnailColor: string;
+  /** Nécessite processing IA (manga/anime) */
+  requiresAI: boolean;
+}
+
+/** Sticker positionné sur la vidéo */
+export interface PlacedSticker {
+  id: string;
+  stickerId: string;
+  imageUrl: string;
+  /** Position relative (0-1) */
+  x: number;
+  y: number;
+  /** Échelle (1 = taille originale) */
+  scale: number;
+  /** Rotation en degrés */
+  rotation: number;
+}
+
+/** Sticker pack */
+export interface StickerPack {
+  id: string;
+  name: string;
+  thumbnailUrl: string | null;
+  isOfficial: boolean;
+  isPremium: boolean;
+  stickerCount: number;
+}
+
+/** Sticker individuel */
+export interface Sticker {
+  id: string;
+  packId: string;
+  name: string;
+  imageUrl: string;
+  isAnimated: boolean;
+  tags: string[];
+}
+
+/** Texte animé positionné */
+export interface PlacedText {
+  id: string;
+  text: string;
+  style: AnimatedTextStyle;
+  /** Position relative (0-1) */
+  x: number;
+  y: number;
+  /** Échelle */
+  scale: number;
+  rotation: number;
+  color: string;
+  /** Apparition en ms depuis le début */
+  startMs: number;
+  /** Durée d'affichage en ms (0 = toute la vidéo) */
+  durationMs: number;
+}
+
+/** Style d'animation de texte */
+export type AnimatedTextStyle =
+  | 'typewriter'
+  | 'fade_in'
+  | 'slide_up'
+  | 'bounce'
+  | 'glow'
+  | 'shake'
+  | 'zoom_in'
+  | 'glitch'
+  | 'wave'
+  | 'rainbow'
+  | 'outline'
+  | 'shadow_pop';
+
+/** Vitesse de lecture vidéo */
+export type PlaybackSpeed = 0.25 | 0.5 | 0.75 | 1 | 1.5 | 2 | 3;
+
+/** Métadonnées d'édition complètes appliquées à une vidéo */
+export interface VideoEditMetadata {
+  filterId: string | null;
+  stickers: PlacedSticker[];
+  texts: PlacedText[];
+  speed: PlaybackSpeed;
 }
 
 // ─── SQL Schema (pour migration Supabase) ─────────────────────

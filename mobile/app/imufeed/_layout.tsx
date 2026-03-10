@@ -71,6 +71,13 @@ export default function ImuFeedLayout() {
           gestureEnabled: true,
         }}
       />
+      <Stack.Screen
+        name="sound/[id]"
+        options={{
+          animation: "slide_from_right",
+          gestureEnabled: true,
+        }}
+      />
     </Stack>
   );
 }

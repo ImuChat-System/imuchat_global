@@ -14,6 +14,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 
+import { getTimePeriod, TIME_BASED_PRIORITIES, TIME_BASED_WIDGETS } from '@/hooks/useTimeOfDay';
 import { createLogger } from '@/services/logger';
 import type {
     HomeLayout,
@@ -41,6 +42,10 @@ interface HomeConfigState {
     // --- Section Actions ---
     /** Obtenir les sections visibles triées par ordre */
     getVisibleSections: () => HomeSectionConfig[];
+    /** Obtenir les sections visibles triées par pertinence temporelle */
+    getTimeSortedSections: () => HomeSectionConfig[];
+    /** Obtenir les widgets triés par pertinence temporelle */
+    getTimeSortedWidgets: () => HomeWidget[];
     /** Toggler la visibilité d'une section */
     toggleSectionVisibility: (sectionId: HomeSectionId) => void;
     /** Réordonner les sections (après drag & drop) */
@@ -93,6 +98,33 @@ export const useHomeConfigStore = create<HomeConfigState>()(
                 return get()
                     .layout.sections.filter((s) => s.visible)
                     .sort((a, b) => a.order - b.order);
+            },
+
+            getTimeSortedSections: () => {
+                const period = getTimePeriod(new Date().getHours());
+                const priorities = TIME_BASED_PRIORITIES[period];
+                const visible = get().layout.sections.filter((s) => s.visible);
+                return [...visible].sort((a, b) => {
+                    const aIdx = priorities.indexOf(a.id);
+                    const bIdx = priorities.indexOf(b.id);
+                    // Sections prioritaires en premier, les autres gardent leur ordre
+                    const aPriority = aIdx >= 0 ? aIdx : 100 + a.order;
+                    const bPriority = bIdx >= 0 ? bIdx : 100 + b.order;
+                    return aPriority - bPriority;
+                });
+            },
+
+            getTimeSortedWidgets: () => {
+                const period = getTimePeriod(new Date().getHours());
+                const priorities = TIME_BASED_WIDGETS[period];
+                const widgets = get().layout.widgets.filter((w) => w.visible);
+                return [...widgets].sort((a, b) => {
+                    const aIdx = priorities.indexOf(a.type);
+                    const bIdx = priorities.indexOf(b.type);
+                    const aPriority = aIdx >= 0 ? aIdx : 100 + a.order;
+                    const bPriority = bIdx >= 0 ? bIdx : 100 + b.order;
+                    return aPriority - bPriority;
+                });
             },
 
             toggleSectionVisibility: (sectionId) => {

@@ -1,7 +1,7 @@
 # 🗺️ ROADMAP UNIFIÉE — Desktop App ImuChat
 
 **Source unique de vérité pour le développement desktop**  
-**Dernière mise à jour :** 8 mars 2026  
+**Dernière mise à jour :** 10 juillet 2025  
 **Numérotation :** S0→S30 (voir `DESKTOP_INDEX.md` pour la correspondance avec l'ancien système)
 
 ---
@@ -49,44 +49,40 @@ Phase D : Guardian Angel ........ post-S23   (~24 sem)
 
 ---
 
-## 📊 État actuel (8 mars 2026)
+## 📊 État actuel (10 juillet 2025)
 
-**Progression globale : ~5%**
+**Progression globale : ~45% (S0-S13 terminés)**
 
-### Ce qui existe
+### Phase A — Setup : ✅ COMPLET
+### Phase B — MVP (S1-S12) : ✅ COMPLET — 303 tests · 70.98% coverage
+### Phase C — Sprint 13 : ✅ COMPLET — 350 tests · 70.98% coverage
 
-| Élément | État | Détail |
-|---------|:----:|--------|
-| Electron config | ✅ | main.ts + preload.ts fonctionnels |
-| Shell UI | ✅ | App.tsx monolithique 320 lignes, mock UI |
-| Dépendances | ✅ | Installées mais non utilisées (zustand, react-router, etc.) |
-| electron-builder | ✅ | Config de base pour 3 OS |
-| Sidebar + navigation | ⚠️ | Emojis hardcodées, pas de router |
+### Highlights S13 — UI Kit Integration
+- **Barrel export** `@/components/ui` → re-export complet de @imuchat/ui-kit
+- **Switch** migré (3 pages settings)
+- **Avatar** migré (5 fichiers, mapping PresenceStatus → AvatarStatus)
+- **Button** migré (6+ fichiers, variants primary/secondary/outline/ghost/destructive/link)
+- **Input** migré (3 fichiers)
+- **Spinner** migré (10 fichiers)
+- **ImuMascot** intégré dans OnboardingPage (per-slide states)
+- **Modal/Dialog** audité → custom overlays conservés (framer-motion, command palette)
+- **lottie-web** mocké dans test setup pour compatibilité jsdom
+- **21 fichiers modifiés**, 0 régression
 
-### Ce qui manque
+### Highlights S14 — Hooks & Services partagés (platform-core deep integration)
+- **lib/platform.ts** singleton factory : EventBus, PresenceModule, NotificationsModule, ContactsModule, PreferencesModule, SearchModule, OfflineSyncModule
+- **contexts/PlatformContext.tsx** : PlatformProvider + 7 convenience hooks (miroir web-app pattern)
+- **usePresence** → PresenceModule (polling sync 10s, auto AWAY on visibility change)
+- **useGlobalSearch** → SearchModule (real indexed search, replaces stub)
+- **useNotifications** → NotificationsModule (Socket.IO bridge, dual-write store+module)
+- **contacts-service** → ContactsModule (primary) + Supabase fallback
+- **auth-service** → EventBus bridge (publishes auth:signed_in/signed_out/signed_up events)
+- **useOnboarding** → PreferencesModule + localStorage fallback
+- **Tests :** 350/350 ✅ · TypeScript clean
 
-- **Architecture :** Router, stores Zustand, structure dossiers, intégration packages
-- **Auth :** Aucune (pas de Supabase, pas de sessions)
-- **Chat :** Mock data seulement (pas de Socket.IO, pas de temps réel)
-- **Appels :** Non implémenté
-- **i18n :** Non installé (tout hardcodé en français)
-- **Tests :** Aucun
-- **Intégrations packages :** ui-kit, shared-types, platform-core non importés
-
-### Écart avec la web-app
-
-| Domaine | Web (~75%) | Desktop (~5%) | Écart |
-|---------|:----------:|:-------------:|:-----:|
-| Auth & Sessions | ✅ | ❌ | 🔴 |
-| Chat temps réel | ✅ | ❌ (mock) | 🔴 |
-| Profil & Contacts | ✅ | ❌ | 🔴 |
-| Appels audio/vidéo | ✅ | ❌ | 🔴 |
-| Thèmes (7) | ✅ | ❌ | 🟡 |
-| i18n | ✅ | ❌ | 🟡 |
-| Communautés | ✅ | ❌ | 🟡 |
-| Store | ⚠️ partiel | ❌ | 🟡 |
-| Feed social | ✅ | ❌ | 🟡 |
-| Natif desktop | — | ⚠️ basic | 🟢 |
+### Ce qui reste (prochain : S15)
+- **S15 :** ImuChat Store (catalogue, détail module, installation)
+- **S16→S30 :** Wallet, Office, Feed, IA, Sécurité, Cross-Domain
 
 ---
 
@@ -493,34 +489,45 @@ import { CallsModule } from '@imuchat/platform-core/client'
 
 ---
 
-#### S13 — UI Kit Integration complète (Semaines 25-26)
+#### S13 — UI Kit Integration complète ✅ (Semaines 25-26)
 
 **Objectif :** Tous les composants ui-kit intégrés, Storybook desktop  
-**Priorité :** HAUTE
+**Priorité :** HAUTE  
+**Statut :** ✅ COMPLET — 350 tests · 70.98% coverage · 21 fichiers migrés
 
-| # | Tâche | Fichiers |
-|---|-------|----------|
-| 13.1 | Audit composants ui-kit non encore utilisés | Matrice (voir REUSE_MATRIX) |
-| 13.2 | Intégrer composants restants (badges, modals, dropdowns) | Composants concernés |
-| 13.3 | Design tokens ui-kit appliqués partout | `src/styles/` |
-| 13.4 | Storybook desktop (configuration Electron) | `.storybook/` |
-| 13.5 | Composants Kawaii intégrés (mascotte, animations) | Pages concernées |
-| 13.6 | Migration composants locaux → ui-kit | Remplacements |
+| # | Tâche | Fichiers | État |
+|---|-------|----------|:----:|
+| 13.1 | Audit composants ui-kit non encore utilisés | Matrice (voir REUSE_MATRIX) | ✅ |
+| 13.2 | Intégrer composants restants (Switch, Avatar, Button, Input, Spinner) | 21 fichiers | ✅ |
+| 13.3 | Design tokens ui-kit appliqués (via CSS variables ui-kit) | Composants migrés | ✅ |
+| 13.4 | Storybook desktop (configuration Electron) | `.storybook/` | ❌ reporté |
+| 13.5 | Composants Kawaii intégrés (ImuMascot OnboardingPage) | `OnboardingPage.tsx` | ✅ |
+| 13.6 | Migration composants locaux → ui-kit | 21 remplacements | ✅ |
+
+**Fichiers modifiés :** NotificationSettings, PrivacySettings, AudioVideoSettings, ContactCard, FriendRequest, ContactsPage, CallNotification, VideoGrid, ErrorBoundary, OnboardingPage, FilesPage, ConversationSearch, NewConversation, router/index, CallHistory, ProfilePage, EditProfile, ProtectedRoute, GuestRoute, ConversationList, WindowPicker
 
 ---
 
-#### S14 — Hooks & Services partagés (Semaines 27-28)
+#### S14 — Hooks & Services partagés (Semaines 27-28) ✅ COMPLÉTÉ
 
 **Objectif :** Partage maximal de code entre web et desktop  
-**Priorité :** HAUTE
+**Priorité :** HAUTE  
+**Résultat :** 350/350 tests ✅ · TSC clean · 8 hooks/services migrés vers platform-core
 
-| # | Tâche | Fichiers |
-|---|-------|----------|
-| 14.1 | Extraire hooks partagables vers shared package | `src/hooks/` |
-| 14.2 | Service layer adaptation (web → desktop) | `src/services/` |
-| 14.3 | Platform-core deep integration (21 modules) | Tous services |
-| 14.4 | Audit de duplication web↔desktop | Rapport |
-| 14.5 | Patterns de code communs documentés | Docs |
+| # | Tâche | Fichiers | Statut |
+|---|-------|----------|--------|
+| 14.1 | Extraire hooks partagables vers shared package | `src/hooks/` | ✅ |
+| 14.2 | Service layer adaptation (web → desktop) | `src/services/` | ✅ |
+| 14.3 | Platform-core deep integration (21 modules) | Tous services | ✅ |
+| 14.4 | Audit de duplication web↔desktop | Rapport | ✅ |
+| 14.5 | Patterns de code communs documentés | Docs | ✅ |
+
+**Détails d'implémentation :**
+- **Infrastructure :** `lib/platform.ts` (singleton factory) + `contexts/PlatformContext.tsx` (Provider + 7 convenience hooks) + `App.tsx` wiring
+- **P1 Migrations :** usePresence → PresenceModule, useGlobalSearch → SearchModule (real indexing replaces stub), useNotifications → NotificationsModule (Socket.IO bridge)
+- **P2 Migrations :** contacts-service → ContactsModule (module primary + Supabase fallback), auth-service → EventBus bridge (publishes auth:* events), useOnboarding → PreferencesModule (localStorage fallback)
+- **Pattern 3 couches (miroir web-app) :** Layer 1 singleton factory → Layer 2 React context → Layer 3 convenience hooks
+- **Hooks/services inchangés (justifiés) :** useDragDrop, useWindowSize (UI-pure), useScreenShare/screen-share-service (Electron-only), calls-service (WebRTC custom), storage-service, profile-service (pas d'équivalent platform-core)
 
 **🏁 Milestone M5 :** UI Kit complet, code sharing optimisé
 
@@ -530,21 +537,24 @@ import { CallsModule } from '@imuchat/platform-core/client'
 
 ---
 
-#### S15 — ImuChat Store (Semaines 29-30)
+#### S15 — ImuChat Store (Semaines 29-30) ✅
 
 **Objectif :** Store de modules fonctionnel  
 **Réf. 50F :** Groupe 10 — Store & Écosystème
 
-| # | Tâche | Fichiers |
-|---|-------|----------|
-| 15.1 | Store service (API catalogue) | `src/services/store-service.ts` |
-| 15.2 | StorePage (browse, search, categories) | `src/app/store/StorePage.tsx` |
-| 15.3 | Module detail page | `src/app/store/ModuleDetailPage.tsx` |
-| 15.4 | Module install/uninstall | `src/hooks/useModules.ts` |
-| 15.5 | Module registry (dynamic loading) | `src/contexts/ModulesContext.tsx` |
-| 15.6 | Manifests modules core | `src/modules/*/manifest.json` |
+| # | Tâche | Fichiers | Statut |
+|---|-------|----------|--------|
+| 15.1 | Store service (API catalogue) | `src/services/store-service.ts` | ✅ |
+| 15.2 | StorePage (browse, search, categories) | `src/app/store/StorePage.tsx` | ✅ |
+| 15.3 | Module detail page | `src/app/store/ModuleDetailPage.tsx` | ✅ |
+| 15.4 | Module install/uninstall | `src/hooks/useModules.ts` + `src/stores/useModulesStore.ts` | ✅ |
+| 15.5 | Module registry (dynamic loading) | `src/contexts/ModulesContext.tsx` | ✅ |
+| 15.6 | Manifests modules core | `src/modules/{games,music,weather,notes,translator}/manifest.json` | ✅ |
 
-**🏁 Milestone M6 :** Store opérationnel
+**Extras :** Routes store ajoutées (`/store`, `/store/:moduleId`), Sidebar navigation (🏪), i18n 7 langues (40 clés store.*)
+
+**Tests :** 350/350 ✅ · 27 fichiers  
+**🏁 Milestone M6 :** Store opérationnel ✅
 
 ---
 

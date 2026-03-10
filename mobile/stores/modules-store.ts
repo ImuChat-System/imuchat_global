@@ -30,6 +30,7 @@ import {
     fetchUserModules,
     fetchUserReview,
 } from '@/services/modules-api';
+import { fetchStaleModules, trackModuleUsage } from '@/services/usage-tracking';
 import type { ModuleReview, RecommendationSection, ReviewStats, StoredModuleManifest, UserInstalledModule } from '@/types/modules';
 
 const logger = createLogger('ModulesStore');
@@ -67,6 +68,9 @@ interface ModulesState {
     recommendationsLoading: boolean;
     recommendationsFetchedAt: number | null;
 
+    // --- Personnalisation (S9) ---
+    staleModules: { module_id: string; module_name: string; last_used_at: string | null; usage_count: number }[];
+
     // --- Actions catalogue ---
     fetchCatalog: (force?: boolean) => Promise<void>;
     searchCatalog: (query: string) => Promise<StoredModuleManifest[]>;
@@ -88,6 +92,11 @@ interface ModulesState {
 
     // --- Actions recommandations ---
     fetchRecommendations: (force?: boolean) => Promise<void>;
+
+    // --- Actions personnalisation (S9) ---
+    trackUsage: (moduleId: string) => Promise<void>;
+    fetchStale: (days?: number) => Promise<void>;
+    getInstalledSortedByUsage: () => UserInstalledModule[];
 
     // --- Helpers ---
     isInstalled: (moduleId: string) => boolean;
@@ -118,6 +127,7 @@ const initialState = {
     recommendations: [] as RecommendationSection[],
     recommendationsLoading: false,
     recommendationsFetchedAt: null as number | null,
+    staleModules: [] as { module_id: string; module_name: string; last_used_at: string | null; usage_count: number }[],
 };
 
 export const useModulesStore = create<ModulesState>()(
@@ -393,6 +403,45 @@ export const useModulesStore = create<ModulesState>()(
                     logger.error('Failed to fetch recommendations:', error);
                     set({ recommendationsLoading: false });
                 }
+            },
+
+            // ─── Track usage (S9) ──────────────────────────────
+            trackUsage: async (moduleId: string) => {
+                try {
+                    await trackModuleUsage(moduleId);
+                    // Mise à jour optimiste locale
+                    set(state => ({
+                        installedModules: state.installedModules.map(m =>
+                            m.module_id === moduleId
+                                ? {
+                                    ...m,
+                                    usage_count: (m.usage_count ?? 0) + 1,
+                                    last_used_at: new Date().toISOString(),
+                                }
+                                : m,
+                        ),
+                    }));
+                } catch (error) {
+                    logger.error(`Failed to track usage for ${moduleId}:`, error);
+                }
+            },
+
+            // ─── Fetch stale modules (S9) ─────────────────────
+            fetchStale: async (days = 7) => {
+                try {
+                    const stale = await fetchStaleModules(days);
+                    set({ staleModules: stale });
+                    logger.info(`Fetched ${stale.length} stale modules`);
+                } catch (error) {
+                    logger.error('Failed to fetch stale modules:', error);
+                }
+            },
+
+            // ─── Get installed sorted by usage (S9) ──────────
+            getInstalledSortedByUsage: () => {
+                return [...get().installedModules]
+                    .filter(m => m.is_active)
+                    .sort((a, b) => (b.usage_count ?? 0) - (a.usage_count ?? 0));
             },
 
             // ─── Helpers ───────────────────────────────────────

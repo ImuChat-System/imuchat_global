@@ -57,6 +57,10 @@ export interface UserInstalledModule {
     settings: Record<string, unknown>;
     installed_at: string;
     updated_at: string;
+    /** Nombre de fois que le module a été ouvert */
+    usage_count: number;
+    /** Dernière date d'utilisation */
+    last_used_at: string | null;
     /** Jointure avec la table modules */
     module?: StoredModuleManifest;
 }

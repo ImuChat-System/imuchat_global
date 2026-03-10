@@ -419,6 +419,72 @@ export interface VideoEditMetadata {
   speed: PlaybackSpeed;
 }
 
+// ─── Video Creation Modes (Sprint S11B) ───────────────────────
+
+/** Mode de création vidéo */
+export type VideoCreationMode = "normal" | "duo" | "remix" | "green_screen";
+
+/** Configuration du layout Duo (split-screen) */
+export interface DuoLayout {
+  /** Orientation du split : vertical = côte à côte, horizontal = dessus/dessous */
+  orientation: "vertical" | "horizontal";
+  /** Ratio de la vidéo source (0-1, défaut 0.5 = 50/50) */
+  sourceRatio: number;
+  /** La vidéo source est à gauche/en haut (true) ou droite/en bas (false) */
+  sourceFirst: boolean;
+}
+
+/** Configuration du mode Remix (vidéo source en vignette) */
+export interface RemixConfig {
+  /** Taille de la vignette source (fraction de l'écran) */
+  thumbnailScale: number;
+  /** Position de la vignette */
+  thumbnailPosition: "top-left" | "top-right" | "bottom-left" | "bottom-right";
+  /** Utiliser l'audio de la source */
+  useSourceAudio: boolean;
+  /** Volume audio source (0-1) */
+  sourceAudioVolume: number;
+}
+
+/** Configuration Green Screen */
+export interface GreenScreenConfig {
+  /** Seuil de tolérance chromakey (0-1) */
+  tolerance: number;
+  /** Lissage des bords (0-1) */
+  smoothing: number;
+}
+
+/** Types d'effets post-production */
+export type PostEffectType =
+  | "blur_bg"
+  | "stabilization"
+  | "light_correction"
+  | "color_grade";
+
+/** Effet post-production appliqué */
+export interface AppliedPostEffect {
+  effectType: PostEffectType;
+  /** Intensité de l'effet (0-1) */
+  intensity: number;
+  /** Paramètres spécifiques */
+  params: Record<string, number | string | boolean>;
+}
+
+/** Métadonnées de création avancée Sprint S11B */
+export interface AdvancedCreationMetadata {
+  mode: VideoCreationMode;
+  sourceVideoId: string | null;
+  duoLayout: DuoLayout | null;
+  remixConfig: RemixConfig | null;
+  greenScreenConfig: GreenScreenConfig | null;
+  postEffects: AppliedPostEffect[];
+}
+
+// ─── Social Sub-Tab Types (Sprint S11A) ───────────────────────
+
+/** Onglets du Social tab */
+export type SocialSubTab = "feed" | "imufeed" | "stories";
+
 // ─── SQL Schema (pour migration Supabase) ─────────────────────
 
 export const IMUFEED_SCHEMA_SQL = `

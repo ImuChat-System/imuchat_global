@@ -563,13 +563,18 @@ import { CallsModule } from '@imuchat/platform-core/client'
 **Objectif :** Wallet intégré, transactions, moyens de paiement  
 **Réf. 50F :** Groupe 8 — Économie virtuelle (ImuCoins)
 
-| # | Tâche | Fichiers |
-|---|-------|----------|
-| 16.1 | Wallet service | `src/services/wallet-service.ts` |
-| 16.2 | WalletPage | `src/app/wallet/WalletPage.tsx` |
-| 16.3 | Transaction history | `src/app/wallet/TransactionsPage.tsx` |
-| 16.4 | Payment methods (Stripe integration) | `src/services/payment-service.ts` |
-| 16.5 | ImuCoins affichage + achats | Composants wallet |
+| # | Tâche | Fichiers | Status |
+|---|-------|----------|--------|
+| 16.1 | Wallet service | `src/services/wallet-service.ts` | ✅ |
+| 16.2 | WalletPage | `src/app/wallet/WalletPage.tsx` | ✅ |
+| 16.3 | Transaction history | `src/app/wallet/TransactionsPage.tsx` | ✅ |
+| 16.4 | Payment methods (Stripe integration) | `src/services/payment-service.ts` | ✅ |
+| 16.5 | ImuCoins affichage + achats | `src/stores/useWalletStore.ts` + `src/hooks/useWallet.ts` + `src/app/wallet/TransferPage.tsx` | ✅ |
+
+**Extras :** Routes wallet ajoutées (`/wallet`, `/wallet/transactions`, `/wallet/transfer`), Sidebar navigation (💰), i18n 7 langues (~45 clés wallet.*)
+
+**Tests :** 350/350 ✅ · 27 fichiers
+**🏁 Milestone M7 :** Wallet & Paiements opérationnel ✅
 
 ---
 
@@ -578,14 +583,18 @@ import { CallsModule } from '@imuchat/platform-core/client'
 **Objectif :** Points, badges, niveaux + création de communautés  
 **Réf. 50F :** Groupes 5 & 9
 
-| # | Tâche | Fichiers |
-|---|-------|----------|
-| 17.1 | Gamification service | `src/services/gamification-service.ts` |
-| 17.2 | Points/Badges/Levels UI | `src/components/gamification/` |
-| 17.3 | Communities service | `src/services/communities-service.ts` |
-| 17.4 | CommunitiesPage (serveurs, channels) | `src/app/communities/` |
-| 17.5 | Community creation wizard | `src/app/communities/CreateCommunity.tsx` |
-| 17.6 | Mini-apps platform base | `src/services/miniapps-service.ts` |
+| # | Tâche | Fichiers | Status |
+|---|-------|----------|--------|
+| 17.1 | Gamification service | `src/services/gamification-service.ts` | ✅ |
+| 17.2 | Points/Badges/Levels UI | `src/components/gamification/` | ✅ |
+| 17.3 | Communities service | `src/services/communities-service.ts` | ✅ |
+| 17.4 | CommunitiesPage (serveurs, channels) | `src/app/communities/` | ✅ |
+| 17.5 | Community creation wizard | `src/app/communities/CreateCommunityPage.tsx` | ✅ |
+| 17.6 | Mini-apps platform base | `src/services/miniapps-service.ts` | ✅ |
+
+**Extras :** routes (gamification, communities, communities/create, communities/:serverId), sidebar (🎮 Gamification, 🏰 Communautés), i18n 7 locales  
+**Tests :** 350/350 ✅  
+**🏁 Milestone M7 — Store, Wallet, Gamification & Communities DONE**
 
 ---
 

@@ -299,10 +299,10 @@ describe("Widget Content Registry", () => {
   it("renderWidgetContent returns null for unknown widget type", () => {
     const widget = {
       id: "w-x",
-      type: "weather" as any,
-      titleKey: "home.widget.weather",
+      type: "unknown_type_xyz" as any,
+      titleKey: "home.widget.unknown",
       size: "1x1" as const,
-      icon: "cloud-outline",
+      icon: "help-outline",
       order: 1,
       visible: true,
     };

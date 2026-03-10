@@ -57,6 +57,20 @@ export default function ImuFeedLayout() {
           gestureEnabled: true,
         }}
       />
+      <Stack.Screen
+        name="explore"
+        options={{
+          animation: "slide_from_right",
+          gestureEnabled: true,
+        }}
+      />
+      <Stack.Screen
+        name="category/[cat]"
+        options={{
+          animation: "slide_from_right",
+          gestureEnabled: true,
+        }}
+      />
     </Stack>
   );
 }

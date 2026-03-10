@@ -67,6 +67,10 @@ interface HomeConfigState {
     removeWidget: (widgetId: string) => void;
     /** Toggler visibilité d'un widget */
     toggleWidgetVisibility: (widgetId: string) => void;
+    /** Réordonner les widgets (après drag & drop) */
+    reorderWidgets: (orderedIds: string[]) => void;
+    /** Mettre à jour les données d'un widget */
+    updateWidgetData: (widgetId: string, data: Record<string, unknown>) => void;
 
     // --- Mode édition ---
     setEditing: (editing: boolean) => void;
@@ -249,6 +253,31 @@ export const useHomeConfigStore = create<HomeConfigState>()(
                             w.id === widgetId ? { ...w, visible: !w.visible } : w,
                         ),
                         updatedAt: new Date().toISOString(),
+                    },
+                }));
+            },
+
+            reorderWidgets: (orderedIds) => {
+                logger.info('reorderWidgets', { count: orderedIds.length });
+                set((state) => ({
+                    layout: {
+                        ...state.layout,
+                        widgets: state.layout.widgets.map((w) => {
+                            const newOrder = orderedIds.indexOf(w.id);
+                            return newOrder >= 0 ? { ...w, order: newOrder } : w;
+                        }),
+                        updatedAt: new Date().toISOString(),
+                    },
+                }));
+            },
+
+            updateWidgetData: (widgetId, data) => {
+                set((state) => ({
+                    layout: {
+                        ...state.layout,
+                        widgets: state.layout.widgets.map((w) =>
+                            w.id === widgetId ? { ...w, data } : w,
+                        ),
                     },
                 }));
             },

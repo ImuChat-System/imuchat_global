@@ -9,14 +9,17 @@
 
 import type { HomeWidget, WidgetType } from "@/types/home-hub";
 import React from "react";
+import AgendaWidgetContent from "./AgendaWidgetContent";
 import AITipsWidgetContent from "./AITipsWidgetContent";
+import ArenaWidgetContent from "./ArenaWidgetContent";
 import FriendsOnlineWidgetContent from "./FriendsOnlineWidgetContent";
+import GamingWidgetContent from "./GamingWidgetContent";
 import MusicWidgetContent from "./MusicWidgetContent";
 import RecapWidgetContent from "./RecapWidgetContent";
 import ScreenTimeWidgetContent from "./ScreenTimeWidgetContent";
+import TasksWidgetContent from "./TasksWidgetContent";
 import WalletWidgetContent from "./WalletWidgetContent";
-
-// ─── Helpers ────────────────────────────────────────────────
+import WeatherWidgetContent from "./WeatherWidgetContent";
 
 // ─── Registry ─────────────────────────────────────────────────
 
@@ -30,6 +33,11 @@ const WIDGET_CONTENT_MAP: Partial<Record<WidgetType, WidgetContentComponent>> =
     recap: RecapWidgetContent,
     screen_time: ScreenTimeWidgetContent,
     ai_tips: AITipsWidgetContent,
+    agenda: AgendaWidgetContent,
+    arena: ArenaWidgetContent,
+    gaming: GamingWidgetContent,
+    weather: WeatherWidgetContent,
+    tasks: TasksWidgetContent,
   };
 
 /**
@@ -43,11 +51,16 @@ export function renderWidgetContent(widget: HomeWidget): React.ReactNode {
 }
 
 export {
+  AgendaWidgetContent,
   AITipsWidgetContent,
+  ArenaWidgetContent,
   FriendsOnlineWidgetContent,
+  GamingWidgetContent,
   MusicWidgetContent,
   RecapWidgetContent,
   ScreenTimeWidgetContent,
+  TasksWidgetContent,
   WalletWidgetContent,
-  WIDGET_CONTENT_MAP,
+  WeatherWidgetContent,
+  WIDGET_CONTENT_MAP
 };

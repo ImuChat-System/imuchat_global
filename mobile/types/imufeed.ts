@@ -186,6 +186,67 @@ export interface FeedSearchResult {
     authors: VideoAuthor[];
 }
 
+// ─── Explore & Trending Types (Sprint S8B) ────────────────────
+
+/** Score trending d'un hashtag (calculé) */
+export interface TrendingHashtagScore {
+    hashtag_id: string;
+    name: string;
+    /** usage_24h × 2 + unique_creators × 5 + views × 0.001 + accélération × 10 */
+    score: number;
+    usage_24h: number;
+    unique_creators: number;
+    views: number;
+    /** Ratio usage_24h / usage_48h_to_24h */
+    acceleration: number;
+}
+
+/** Créateur populaire (classement hebdomadaire) */
+export interface TopCreator {
+    id: string;
+    username: string;
+    display_name: string | null;
+    avatar_url: string | null;
+    is_verified: boolean;
+    followers_count: number;
+    /** Likes reçus cette semaine */
+    weekly_likes: number;
+    /** Nombre de vidéos postées cette semaine */
+    weekly_videos: number;
+    is_following: boolean;
+}
+
+/** Section de la page Explore */
+export type ExploreSectionType =
+    | 'trending_hashtags'
+    | 'top_creators'
+    | 'top_videos'
+    | 'active_challenges';
+
+/** Section Explore avec données chargées */
+export interface ExploreSection {
+    type: ExploreSectionType;
+    title: string;
+    data: TrendingHashtagScore[] | TopCreator[] | ImuFeedVideo[];
+}
+
+/** Données complètes de la page Explore */
+export interface ExploreFeedData {
+    trendingHashtags: TrendingHashtagScore[];
+    topCreators: TopCreator[];
+    topVideos: ImuFeedVideo[];
+    activeChallenges: VideoHashtag[];
+}
+
+/** Page de feed par catégorie */
+export interface CategoryFeedPage {
+    category: VideoCategory;
+    videos: ImuFeedVideo[];
+    cursor: string | null;
+    hasMore: boolean;
+    totalCount: number;
+}
+
 // ─── Algorithm Types (Sprint S7) ──────────────────────────────
 
 /** Événement d'engagement lors du visionnage */

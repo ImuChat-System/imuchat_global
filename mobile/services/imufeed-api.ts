@@ -8,7 +8,9 @@
 
 import { createLogger } from '@/services/logger';
 import type {
+    CategoryFeedPage,
     CommentReportReason,
+    ExploreFeedData,
     FeedComment,
     FeedPage,
     FeedSearchResult,
@@ -21,6 +23,11 @@ import type {
     VideoSound,
     VideoUploadData,
 } from '@/types/imufeed';
+import {
+    fetchActiveChallenges,
+    fetchTopCreatorsWeekly,
+    fetchTrendingHashtagsScored,
+} from './imufeed-trending';
 import { supabase } from './supabase';
 
 const logger = createLogger('ImuFeedAPI');
@@ -800,5 +807,82 @@ export async function fetchBookmarkedVideos(cursor?: string, limit = 20): Promis
         videos,
         cursor: (lastRow as Record<string, unknown>)?.created_at as string ?? null,
         hasMore: videos.length === limit,
+    };
+}
+
+// ─── Explore & Category (Sprint S8B) ─────────────────────────
+
+/** Données complètes de la page Explore */
+export async function fetchExploreData(): Promise<ExploreFeedData> {
+    logger.info('fetchExploreData');
+
+    const [trendingHashtags, topCreators, topVideosPage, activeChallenges] = await Promise.all([
+        fetchTrendingHashtagsScored(15),
+        fetchTopCreatorsWeekly(10),
+        fetchTrendingFeed(undefined, 12),
+        fetchActiveChallenges(8),
+    ]);
+
+    return {
+        trendingHashtags,
+        topCreators,
+        topVideos: topVideosPage.videos,
+        activeChallenges,
+    };
+}
+
+/** Feed filtré par catégorie (paginé) */
+export async function fetchCategoryFeed(
+    category: VideoCategory,
+    cursor?: string,
+    limit = 20,
+): Promise<CategoryFeedPage> {
+    logger.info('fetchCategoryFeed', { category, cursor });
+
+    const { data: userData } = await supabase.auth.getUser();
+    const userId = userData?.user?.id;
+
+    let query = supabase
+        .from('imufeed_videos')
+        .select(`
+      *,
+      profiles!author_id(username, display_name, avatar_url, is_verified, followers_count),
+      imufeed_sounds(*)
+    `)
+        .eq('status', 'published')
+        .eq('visibility', 'public')
+        .eq('category', category)
+        .order('created_at', { ascending: false })
+        .limit(limit);
+
+    if (cursor) {
+        query = query.lt('created_at', cursor);
+    }
+
+    const { data, error } = await query;
+    if (error) {
+        logger.error('fetchCategoryFeed error', error);
+        throw error;
+    }
+
+    const videos = (data ?? []).map((row: Record<string, unknown>) =>
+        mapVideoRow(row, userId ?? undefined)
+    );
+    const lastVideo = videos[videos.length - 1];
+
+    // Total count (approximation via count query)
+    const { count } = await supabase
+        .from('imufeed_videos')
+        .select('id', { count: 'exact', head: true })
+        .eq('status', 'published')
+        .eq('visibility', 'public')
+        .eq('category', category);
+
+    return {
+        category,
+        videos,
+        cursor: lastVideo?.created_at ?? null,
+        hasMore: videos.length === limit,
+        totalCount: count ?? 0,
     };
 }

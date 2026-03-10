@@ -127,8 +127,37 @@ async function fetchWeatherData(_userId: string): Promise<WidgetData> {
     return { temp: null, condition: null };
 }
 
-async function fetchArenaData(_userId: string): Promise<WidgetData> {
-    return { activeTournaments: 0 };
+async function fetchArenaData(userId: string): Promise<WidgetData> {
+    // Récupère rang, points et nombre de concours actifs
+    const [profileRes, countRes, nextRes] = await Promise.all([
+        supabase
+            .from('arena_participants')
+            .select('rank, points')
+            .eq('user_id', userId)
+            .order('points', { ascending: false })
+            .limit(1)
+            .maybeSingle(),
+        supabase
+            .from('contests')
+            .select('id', { count: 'exact', head: true })
+            .eq('status', 'active'),
+        supabase
+            .from('contests')
+            .select('title')
+            .eq('status', 'active')
+            .order('start_at', { ascending: true })
+            .limit(1)
+            .maybeSingle(),
+    ]);
+
+    if (profileRes.error) logger.warn('arena profile fetch failed', profileRes.error.message);
+
+    return {
+        rank: profileRes.data?.rank ?? null,
+        points: profileRes.data?.points ?? 0,
+        activeTournaments: countRes.count ?? 0,
+        nextContest: nextRes.data?.title ?? null,
+    };
 }
 
 async function fetchMusicData(_userId: string): Promise<WidgetData> {
@@ -160,8 +189,28 @@ async function fetchPackagesData(_userId: string): Promise<WidgetData> {
     return { pendingCount: 0 };
 }
 
-async function fetchGamingData(_userId: string): Promise<WidgetData> {
-    return { recentGame: null };
+async function fetchGamingData(userId: string): Promise<WidgetData> {
+    const [recentRes, countRes] = await Promise.all([
+        supabase
+            .from('game_sessions')
+            .select('game_name, score, played_at')
+            .eq('user_id', userId)
+            .order('played_at', { ascending: false })
+            .limit(1)
+            .maybeSingle(),
+        supabase
+            .from('game_sessions')
+            .select('id', { count: 'exact', head: true })
+            .eq('user_id', userId),
+    ]);
+
+    if (recentRes.error) logger.warn('gaming fetch failed', recentRes.error.message);
+
+    const recentGame = recentRes.data
+        ? { name: recentRes.data.game_name, score: recentRes.data.score, played_at: recentRes.data.played_at }
+        : null;
+
+    return { recentGame, totalGames: countRes.count ?? 0 };
 }
 
 // ─── Registry ─────────────────────────────────────────────────

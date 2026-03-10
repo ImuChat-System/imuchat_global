@@ -469,6 +469,18 @@ jobs:
         working-directory: ./desktop-app
         run: pnpm exec tsc --noEmit || true
 
+      - name: Run unit tests with coverage
+        working-directory: ./desktop-app
+        run: pnpm test:coverage
+
+      - name: Upload coverage report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: desktop-coverage
+          path: desktop-app/coverage/
+          retention-days: 14
+
       - name: Build
         working-directory: ./desktop-app
         run: pnpm build || true

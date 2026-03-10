@@ -82,7 +82,7 @@ jest.mock("@/providers/ThemeProvider", () => ({
     background: "#0f0a1a",
     text: "#ffffff",
     textMuted: "#999",
-    primary: "#ec4899",
+    primary: "#6A54A3",
     surface: "#1a1a2e",
     border: "#333",
   }),

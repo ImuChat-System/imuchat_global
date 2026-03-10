@@ -133,10 +133,11 @@ export default function MessageBubble({
 
   /** Renders message content with Markdown formatting */
   const renderContent = () => {
-    const textColor = isOwnMessage ? "#FFFFFF" : colors.text;
-    const codeColor = isOwnMessage ? "rgba(255,255,255,0.85)" : colors.text;
-    const codeBg = isOwnMessage ? "rgba(255,255,255,0.15)" : colors.background;
-    const linkColor = isOwnMessage ? "rgba(200,230,255,1)" : colors.primary;
+    // Both chat bubbles are pastel — always use dark text
+    const textColor = "#1a1a2e";
+    const codeColor = "rgba(26,26,46,0.85)";
+    const codeBg = isOwnMessage ? "rgba(0,0,0,0.06)" : "rgba(0,0,0,0.04)";
+    const linkColor = isOwnMessage ? "#3E2C63" : colors.primary;
 
     if (!markdownSegments) {
       // Plain text — no markdown
@@ -223,8 +224,8 @@ export default function MessageBubble({
           style={[
             styles.bubble,
             isOwnMessage
-              ? { backgroundColor: colors.primary }
-              : { backgroundColor: colors.surface },
+              ? { backgroundColor: colors.chatSent }
+              : { backgroundColor: colors.chatReceived },
             hasMedia && !hasText && styles.mediaBubble,
           ]}
         >
@@ -235,7 +236,7 @@ export default function MessageBubble({
                 styles.replyQuote,
                 {
                   backgroundColor: isOwnMessage
-                    ? "rgba(255,255,255,0.15)"
+                    ? "rgba(0,0,0,0.06)"
                     : colors.background,
                   borderLeftColor: colors.primary,
                 },
@@ -245,9 +246,7 @@ export default function MessageBubble({
                 style={[
                   styles.replyAuthor,
                   {
-                    color: isOwnMessage
-                      ? "rgba(255,255,255,0.9)"
-                      : colors.primary,
+                    color: colors.primary,
                   },
                 ]}
                 numberOfLines={1}
@@ -261,7 +260,7 @@ export default function MessageBubble({
                   styles.replyContent,
                   {
                     color: isOwnMessage
-                      ? "rgba(255,255,255,0.7)"
+                      ? "rgba(26,26,46,0.6)"
                       : colors.textMuted,
                   },
                 ]}
@@ -294,9 +293,7 @@ export default function MessageBubble({
                 styles.messageText,
                 styles.deletedText,
                 {
-                  color: isOwnMessage
-                    ? "rgba(255,255,255,0.6)"
-                    : colors.textMuted,
+                  color: isOwnMessage ? "rgba(26,26,46,0.5)" : colors.textMuted,
                 },
               ]}
             >
@@ -313,7 +310,7 @@ export default function MessageBubble({
                 styles.translationContainer,
                 {
                   borderTopColor: isOwnMessage
-                    ? "rgba(255,255,255,0.2)"
+                    ? "rgba(0,0,0,0.1)"
                     : colors.border,
                 },
               ]}
@@ -322,7 +319,7 @@ export default function MessageBubble({
                 style={[
                   styles.messageText,
                   {
-                    color: isOwnMessage ? "#FFFFFF" : colors.text,
+                    color: isOwnMessage ? "#1a1a2e" : colors.text,
                   },
                 ]}
               >
@@ -333,7 +330,7 @@ export default function MessageBubble({
                   styles.translatedIndicator,
                   {
                     color: isOwnMessage
-                      ? "rgba(255,255,255,0.5)"
+                      ? "rgba(26,26,46,0.5)"
                       : colors.textMuted,
                   },
                 ]}
@@ -350,14 +347,14 @@ export default function MessageBubble({
             <View style={styles.translationLoading}>
               <ActivityIndicator
                 size="small"
-                color={isOwnMessage ? "rgba(255,255,255,0.7)" : colors.primary}
+                color={isOwnMessage ? "rgba(26,26,46,0.6)" : colors.primary}
               />
               <Text
                 style={[
                   styles.translatingText,
                   {
                     color: isOwnMessage
-                      ? "rgba(255,255,255,0.5)"
+                      ? "rgba(26,26,46,0.5)"
                       : colors.textMuted,
                   },
                 ]}
@@ -375,7 +372,7 @@ export default function MessageBubble({
                   styles.editedText,
                   {
                     color: isOwnMessage
-                      ? "rgba(255,255,255,0.6)"
+                      ? "rgba(26,26,46,0.5)"
                       : colors.textMuted,
                   },
                 ]}
@@ -387,9 +384,7 @@ export default function MessageBubble({
               style={[
                 styles.timestamp,
                 {
-                  color: isOwnMessage
-                    ? "rgba(255,255,255,0.7)"
-                    : colors.textMuted,
+                  color: isOwnMessage ? "rgba(26,26,46,0.6)" : colors.textMuted,
                 },
               ]}
             >
@@ -401,9 +396,7 @@ export default function MessageBubble({
                 style={[
                   styles.readReceipt,
                   {
-                    color: isRead
-                      ? "rgba(255,255,255,0.9)"
-                      : "rgba(255,255,255,0.5)",
+                    color: isRead ? "rgba(26,26,46,0.8)" : "rgba(26,26,46,0.4)",
                   },
                 ]}
               >

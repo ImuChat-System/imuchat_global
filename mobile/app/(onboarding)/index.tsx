@@ -32,14 +32,14 @@ const SLIDES: OnboardingSlide[] = [
     icon: "chatbubbles",
     titleKey: "onboarding.slide1Title",
     descriptionKey: "onboarding.slide1Description",
-    color: "#6366f1",
+    color: "#6A54A3",
   },
   {
     id: "2",
     icon: "videocam",
     titleKey: "onboarding.slide2Title",
     descriptionKey: "onboarding.slide2Description",
-    color: "#ec4899",
+    color: "#7FD9E5",
   },
   {
     id: "3",
@@ -53,7 +53,7 @@ const SLIDES: OnboardingSlide[] = [
     icon: "shield-checkmark",
     titleKey: "onboarding.slide4Title",
     descriptionKey: "onboarding.slide4Description",
-    color: "#f59e0b",
+    color: "#D4A96A",
   },
 ];
 

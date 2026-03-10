@@ -21,7 +21,7 @@ export default function XPLevelsScreen() {
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
       {/* ── Level card ──────────────────────────────────────────── */}
-      <View style={[styles.levelCard, { backgroundColor: colors.primary }]}>
+      <View style={[styles.levelCard, { backgroundColor: colors.gold }]}>
         <Text style={styles.levelNumber}>
           {t("gamification.levelLabel", { level: userLevel.level })}
         </Text>
@@ -77,7 +77,7 @@ export default function XPLevelsScreen() {
                   {new Date(item.timestamp).toLocaleDateString()}
                 </Text>
               </View>
-              <Text style={[styles.historyXP, { color: colors.primary }]}>
+              <Text style={[styles.historyXP, { color: colors.gold }]}>
                 +{item.xp} XP
               </Text>
             </View>
@@ -112,7 +112,7 @@ const styles = StyleSheet.create({
   },
   progressBarFill: {
     height: "100%",
-    backgroundColor: "#fff",
+    backgroundColor: "#FFF5E3",
     borderRadius: 5,
   },
   progressLabel: {

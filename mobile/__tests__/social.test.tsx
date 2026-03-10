@@ -74,7 +74,7 @@ jest.mock("@/providers/ThemeProvider", () => ({
         text: "#fff",
         textMuted: "#aaa",
         border: "#333",
-        primary: "#ec4899",
+        primary: "#6A54A3",
       },
     },
     mode: "dark",
@@ -87,7 +87,7 @@ jest.mock("@/providers/ThemeProvider", () => ({
     text: "#fff",
     textMuted: "#aaa",
     border: "#333",
-    primary: "#ec4899",
+    primary: "#6A54A3",
   }),
   useSpacing: () => ({ xs: 4, sm: 8, md: 12, lg: 16, xl: 24 }),
 }));

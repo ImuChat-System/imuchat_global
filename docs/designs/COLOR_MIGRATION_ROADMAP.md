@@ -260,13 +260,31 @@ Utiliser le gradient signature pour :
 
 ## ✅ Checklist récapitulative
 
-- [ ] Phase 1 : Types `BrandColors` et `ChatColors` dans shared-types
-- [ ] Phase 2 : Variables CSS brand + gold + chat dans globals.css
-- [ ] Phase 2 : Tokens Tailwind brand/chat dans tailwind.config.ts
-- [ ] Phase 2 : Gradient signature mis à jour
-- [ ] Phase 3 : ui-kit primary rose → violet
-- [ ] Phase 3 : site-vitrine secondary rose → violet
-- [ ] Phase 3 : Revue visuelle composants mobile
-- [ ] Phase 4 : Couleurs chat appliquées aux bulles messagerie
-- [ ] Phase 4 : Gamme Gold utilisée dans la gamification
-- [ ] Phase 4 : Gradient signature sur splash/onboarding
+- [x] Phase 1 : Types `BrandColors` et `ChatColors` dans shared-types
+- [x] Phase 2 : Variables CSS brand + gold + chat dans globals.css (light + dark)
+- [x] Phase 2 : Tokens Tailwind brand/chat dans tailwind.config.ts (web-app)
+- [x] Phase 2 : Gradient signature mis à jour (#513B75 → #7FD9E5)
+- [x] Phase 2 : Desktop-app tokens brand/gold/chat ajoutés (globals.css + index.css)
+- [x] Phase 3 : ui-kit native tokens primary rose → violet
+- [x] Phase 3 : site-vitrine secondary rose → teal + tokens brand ajoutés
+- [x] Phase 3 : desktop-app primary rose → violet (globals.css, index.css, splash.ts)
+- [x] Phase 3 : mobile dark theme primary rose → violet (theme-presets.ts)
+- [x] Phase 3 : mobile FloatingActionButton shadowColor aligné
+- [x] Phase 3 : 24 fichiers de tests mobile mis à jour (mocks primary)
+- [x] ✅ Validation : 350/350 tests desktop + 2728/2728 tests mobile passent
+- [ ] Phase 3 : Revue visuelle composants mobile (manuelle)
+- [x] Phase 4 : Couleurs chat appliquées aux bulles messagerie
+  - ui-kit ChatBubble → `bg-chat-sent` / `bg-chat-received` + `text-chat-foreground`
+  - mobile MessageBubble → `colors.chatSent` / `colors.chatReceived` + texte sombre
+  - web-app AI chat → `bg-chat-sent` / `bg-chat-received`
+  - desktop-app tokens alias `--color-chat-*` (compatibilité ui-kit)
+- [x] Phase 4 : Gamme Gold utilisée dans la gamification
+  - mobile badges legendary → `#D4A96A` (brand gold)
+  - mobile XP levels card → `colors.gold` + barre XP `#FFF5E3`
+  - web-app badges-showcase → `bg-brand-gold-*` + `ring-brand-gold-*`
+- [x] Phase 4 : Gradient signature sur splash/onboarding
+  - web-app onboarding logo + bouton → `from-brand-purple-700 to-[#7FD9E5]`
+  - web-app onboarding slide → gradient brand dans icône
+  - desktop-app splash title → gradient text `#513B75 → #7FD9E5`
+  - mobile onboarding slides → couleurs brand (purple, cyan, gold)
+- [x] ✅ Validation Phase 4 : 349/350 tests desktop + 2728/2728 tests mobile

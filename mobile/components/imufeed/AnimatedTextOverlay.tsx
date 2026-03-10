@@ -13,13 +13,14 @@ import type { AnimatedTextStyle, PlacedText } from "@/types/imufeed";
 import { Ionicons } from "@expo/vector-icons";
 import React, { useEffect, useRef } from "react";
 import {
-  Animated,
-  Dimensions,
-  PanResponder,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
+    Animated,
+    Dimensions,
+    PanResponder,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View,
+    type ViewStyle,
 } from "react-native";
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get("window");
@@ -150,22 +151,23 @@ function DraggableText({ textItem, onUpdate, onRemove }: DraggableTextProps) {
 
   const animatedStyle = getAnimatedStyle(textItem.style, animValue);
 
+  // Animated transform arrays mix ValueXY, interpolations, and static values.
+  // React Native handles this at runtime; TypeScript's transform union is too strict.
+  const dynamicStyle = {
+    transform: [
+      ...pan.getTranslateTransform(),
+      { rotate: `${textItem.rotation}deg` },
+      { scale: textItem.scale },
+      ...(animatedStyle.transform ?? []),
+    ],
+    opacity: animatedStyle.opacity ?? 1,
+  } as unknown as Animated.WithAnimatedObject<ViewStyle>;
+
   return (
     <Animated.View
       testID={`text-${textItem.id}`}
       {...panResponder.panHandlers}
-      style={[
-        styles.textContainer,
-        {
-          transform: [
-            ...pan.getTranslateTransform(),
-            { rotate: `${textItem.rotation}deg` },
-            { scale: textItem.scale },
-            ...(animatedStyle.transform ?? []),
-          ],
-          opacity: animatedStyle.opacity ?? 1,
-        },
-      ]}
+      style={[styles.textContainer, dynamicStyle]}
     >
       <Text
         style={[
@@ -192,15 +194,19 @@ function DraggableText({ textItem, onUpdate, onRemove }: DraggableTextProps) {
 
 // ─── Animation helpers ────────────────────────────────────────
 
+type AnimatedTransformEntry =
+  | { translateY: Animated.AnimatedInterpolation<string | number> }
+  | { scale: Animated.AnimatedInterpolation<string | number> };
+
+interface AnimatedStyleResult {
+  transform?: AnimatedTransformEntry[];
+  opacity?: Animated.AnimatedInterpolation<string | number> | Animated.Value;
+}
+
 function getAnimatedStyle(
   style: AnimatedTextStyle,
   animValue: Animated.Value,
-): {
-  transform?: Array<
-    Record<string, Animated.AnimatedInterpolation<string | number>>
-  >;
-  opacity?: Animated.AnimatedInterpolation<string | number>;
-} {
+): AnimatedStyleResult {
   switch (style) {
     case "fade_in":
       return { opacity: animValue };

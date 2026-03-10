@@ -69,6 +69,14 @@ export interface ThemeColors {
     busy: string;
     offline: string;
 
+    // Chat
+    chatSent: string;
+    chatReceived: string;
+    chatHighlight: string;
+
+    // Brand accent
+    gold: string;
+
     // Overlay
     transparent: string;
     overlay: string;
@@ -137,6 +145,14 @@ const lightColors: ThemeColors = {
     busy: "#ef4444",
     offline: "rgba(31,41,55,0.4)",
 
+    // Chat
+    chatSent: "#AFE3EB",
+    chatReceived: "#F7F3FB",
+    chatHighlight: "#FFE7C7",
+
+    // Brand accent
+    gold: "#D4A96A",
+
     // Overlay
     transparent: "transparent",
     overlay: "rgba(0,0,0,0.3)",
@@ -152,11 +168,11 @@ const darkColors: ThemeColors = {
     surfaceHover: "rgba(255,255,255,0.1)",
     surfaceActive: "rgba(255,255,255,0.15)",
 
-    // Primary (Pink)
-    primary: "#ec4899",
-    primaryHover: "#f472b6",
-    primaryActive: "#db2777",
-    primaryGradientEnd: "#a855f7",
+    // Primary (Purple — brand ImuChat)
+    primary: "#6A54A3",
+    primaryHover: "#513B75",
+    primaryActive: "#3E2C63",
+    primaryGradientEnd: "#7FD9E5",
 
     // Secondary (Cyan)
     secondary: "#06b6d4",
@@ -188,13 +204,21 @@ const darkColors: ThemeColors = {
     // Borders
     border: "rgba(255,255,255,0.1)",
     borderHover: "rgba(255,255,255,0.2)",
-    borderFocus: "#ec4899",
+    borderFocus: "#6A54A3",
 
     // Status
     online: "#22c55e",
     away: "#f59e0b",
     busy: "#ef4444",
     offline: "rgba(255,255,255,0.4)",
+
+    // Chat
+    chatSent: "#1a3a4a",
+    chatReceived: "#2a2040",
+    chatHighlight: "#3d2f1a",
+
+    // Brand accent
+    gold: "#D4A96A",
 
     // Overlay
     transparent: "transparent",
@@ -255,6 +279,14 @@ const kawaiiColors: ThemeColors = {
     busy: "#fca5a5",
     offline: "rgba(131,24,67,0.35)",
 
+    // Chat
+    chatSent: "#fce4ec",
+    chatReceived: "#fff0f3",
+    chatHighlight: "#FFE7C7",
+
+    // Brand accent
+    gold: "#D4A96A",
+
     // Overlay
     transparent: "transparent",
     overlay: "rgba(131,24,67,0.25)",
@@ -313,6 +345,14 @@ const proColors: ThemeColors = {
     away: "#f59e0b",
     busy: "#ef4444",
     offline: "rgba(241,245,249,0.4)",
+
+    // Chat
+    chatSent: "#1a2a3a",
+    chatReceived: "#1e293b",
+    chatHighlight: "#3d2f1a",
+
+    // Brand accent
+    gold: "#D4A96A",
 
     // Overlay
     transparent: "transparent",
@@ -373,6 +413,14 @@ const neonColors: ThemeColors = {
     busy: "#f87171",
     offline: "rgba(240,253,244,0.35)",
 
+    // Chat
+    chatSent: "#1a0033",
+    chatReceived: "#15002a",
+    chatHighlight: "#3d2f1a",
+
+    // Brand accent
+    gold: "#D4A96A",
+
     // Overlay
     transparent: "transparent",
     overlay: "rgba(12,0,21,0.6)",
@@ -431,6 +479,14 @@ const oceanColors: ThemeColors = {
     away: "#fbbf24",
     busy: "#f87171",
     offline: "rgba(240,253,250,0.35)",
+
+    // Chat
+    chatSent: "#0a3a3a",
+    chatReceived: "#022c22",
+    chatHighlight: "#3d2f1a",
+
+    // Brand accent
+    gold: "#D4A96A",
 
     // Overlay
     transparent: "transparent",

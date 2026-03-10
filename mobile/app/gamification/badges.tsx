@@ -24,7 +24,7 @@ const RARITY_COLORS: Record<BadgeRarity, string> = {
   common: "#9e9e9e",
   rare: "#2196f3",
   epic: "#9c27b0",
-  legendary: "#ff9800",
+  legendary: "#D4A96A",
 };
 
 const RARITY_FILTERS: (BadgeRarity | "all")[] = [

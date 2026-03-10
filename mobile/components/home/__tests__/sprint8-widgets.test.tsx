@@ -10,7 +10,7 @@ import React from "react";
 
 jest.mock("@/providers/ThemeProvider", () => ({
   useColors: () => ({
-    primary: "#ec4899",
+    primary: "#6A54A3",
     card: "#1a1a2e",
     surface: "#1a1a2e",
     background: "#0f0a1a",

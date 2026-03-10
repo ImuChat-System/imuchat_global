@@ -200,3 +200,74 @@ export interface GamificationState {
     equippedSkins: Record<SkinCategory, string | null>;
     rewardHistory: RewardHistoryItem[];
 }
+
+// ---------------------------------------------------------------------------
+// Sprint S12 — ImuFeed Gamification
+// ---------------------------------------------------------------------------
+
+/** Actions XP créateur ImuFeed avec points associés */
+export type CreatorXPAction =
+    | 'publish_video'
+    | 'like_received'
+    | 'comment_received'
+    | 'views_1k'
+    | 'views_10k'
+    | 'challenge_completed'
+    | 'share_received'
+    | 'first_video'
+    | 'went_viral'
+    | 'collab';
+
+/** Configuration XP par action */
+export interface XPConfig {
+    action: CreatorXPAction;
+    xp: number;
+    label: string;
+}
+
+/** Niveau créateur avec tier */
+export interface CreatorLevel {
+    user_id: string;
+    level: number;
+    total_xp: number;
+    tier: LevelTier;
+    xp_for_next_level: number;
+    current_xp_in_level: number;
+}
+
+/** Badge du catalogue créateur */
+export interface CreatorBadge {
+    id: string;
+    name: string;
+    description: string;
+    icon: string;
+    rarity: BadgeRarity;
+    requirement: string;
+    unlocked: boolean;
+    unlocked_at?: string;
+}
+
+/** Défi quotidien */
+export type ChallengeActionType = 'publish' | 'like' | 'comment' | 'watch' | 'share';
+
+export interface DailyChallenge {
+    id: string;
+    title: string;
+    description: string;
+    action_type: ChallengeActionType;
+    target: number;
+    current: number;
+    xp_reward: number;
+    completed: boolean;
+    claimed: boolean;
+}
+
+/** Entrée du classement créateur */
+export interface CreatorLeaderboardEntry {
+    user_id: string;
+    username: string;
+    total_xp: number;
+    level: number;
+    tier: LevelTier;
+    rank: number;
+}

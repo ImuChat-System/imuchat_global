@@ -2,6 +2,7 @@
 
 **Date de création :** 9 mars 2026  
 **Documents source :**  
+
 - `ROADMAP_MOBILE_GLOBAL.md` — 3 axes, 47 sprints locaux  
 - `ROADMAP_MOBILE_NAVIGATION_HUB.md` — Axe A, 19 sprints, 38 semaines  
 - `ROADMAP_IMUFEED_VIDEO.md` — Axe B, 24 sprints, 48 semaines  
@@ -58,6 +59,7 @@
 | 11-12 | S6 | Widgets | WidgetCard composant base, WidgetGrid (ScrollView/FlatList), 4 types initiaux | `NAV_HUB` Sprint 6 |
 
 **Livrables T1 Axe A :**
+
 - ✅ Home Hub fonctionnel avec données réelles (remplace mock actuel ~50%)
 - ✅ FAB universel avec 7 actions + contextuel
 - ✅ Système de widgets (base)
@@ -74,6 +76,7 @@
 | 11-12 | S6 | Social | Hashtags, tendances, page hashtag dédiée, mentions | `IMUFEED` Sprint 6 |
 
 **Livrables T1 Axe B :**
+
 - ✅ Feed vertical fonctionnel avec lecture vidéo
 - ✅ Upload + capture caméra
 - ✅ Éditeur vidéo basique
@@ -97,6 +100,7 @@
 | 23-24 | S12 | Onglets Enrichis | Watch tab enrichi (catégories, Watch Party), Profil enrichi (Wallet) | `NAV_HUB` Sprint 12 |
 
 **Livrables T2 Axe A :**
+
 - ✅ 12 types de widgets complets avec drag & drop
 - ✅ Personnalisation IA (comportement + time-of-day)
 - ✅ Social avec sub-tabs (Feed/ImuFeed/Stories)
@@ -114,12 +118,14 @@
 | 23-24 | S12 | Créateurs | Profil créateur enrichi, XP/niveaux/badges (6 tiers), statistiques | `IMUFEED` Sprint 12 |
 
 **Livrables T2 Axe B :**
+
 - ✅ Algo "Pour Toi" fonctionnel
 - ✅ Page Explore avec recherche
 - ✅ Éditeur avancé (musique, filtres IA, remix/duo)
 - ✅ Système gamification créateurs
 
 **Convergence T2 :**
+
 - S11 Axe A (Social sub-tabs) intègre ImuFeed comme sous-onglet → dépendance Axe B Sprint 6+
 - S12 Axe A (Watch enrichi) peut afficher du contenu ImuFeed → dépendance Axe B Sprint 7+
 
@@ -154,11 +160,13 @@
 | 37-38 | S19 | IC-M2 | Live2D native bridge iOS/Android, model loader, animations | `COMPANION` IC-M2 |
 
 **Livrables T3 :**
+
 - ✅ Axe A terminé (Sprint 15) : performance, offline, a11y
 - ✅ ImuFeed : monétisation + live streaming opérationnel
 - ✅ ImuCompanion : core + début rendering Live2D
 
 **Convergence T3 :**
+
 - Le dashboard créateur (Axe B S13) nécessite le Wallet (Axe A S12 Profil enrichi)
 - ImuCompanion (IC-M1) réutilise l'infrastructure Alice IA (DEV-024, prérequis ✅)
 
@@ -200,6 +208,7 @@
 | 53-56 | S27-S28 | IC-M6 | Intégration modules (Chat→résumé, Store→reco), offline | `COMPANION` IC-M6 |
 
 **Livrables T4 :**
+
 - ✅ ImuFeed complet (modération IA, live, PiP, intégration écosystème)
 - ✅ Cross-Domain intégrés (Gaming, Arena, Finance)
 - ✅ ImuCompanion complet (Live2D, FSM, TTS, archétypes, appels avatar)

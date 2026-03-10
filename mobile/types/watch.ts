@@ -3,6 +3,9 @@
  * Couvre les vidéos, Watch Parties et l'état du lecteur vidéo.
  */
 
+/** Sous-onglet Watch (Sprint S12) */
+export type WatchSubTab = 'videos' | 'podcasts' | 'music';
+
 /** Source de contenu vidéo */
 export type VideoSource = 'upload' | 'youtube' | 'twitch' | 'external';
 
@@ -90,4 +93,39 @@ export interface WatchSection {
     title: string;
     type: 'featured' | 'live_parties' | 'upcoming' | 'trending' | 'categories';
     items: WatchItem[] | WatchParty[];
+}
+
+// ─── Sprint S12 — Watch enrichi ───────────────────────────────
+
+/** Catégorie dynamique depuis Supabase */
+export interface DynamicWatchCategory {
+    id: string;
+    slug: string;
+    label: string;
+    emoji: string | null;
+    sort_order: number;
+    is_active: boolean;
+}
+
+/** Données pour créer une Watch Party */
+export interface WatchPartyCreateInput {
+    title: string;
+    description?: string;
+    video_id?: string;
+    category_slug?: string;
+    is_public: boolean;
+    max_viewers?: number;
+    chat_enabled: boolean;
+    scheduled_for?: string;
+    invited_user_ids?: string[];
+}
+
+/** Invitation Watch Party */
+export interface WatchPartyInvitation {
+    id: string;
+    party_id: string;
+    inviter_id: string;
+    invitee_id: string;
+    status: 'pending' | 'accepted' | 'declined';
+    created_at: string;
 }

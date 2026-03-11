@@ -33,6 +33,18 @@
             "title": "ImuStore",
             "description": "Mini-apps, thèmes, stickers"
         },
+        "arena": {
+            "title": "ImuArena",
+            "description": "Jeux et tournois"
+        },
+        "pay": {
+            "title": "ImuPay",
+            "description": "Portefeuille et paiements"
+        },
+        "creators": {
+            "title": "Créateurs",
+            "description": "Espace créateurs et monétisation"
+        },
         "privacy": {
             "title": "Vie privée",
             "description": "Protection des données"
@@ -109,13 +121,16 @@
         "title": "Contacter le support",
         "subtitle": "Nous sommes là pour vous aider",
         "form": {
+            "title": "Envoyez-nous un message",
             "name": "Votre nom",
             "email": "Adresse email",
             "subject": "Sujet",
             "message": "Votre message",
-            "submit": "Envoyer le message"
+            "submit": "Envoyer le message",
+            "success": "Message envoyé avec succès ! Nous reviendrons vers vous bientôt."
         },
         "channels": {
+            "title": "Choisissez un canal",
             "chat": {
                 "title": "Chat en direct",
                 "description": "Discutez avec notre équipe",
@@ -132,5 +147,36 @@
                 "cta": "Visiter le forum"
             }
         }
+    },
+    "statusPage": {
+        "title": "État des services",
+        "subtitle": "Statut en temps réel de tous les services ImuChat",
+        "allOperational": "Tous les systèmes opérationnels",
+        "partialOutage": "Incident en cours",
+        "majorOutage": "Panne majeure",
+        "operational": "Opérationnel",
+        "degraded": "Dégradé",
+        "down": "Hors service",
+        "services": {
+            "messaging": "Messagerie",
+            "voiceCalls": "Appels vocaux",
+            "videoCalls": "Appels vidéo",
+            "alice": "Alice IA",
+            "store": "ImuStore",
+            "office": "ImuOffice",
+            "pay": "ImuPay",
+            "api": "API"
+        },
+        "lastUpdated": "Dernière mise à jour",
+        "recentIncidents": "Incidents récents",
+        "noIncidents": "Aucun incident récent",
+        "subscribe": "S'abonner aux alertes"
+    },
+    "searchPage": {
+        "title": "Rechercher dans l'aide",
+        "placeholder": "Tapez votre recherche...",
+        "noResults": "Aucun résultat pour",
+        "resultsFor": "résultats pour",
+        "tryAgain": "Essayez d'autres termes ou parcourez les catégories"
     }
 }

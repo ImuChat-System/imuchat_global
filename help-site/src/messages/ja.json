@@ -33,6 +33,18 @@
             "title": "ImuStore",
             "description": "ミニアプリ、テーマ、スタンプ"
         },
+        "arena": {
+            "title": "ImuArena",
+            "description": "ゲームとトーナメント"
+        },
+        "pay": {
+            "title": "ImuPay",
+            "description": "ウォレットと決済"
+        },
+        "creators": {
+            "title": "クリエイター",
+            "description": "クリエイタースペースと収益化"
+        },
         "privacy": {
             "title": "プライバシー",
             "description": "データ保護"
@@ -109,13 +121,16 @@
         "title": "サポートに連絡",
         "subtitle": "お手伝いします",
         "form": {
+            "title": "メッセージを送る",
             "name": "お名前",
             "email": "メールアドレス",
             "subject": "件名",
             "message": "メッセージ",
-            "submit": "送信"
+            "submit": "送信",
+            "success": "メッセージが送信されました！まもなくご連絡します。"
         },
         "channels": {
+            "title": "チャンネルを選択",
             "chat": {
                 "title": "ライブチャット",
                 "description": "チームとチャット",
@@ -132,5 +147,36 @@
                 "cta": "フォーラムへ"
             }
         }
+    },
+    "statusPage": {
+        "title": "サービス状態",
+        "subtitle": "全ImuChatサービスのリアルタイムステータス",
+        "allOperational": "全システム正常稼働中",
+        "partialOutage": "部分的障害",
+        "majorOutage": "大規模障害",
+        "operational": "正常",
+        "degraded": "低下",
+        "down": "停止",
+        "services": {
+            "messaging": "メッセージ",
+            "voiceCalls": "音声通話",
+            "videoCalls": "ビデオ通話",
+            "alice": "Alice AI",
+            "store": "ImuStore",
+            "office": "ImuOffice",
+            "pay": "ImuPay",
+            "api": "API"
+        },
+        "lastUpdated": "最終更新",
+        "recentIncidents": "最近のインシデント",
+        "noIncidents": "最近のインシデントなし",
+        "subscribe": "アラートを購読"
+    },
+    "searchPage": {
+        "title": "ヘルプを検索",
+        "placeholder": "検索語を入力...",
+        "noResults": "検索結果なし",
+        "resultsFor": "の検索結果",
+        "tryAgain": "他のキーワードを試すか、カテゴリから探す"
     }
 }

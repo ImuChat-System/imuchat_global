@@ -33,6 +33,18 @@
             "title": "ImuStore",
             "description": "Mini-Apps, Designs, Sticker"
         },
+        "arena": {
+            "title": "ImuArena",
+            "description": "Spiele und Turniere"
+        },
+        "pay": {
+            "title": "ImuPay",
+            "description": "Wallet und Zahlungen"
+        },
+        "creators": {
+            "title": "Creators",
+            "description": "Creator-Bereich und Monetarisierung"
+        },
         "privacy": {
             "title": "Datenschutz",
             "description": "Schutz Ihrer Daten"
@@ -109,13 +121,16 @@
         "title": "Support kontaktieren",
         "subtitle": "Wir sind hier, um Ihnen zu helfen",
         "form": {
+            "title": "Senden Sie uns eine Nachricht",
             "name": "Ihr Name",
             "email": "E-Mail-Adresse",
             "subject": "Betreff",
             "message": "Ihre Nachricht",
-            "submit": "Nachricht senden"
+            "submit": "Nachricht senden",
+            "success": "Nachricht erfolgreich gesendet! Wir melden uns bald."
         },
         "channels": {
+            "title": "Wählen Sie einen Kanal",
             "chat": {
                 "title": "Live-Chat",
                 "description": "Chat mit unserem Team",
@@ -132,5 +147,36 @@
                 "cta": "Forum besuchen"
             }
         }
+    },
+    "statusPage": {
+        "title": "Dienststatus",
+        "subtitle": "Echtzeit-Status aller ImuChat-Dienste",
+        "allOperational": "Alle Systeme betriebsbereit",
+        "partialOutage": "Teilweiser Ausfall",
+        "majorOutage": "Größerer Ausfall",
+        "operational": "Betriebsbereit",
+        "degraded": "Beeinträchtigt",
+        "down": "Ausgefallen",
+        "services": {
+            "messaging": "Messaging",
+            "voiceCalls": "Sprachanrufe",
+            "videoCalls": "Videoanrufe",
+            "alice": "Alice KI",
+            "store": "ImuStore",
+            "office": "ImuOffice",
+            "pay": "ImuPay",
+            "api": "API"
+        },
+        "lastUpdated": "Zuletzt aktualisiert",
+        "recentIncidents": "Aktuelle Vorfälle",
+        "noIncidents": "Keine aktuellen Vorfälle",
+        "subscribe": "Benachrichtigungen abonnieren"
+    },
+    "searchPage": {
+        "title": "Hilfe durchsuchen",
+        "placeholder": "Suche eingeben...",
+        "noResults": "Keine Ergebnisse für",
+        "resultsFor": "Ergebnisse für",
+        "tryAgain": "Versuchen Sie andere Begriffe oder durchsuchen Sie die Kategorien"
     }
 }

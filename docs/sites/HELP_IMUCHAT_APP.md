@@ -155,19 +155,22 @@ Widget IA intégré dans toutes les pages :
 
 ## 📅 Roadmap
 
-### Phase 1 (Semaines 1-3)
-- [ ] Page d'accueil + recherche
-- [ ] Structure catégories
-- [ ] 50 premiers articles (getting-started, account, messaging)
-- [ ] Page `/contact`
-- [ ] i18n FR/EN
+### Phase 1 (Semaines 1-3) — ✅ Complété
+- [x] Page d'accueil + recherche
+- [x] Structure catégories (11 catégories)
+- [x] Articles de base (getting-started, account, messaging, alice, office, store, arena, pay, creators, privacy, billing)
+- [x] Page `/contact` avec formulaire et canaux
+- [x] Page `/getting-started` avec guide 4 étapes
+- [x] Page `/status` avec état des services
+- [x] Page `/search` avec recherche full-text
+- [x] i18n FR/EN/DE/ES/JA
 
-### Phase 2 (Semaines 4-6)
-- [ ] Intégration Alice Assistant
-- [ ] Status page
-- [ ] Articles ImuOffice, Store, Arena, Pay
-- [ ] Algolia DocSearch
-- [ ] Traductions DE/ES/JA
+### Phase 2 (Semaines 4-6) — 🚧 En cours
+- [ ] Intégration Alice Assistant (widget IA)
+- [ ] Algolia DocSearch pour recherche avancée
+- [ ] Plus d'articles de contenu (objectif 50+)
+- [ ] Feedback 👍/👎 avec Supabase
+- [ ] Analytics (Plausible)
 
 ---
 

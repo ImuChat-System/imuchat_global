@@ -638,24 +638,31 @@ import { CallsModule } from '@imuchat/platform-core/client'
 
 ---
 
-#### S20 — ImuFeed (Semaines 39-40)
+#### S20 — ImuFeed (Semaines 39-40) ✅ COMPLET
 
 **Objectif :** Feed social complet  
 **Réf. 50F :** Groupe 5 — Mini-apps sociales
 
-| # | Tâche | Fichiers |
-|---|-------|----------|
-| 20.1 | Feed service | `src/services/feed-service.ts` |
-| 20.2 | Feed timeline | `src/app/feed/FeedPage.tsx` |
-| 20.3 | Create post (texte, image, vidéo) | `src/components/feed/CreatePost.tsx` |
-| 20.4 | Comments / likes / share | `src/components/feed/PostActions.tsx` |
-| 20.5 | Stories viewer & creation | `src/app/feed/StoriesPage.tsx` |
+| # | Tâche | Fichiers | Statut |
+|---|-------|----------|--------|
+| 20.1 | Feed service | `src/services/feed-service.ts` | ✅ |
+| 20.2 | Feed timeline | `src/app/feed/FeedPage.tsx` | ✅ |
+| 20.3 | Create post (texte, image, vidéo) | `src/components/feed/CreatePost.tsx` | ✅ |
+| 20.4 | Comments / likes / share | `src/components/feed/PostActions.tsx` | ✅ |
+| 20.5 | Stories viewer & creation | `src/app/feed/StoriesPage.tsx` | ✅ |
 
-**🏁 Milestone M8 :** Feed lancé
+**Livrables supplémentaires :**
+- `supabase_social_feed.sql` — 6 tables, triggers, RLS
+- Routes `/feed` et `/feed/stories` (lazy-loaded)
+- Sidebar navigation entry (📰)
+- i18n 7 locales (fr/en/ja/es/ar/zh/pt)
+- 77 tests meta-verification (`sprint20-imufeed.test.ts`)
+
+**🏁 Milestone M8 :** Feed lancé ✅
 
 ---
 
-#### S21 — Profil Social & Events (Semaines 41-42)
+#### S21 — Profil Social & Events (Semaines 41-42) ✅
 
 **Objectif :** Profil social étendu, événements
 
@@ -666,6 +673,20 @@ import { CallsModule } from '@imuchat/platform-core/client'
 | 21.3 | Event creation/RSVP | `src/app/events/CreateEvent.tsx` |
 | 21.4 | Location/map features | `src/components/shared/MapView.tsx` |
 | 21.5 | Activity feed | `src/components/social/ActivityFeed.tsx` |
+
+**Livrables S21 :**
+- `events-service.ts` — CRUD événements + système RSVP complet
+- `ExtendedProfile.tsx` — Profil social avec onglets (posts, médias, à propos), compteurs amis/posts
+- `EventsPage.tsx` — Listing événements avec filtres catégorie/recherche, cartes RSVP
+- `CreateEvent.tsx` — Formulaire création événement (titre, description, dates, lieu/en ligne, catégorie)
+- `MapView.tsx` — Composant carte/localisation (OpenStreetMap)
+- `ActivityFeed.tsx` — Flux d'activité avec types multiples (post, event, comment, like)
+- Routes `/events`, `/events/create`, `/profile/:userId` (lazy-loaded)
+- Sidebar navigation entry (🎉)
+- i18n 7 locales — sections events, activity, profile étendu
+- 79 tests meta-verification (`sprint21-social-events.test.ts`)
+
+**🏁 Milestone :** Profil Social & Events complet ✅
 
 ---
 

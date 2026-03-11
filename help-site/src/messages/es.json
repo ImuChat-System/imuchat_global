@@ -33,6 +33,18 @@
             "title": "ImuStore",
             "description": "Mini-apps, temas, stickers"
         },
+        "arena": {
+            "title": "ImuArena",
+            "description": "Juegos y torneos"
+        },
+        "pay": {
+            "title": "ImuPay",
+            "description": "Cartera y pagos"
+        },
+        "creators": {
+            "title": "Creadores",
+            "description": "Espacio de creadores y monetización"
+        },
         "privacy": {
             "title": "Privacidad",
             "description": "Protección de datos"
@@ -109,13 +121,16 @@
         "title": "Contactar soporte",
         "subtitle": "Estamos aquí para ayudarte",
         "form": {
+            "title": "Envíanos un mensaje",
             "name": "Tu nombre",
             "email": "Correo electrónico",
             "subject": "Asunto",
             "message": "Tu mensaje",
-            "submit": "Enviar mensaje"
+            "submit": "Enviar mensaje",
+            "success": "¡Mensaje enviado con éxito! Te responderemos pronto."
         },
         "channels": {
+            "title": "Elige un canal",
             "chat": {
                 "title": "Chat en vivo",
                 "description": "Chatea con nuestro equipo",
@@ -132,5 +147,36 @@
                 "cta": "Visitar foro"
             }
         }
+    },
+    "statusPage": {
+        "title": "Estado de los servicios",
+        "subtitle": "Estado en tiempo real de todos los servicios ImuChat",
+        "allOperational": "Todos los sistemas operativos",
+        "partialOutage": "Interrupción parcial",
+        "majorOutage": "Interrupción mayor",
+        "operational": "Operativo",
+        "degraded": "Degradado",
+        "down": "Caído",
+        "services": {
+            "messaging": "Mensajería",
+            "voiceCalls": "Llamadas de voz",
+            "videoCalls": "Videollamadas",
+            "alice": "Alice IA",
+            "store": "ImuStore",
+            "office": "ImuOffice",
+            "pay": "ImuPay",
+            "api": "API"
+        },
+        "lastUpdated": "Última actualización",
+        "recentIncidents": "Incidentes recientes",
+        "noIncidents": "Sin incidentes recientes",
+        "subscribe": "Suscribirse a alertas"
+    },
+    "searchPage": {
+        "title": "Buscar ayuda",
+        "placeholder": "Escribe tu búsqueda...",
+        "noResults": "Sin resultados para",
+        "resultsFor": "resultados para",
+        "tryAgain": "Prueba otros términos o explora las categorías"
     }
 }

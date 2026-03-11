@@ -1,0 +1,56 @@
+{
+    "Hero": {
+        "status": "In aktiver Entwicklung",
+        "title_start": "ImuChat —",
+        "title_end": "One app. Many possibilities.",
+        "subtitle": "Kommunikation, nützliche Dienste, Mini-Apps und künstliche Intelligenz, vereint in einer einzigen modernen und verantwortungsvollen Plattform.",
+        "cta_waitlist": "Warteliste beitreten",
+        "cta_vision": "Vision entdecken"
+    },
+    "Problem": {
+        "title": "Warum noch eine App?",
+        "card1_title": "Fragmentierung",
+        "card1_desc": "Zu viele Apps, um Ihr tägliches Leben zu verwalten (Nachrichten, Aufgaben, Dokumente...).",
+        "card2_title": "Datenschutz",
+        "card2_desc": "Ihre Daten werden oft ohne Ihre wirkliche Zustimmung für gezielte Werbung ausgebeutet.",
+        "card3_title": "Komplexität",
+        "card3_desc": "Überladene Schnittstellen, die Ihren Austausch und Ihre Organisation unnötig komplizieren."
+    },
+    "Vision": {
+        "title": "Die ImuChat Vision",
+        "description": "Mehr als ein Messenger. Eine einheitliche Plattform, die Ihre Zeit und Ihre Daten respektiert. Inspiriert von asiatischen Super-Apps, angepasst an europäische Datenschutzstandards.",
+        "feat1_title": "Erweitertes Messaging",
+        "feat1_desc": "Flüssige Chats (Matrix-Protokoll), verschlüsseltes Audio/Video und sofortige lokale Übersetzung.",
+        "feat2_title": "Nützliche Dienste & Mini-Apps",
+        "feat2_desc": "Greifen Sie auf Ihre Lieblingsdienste zu, ohne 50 verschiedene Apps zu installieren.",
+        "mockup_app_name": "ImuChat",
+        "mockup_chat1_name": "Familie",
+        "mockup_chat1_msg": "Foto geteilt...",
+        "mockup_mini_apps": "Mini-Apps"
+    },
+    "Audience": {
+        "title": "Für wen?",
+        "subtitle": "Ein Erlebnis, angepasst an jeden Moment Ihres Lebens.",
+        "card1_title": "Studenten",
+        "card1_desc": "Verwalten Sie Ihre Gruppenprojekte, teilen Sie Ihre Notizen und organisieren Sie Ihr Sozialleben ohne Ablenkung. Fokus-Modus integriert.",
+        "card2_title": "Familien",
+        "card2_desc": "Ein privater und sicherer Raum zum Teilen von Fotos, Planung und Neuigkeiten. Kawaii-Themen verfügbar, um Ihren Austausch zu personalisieren.",
+        "card3_title": "Profis & Vereine",
+        "card3_desc": "Kommunizieren Sie effektiv mit Ihren Teams oder Mitgliedern. Rollenverwaltung, private Kanäle und Planungstools."
+    },
+    "Engagement": {
+        "title": "Das ImuChat Engagement",
+        "stat1_label": "Respekt der Privatsphäre",
+        "stat1_sub": "Ende-zu-Ende-Verschlüsselung standardmäßig.",
+        "stat2_label": "Aufdringliche Werbung",
+        "stat2_sub": "Ihre Aufmerksamkeit steht nicht zum Verkauf.",
+        "stat3_label": "Erweiterbare Plattform",
+        "stat3_sub": "Offene API für Entwickler."
+    },
+    "Footer": {
+        "incubated": " In Zusammenarbeit mit dem Pépite-Gründerzentrum",
+        "supported": "Vom Ökosystem unterstützt",
+        "description": "ImuChat ist ein ehrgeiziges Studentenprojekt, das mit Unterstützung des Universitätszentrums und lokaler Akteure entwickelt wurde.",
+        "copyright": "ImuChat. Entworfen & Entwickelt in Europa 🇪🇺"
+    }
+}

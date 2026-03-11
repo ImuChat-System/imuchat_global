@@ -1,0 +1,920 @@
+{
+    "Hero": {
+        "status": "Actively Developing",
+        "title_start": "ImuChat —",
+        "title_end": "One app. Many possibilities.",
+        "subtitle": "Communication, useful services, mini-apps and artificial intelligence, united in a single modern and responsible platform.",
+        "cta_waitlist": "Join the Waitlist",
+        "cta_vision": "Discover the Vision"
+    },
+    "Problem": {
+        "title": "Why another app?",
+        "card1_title": "Fragmentation",
+        "card1_desc": "Too many apps to manage your daily life (messaging, tasks, documents...).",
+        "card2_title": "Privacy",
+        "card2_desc": "Your data is often exploited without your real consent for targeted advertising.",
+        "card3_title": "Complexity",
+        "card3_desc": "Overloaded interfaces that unnecessarily complicate your exchanges and organization."
+    },
+    "Vision": {
+        "title": "The ImuChat Vision",
+        "description": "More than a messaging app. A unified platform that creates time and respects your data. Inspired by Asian super-apps, adapted to European privacy standards.",
+        "feat1_title": "Advanced Messaging",
+        "feat1_desc": "Fluid chats (Matrix protocol), encrypted audio/video, and instant local translation.",
+        "feat2_title": "Useful Services & Mini-apps",
+        "feat2_desc": "Access your favorite services without installing 50 different apps.",
+        "mockup_app_name": "ImuChat",
+        "mockup_chat1_name": "Family",
+        "mockup_chat1_msg": "Photo shared...",
+        "mockup_mini_apps": "Mini-apps"
+    },
+    "Audience": {
+        "title": "For whom?",
+        "subtitle": "An experience adapted to every moment of your life.",
+        "card1_title": "Students",
+        "card1_desc": "Manage your group projects, share your notes, and organize your social life without distraction. Focus Mode integrated.",
+        "card2_title": "Families",
+        "card2_desc": "A private and secure space to share photos, planning and news. Kawaii themes available to customize your exchanges.",
+        "card3_title": "Pros & Associations",
+        "card3_desc": "Communicate effectively with your teams or members. Role management, private channels and planning tools."
+    },
+    "Engagement": {
+        "title": "The ImuChat Commitment",
+        "stat1_label": "Privacy Respect",
+        "stat1_sub": "End-to-end encryption by default.",
+        "stat2_label": "Intrusive Advertising",
+        "stat2_sub": "Your attention is not for sale.",
+        "stat3_label": "Extensible Platform",
+        "stat3_sub": "Open API for developers."
+    },
+    "Footer": {
+        "incubated": "Incubated Project Pépite",
+        "supported": "Supported by the ecosystem",
+        "description": "ImuChat is an ambitious student project developed with the support of the University Pole and local actors.",
+        "copyright": "ImuChat. Designed & Developed in Europe 🇪🇺",
+        "tagline": "The European super-app that respects your data.",
+        "sections": {
+            "product": "Product",
+            "developers": "Developers",
+            "company": "Company",
+            "legal": "Legal"
+        },
+        "links": {
+            "product": "Product Vision",
+            "features": "Features",
+            "ai": "AI Intelligence",
+            "developers": "Dev Ecosystem",
+            "api": "API & SDK",
+            "docs": "Documentation",
+            "about": "About",
+            "blog": "News",
+            "contact": "Contact",
+            "privacy": "Privacy",
+            "terms": "Terms",
+            "legal": "Legal Notice"
+        }
+    },
+    "Navbar": {
+        "product": "Product",
+        "features": "Features",
+        "ai": "AI",
+        "developers": "Developers",
+        "about": "About",
+        "cta": "Join Waitlist"
+    },
+    "Product": {
+        "hero": {
+            "label": "Product Vision",
+            "title": "More than messaging, a platform",
+            "subtitle": "ImuChat reinvents the super-app by bringing together communication, everyday services and artificial intelligence in a single data-respectful experience."
+        },
+        "what": {
+            "title": "What is ImuChat?",
+            "description": "A modular, open and respectful platform that simplifies your digital life.",
+            "feature1_title": "Modern Messaging",
+            "feature1_desc": "Instant communication, HD audio/video calls, transcribed voice messages, and real-time translation.",
+            "feature2_title": "Mini-Apps Ecosystem",
+            "feature2_desc": "Access useful services without leaving the app: transport, documents, organization, and more.",
+            "feature3_title": "Artificial Intelligence",
+            "feature3_desc": "Contextual AI assistants to help you with your daily tasks while respecting your privacy.",
+            "feature4_title": "Multiplatform",
+            "feature4_desc": "Available on Web, iOS, Android, Windows, macOS and Linux. Seamless synchronization.",
+            "feature5_title": "Privacy-First",
+            "feature5_desc": "End-to-end encryption, GDPR compliance, no targeted advertising. Your data belongs to you.",
+            "feature6_title": "Modular Architecture",
+            "feature6_desc": "Activate only the features you need. Total customization of your experience."
+        },
+        "usecases": {
+            "title": "Use Cases",
+            "description": "ImuChat adapts to your needs, whether you're a student, family or team.",
+            "student_title": "👨‍🎓 Students",
+            "student_desc": "Manage your group projects, share your notes and organize your student life efficiently.",
+            "student_feat1": "Work groups with file sharing",
+            "student_feat2": "Integrated planning and smart reminders",
+            "student_feat3": "Focus Mode to avoid distractions",
+            "family_title": "👨‍👩‍👧‍👦 Families",
+            "family_desc": "A secure space to share moments, organize daily life and stay connected.",
+            "family_feat1": "Shared photo albums with secure storage",
+            "family_feat2": "Family calendar and shopping lists",
+            "family_feat3": "Customizable themes (Kawaii mode available)",
+            "org_title": "🏢 Organizations",
+            "org_desc": "Professional communication with role management, private channels and collaboration tools.",
+            "org_feat1": "Servers with thematic channels",
+            "org_feat2": "Permission management and moderation",
+            "org_feat3": "Integration with business tools (open API)"
+        },
+        "philosophy": {
+            "title": "Our philosophy",
+            "description": "ImuChat is the ambition of a European super-app that truly respects its users. Inspired by Asian innovations, rooted in European values of data protection and transparency.",
+            "tagline": "European innovation. Global standards."
+        }
+    },
+    "Features": {
+        "hero": {
+            "label": "50+ Features",
+            "title": "A complete ecosystem",
+            "subtitle": "From messaging to everyday services, discover all the features that make ImuChat much more than just an app."
+        },
+        "groups": {
+            "messaging": {
+                "title": "Messaging & Communication",
+                "description": "The fundamentals for daily communication",
+                "g1_f1": "Instant messaging with emojis and GIFs",
+                "g1_f2": "Voice messages with automatic transcription",
+                "g1_f3": "Attachments (photos, videos, files)",
+                "g1_f4": "Edit and delete messages",
+                "g1_f5": "Quick reactions to messages"
+            },
+            "calls": {
+                "title": "Audio & Video Calls",
+                "description": "High quality real-time communication",
+                "g2_f1": "1-to-1 and group audio calls",
+                "g2_f2": "HD video calls with noise reduction",
+                "g2_f3": "Floating mini-window (Picture-in-Picture)",
+                "g2_f4": "Screen sharing (mobile & desktop)",
+                "g2_f5": "AI beauty filters + background blur"
+            },
+            "profiles": {
+                "title": "Profiles & Identity",
+                "description": "Manage your online presence",
+                "g3_f1": "Private, public and anonymous profiles",
+                "g3_f2": "Multi-profiles (personal, professional, creator)",
+                "g3_f3": "Customizable 2D/3D avatars",
+                "g3_f4": "Animated statuses (emoji, text, music)",
+                "g3_f5": "Voluntary identity verification"
+            },
+            "personalization": {
+                "title": "Advanced Personalization",
+                "description": "Make ImuChat your own app",
+                "g4_f1": "Visual themes (Kawaii, Pro, Night, Solar, Neon)",
+                "g4_f2": "Animated backgrounds for chats",
+                "g4_f3": "Customizable fonts per conversation",
+                "g4_f4": "Downloadable icon and sound packs",
+                "g4_f5": "Custom homescreen widgets"
+            },
+            "social": {
+                "title": "Social Mini-Apps",
+                "description": "Connect differently with your loved ones",
+                "g5_f1": "24h Stories (text, photo, video)",
+                "g5_f2": "Social wall timeline",
+                "g5_f3": "Personal mini-blogs",
+                "g5_f4": "Events with invitations and reminders",
+                "g5_f5": "Advanced public/private groups"
+            },
+            "modules": {
+                "title": "Advanced Modules",
+                "description": "Integrated productivity and organization",
+                "g6_f1": "Productivity Hub (tasks, to-do, planning)",
+                "g6_f2": "Office Suite (text, spreadsheet)",
+                "g6_f3": "Presentations and slideshows",
+                "g6_f4": "Collaborative board (whiteboard, mindmap)",
+                "g6_f5": "Home & Cooking Module"
+            },
+            "services": {
+                "title": "Public Utility Services",
+                "description": "Your essential services, quickly accessible",
+                "g7_f1": "Public transport schedules with alerts",
+                "g7_f2": "Real-time road traffic info",
+                "g7_f3": "Geolocated emergency numbers",
+                "g7_f4": "Public services directory",
+                "g7_f5": "Multi-carrier package tracking"
+            },
+            "entertainment": {
+                "title": "Entertainment & Creation",
+                "description": "Integrated music, videos and games",
+                "g8_f1": "Mini music player + shared playlists",
+                "g8_f2": "Podcasts with catalog and favorites",
+                "g8_f3": "Video player with adaptive quality",
+                "g8_f4": "Social mini-games (quiz, drawing)",
+                "g8_f5": "Custom stickers & emojis creation"
+            },
+            "ai": {
+                "title": "Artificial Intelligence",
+                "description": "Contextual AI to assist you",
+                "g9_f1": "Multi-persona chatbot (assistant, coach, teacher)",
+                "g9_f2": "Smart response suggestions",
+                "g9_f3": "Automatic conversation summary",
+                "g9_f4": "Automatic moderation for groups",
+                "g9_f5": "Instant translation in chats"
+            },
+            "store": {
+                "title": "App Store & Ecosystem",
+                "description": "Marketplace and extensions",
+                "g10_f1": "Internal & partner apps store",
+                "g10_f2": "Module installation/removal",
+                "g10_f3": "Granular permission system",
+                "g10_f4": "Services marketplace (designers, pros)",
+                "g10_f5": "Integrated payment + secure wallet"
+            }
+        },
+        "cta": {
+            "title": "Ready to discover ImuChat?",
+            "description": "Join the waitlist to be among the first to test the beta version.",
+            "button": "Join the waitlist"
+        }
+    },
+    "AI": {
+        "hero": {
+            "label": "Artificial Intelligence",
+            "title": "An AI that understands you",
+            "subtitle": "Smart and contextual assistants to simplify your daily life, all with absolute respect for your privacy."
+        },
+        "assistants": {
+            "title": "Multi-Persona AI Assistants",
+            "description": "Choose the assistant suited to your current need",
+            "chat": {
+                "title": "Personal Assistant",
+                "desc": "Daily help to organize your tasks and answer your questions."
+            },
+            "coach": {
+                "title": "Coach & Mentor",
+                "desc": "Personalized support to achieve your goals."
+            },
+            "creative": {
+                "title": "Creative Assistant",
+                "desc": "Idea generation, brainstorming and creative help."
+            },
+            "research": {
+                "title": "Research Assistant",
+                "desc": "Document analysis, information synthesis and in-depth research."
+            }
+        },
+        "features": {
+            "title": "AI Features",
+            "description": "Artificial intelligence serving your experience",
+            "suggestions": {
+                "title": "Smart Suggestions",
+                "desc": "Contextual automatic replies that adapt to your communication style and conversation context."
+            },
+            "translation": {
+                "title": "Instant Translation",
+                "desc": "Communicate without language barriers with real-time translation in over 100 languages."
+            },
+            "summary": {
+                "title": "Conversation Summary",
+                "desc": "No more wasting time re-reading long discussions. AI generates clear and concise summaries."
+            },
+            "moderation": {
+                "title": "Automatic Moderation",
+                "desc": "Smart protection against spam, inappropriate content and toxic behavior in your groups."
+            },
+            "contextual": {
+                "title": "Contextual Understanding",
+                "desc": "AI understands the context of your conversations to provide relevant responses and suggestions."
+            },
+            "personalized": {
+                "title": "Personalized Experience",
+                "desc": "AI learns from your preferences to offer an experience tailored to your usage."
+            }
+        },
+        "privacy": {
+            "badge": "Privacy-First AI",
+            "title": "An AI that respects your data",
+            "description": "We believe that artificial intelligence and privacy protection are not incompatible. Our approach ensures that your personal data remains private.",
+            "point1": {
+                "title": "Local processing when possible",
+                "desc": "Lightweight AI models run directly on your device to avoid sending data."
+            },
+            "point2": {
+                "title": "End-to-end encryption",
+                "desc": "Even for AI processing requiring the cloud, your data is encrypted."
+            },
+            "point3": {
+                "title": "No data resale",
+                "desc": "Your conversations and information are never used to train third-party models."
+            },
+            "point4": {
+                "title": "Total control",
+                "desc": "You decide which AI features to activate and can disable them at any time."
+            },
+            "visual": {
+                "encryption": "E2E Encryption",
+                "encryption_sub": "Your data is protected",
+                "transparency": "Total transparency",
+                "transparency_sub": "You know what is analyzed",
+                "local": "Local processing",
+                "local_sub": "On your device when possible"
+            }
+        },
+        "cta": {
+            "title": "Discover responsible AI",
+            "description": "Experience artificial intelligence that truly respects your data.",
+            "button": "Learn more"
+        }
+    },
+    "Developers": {
+        "hero": {
+            "label": "For Developers",
+            "title": "Build on ImuChat",
+            "subtitle": "An open platform with public API, complete SDK and mini-apps marketplace. Create unique experiences for millions of users.",
+            "cta_docs": "API Documentation",
+            "cta_github": "View on GitHub"
+        },
+        "miniapps": {
+            "title": "Mini-Apps Platform",
+            "description": "Develop applications that integrate natively into the ImuChat ecosystem",
+            "what": {
+                "title": "What is a Mini-App?",
+                "description": "Mini-apps are lightweight applications that run directly in ImuChat, offering a smooth experience without additional installation.",
+                "point1": "Simple development with HTML/CSS/JS or modern frameworks",
+                "point2": "Secure access to ImuChat APIs via SDK",
+                "point3": "Distribution via integrated Store"
+            },
+            "feat1": {
+                "title": "Modular & Flexible",
+                "desc": "Create simple or complex apps according to your needs. Support React, Vue, Svelte..."
+            },
+            "feat2": {
+                "title": "Optimal Performance",
+                "desc": "Optimized runtime for smooth experiences even on mobile."
+            },
+            "feat3": {
+                "title": "Granular Permissions",
+                "desc": "Transparent permission system to protect users."
+            }
+        },
+        "api": {
+            "title": "Public API & SDK",
+            "description": "Integrate ImuChat into your services or create new experiences",
+            "endpoint1": {
+                "title": "Authentication",
+                "desc": "OAuth 2.0, API Keys, JWT"
+            },
+            "endpoint2": {
+                "title": "Users",
+                "desc": "Profiles, preferences, statuses"
+            },
+            "endpoint3": {
+                "title": "Messages",
+                "desc": "Send, receive, webhooks"
+            },
+            "endpoint4": {
+                "title": "Analytics",
+                "desc": "Usage metrics, statistics"
+            },
+            "example": {
+                "title": "Usage example",
+                "comment": "Get user profile",
+                "comment2": "Send a message"
+            }
+        },
+        "resources": {
+            "title": "Developer Resources",
+            "description": "Everything you need to get started",
+            "docs": {
+                "title": "Complete Documentation",
+                "desc": "Detailed guides, API reference, tutorials and code examples.",
+                "cta": "View docs"
+            },
+            "quickstart": {
+                "title": "Quick Start",
+                "desc": "Create your first mini-app in less than 10 minutes.",
+                "cta": "Start now"
+            },
+            "community": {
+                "title": "Community",
+                "desc": "Join Discord, ask questions and share your creations.",
+                "cta": "Join"
+            }
+        },
+        "cta": {
+            "title": "Ready to develop?",
+            "description": "Access the documentation and create your first mini-app today.",
+            "button1": "Access API",
+            "button2": "Documentation"
+        }
+    },
+    "About": {
+        "hero": {
+            "label": "About ImuChat",
+            "title": "Our story",
+            "subtitle": "An ambitious student project to reinvent digital communication with a European approach."
+        },
+        "mission": {
+            "title": "Our Mission",
+            "description": "Create a super-app that simplifies digital life without compromising privacy. An open, modular and respectful platform that meets real user needs."
+        },
+        "vision": {
+            "title": "Our Vision",
+            "description": "Become the European reference for super-apps, combining Asian innovation with European values of data protection and transparency."
+        },
+        "values": {
+            "title": "Our Values",
+            "description": "The principles that guide every decision we make",
+            "privacy": {
+                "title": "Privacy First",
+                "desc": "Your data belongs to you. End-to-end encryption, strict GDPR compliance, zero data resale."
+            },
+            "openness": {
+                "title": "Openness & Community",
+                "desc": "Open API, accessible SDK, developer marketplace. We build with the community."
+            },
+            "innovation": {
+                "title": "Responsible Innovation",
+                "desc": "Adopting the best technologies while questioning their impact on society and the environment."
+            }
+        },
+        "story": {
+            "title": "The project's story",
+            "p1": "ImuChat was born from a frustration: why do we have to juggle dozens of apps to manage our daily life? Messaging, transport, organization, public services... everything is fragmented.",
+            "p2": "Inspired by Asian super-apps like WeChat and LINE, but aware of privacy issues, we imagined a European alternative: a unified platform that truly respects its users.",
+            "p3": "What started as a student project has become an ambitious vision: create the first European super-app, privacy-respectful, open to developers, and built to last."
+        },
+        "incubation": {
+            "title": "PEPITE incubated project",
+            "description": "ImuChat is supported by the PEPITE program, which helps student entrepreneurs develop their innovative projects."
+        },
+        "location": {
+            "title": "Designed in Europe 🇪🇺",
+            "description": "Developed with the support of universities and the local entrepreneurial ecosystem. 100% European innovation, designed for the world."
+        }
+    },
+    "Contact": {
+        "hero": {
+            "label": "Contact Us",
+            "title": "Let's talk about your project",
+            "subtitle": "Whether you're a potential partner, media or simply curious, we're here to listen."
+        },
+        "types": {
+            "partnership": "Partnership",
+            "press": "Press",
+            "beta": "Beta Tester",
+            "developer": "Developer",
+            "other": "Other"
+        },
+        "form": {
+            "selectType": "What is the purpose of your request?",
+            "name": "Full Name",
+            "namePlaceholder": "John Doe",
+            "email": "Email Address",
+            "emailPlaceholder": "john.doe@example.com",
+            "organization": "Organization",
+            "organizationPlaceholder": "Your company or institution name",
+            "message": "Message",
+            "messagePlaceholder": {
+                "partnership": "Describe your partnership project and how we could collaborate...",
+                "press": "Tell us about your media outlet and your article angle...",
+                "beta": "Explain why you'd like to test ImuChat early...",
+                "developer": "Describe your mini-app project or technical question...",
+                "other": "Share your question or suggestion..."
+            },
+            "submit": "Send Message",
+            "sending": "Sending...",
+            "privacy": "Your data is processed in accordance with GDPR and will never be shared.",
+            "success": {
+                "title": "Message sent!",
+                "message": "We'll respond to you as soon as possible."
+            }
+        },
+        "info": {
+            "email": {
+                "title": "Email",
+                "value": "contact@imuchat.app"
+            },
+            "location": {
+                "title": "Location",
+                "value": "Paris, France 🇫🇷"
+            },
+            "response": {
+                "title": "Response Time",
+                "value": "Within 48 business hours"
+            }
+        }
+    },
+    "Privacy": {
+        "hero": {
+            "label": "Privacy Policy",
+            "title": "Your data belongs to you",
+            "subtitle": "We are committed to protecting your privacy and ensuring the security of your personal information.",
+            "updated": "Last updated: February 11, 2026"
+        },
+        "toc": {
+            "title": "Table of contents"
+        },
+        "intro": {
+            "title": "Introduction",
+            "content": "ImuChat is committed to protecting the privacy of its users. This policy explains how we collect, use, store and protect your personal data in accordance with the General Data Protection Regulation (GDPR) and applicable European laws."
+        },
+        "sections": {
+            "collection": {
+                "title": "Data Collection",
+                "intro": "We only collect data necessary for the operation of our services:",
+                "account": {
+                    "title": "Account Data",
+                    "items": [
+                        "Username and email address",
+                        "Password (hashed and salted)",
+                        "Profile picture (optional)",
+                        "Language and theme preferences"
+                    ]
+                },
+                "usage": {
+                    "title": "Usage Data",
+                    "items": [
+                        "Connection logs (IP address, device, browser)",
+                        "Diagnostic and performance data",
+                        "Interactions with application features"
+                    ]
+                }
+            },
+            "usage": {
+                "title": "Data Usage",
+                "intro": "Your data is used exclusively to:",
+                "purposes": [
+                    "Provide and improve our services",
+                    "Authenticate and secure your account",
+                    "Contact you regarding important updates",
+                    "Analyze usage to improve user experience",
+                    "Comply with our legal obligations"
+                ]
+            },
+            "protection": {
+                "title": "Data Protection",
+                "intro": "We implement advanced security measures:",
+                "measures": [
+                    "End-to-end encryption for messages (Matrix protocol)",
+                    "Secure storage with encryption at rest",
+                    "Multi-factor authentication available",
+                    "Regular security audits",
+                    "Zero-trust architecture"
+                ]
+            },
+            "rights": {
+                "title": "Your GDPR Rights",
+                "intro": "In accordance with GDPR, you have the following rights:",
+                "list": [
+                    "Right of access: Access your personal data",
+                    "Right of rectification: Correct inaccurate information",
+                    "Right to be forgotten: Delete your account and data",
+                    "Right to portability: Export your data",
+                    "Right to object: Refuse certain processing",
+                    "Right to restriction: Limit the processing of your data"
+                ]
+            },
+            "cookies": {
+                "title": "Cookies and Trackers",
+                "intro": "ImuChat uses cookies strictly necessary for the application to function.",
+                "content": "We do not use advertising or third-party tracking cookies. You can manage your cookie preferences in your browser settings."
+            },
+            "updates": {
+                "title": "Policy Updates",
+                "content": "We reserve the right to modify this policy. Significant changes will be notified to you by email or via the application. The last update date is always displayed at the top of this page."
+            },
+            "contact": {
+                "title": "Contact Us",
+                "content": "For any questions regarding this policy or your personal data, contact our Data Protection Officer (DPO):"
+            }
+        }
+    },
+    "Terms": {
+        "hero": {
+            "label": "Terms of Service",
+            "title": "Terms of Service",
+            "subtitle": "Please read these terms carefully before using ImuChat.",
+            "updated": "Last updated: February 11, 2026"
+        },
+        "toc": {
+            "title": "Table of contents"
+        },
+        "intro": {
+            "title": "Introduction",
+            "content": "These Terms of Service (ToS) govern the use of the ImuChat platform and its services. By creating an account or using our services, you agree to be bound by these terms."
+        },
+        "sections": {
+            "acceptance": {
+                "title": "Acceptance of Terms",
+                "content": "By accessing ImuChat or using our services, you acknowledge that you have read, understood, and agree to be bound by these ToS and our Privacy Policy. If you do not accept these terms, you must not use our services.",
+                "highlight": "⚠️ You must be at least 13 years old to use ImuChat. Users under 16 must obtain parental consent."
+            },
+            "account": {
+                "title": "Account Creation and Management",
+                "intro": "To use ImuChat, you must create an account. You are responsible for:",
+                "responsibilities": [
+                    "Providing accurate and up-to-date information during registration",
+                    "Maintaining the security of your password and account",
+                    "All activities performed through your account",
+                    "Immediately notifying ImuChat in case of unauthorized use of your account"
+                ]
+            },
+            "usage": {
+                "title": "Acceptable Use",
+                "intro": "You agree to use ImuChat responsibly and in compliance with the law.",
+                "allowed": {
+                    "title": "Permitted uses:",
+                    "items": [
+                        "Legitimate personal and professional communication",
+                        "Sharing content that complies with these ToS",
+                        "Using integrated mini-apps and services",
+                        "Creating groups and events"
+                    ]
+                },
+                "prohibited": {
+                    "title": "Prohibited uses:",
+                    "items": [
+                        "Dissemination of illegal, hateful, violent, or pornographic content",
+                        "Harassment, intimidation, or threats against other users",
+                        "Identity theft or misrepresentation",
+                        "Spam, phishing, or fraudulent activities",
+                        "Attempts to gain unauthorized access to ImuChat systems",
+                        "Use of bots or unauthorized automation"
+                    ]
+                }
+            },
+            "content": {
+                "title": "User Content",
+                "intro": "You retain all rights to the content you post on ImuChat. By posting content, you grant us:",
+                "rights": [
+                    "A non-exclusive license to store, process, and transmit your content",
+                    "The right to moderate and remove content violating our ToS",
+                    "You are solely responsible for the content you post",
+                    "You warrant that you hold all necessary rights to your content"
+                ]
+            },
+            "liability": {
+                "title": "Limitation of Liability",
+                "intro": "ImuChat strives to provide a reliable service, but:",
+                "limits": [
+                    "The service is provided \"as is\" without guarantee of uninterrupted availability",
+                    "We are not responsible for content posted by users",
+                    "We do not guarantee the accuracy of information provided by third parties",
+                    "Our liability is limited to the extent permitted by law"
+                ]
+            },
+            "modifications": {
+                "title": "Modifications to ToS",
+                "content": "We reserve the right to modify these ToS at any time. Significant changes will be notified by email or via the application. Continued use after notification constitutes acceptance of the new terms."
+            },
+            "termination": {
+                "title": "Termination",
+                "intro": "We may suspend or terminate your account in case of:",
+                "reasons": [
+                    "Violation of these ToS",
+                    "Fraudulent or illegal activity",
+                    "Repeated non-compliance with community rules",
+                    "Request from you (you can delete your account at any time)"
+                ]
+            }
+        },
+        "contact": {
+            "title": "Legal Questions",
+            "content": "For any questions regarding these ToS, contact our legal department:"
+        }
+    },
+    "Legal": {
+        "hero": {
+            "label": "Legal Notice",
+            "title": "Legal Notice",
+            "subtitle": "Legal information regarding the publisher of the ImuChat website and platform.",
+            "updated": "Last updated: February 11, 2026"
+        },
+        "company": {
+            "title": "Website Publisher",
+            "name": "ImuChat",
+            "form": "PEPITE incubation project",
+            "address": {
+                "title": "Headquarters",
+                "line1": "Paris, France",
+                "line2": "Île-de-France"
+            },
+            "registration": {
+                "title": "Registration",
+                "number": "Pending assignment (student project)"
+            },
+            "contact": {
+                "title": "Contact",
+                "phone": "Phone: Available upon request"
+            }
+        },
+        "director": {
+            "title": "Publication Director",
+            "name": "Nathan Imogo",
+            "role": "Founder & CEO"
+        },
+        "hosting": {
+            "title": "Hosting",
+            "provider": "Firebase Hosting (Google LLC)",
+            "address": "1600 Amphitheatre Parkway, Mountain View, CA 94043, USA",
+            "website": "Website: https://firebase.google.com"
+        },
+        "intellectual": {
+            "title": "Intellectual Property",
+            "content": {
+                "p1": "All content on the ImuChat website (texts, images, graphics, logo, icons, photos, videos, etc.) is the exclusive property of ImuChat or its partners, unless otherwise stated.",
+                "p2": "Any reproduction, representation, modification, publication, adaptation of all or part of the site's elements, regardless of the means or process used, is prohibited without prior written authorization from ImuChat.",
+                "p3": "The name \"ImuChat\", the logo and all distinctive signs reproduced on the site are registered trademarks or in the process of being registered. Any unauthorized use constitutes counterfeiting subject to legal prosecution."
+            }
+        },
+        "data": {
+            "title": "Personal Data",
+            "dpo": {
+                "title": "The data controller is ImuChat. A Data Protection Officer (DPO) is designated:",
+                "contact": "Contact our DPO"
+            },
+            "policy": "For more information on how your data is managed, see our Privacy Policy."
+        },
+        "cookies": {
+            "title": "Cookies",
+            "content": "The ImuChat website uses cookies strictly necessary for the application to function. No advertising or third-party tracking cookies are used. For more information, see our Cookie Policy."
+        },
+        "law": {
+            "title": "Applicable Law",
+            "content": "These legal notices are governed by French and European law (GDPR). The site complies with Law No. 2004-575 of June 21, 2004 for confidence in the digital economy.",
+            "disputes": "In case of dispute, an amicable solution will be sought before any legal action. Failing this, French courts will have sole jurisdiction."
+        },
+        "contact": {
+            "title": "Contact for Legal Questions",
+            "content": "For any questions regarding these legal notices or our practices:",
+            "response": "We commit to responding within 48 business hours."
+        }
+    },
+    "Partners": {
+        "hero": {
+            "label": "PEPITE Program",
+            "title": "Become an ImuChat Partner",
+            "subtitle": "Join the European social innovation ecosystem and support the digital transformation of community communication.",
+            "cta": "Become a partner"
+        },
+        "pepite": {
+            "title": "Supported by PEPITE",
+            "subtitle": "Program of Excellence for Technological Innovation and Entrepreneurship",
+            "description": "ImuChat is proudly supported by the PEPITE program, a national support system for student entrepreneurs. This recognition demonstrates our commitment to European innovation and our growth potential."
+        },
+        "types": {
+            "label": "Partnership types",
+            "title": "Multiple ways to collaborate",
+            "description": "Whether you're a university, institution, or association, we have a partnership program tailored to your needs.",
+            "universities": {
+                "title": "Universities",
+                "description": "Collaborate with us on research and innovation in digital communication.",
+                "benefits": [
+                    "Platform access for your campus",
+                    "Internship and project opportunities",
+                    "R&D collaboration",
+                    "Free academic license"
+                ]
+            },
+            "institutions": {
+                "title": "Institutions",
+                "description": "Join our European incubation and acceleration program.",
+                "benefits": [
+                    "Development support",
+                    "International visibility",
+                    "Professional networking",
+                    "Strategic guidance"
+                ]
+            },
+            "associations": {
+                "title": "Associations",
+                "description": "Benefit from a platform tailored to your community needs.",
+                "benefits": [
+                    "Preferential pricing",
+                    "Dedicated technical support",
+                    "Team training",
+                    "Advanced customization"
+                ]
+            }
+        },
+        "useCases": {
+            "label": "Use cases",
+            "title": "How our partners use ImuChat",
+            "description": "Discover how different organizations leverage our platform.",
+            "campus": {
+                "title": "Campus Management",
+                "description": "Universities using ImuChat to connect students, teachers, and administration in a secure and collaborative environment."
+            },
+            "incubation": {
+                "title": "Incubation Programs",
+                "description": "Incubators and accelerators creating collaboration spaces for their startups and entrepreneurs."
+            },
+            "communities": {
+                "title": "Thematic Communities",
+                "description": "Associations and organizations building engaged communities around their missions and values."
+            }
+        },
+        "benefits": {
+            "label": "Partner benefits",
+            "title": "What you get",
+            "list": [
+                "Early access to new features",
+                "Premium technical support",
+                "Participation in product decisions",
+                "Visibility on our communication channels",
+                "Co-branding opportunities",
+                "Regular training sessions",
+                "Exclusive partner community",
+                "Advantageous commercial terms"
+            ]
+        },
+        "cta": {
+            "title": "Ready to join our ecosystem?",
+            "description": "Contact us to discuss partnership opportunities tailored to your organization.",
+            "contact": "Contact us",
+            "learn": "Learn more"
+        }
+    },
+    "News": {
+        "hero": {
+            "title": "News & Progress",
+            "subtitle": "Follow ImuChat's evolution, our major milestones, and the latest news from our ecosystem."
+        },
+        "timeline": {
+            "label": "Project timeline",
+            "title": "Our journey",
+            "description": "From conception to international expansion, discover the key milestones marking ImuChat's evolution.",
+            "current": "Ongoing",
+            "events": {
+                "launch": {
+                    "date": "January 2024",
+                    "title": "Project Launch",
+                    "description": "Development kickoff and design of ImuChat's multi-platform architecture."
+                },
+                "pepite": {
+                    "date": "March 2024",
+                    "title": "PEPITE Integration",
+                    "description": "Acceptance into the PEPITE program and start of entrepreneurial support."
+                },
+                "mvp": {
+                    "date": "June 2024",
+                    "title": "MVP Completed",
+                    "description": "First functional version with real-time chat and server management."
+                },
+                "beta": {
+                    "date": "September 2024",
+                    "title": "Beta Phase",
+                    "description": "Open beta launch with the first test communities."
+                },
+                "launch_public": {
+                    "date": "Q1 2025",
+                    "title": "Public Launch",
+                    "description": "Stable version 1.0 available to the public with all core features."
+                },
+                "international": {
+                    "date": "Q2 2025",
+                    "title": "International Expansion",
+                    "description": "Deployment of 5 languages and expansion to key European markets."
+                }
+            }
+        },
+        "news": {
+            "label": "Latest news",
+            "title": "Recent updates",
+            "description": "Stay informed about the latest advances, partnerships, and project developments.",
+            "article1": {
+                "date": "December 15, 2024",
+                "title": "ImuChat joins the PEPITE program",
+                "excerpt": "We are proud to announce our integration into the PEPITE program, recognition of our innovation potential and social impact.",
+                "category": "Partnership"
+            },
+            "article2": {
+                "date": "December 10, 2024",
+                "title": "Technical architecture finalized",
+                "excerpt": "The multi-platform architecture is now complete, enabling a seamless experience across Web, Mobile, and Desktop.",
+                "category": "Technical"
+            },
+            "article3": {
+                "date": "December 5, 2024",
+                "title": "Private beta successfully launched",
+                "excerpt": "The first test communities have joined the platform and are providing us with valuable feedback to improve the experience.",
+                "category": "Product"
+            }
+        },
+        "stats": {
+            "commits": {
+                "value": "2,500+",
+                "label": "Commits"
+            },
+            "features": {
+                "value": "50+",
+                "label": "Features"
+            },
+            "languages": {
+                "value": "5",
+                "label": "Languages"
+            },
+            "platforms": {
+                "value": "3",
+                "label": "Platforms"
+            }
+        }
+    }
+}

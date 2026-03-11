@@ -1,0 +1,56 @@
+{
+    "Hero": {
+        "status": "En desarrollo activo",
+        "title_start": "ImuChat —",
+        "title_end": "One app. Many possibilities.",
+        "subtitle": "Comunicación, servicios útiles, mini-apps e inteligencia artificial, reunidos en una única plataforma moderna y responsable.",
+        "cta_waitlist": "Unirse a la lista de espera",
+        "cta_vision": "Descubrir la visión"
+    },
+    "Problem": {
+        "title": "¿Por qué otra aplicación?",
+        "card1_title": "Fragmentación",
+        "card1_desc": "Demasiadas aplicaciones para gestionar tu vida diaria (mensajería, tareas, documentos...).",
+        "card2_title": "Privacidad",
+        "card2_desc": "Tus datos son a menudo explotados sin tu consentimiento real para publicidad dirigida.",
+        "card3_title": "Complejidad",
+        "card3_desc": "Interfaces sobrecargadas que complican inútilmente tus intercambios y tu organización."
+    },
+    "Vision": {
+        "title": "La Visión ImuChat",
+        "description": "Más que una aplicación de mensajería. Una plataforma unificada que respeta tu tiempo y tus datos. Inspirada en las super-apps asiáticas, adaptada a los estándares europeos de privacidad.",
+        "feat1_title": "Mensajería Avanzada",
+        "feat1_desc": "Chats fluidos (protocolo Matrix), audio/video cifrados y traducción instantánea local.",
+        "feat2_title": "Servicios Útiles & Mini-apps",
+        "feat2_desc": "Accede a tus servicios favoritos sin instalar 50 aplicaciones diferentes.",
+        "mockup_app_name": "ImuChat",
+        "mockup_chat1_name": "Familia",
+        "mockup_chat1_msg": "Foto compartida...",
+        "mockup_mini_apps": "Mini-apps"
+    },
+    "Audience": {
+        "title": "¿Para quién?",
+        "subtitle": "Una experiencia adaptada a cada momento de tu vida.",
+        "card1_title": "Estudiantes",
+        "card1_desc": "Gestiona tus proyectos de grupo, comparte tus notas y organiza tu vida social sin distracciones. Modo Focus integrado.",
+        "card2_title": "Familias",
+        "card2_desc": "Un espacio privado y seguro para compartir fotos, planificación y noticias. Temas Kawaii disponibles para personalizar tus intercambios.",
+        "card3_title": "Profesionales & Asociaciones",
+        "card3_desc": "Comunícate eficazmente con tus equipos o miembros. Gestión de roles, canales privados y herramientas de planificación."
+    },
+    "Engagement": {
+        "title": "El Compromiso ImuChat",
+        "stat1_label": "Respeto a la Privacidad",
+        "stat1_sub": "Cifrado de extremo a extremo por defecto.",
+        "stat2_label": "Publicidad Intrusiva",
+        "stat2_sub": "Tu atención no está en venta.",
+        "stat3_label": "Plataforma Extensible",
+        "stat3_sub": "API abierta para desarrolladores."
+    },
+    "Footer": {
+        "incubated": "Proyecto Incubado Pépite",
+        "supported": "Apoyado por el ecosistema",
+        "description": "ImuChat es un ambicioso proyecto estudiantil desarrollado con el apoyo del Polo Universitario y los actores locales.",
+        "copyright": "ImuChat. Diseñado y Desarrollado en Europa 🇪🇺"
+    }
+}

@@ -7,8 +7,7 @@ packages:
   - 'desktop-app'
   - 'ui-kit'
   - 'infra'
-  - 'site-vitrine'
-  - 'help-site'
+  - 'sites/*'
   # Framework mini-apps (SDK, CLI, templates) — les mini-apps elles-mêmes
   # sont développées dans leurs propres repos indépendants.
   - 'imu-miniapps/packages/*'

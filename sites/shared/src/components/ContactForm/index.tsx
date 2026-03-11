@@ -1,7 +1,7 @@
 'use client';
 
-import { useState, useCallback } from 'react';
-import { Send, Loader2 } from 'lucide-react';
+import { Loader2, Send } from 'lucide-react';
+import { useCallback, useState } from 'react';
 import { cn } from '../../utils/cn';
 
 export interface ContactFormData {

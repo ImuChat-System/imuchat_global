@@ -18,6 +18,7 @@
 ## 🏗️ Architecture Technique
 
 ### Stack Commune
+
 - **Framework** : Next.js 14 (App Router)
 - **Styling** : Tailwind CSS
 - **i18n** : next-intl
@@ -25,6 +26,7 @@
 - **Composants** : Partagés via `@imuchat/ui-kit`
 
 ### Structure Monorepo
+
 ```
 sites/
 ├── help/           → help.imuchat.app
@@ -41,6 +43,7 @@ sites/
 ## 🔴 TIER 1 — Critiques (Sprint Actuel)
 
 ### 1. admin.imuchat.app — Back-Office
+
 | Aspect | Détail |
 |--------|--------|
 | **Statut** | 📋 Planifié |
@@ -49,6 +52,7 @@ sites/
 | **Effort estimé** | 3-4 semaines |
 
 **Pages MVP :**
+
 - [ ] `/` — Dashboard principal (métriques temps réel)
 - [ ] `/users` — Gestion utilisateurs (recherche, actions)
 - [ ] `/users/[id]` — Profil utilisateur détaillé
@@ -57,6 +61,7 @@ sites/
 - [ ] `/support` — Tickets support
 
 ### 2. help.imuchat.app — Centre d'Aide
+
 | Aspect | Détail |
 |--------|--------|
 | **Statut** | 🚧 En cours (80%) |
@@ -65,6 +70,7 @@ sites/
 | **Effort estimé** | 2 semaines |
 
 **Pages MVP :**
+
 - [x] `/` — Accueil (recherche + catégories)
 - [x] `/getting-started` — Premiers pas
 - [x] `/[category]/[slug]` — Article d'aide
@@ -73,6 +79,7 @@ sites/
 - [x] `/status` — État des services
 
 **Catégories implémentées :**
+
 - [x] getting-started, account, messaging, alice
 - [x] office, store, arena, pay, creators
 - [x] privacy, billing
@@ -80,6 +87,7 @@ sites/
 **i18n :** FR, EN, DE, ES, JA ✅
 
 ### 3. docs.imuchat.app — Documentation Technique
+
 | Aspect | Détail |
 |--------|--------|
 | **Statut** | 📋 Planifié |
@@ -88,6 +96,7 @@ sites/
 | **Effort estimé** | 2-3 semaines |
 
 **Pages MVP :**
+
 - [ ] `/` — Accueil docs
 - [ ] `/getting-started/quickstart` — Démarrage rapide
 - [ ] `/api/[endpoint]` — Référence API
@@ -99,21 +108,25 @@ sites/
 ## 🟠 TIER 2 — Haute Priorité (Sprint +1)
 
 ### 4. blog.imuchat.app
+
 | Statut | 📋 Planifié |
 |--------|-------------|
 | **Effort** | 1-2 semaines |
 
 ### 5. feedback.imuchat.app  
+
 | Statut | 📋 Planifié |
 |--------|-------------|
 | **Effort** | 1-2 semaines |
 
 ### 6. store.imuchat.app
+
 | Statut | 📋 Planifié |
 |--------|-------------|
 | **Effort** | 2-3 semaines |
 
 ### 7. developers.imuchat.app
+
 | Statut | 📋 Planifié |
 |--------|-------------|
 | **Effort** | 2 semaines |
@@ -190,6 +203,7 @@ Q4 2026       : Sites restants selon traction
 ## ✅ Checklist Lancement Site
 
 Pour chaque site :
+
 - [ ] Structure Next.js 14
 - [ ] Tailwind configuré
 - [ ] i18n (FR/EN minimum)

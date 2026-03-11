@@ -1,6 +1,6 @@
 # 🌐 Site Vitrine ImuChat
 
-Site vitrine officiel du projet **ImuChat** - Super-application européenne respectueuse de vos données.
+Site vitrine officiel du projet **ImuChat** - Super-application européenne.
 
 ## 📚 Documentation Stratégique
 

@@ -1,0 +1,97 @@
+{
+  "meta": {
+    "title": "ImuChat Help Center",
+    "description": "Find answers to your questions about ImuChat"
+  },
+  "hero": {
+    "title": "How can we help you?",
+    "placeholder": "Search help..."
+  },
+  "categories": {
+    "title": "Browse by category",
+    "gettingStarted": { "title": "Getting Started", "description": "Create an account, set up your profile" },
+    "account": { "title": "Account", "description": "Settings, security, privacy" },
+    "messaging": { "title": "Messaging & Calls", "description": "Messages, voice and video calls" },
+    "alice": { "title": "Alice AI", "description": "Using Alice, commands, customization" },
+    "office": { "title": "ImuOffice", "description": "Documents, spreadsheets, presentations" },
+    "store": { "title": "ImuStore", "description": "Mini-apps, themes, stickers" },
+    "privacy": { "title": "Privacy", "description": "Data protection" },
+    "billing": { "title": "Billing", "description": "Subscriptions, payments" }
+  },
+  "popular": {
+    "title": "Popular Questions",
+    "items": [
+      "How to create an ImuChat account?",
+      "How to recover my password?",
+      "How to delete my account?",
+      "How to use Alice AI?",
+      "How to buy ImuCoins?"
+    ]
+  },
+  "contact": {
+    "title": "Need more help?",
+    "description": "Our support team is here to help you",
+    "button": "Contact Support"
+  },
+  "footer": {
+    "copyright": "© 2026 ImuChat. All rights reserved.",
+    "links": { "privacy": "Privacy", "terms": "Terms", "status": "Service Status" }
+  },
+  "breadcrumb": { "home": "Home" },
+  "article": { "helpful": "Was this article helpful?", "yes": "Yes", "no": "No", "lastUpdated": "Last updated", "related": "Related articles" },
+  "search": { "noResults": "No results found", "results": "results found" },
+  "nav": {
+    "gettingStarted": "Getting Started",
+    "contact": "Contact Support"
+  },
+  "gettingStarted": {
+    "title": "Getting Started with ImuChat",
+    "subtitle": "Everything you need to get started",
+    "steps": {
+      "download": {
+        "title": "Download the app",
+        "description": "ImuChat for iOS, Android or desktop"
+      },
+      "create": {
+        "title": "Create an account",
+        "description": "Sign up with email or phone"
+      },
+      "setup": {
+        "title": "Set up your profile",
+        "description": "Add photo, name and preferences"
+      },
+      "explore": {
+        "title": "Explore",
+        "description": "Discover modules and features"
+      }
+    }
+  },
+  "contactPage": {
+    "title": "Contact Support",
+    "subtitle": "We're here to help",
+    "form": {
+      "name": "Your name",
+      "email": "Email address",
+      "subject": "Subject",
+      "message": "Your message",
+      "submit": "Send message"
+    },
+    "channels": {
+      "chat": {
+        "title": "Live Chat",
+        "description": "Chat with our team",
+        "cta": "Start chat"
+      },
+      "email": {
+        "title": "Email",
+        "description": "Response within 24 hours",
+        "cta": "Send email"
+      },
+      "community": {
+        "title": "Community",
+        "description": "Ask the community",
+        "cta": "Visit forum"
+      }
+    }
+  }
+}

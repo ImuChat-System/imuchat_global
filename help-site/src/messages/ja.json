@@ -1,0 +1,136 @@
+{
+    "meta": {
+        "title": "ImuChat ヘルプセンター",
+        "description": "ImuChatに関するご質問への回答をお探しください"
+    },
+    "hero": {
+        "title": "お困りのことはありますか？",
+        "placeholder": "ヘルプを検索..."
+    },
+    "categories": {
+        "title": "カテゴリから探す",
+        "gettingStarted": {
+            "title": "はじめに",
+            "description": "アカウント作成、プロフィール設定"
+        },
+        "account": {
+            "title": "アカウント管理",
+            "description": "設定、セキュリティ、プライバシー"
+        },
+        "messaging": {
+            "title": "メッセージ・通話",
+            "description": "メッセージ、音声・ビデオ通話"
+        },
+        "alice": {
+            "title": "Alice AI",
+            "description": "Aliceの使い方、コマンド、カスタマイズ"
+        },
+        "office": {
+            "title": "ImuOffice",
+            "description": "ドキュメント、スプレッドシート、プレゼンテーション"
+        },
+        "store": {
+            "title": "ImuStore",
+            "description": "ミニアプリ、テーマ、スタンプ"
+        },
+        "privacy": {
+            "title": "プライバシー",
+            "description": "データ保護"
+        },
+        "billing": {
+            "title": "お支払い",
+            "description": "サブスクリプション、決済"
+        }
+    },
+    "popular": {
+        "title": "よくある質問",
+        "items": [
+            "ImuChatアカウントの作成方法は？",
+            "パスワードを忘れた場合は？",
+            "アカウントの削除方法は？",
+            "Alice AIの使い方は？",
+            "ImuCoinsの購入方法は？"
+        ]
+    },
+    "contact": {
+        "title": "さらにサポートが必要ですか？",
+        "description": "サポートチームがお手伝いします",
+        "button": "サポートに連絡"
+    },
+    "footer": {
+        "copyright": "© 2026 ImuChat. All rights reserved.",
+        "links": {
+            "privacy": "プライバシー",
+            "terms": "利用規約",
+            "status": "サービス状況"
+        }
+    },
+    "breadcrumb": {
+        "home": "ホーム"
+    },
+    "article": {
+        "helpful": "この記事は役に立ちましたか？",
+        "yes": "はい",
+        "no": "いいえ",
+        "lastUpdated": "最終更新",
+        "related": "関連記事"
+    },
+    "search": {
+        "noResults": "結果が見つかりませんでした",
+        "results": "件の結果"
+    },
+    "nav": {
+        "gettingStarted": "はじめに",
+        "contact": "サポートに連絡"
+    },
+    "gettingStarted": {
+        "title": "ImuChatを始めよう",
+        "subtitle": "スタートに必要なすべて",
+        "steps": {
+            "download": {
+                "title": "アプリをダウンロード",
+                "description": "iOS、Android、デスクトップ版ImuChat"
+            },
+            "create": {
+                "title": "アカウント作成",
+                "description": "メールまたは電話番号で登録"
+            },
+            "setup": {
+                "title": "プロフィール設定",
+                "description": "写真、名前、設定を追加"
+            },
+            "explore": {
+                "title": "探索する",
+                "description": "モジュールと機能を発見"
+            }
+        }
+    },
+    "contactPage": {
+        "title": "サポートに連絡",
+        "subtitle": "お手伝いします",
+        "form": {
+            "name": "お名前",
+            "email": "メールアドレス",
+            "subject": "件名",
+            "message": "メッセージ",
+            "submit": "送信"
+        },
+        "channels": {
+            "chat": {
+                "title": "ライブチャット",
+                "description": "チームとチャット",
+                "cta": "チャットを開始"
+            },
+            "email": {
+                "title": "メール",
+                "description": "24時間以内に回答",
+                "cta": "メールを送信"
+            },
+            "community": {
+                "title": "コミュニティ",
+                "description": "コミュニティに質問",
+                "cta": "フォーラムへ"
+            }
+        }
+    }
+}

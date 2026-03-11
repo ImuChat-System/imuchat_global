@@ -1,0 +1,136 @@
+{
+    "meta": {
+        "title": "Centre d'Aide ImuChat",
+        "description": "Trouvez des réponses à vos questions sur ImuChat"
+    },
+    "hero": {
+        "title": "Comment pouvons-nous vous aider ?",
+        "placeholder": "Rechercher dans l'aide..."
+    },
+    "categories": {
+        "title": "Parcourir par catégorie",
+        "gettingStarted": {
+            "title": "Premiers pas",
+            "description": "Créer un compte, configurer votre profil"
+        },
+        "account": {
+            "title": "Gestion de compte",
+            "description": "Paramètres, sécurité, confidentialité"
+        },
+        "messaging": {
+            "title": "Messagerie & Appels",
+            "description": "Messages, appels vocaux et vidéo"
+        },
+        "alice": {
+            "title": "Alice IA",
+            "description": "Utiliser Alice, commandes, personnalisation"
+        },
+        "office": {
+            "title": "ImuOffice",
+            "description": "Documents, tableurs, présentations"
+        },
+        "store": {
+            "title": "ImuStore",
+            "description": "Mini-apps, thèmes, stickers"
+        },
+        "privacy": {
+            "title": "Vie privée",
+            "description": "Protection des données"
+        },
+        "billing": {
+            "title": "Facturation",
+            "description": "Abonnements, paiements"
+        }
+    },
+    "popular": {
+        "title": "Questions populaires",
+        "items": [
+            "Comment créer un compte ImuChat ?",
+            "Comment récupérer mon mot de passe ?",
+            "Comment supprimer mon compte ?",
+            "Comment utiliser Alice IA ?",
+            "Comment acheter des ImuCoins ?"
+        ]
+    },
+    "contact": {
+        "title": "Besoin d'aide supplémentaire ?",
+        "description": "Notre équipe de support est là pour vous aider",
+        "button": "Contacter le support"
+    },
+    "footer": {
+        "copyright": "© 2026 ImuChat. Tous droits réservés.",
+        "links": {
+            "privacy": "Confidentialité",
+            "terms": "Conditions",
+            "status": "État des services"
+        }
+    },
+    "breadcrumb": {
+        "home": "Accueil"
+    },
+    "article": {
+        "helpful": "Cet article vous a-t-il été utile ?",
+        "yes": "Oui",
+        "no": "Non",
+        "lastUpdated": "Dernière mise à jour",
+        "related": "Articles connexes"
+    },
+    "search": {
+        "noResults": "Aucun résultat trouvé",
+        "results": "résultats trouvés"
+    },
+    "nav": {
+        "gettingStarted": "Premiers pas",
+        "contact": "Contacter le support"
+    },
+    "gettingStarted": {
+        "title": "Premiers pas avec ImuChat",
+        "subtitle": "Tout ce dont vous avez besoin pour commencer",
+        "steps": {
+            "download": {
+                "title": "Télécharger l'app",
+                "description": "ImuChat pour iOS, Android ou bureau"
+            },
+            "create": {
+                "title": "Créer un compte",
+                "description": "S'inscrire avec email ou téléphone"
+            },
+            "setup": {
+                "title": "Configurer le profil",
+                "description": "Ajouter photo, nom et préférences"
+            },
+            "explore": {
+                "title": "Explorer",
+                "description": "Découvrir les modules et fonctionnalités"
+            }
+        }
+    },
+    "contactPage": {
+        "title": "Contacter le support",
+        "subtitle": "Nous sommes là pour vous aider",
+        "form": {
+            "name": "Votre nom",
+            "email": "Adresse email",
+            "subject": "Sujet",
+            "message": "Votre message",
+            "submit": "Envoyer le message"
+        },
+        "channels": {
+            "chat": {
+                "title": "Chat en direct",
+                "description": "Discutez avec notre équipe",
+                "cta": "Démarrer le chat"
+            },
+            "email": {
+                "title": "Email",
+                "description": "Réponse sous 24h",
+                "cta": "Envoyer un email"
+            },
+            "community": {
+                "title": "Communauté",
+                "description": "Posez vos questions à la communauté",
+                "cta": "Visiter le forum"
+            }
+        }
+    }
+}

@@ -1,0 +1,12 @@
+{
+  "projects": {
+    "default": "imuchat-378ad"
+  },
+  "targets": {
+    "imuchat-378ad": {
+      "hosting": {
+        "help": ["imuchat-help"]
+      }
+    }
+  }
+}

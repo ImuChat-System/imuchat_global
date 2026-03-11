@@ -51,11 +51,11 @@ Phase D : Guardian Angel ........ post-S23   (~24 sem)
 
 ## 📊 État actuel (10 juillet 2025)
 
-**Progression globale : ~45% (S0-S13 terminés)**
+**Progression globale : ~55% (S0-S19 terminés)**
 
 ### Phase A — Setup : ✅ COMPLET
 ### Phase B — MVP (S1-S12) : ✅ COMPLET — 303 tests · 70.98% coverage
-### Phase C — Sprint 13 : ✅ COMPLET — 350 tests · 70.98% coverage
+### Phase C — Sprints 13-18 : ✅ COMPLET — 350 tests · 70.98% coverage
 
 ### Highlights S13 — UI Kit Integration
 - **Barrel export** `@/components/ui` → re-export complet de @imuchat/ui-kit
@@ -602,34 +602,35 @@ import { CallsModule } from '@imuchat/platform-core/client'
 
 ---
 
-#### S18 — Imu Office Desktop (Semaines 35-36)
+#### S18 — Imu Office Desktop (Semaines 35-36) ✅
 
 **Objectif :** Suite bureautique desktop-optimized  
 **Réf. 50F :** Groupe 6 — Suite bureautique
 
-| # | Tâche | Fichiers |
-|---|-------|----------|
-| 18.1 | Document editor (collaborative) | `src/app/office/DocumentEditor.tsx` |
-| 18.2 | Spreadsheet basique | `src/app/office/SpreadsheetEditor.tsx` |
-| 18.3 | Slides/Présentation | `src/app/office/SlidesEditor.tsx` |
-| 18.4 | Local file system access (Electron APIs) | `electron/file-access.ts` |
-| 18.5 | Auto-save + sync cloud | Services office |
+| # | Tâche | Fichiers | Statut |
+|---|-------|----------|--------|
+| 18.1 | Document editor (rich text, contentEditable) | `src/app/office/DocumentEditor.tsx` | ✅ |
+| 18.2 | Spreadsheet basique (grid + formules SUM/AVERAGE) | `src/app/office/SpreadsheetEditor.tsx` | ✅ |
+| 18.3 | Slides/Présentation (mode édition + présentation) | `src/app/office/SlidesEditor.tsx` | ✅ |
+| 18.4 | Local file system access (Electron IPC) | `electron/file-access.ts` | ✅ |
+| 18.5 | Auto-save debounced + sync cloud Supabase | `src/services/office-service.ts` | ✅ |
 
-**🏁 Milestone M7 :** Office intégré
+**Statut :** ✅ COMPLET — Hub office, 3 éditeurs, IPC file access, auto-save cloud  
+**🏁 Milestone M7 :** Office intégré ✅
 
 ---
 
-#### S19 — File Manager & Tasks (Semaines 37-38)
+#### S19 — File Manager & Tasks (Semaines 37-38) ✅
 
 **Objectif :** Gestionnaire fichiers avancé, Kanban, calendrier
 
-| # | Tâche | Fichiers |
-|---|-------|----------|
-| 19.1 | Advanced file browser (arborescence) | `src/app/files/FileBrowser.tsx` |
-| 19.2 | File preview (images, PDF, code) | `src/components/files/FilePreview.tsx` |
-| 19.3 | Task/Kanban board | `src/app/tasks/TaskBoard.tsx` |
-| 19.4 | Calendar integration | `src/app/calendar/CalendarPage.tsx` |
-| 19.5 | File sharing (liens) | Services fichiers |
+| # | Tâche | Fichiers | Statut |
+|---|-------|----------|--------|
+| 19.1 | Advanced file browser (arborescence) | `src/app/files/FileBrowser.tsx` | ✅ |
+| 19.2 | File preview (images, PDF, code) | `src/components/files/FilePreview.tsx` | ✅ |
+| 19.3 | Task/Kanban board | `src/app/tasks/TaskBoard.tsx` | ✅ |
+| 19.4 | Calendar integration | `src/app/calendar/CalendarPage.tsx` | ✅ |
+| 19.5 | Router + Sidebar + i18n (7 locales) | `router/index.tsx`, `Sidebar.tsx`, `locales/*.json` | ✅ |
 
 ---
 

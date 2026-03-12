@@ -10,7 +10,7 @@
 
 | Donnée | Valeur |
 |--------|--------|
-| **Sprints totaux** | 32 (S0→S31) |
+| **Sprints totaux** | 33 (S0→S32) |
 | **Durée estimée** | ~60 semaines |
 | **Jalon MVP** | S12 (semaine 24) |
 | **Jalon App 1.0** | S26 (semaine 52) |
@@ -51,12 +51,13 @@ Phase D : Guardian Angel ........ post-S23   (~24 sem)
 
 ## 📊 État actuel (11 mars 2026)
 
-**Progression globale : 100 % — S0-S31 COMPLET · 1300 tests · 39 fichiers**
+**Progression globale : 100 % — S0-S32 COMPLET · 1380 tests · 40 fichiers**
 
 ### Phase A — Setup : ✅ COMPLET
 ### Phase B — MVP (S1-S12) : ✅ COMPLET — 303 tests
 ### Phase C — Features Post-MVP (S13-S30) : ✅ COMPLET — 1216 tests au total
 ### Phase C+ — Quick Wins (S31) : ✅ COMPLET — 84 tests ajoutés (total 1300)
+### Phase D — Collaboration & Verification (S32) : ✅ COMPLET — 80 tests ajoutés (total 1380)
 
 | Bloc | Sprints | Tests ajoutés | Résumé |
 |------|:-------:|:-------------:|--------|
@@ -68,6 +69,15 @@ Phase D : Guardian Angel ........ post-S23   (~24 sem)
 | C6 — Sécurité & Perf | S24-S26 | ~220 | Electron hardening, bundle optimize, e2e |
 | C7 — Cross-Domain | S27-S30 | ~226 | Music, Gaming, Arena, Finance, Social graph, Companion Full |
 | C+ — Quick Wins | S31 | 84 | Mini-blogs, AI Moderation, Animated Statuses |
+| D — Collab & Verification | S32 | 80 | Whiteboard, Group Bots, Identity Verification |
+
+### S32 — Collaboration & Verification (détail)
+| Feature | Fichiers créés | Tests |
+|---------|---------------|:-----:|
+| Board collaboratif | `whiteboard-service.ts`, `WhiteboardPage.tsx` | 27 |
+| Bots de groupe | `bot-service.ts`, `BotManager.tsx` | 27 |
+| Vérification identité | `verification-service.ts`, `VerificationPage.tsx` | 26 |
+| Router intégration | `router/index.tsx` (routes `/whiteboard`, `/whiteboard/:id`, `/communities/:serverId/bots`, `/profile/verify`) | — |
 
 ### S31 — Quick Wins (détail)
 | Feature | Fichiers créés | Tests |

@@ -10,15 +10,26 @@
 
 ## Table des matières
 
-1. [Vision & Positionnement](#1-vision--positionnement)
-2. [Architecture générale](#2-architecture-générale)
-3. [Schéma de base de données](#3-schéma-de-base-de-données)
-4. [API & Routes](#4-api--routes)
-5. [Mapping des écrans & composants](#5-mapping-des-écrans--composants)
-6. [Intégration Chat](#6-intégration-chat)
-7. [Moteur de traduction](#7-moteur-de-traduction)
-8. [Langues supportées](#8-langues-supportées)
-9. [Plan d'implémentation](#9-plan-dimplémentation)
+- [🌐 ImuTranslate — Document d'Implémentation Complet](#-imutranslate--document-dimplémentation-complet)
+  - [Table des matières](#table-des-matières)
+  - [1. Vision \& Positionnement](#1-vision--positionnement)
+  - [2. Architecture générale](#2-architecture-générale)
+  - [3. Schéma de base de données](#3-schéma-de-base-de-données)
+  - [4. API \& Routes](#4-api--routes)
+    - [4.1 Route API serveur (proxy sécurisé)](#41-route-api-serveur-proxy-sécurisé)
+    - [4.2 Service client TypeScript](#42-service-client-typescript)
+    - [4.3 Routes Next.js](#43-routes-nextjs)
+  - [5. Mapping des écrans \& composants](#5-mapping-des-écrans--composants)
+    - [Écrans](#écrans)
+    - [Composants Chat (intégrés)](#composants-chat-intégrés)
+  - [6. Intégration Chat](#6-intégration-chat)
+    - [6.1 Traduction à la demande](#61-traduction-à-la-demande)
+    - [6.2 Mode Auto par conversation](#62-mode-auto-par-conversation)
+  - [7. Moteur de traduction](#7-moteur-de-traduction)
+    - [7.1 Zustand Store](#71-zustand-store)
+    - [7.2 Cache côté client (IndexedDB via idb)](#72-cache-côté-client-indexeddb-via-idb)
+  - [8. Langues supportées](#8-langues-supportées)
+  - [9. Plan d'implémentation](#9-plan-dimplémentation)
 
 ---
 
@@ -27,11 +38,13 @@
 ImuTranslate apporte la **traduction instantanée** directement dans les conversations ImuChat. Chaque message peut être affiché dans la langue maternelle de l'utilisateur, sans copier-coller ni quitter l'app.
 
 **Modes de fonctionnement :**
+
 - **Traduction à la demande** : tap sur un message → "Voir en français"
 - **Mode auto** : activation par conversation → tous les messages entrants traduits automatiquement
 - **Traduction de groupe** : dans un groupe multilingue, chacun voit les messages dans sa langue
 
 **Providers supportés :**
+
 - DeepL API (prioritaire — meilleure qualité pour les langues européennes)
 - Google Translate API (fallback + langues rares)
 - Claude API (pour les nuances et argot)
@@ -379,6 +392,7 @@ Quand l'utilisateur fait un **long-press / clic droit** sur un message, le menu 
 ```
 
 En cliquant "Traduire" :
+
 1. Affiche un skeleton sous le message
 2. Appelle `/api/translate` (avec `message_id` pour le cache)
 3. Affiche la traduction sous le message original avec un badge de langue source

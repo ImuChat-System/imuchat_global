@@ -10,16 +10,22 @@
 
 ## Table des matières
 
-1. [Vision & Positionnement](#1-vision--positionnement)
-2. [Architecture générale](#2-architecture-générale)
-3. [Schéma de base de données](#3-schéma-de-base-de-données)
-4. [API & Routes](#4-api--routes)
-5. [Mapping des écrans](#5-mapping-des-écrans)
-6. [Composants UI](#6-composants-ui)
-7. [Logique métier](#7-logique-métier)
-8. [Intégration Chat](#8-intégration-chat)
-9. [Notifications](#9-notifications)
-10. [Plan d'implémentation](#10-plan-dimplémentation)
+- [💸 ImuSplit — Document d'Implémentation Complet](#-imusplit--document-dimplémentation-complet)
+  - [Table des matières](#table-des-matières)
+  - [1. Vision \& Positionnement](#1-vision--positionnement)
+  - [2. Architecture générale](#2-architecture-générale)
+  - [3. Schéma de base de données](#3-schéma-de-base-de-données)
+  - [4. API \& Routes](#4-api--routes)
+    - [4.1 Services TypeScript](#41-services-typescript)
+    - [4.2 Routes Next.js API](#42-routes-nextjs-api)
+  - [5. Mapping des écrans](#5-mapping-des-écrans)
+  - [6. Composants UI](#6-composants-ui)
+  - [7. Logique métier](#7-logique-métier)
+    - [7.1 Algorithme "Simplify Debts"](#71-algorithme-simplify-debts)
+    - [7.2 Modes de répartition](#72-modes-de-répartition)
+  - [8. Intégration Chat](#8-intégration-chat)
+  - [9. Notifications](#9-notifications)
+  - [10. Plan d'implémentation](#10-plan-dimplémentation)
 
 ---
 
@@ -28,6 +34,7 @@
 ImuSplit est un module de **partage de dépenses** directement intégré à ImuChat. Il permet à un groupe de calculer qui doit quoi à qui, régler les dettes en ImuCoin, et garder une trace des dépenses communes sans quitter l'application.
 
 **Cas d'usage principaux :**
+
 - Soirée entre amis → qui a payé quoi ?
 - Voyage en groupe → hôtel, essence, restos
 - Colocation → loyer, courses, électricité
@@ -494,6 +501,7 @@ components/split/
 ```
 
 **Exemple : `DebtCard.tsx`**
+
 ```tsx
 interface DebtCardProps {
   debt: SplitDebt;
@@ -570,11 +578,13 @@ Transactions minimales :
 ## 8. Intégration Chat
 
 Quand une dépense est ajoutée depuis un chat de groupe :
+
 1. Un message spécial de type `split_expense` est envoyé automatiquement
 2. Le composant `SplitChatBubble` affiche la dépense inline dans la conversation
 3. Un bouton "Voir les soldes" renvoie vers `/split/[groupId]/balance`
 
 **Message schema (type `split_expense`) :**
+
 ```typescript
 {
   type: 'split_expense',

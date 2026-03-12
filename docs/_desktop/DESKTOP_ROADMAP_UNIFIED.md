@@ -1,7 +1,7 @@
 # 🗺️ ROADMAP UNIFIÉE — Desktop App ImuChat
 
 **Source unique de vérité pour le développement desktop**  
-**Dernière mise à jour :** 10 juillet 2025  
+**Dernière mise à jour :** 11 juillet 2025  
 **Numérotation :** S0→S30 (voir `DESKTOP_INDEX.md` pour la correspondance avec l'ancien système)
 
 ---
@@ -10,7 +10,7 @@
 
 | Donnée | Valeur |
 |--------|--------|
-| **Sprints totaux** | 33 (S0→S32) |
+| **Sprints totaux** | 41 (S0→S40) |
 | **Durée estimée** | ~60 semaines |
 | **Jalon MVP** | S12 (semaine 24) |
 | **Jalon App 1.0** | S26 (semaine 52) |
@@ -51,13 +51,29 @@ Phase D : Guardian Angel ........ post-S23   (~24 sem)
 
 ## 📊 État actuel (11 mars 2026)
 
-**Progression globale : 100 % — S0-S32 COMPLET · 1380 tests · 40 fichiers**
+**Progression globale : 100 % — S0-S40 COMPLET · 2511 tests · 48 fichiers**
 
 ### Phase A — Setup : ✅ COMPLET
+
 ### Phase B — MVP (S1-S12) : ✅ COMPLET — 303 tests
+
 ### Phase C — Features Post-MVP (S13-S30) : ✅ COMPLET — 1216 tests au total
+
 ### Phase C+ — Quick Wins (S31) : ✅ COMPLET — 84 tests ajoutés (total 1300)
+
 ### Phase D — Collaboration & Verification (S32) : ✅ COMPLET — 80 tests ajoutés (total 1380)
+
+### Phase E — Beauté IA, Organisations & Stickers (S33) : ✅ COMPLET — 81 tests ajoutés (total 1461)
+
+### Phase F — Personnalisation, Marketplace & News (S34) : ✅ COMPLET — 81 tests ajoutés (total ~1542)
+
+### Phase G — Formations, Design & Média, PDF (S35) : ✅ COMPLET — 122 tests ajoutés (total 1664)
+
+### Phase H — Podcasts, Livres & Lecteur Vidéo (S36) : ✅ COMPLET — 126 tests ajoutés (total 1790)
+### Phase I — Dating, Smart Home, Style & Beauté (S37) : ✅ COMPLET — ~180 tests ajoutés (total ~1970)
+### Phase J — Cooking & Home, Layout Editor, Services publics (S38) : ✅ COMPLET — 188 tests ajoutés (total 2158)
+### Phase K — Guardian Angel D1/D2/D3 (S39) : ✅ COMPLET — 217 tests ajoutés (total 2375)
+### Phase L — Guardian Angel D4/D5/D6 (S40) : ✅ COMPLET — 136 tests ajoutés (total 2511)
 
 | Bloc | Sprints | Tests ajoutés | Résumé |
 |------|:-------:|:-------------:|--------|
@@ -70,8 +86,17 @@ Phase D : Guardian Angel ........ post-S23   (~24 sem)
 | C7 — Cross-Domain | S27-S30 | ~226 | Music, Gaming, Arena, Finance, Social graph, Companion Full |
 | C+ — Quick Wins | S31 | 84 | Mini-blogs, AI Moderation, Animated Statuses |
 | D — Collab & Verification | S32 | 80 | Whiteboard, Group Bots, Identity Verification |
+| E — Beauté IA, Orgs & Stickers | S33 | 80 | Filtres beauté IA, Organisations, Création stickers |
+| F — Perso, Marketplace & News | S34 | 81 | Personnalisation avancée, Marketplace services, Actualités |
+| G — Formations, Design & PDF | S35 | 122 | Formations/Cours, Design & Media (mini-Canva), Lecteur PDF |
+| H — Podcasts, Livres & Vidéo | S36 | 126 | Podcasts, Ebooks/Liseuse, Lecteur Vidéo dédié |
+| I — Dating, Smart Home, Beauté | S37 | ~180 | Dating, Smart Home, Style & Beauté avancé |
+| J — Cooking, Layout, Public G7 | S38 | 188 | Cooking & Home, Layout Editor, Services publics |
+| K — Guardian Angel D1/D2/D3 | S39 | 217 | Safety Monitoring, Emergency Alerts, Location Tracking |
+| L — Guardian Angel D4/D5/D6 | S40 | 136 | Health Monitoring, Parental Controls, Guardian Dashboard |
 
 ### S32 — Collaboration & Verification (détail)
+
 | Feature | Fichiers créés | Tests |
 |---------|---------------|:-----:|
 | Board collaboratif | `whiteboard-service.ts`, `WhiteboardPage.tsx` | 27 |
@@ -79,7 +104,80 @@ Phase D : Guardian Angel ........ post-S23   (~24 sem)
 | Vérification identité | `verification-service.ts`, `VerificationPage.tsx` | 26 |
 | Router intégration | `router/index.tsx` (routes `/whiteboard`, `/whiteboard/:id`, `/communities/:serverId/bots`, `/profile/verify`) | — |
 
+### S33 — Beauté IA, Organisations & Stickers (détail)
+
+| Feature | Fichiers créés | Tests |
+|---------|---------------|:-----:|
+| Filtres beauté IA | `beauty-filter-service.ts`, `BeautyFiltersPage.tsx` | 26 |
+| Organisations (Pro) | `organization-service.ts`, `OrganizationsPage.tsx` | 27 |
+| Création stickers & emojis | `sticker-creator-service.ts`, `StickerCreatorPage.tsx` | 27 |
+| Router intégration | `router/index.tsx` (routes `/calls/filters`, `/organizations`, `/organizations/:orgId`, `/stickers`, `/stickers/create`) | — |
+
+### S34 — Personnalisation avancée, Marketplace & News (détail)
+
+| Feature | Fichiers créés | Tests |
+|---------|---------------|:-----:|
+| Personnalisation avancée | `personalization-service.ts`, `PersonalizationPage.tsx` | 27 |
+| Marketplace services | `marketplace-service.ts`, `MarketplacePage.tsx` | 27 |
+| Actualités & tendances | `news-service.ts`, `NewsPage.tsx` | 27 |
+| Router intégration | `router/index.tsx` (routes `/settings/personalization`, `/marketplace`, `/marketplace/:listingId`, `/news`, `/news/:slug`) | — |
+
+### S35 — Formations, Design & Média, PDF (détail)
+
+| Feature | Fichiers créés | Tests |
+|---------|---------------|:-----:|
+| Formations & Cours | `course-service.ts`, `CoursesPage.tsx` | ~40 |
+| Design & Média (mini-Canva) | `design-media-service.ts`, `DesignMediaPage.tsx` | ~40 |
+| Lecteur PDF standalone | `pdf-service.ts`, `PdfViewerPage.tsx` | ~42 |
+| Router intégration | `router/index.tsx` (routes `/courses`, `/courses/:courseId`, `/courses/:courseId/lesson/:lessonId`, `/design`, `/design/:projectId`, `/pdf`, `/pdf/:documentId`) | — |
+
+### S36 — Podcasts, Livres & Lecteur Vidéo (détail)
+
+| Feature | Fichiers créés | Tests |
+|---------|---------------|:-----:|
+| Podcasts | `podcast-service.ts`, `PodcastPage.tsx` | ~42 |
+| Livres / Liseuse | `ebook-service.ts`, `EbookReaderPage.tsx` | ~42 |
+| Lecteur Vidéo dédié | `video-player-service.ts`, `VideoPlayerPage.tsx` | ~42 |
+| Router intégration | `router/index.tsx` (routes `/podcasts`, `/podcasts/:podcastId`, `/podcasts/:podcastId/episode/:episodeId`, `/ebooks`, `/ebooks/:ebookId`, `/video`, `/video/:videoId`) | — |
+
+### S37 — Dating, Smart Home, Style & Beauté (détail)
+
+| Feature | Fichiers créés | Tests |
+|---------|---------------|:-----:|
+| Dating | `dating-service.ts`, `DatingPage.tsx` | ~60 |
+| Smart Home | `smart-home-service.ts`, `SmartHomePage.tsx` | ~60 |
+| Style & Beauté avancé | `style-beauty-service.ts`, `StyleBeautyPage.tsx` | ~60 |
+| Router intégration | `router/index.tsx` (routes `/dating`, `/dating/:profileId`, `/smarthome`, `/smarthome/:deviceId`, `/stylebeauty`, `/stylebeauty/:lookId`) | — |
+
+### S38 — Cooking & Home, Layout Editor, Services publics G7 (détail)
+
+| Feature | Fichiers créés | Tests |
+|---------|---------------|:-----:|
+| Cooking & Home | `cooking-home-service.ts`, `CookingHomePage.tsx` | ~63 |
+| Layout Editor | `layout-editor-service.ts`, `LayoutEditorPage.tsx` | ~63 |
+| Services publics | `public-services-service.ts`, `PublicServicesPage.tsx` | ~62 |
+| Router intégration | `router/index.tsx` (routes `/cooking`, `/cooking/:recipeId`, `/layout-editor`, `/layout-editor/:layoutId`, `/publicservices`, `/publicservices/:serviceId`) | — |
+
+### S39 — Guardian Angel D1/D2/D3 (détail)
+
+| Feature | Fichiers créés | Tests |
+|---------|---------------|:-----:|
+| Safety Monitoring | `safety-monitoring-service.ts`, `SafetyMonitoringPage.tsx` | ~72 |
+| Emergency Alerts | `emergency-alert-service.ts`, `EmergencyAlertPage.tsx` | ~72 |
+| Location Tracking | `location-tracking-service.ts`, `LocationTrackingPage.tsx` | ~73 |
+| Router intégration | `router/index.tsx` (routes `/safety`, `/safety/incident/:incidentId`, `/emergency`, `/emergency/alert/:alertId`, `/location`, `/location/:memberId`, `/location/geofence/:geofenceId`) | — |
+
+### S40 — Guardian Angel D4/D5/D6 (détail)
+
+| Feature | Fichiers créés | Tests |
+|---------|---------------|:-----:|
+| Health Monitoring | `health-monitoring-service.ts`, `HealthMonitoringPage.tsx` | ~45 |
+| Parental Controls | `parental-controls-service.ts`, `ParentalControlsPage.tsx` | ~45 |
+| Guardian Dashboard | `guardian-dashboard-service.ts`, `GuardianDashboardPage.tsx` | ~46 |
+| Router intégration | `router/index.tsx` (routes `/health`, `/health/vital/:vitalId`, `/parental`, `/parental/:childId`, `/parental/:childId/approval/:approvalId`, `/guardian`, `/guardian/:groupId`) | — |
+
 ### S31 — Quick Wins (détail)
+
 | Feature | Fichiers créés | Tests |
 |---------|---------------|:-----:|
 | Mini-Blogs | `blog-service.ts`, `BlogPage.tsx` | 27 |
@@ -103,11 +201,16 @@ Phase D : Guardian Angel ........ post-S23   (~24 sem)
 | M10 – Social Complet | S21 | ✅ |
 | M11 – App 1.0 Distribution | S26 | ✅ |
 | M12 – App 2.0 Complète | S30 | ✅ |
+| M13 – P2 Complet | S35 | ✅ |
+| M14 – P3 Divertissement | S36 | ✅ |
+| M15 – P3 Lifestyle | S37 | ✅ |
+| M16 – P4 Créativité & Public | S38 | ✅ |
+| M17 – Guardian Angel Core | S39 | ✅ |
+| M18 – Guardian Angel Complet | S40 | ✅ |
 
-### Ce qui reste : Phase D — Guardian Angel
-- **GA-D1→GA-D6** (~24 semaines) — voir `ROADMAP_GUARDIAN_ANGEL_DESKTOP.md`
-- Prérequis satisfaits : Auth (S2), Companion (S23/S30), Sécurité Electron (S24)
-- Voir aussi `DESKTOP_GAP_ANALYSIS_POST_S30.md` pour l'audit complet des fonctionnalités manquantes
+### Ce qui reste : Aucun
+
+Tous les sprints S0→S40 sont complets, y compris Guardian Angel D1→D6.
 
 ---
 
@@ -134,6 +237,7 @@ Phase D : Guardian Angel ........ post-S23   (~24 sem)
 | 0.10 | Vérifier imports workspace packages | Build test | P0 |
 
 **Fichiers créés :**
+
 ```
 src/
 ├── router/index.tsx
@@ -148,6 +252,7 @@ postcss.config.mjs
 ```
 
 **Critères de validation :**
+
 - `pnpm dev` démarre sans erreur
 - Import `@/` fonctionne
 - Import `@imuchat/ui-kit` et `@imuchat/shared-types` fonctionne
@@ -182,6 +287,7 @@ postcss.config.mjs
 | 1.8 | i18n namespaces `common`, `navigation` | `src/i18n/locales/*.json` | P0 |
 
 **Intégrations packages :**
+
 ```typescript
 // shared-types
 import type { User, UserProfile } from '@imuchat/shared-types'
@@ -214,6 +320,7 @@ import { Button, Card, Spinner, Input } from '@imuchat/ui-kit'
 | 2.10 | Tests auth (useAuth, login flow) | `src/__tests__/auth.test.ts` | P1 |
 
 **Intégrations packages :**
+
 ```typescript
 // shared-types
 import type { User, UserProfile, AuthState } from '@imuchat/shared-types'
@@ -254,6 +361,7 @@ import { KawaiiCard, KawaiiInput, KawaiiButton } from '@imuchat/ui-kit'
 | 3.11 | i18n namespace `chat` | `src/i18n/locales/*.json` | P0 |
 
 **Intégrations packages :**
+
 ```typescript
 // shared-types
 import type { ChatMessage, Conversation, MessageType } from '@imuchat/shared-types'
@@ -284,6 +392,7 @@ import { ChatBubble, ChatInput, MessageList, Avatar, UserAvatar } from '@imuchat
 | 4.9 | Tests chat (useChat, message sending) | `src/__tests__/chat.test.ts` | P1 |
 
 **Intégrations packages :**
+
 ```typescript
 // ui-kit
 import { TypingIndicator, EmojiReaction, OnlineIndicator } from '@imuchat/ui-kit'
@@ -318,6 +427,7 @@ import { EventBus } from '@imuchat/platform-core/client'
 | 5.13 | i18n namespaces `contacts`, `notifications` | `src/i18n/locales/*.json` | P0 |
 
 **Intégrations packages :**
+
 ```typescript
 // shared-types
 import type { Contact, FriendRequest, UserProfile } from '@imuchat/shared-types'
@@ -358,6 +468,7 @@ import { PresenceModule, NotificationsModule, EventBus } from '@imuchat/platform
 | 6.9 | i18n namespaces `profile`, `settings` | `src/i18n/locales/*.json` | P0 |
 
 **Intégrations packages :**
+
 ```typescript
 // ui-kit
 import { Avatar, Card, Tabs, Switch, Slider } from '@imuchat/ui-kit'
@@ -382,6 +493,7 @@ import { Avatar, Card, Tabs, Switch, Slider } from '@imuchat/ui-kit'
 | 7.8 | Home page refactored (données réelles) | `src/app/home/HomePage.tsx` | P0 |
 
 **Intégrations packages :**
+
 ```typescript
 // ui-kit
 import { themes, applyTheme, ThemeSelector } from '@imuchat/ui-kit/themes'
@@ -416,6 +528,7 @@ import { ThemeModule, PreferencesModule } from '@imuchat/platform-core/client'
 | 8.8 | i18n namespace `calls` | `src/i18n/locales/*.json` | P0 |
 
 **Intégrations packages :**
+
 ```typescript
 // shared-types
 import type { Call, CallType, CallStatus } from '@imuchat/shared-types'
@@ -548,6 +661,7 @@ import { CallsModule } from '@imuchat/platform-core/client'
 | 14.5 | Patterns de code communs documentés | Docs | ✅ |
 
 **Détails d'implémentation :**
+
 - **Infrastructure :** `lib/platform.ts` (singleton factory) + `contexts/PlatformContext.tsx` (Provider + 7 convenience hooks) + `App.tsx` wiring
 - **P1 Migrations :** usePresence → PresenceModule, useGlobalSearch → SearchModule (real indexing replaces stub), useNotifications → NotificationsModule (Socket.IO bridge)
 - **P2 Migrations :** contacts-service → ContactsModule (module primary + Supabase fallback), auth-service → EventBus bridge (publishes auth:* events), useOnboarding → PreferencesModule (localStorage fallback)
@@ -677,6 +791,7 @@ import { CallsModule } from '@imuchat/platform-core/client'
 | 20.5 | Stories viewer & creation | `src/app/feed/StoriesPage.tsx` | ✅ |
 
 **Livrables supplémentaires :**
+
 - `supabase_social_feed.sql` — 6 tables, triggers, RLS
 - Routes `/feed` et `/feed/stories` (lazy-loaded)
 - Sidebar navigation entry (📰)
@@ -700,6 +815,7 @@ import { CallsModule } from '@imuchat/platform-core/client'
 | 21.5 | Activity feed | `src/components/social/ActivityFeed.tsx` |
 
 **Livrables S21 :**
+
 - `events-service.ts` — CRUD événements + système RSVP complet
 - `ExtendedProfile.tsx` — Profil social avec onglets (posts, médias, à propos), compteurs amis/posts
 - `EventsPage.tsx` — Listing événements avec filtres catégorie/recherche, cartes RSVP

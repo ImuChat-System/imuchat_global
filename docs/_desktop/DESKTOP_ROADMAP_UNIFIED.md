@@ -10,7 +10,7 @@
 
 | Donnée | Valeur |
 |--------|--------|
-| **Sprints totaux** | 31 (S0→S30) |
+| **Sprints totaux** | 32 (S0→S31) |
 | **Durée estimée** | ~60 semaines |
 | **Jalon MVP** | S12 (semaine 24) |
 | **Jalon App 1.0** | S26 (semaine 52) |
@@ -49,40 +49,55 @@ Phase D : Guardian Angel ........ post-S23   (~24 sem)
 
 ---
 
-## 📊 État actuel (10 juillet 2025)
+## 📊 État actuel (11 mars 2026)
 
-**Progression globale : ~55% (S0-S19 terminés)**
+**Progression globale : 100 % — S0-S31 COMPLET · 1300 tests · 39 fichiers**
 
 ### Phase A — Setup : ✅ COMPLET
-### Phase B — MVP (S1-S12) : ✅ COMPLET — 303 tests · 70.98% coverage
-### Phase C — Sprints 13-18 : ✅ COMPLET — 350 tests · 70.98% coverage
+### Phase B — MVP (S1-S12) : ✅ COMPLET — 303 tests
+### Phase C — Features Post-MVP (S13-S30) : ✅ COMPLET — 1216 tests au total
+### Phase C+ — Quick Wins (S31) : ✅ COMPLET — 84 tests ajoutés (total 1300)
 
-### Highlights S13 — UI Kit Integration
-- **Barrel export** `@/components/ui` → re-export complet de @imuchat/ui-kit
-- **Switch** migré (3 pages settings)
-- **Avatar** migré (5 fichiers, mapping PresenceStatus → AvatarStatus)
-- **Button** migré (6+ fichiers, variants primary/secondary/outline/ghost/destructive/link)
-- **Input** migré (3 fichiers)
-- **Spinner** migré (10 fichiers)
-- **ImuMascot** intégré dans OnboardingPage (per-slide states)
-- **Modal/Dialog** audité → custom overlays conservés (framer-motion, command palette)
-- **lottie-web** mocké dans test setup pour compatibilité jsdom
-- **21 fichiers modifiés**, 0 régression
+| Bloc | Sprints | Tests ajoutés | Résumé |
+|------|:-------:|:-------------:|--------|
+| C1 — UI Kit & Code Sharing | S13-S14 | 350 | UI-kit barrel, platform-core hooks |
+| C2 — Store & Économie | S15-S17 | ~120 | Store, Wallet, Communities |
+| C3 — Office & Productivité | S18-S19 | ~100 | 3 éditeurs Office, TaskBoard, Calendar |
+| C4 — Feed & Social | S20-S21 | ~80 | Stories, Feed, Events, ExtendedProfile |
+| C5 — IA & Companion | S22-S23 | ~120 | Alice IA, Translator, Live2D Companion |
+| C6 — Sécurité & Perf | S24-S26 | ~220 | Electron hardening, bundle optimize, e2e |
+| C7 — Cross-Domain | S27-S30 | ~226 | Music, Gaming, Arena, Finance, Social graph, Companion Full |
+| C+ — Quick Wins | S31 | 84 | Mini-blogs, AI Moderation, Animated Statuses |
 
-### Highlights S14 — Hooks & Services partagés (platform-core deep integration)
-- **lib/platform.ts** singleton factory : EventBus, PresenceModule, NotificationsModule, ContactsModule, PreferencesModule, SearchModule, OfflineSyncModule
-- **contexts/PlatformContext.tsx** : PlatformProvider + 7 convenience hooks (miroir web-app pattern)
-- **usePresence** → PresenceModule (polling sync 10s, auto AWAY on visibility change)
-- **useGlobalSearch** → SearchModule (real indexed search, replaces stub)
-- **useNotifications** → NotificationsModule (Socket.IO bridge, dual-write store+module)
-- **contacts-service** → ContactsModule (primary) + Supabase fallback
-- **auth-service** → EventBus bridge (publishes auth:signed_in/signed_out/signed_up events)
-- **useOnboarding** → PreferencesModule + localStorage fallback
-- **Tests :** 350/350 ✅ · TypeScript clean
+### S31 — Quick Wins (détail)
+| Feature | Fichiers créés | Tests |
+|---------|---------------|:-----:|
+| Mini-Blogs | `blog-service.ts`, `BlogPage.tsx` | 27 |
+| AI Moderation avancée | `moderation-service.ts`, `ModerationDashboard.tsx` | 27 |
+| Statuts animés | `animated-status-service.ts`, `AnimatedStatusPicker.tsx` | 26 |
+| Router intégration | `router/index.tsx` (routes `/blog`, `/blog/:slug`) | 4 |
 
-### Ce qui reste (prochain : S15)
-- **S15 :** ImuChat Store (catalogue, détail module, installation)
-- **S16→S30 :** Wallet, Office, Feed, IA, Sécurité, Cross-Domain
+### Milestones atteints
+
+| Milestone | Sprint | Statut |
+|-----------|:------:|:------:|
+| M1 – Shell Fonctionnel | S0 | ✅ |
+| M2 – Auth & Navigation | S2 | ✅ |
+| M3 – Chat Core | S5 | ✅ |
+| M4 – Profils & Settings | S7 | ✅ |
+| M5 – Appels & Natif | S10 | ✅ |
+| M6 – MVP Release | S12 | ✅ |
+| M7 – Platform Shared | S14 | ✅ |
+| M8 – Économie Complète | S17 | ✅ |
+| M9 – Productivité Complète | S19 | ✅ |
+| M10 – Social Complet | S21 | ✅ |
+| M11 – App 1.0 Distribution | S26 | ✅ |
+| M12 – App 2.0 Complète | S30 | ✅ |
+
+### Ce qui reste : Phase D — Guardian Angel
+- **GA-D1→GA-D6** (~24 semaines) — voir `ROADMAP_GUARDIAN_ANGEL_DESKTOP.md`
+- Prérequis satisfaits : Auth (S2), Companion (S23/S30), Sécurité Electron (S24)
+- Voir aussi `DESKTOP_GAP_ANALYSIS_POST_S30.md` pour l'audit complet des fonctionnalités manquantes
 
 ---
 

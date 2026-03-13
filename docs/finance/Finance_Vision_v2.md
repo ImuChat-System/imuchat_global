@@ -473,7 +473,7 @@ interface GroupPool {
 
 Le commerçant/freelance génère un lien :
 ```
-https://pay.imuchat.com/p/abc123
+https://pay.imuchat.app/p/abc123
 → Montant : 45,00 €
 → Marchand : Studio Design Nathan
 → Ref : INV-2026-042

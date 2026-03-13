@@ -137,7 +137,7 @@ sites/
 
 | Site | Statut |
 |------|--------|
-| enterprise.imuchat.app | ⏳ |
+| enterprise.imuchat.app | 🚧 En cours (90%) |
 | office.imuchat.app | ⏳ |
 | sandbox.imuchat.app | ⏳ |
 | analytics.imuchat.app | ⏳ |
@@ -216,4 +216,4 @@ Pour chaque site :
 
 ---
 
-*Dernière mise à jour : 11 mars 2026*
+*Dernière mise à jour : 13 mars 2026*

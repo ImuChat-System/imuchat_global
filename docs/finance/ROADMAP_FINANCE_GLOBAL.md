@@ -13,6 +13,12 @@
 | **S45** | IMUBANK 5 (KYC Onfido) + IMUBANK 7 (P2P Payments) | +238 → 3385 | ✅ |
 | **S46** | ECONOMY A1 (15 types transactions IC + stats wallet) | +285 → 3670 | ✅ |
 | **S47** | IMUBANK 8 (Split Bill + Cagnottes de groupe) | +201 → 3871 | ✅ |
+| **S48** | ECONOMY A2 (Cycle économique IC complet) | +192 → 4063 | ✅ |
+| **S49** | ECONOMY A3 (Commissions dynamiques, revenue share) | +132 → 4195 | ✅ |
+| **S50** | IMUBANK 9 (Cartes virtuelles Stripe Issuing) | +110 → 4305 | ✅ |
+| **S51** | ECONOMY B1 (Tips / Pourboires) | +98 → 4390 | ✅ |
+| **S52** | IMUBANK 10 (Apple Pay / Google Pay / QR / NFC / Liens) | +100 → 4490 | ✅ |
+| **S53** | ECONOMY B2 (Cadeaux Live — Rose 50IC → Castle 10000IC) | +111 → 4601 | ✅ |
 
 ---
 
@@ -66,7 +72,7 @@ ImuEcon         █████████████████████�
 | **IMUBANK 7** ✅ | Wallet | 2 sem. | P2P dans le chat (send, request) — *Desktop S45 : p2p-payment-service.ts + P2PPaymentPage.tsx (238 tests)* |
 | **ECONOMY A2** ✅ | Economy | 2 sem. | Cycle économique IC complet (conversion IC↔fiat) — *Desktop S48 : economy-cycle-service.ts + EconomyCyclePage.tsx (+192 tests → 4063)* |
 | **IMUBANK 8** ✅ | Wallet | 2 sem. | Split Bill + Cagnottes de groupe — *Desktop S47 : split-bill-service.ts + SplitBillPage.tsx (201 tests)* |
-| **ECONOMY A3** | Economy | 2 sem. | Commissions dynamiques, revenue share, dashboard admin |
+| **ECONOMY A3** ✅ | Economy | 2 sem. | Commissions dynamiques, revenue share, dashboard admin — *Desktop S49 : dynamic-commission-service.ts + EconomyTransactionsPage.tsx (+132 tests → 4195)* |
 
 > Note : A1 peut démarrer dès que IMUBANK 1-2 sont terminés. A2 après IMUBANK 2-4. A3 en parallèle avec IMUBANK 7-8.
 

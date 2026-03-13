@@ -114,13 +114,13 @@ Le Finance Hub est accessible depuis **5 points d'entrée** :
 | **Supabase Edge Functions manquantes** | `create-checkout-session`, `check-checkout-status`, `request-cashout` etc. → appelées mais non implémentées | Stripe non fonctionnel |
 | **Noms tables incompatibles** | Mobile requête `wallets` / `wallet_transactions` / `wallet_missions` mais SQL crée `imucoin_wallets` / `imucoin_transactions` / `missions` | Erreurs runtime |
 | **Types dupliqués divergents** | `shared-types/src/wallet.ts` vs `mobile/types/wallet.ts` → structures différentes (ex: `WalletBalance` = différent) | Confusion, bugs |
-| **KYC mock uniquement** | Données KYC dans le store mais pas de véritable service de vérification | Non fonctionnel |
+| **KYC mock uniquement** | Données KYC dans le store mais pas de véritable service de vérification | Non fonctionnel | ✅ *Desktop S45 : kyc-verification-service.ts — Onfido integration, KYC tiers 0-2* |
 | **Gamification ↔ Wallet** | `missions.imucoin_reward` existe en SQL mais pas de trigger pour créditer le wallet automatiquement à la complétion | Rewards non distribuées |
 
 ### ❌ Non implémenté (prévu dans la vision)
 
-- Finance Hub complet (40 écrans)
-- Paiements P2P dans le chat
+- Finance Hub complet (40 écrans) — ✅ *Desktop S44 : FinanceHubPage.tsx (dashboard + navigation)*
+- Paiements P2P dans le chat — ✅ *Desktop S45 : P2PPaymentPage.tsx (send, request, contacts, history)*
 - Cartes ImuChat (virtuelles/physiques)
 - QR code / NFC
 - Investissements / Épargne

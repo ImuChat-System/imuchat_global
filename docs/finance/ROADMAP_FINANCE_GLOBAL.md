@@ -32,6 +32,12 @@
 
 **✅ Macro-Phase 4 — Creator & Gaming Economy : TERMINÉE (S57→S61)**
 
+| **S62** | ECONOMY D1 (Store enrichi — avis, remboursements, bundles, promos) | +100 → 5568 | ✅ |
+| **S63** | ECONOMY D2 (Developer payouts v2 — auto, fiscaux, multi-devises) | +95 → 5663 | ✅ |
+| **S64** | ECONOMY D3 (Marketplace services — escrow, réservation, litiges) | +105 → 5768 | ✅ |
+
+**✅ Macro-Phase 5 — Store Economy & Marketplace : TERMINÉE (S62→S64)**
+
 ---
 
 ## Timeline consolidée

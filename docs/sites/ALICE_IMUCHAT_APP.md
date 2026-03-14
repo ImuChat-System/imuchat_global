@@ -51,6 +51,7 @@ alice.imuchat.app
 **Rôle** : Présenter Alice en 30 secondes, créer une connexion émotionnelle.
 
 **Sections** :
+
 1. **Hero** — Avatar Alice animé + "Bonjour, je suis Alice. Votre IA, votre allié(e)."
 2. **En 1 phrase** — "Alice est l'intelligence artificielle intégrée partout dans ImuChat. Elle vous assiste, vous protège et s'adapte à vous."
 3. **Où est Alice ?** — Grille visuelle : Chat, Office, Store, Finance, Gaming, Feed (chaque module = 1 icône)
@@ -80,6 +81,7 @@ alice.imuchat.app
 ### 🎭 `/personas` — Les personnalités d'Alice (ImuCompanion)
 
 **Contenu** :
+
 - **Concept** : Alice n'a pas qu'un seul visage. Elle s'incarne dans des **Companions** personnalisables.
 - **Archétypes officiels** :
   - 🧑‍💼 **Assistant Pro** — Sobre, efficace, orienté tâches
@@ -97,6 +99,7 @@ alice.imuchat.app
 ### 🔐 `/privacy` — IA privée & respect des données
 
 **Contenu** :
+
 - **Principe fondamental** : "Vos données ne quittent jamais votre contrôle."
 - **Pas d'entraînement sur vos données** — Aucune conversation n'est utilisée pour améliorer les modèles
 - **Option IA locale** — Déploiement on-premise pour entreprises (Mistral, LLaMA)
@@ -127,6 +130,7 @@ alice.imuchat.app
 ### 🧑‍💻 `/developers` — Intégrer Alice dans vos mini-apps
 
 **Contenu** :
+
 - **Alice SDK** : API simple pour intégrer Alice dans n'importe quelle mini-app ImuChat
 - **Endpoints** :
   - `/alice/chat` — Conversation contextuelle
@@ -141,6 +145,7 @@ alice.imuchat.app
 ### 🔮 `/about` — Vision & philosophie IA
 
 **Contenu** :
+
 - L'IA au service de l'humain, pas l'inverse
 - Pourquoi "Alice" ? (référence littéraire, curiosité, exploration)
 - Roadmap IA : court terme (assistants) → moyen terme (agents autonomes) → long terme (IA souveraine UE)

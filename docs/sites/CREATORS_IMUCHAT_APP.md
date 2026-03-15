@@ -49,6 +49,7 @@ creators.imuchat.app
 ### 🏠 `/` — Page d'accueil
 
 **Sections** :
+
 1. **Hero** — "Créez. Partagez. Gagnez." + visuel créateur avec interface ImuFeed
 2. **La promesse** — "Sur ImuChat, vos créations vous rapportent. Vraiment."
 3. **Sources de revenus** — 5 piliers visuels : Pourboires, Abonnements, Ventes, Lives, Concours
@@ -72,6 +73,7 @@ creators.imuchat.app
 | **Sponsoring** | Partenariats marques via le marketplace | Négocié |
 
 **Calcul de revenus** :
+
 - Simulateur interactif : "Combien pouvez-vous gagner ?"
 - Inputs : nombre d'abonnés, taux d'engagement, type de contenu
 - Output : estimation de revenu mensuel
@@ -79,6 +81,7 @@ creators.imuchat.app
 ### 🛠️ `/tools` — Outils de création
 
 **Contenu** :
+
 - **Éditeur vidéo** : Trim, multi-clip, musique, transitions
 - **Filtres IA** : Style manga/anime, vintage, cinématique
 - **Sous-titres automatiques** : Alice génère les sous-titres dans toutes les langues
@@ -91,6 +94,7 @@ creators.imuchat.app
 ### 🎬 `/imufeed` — ImuFeed
 
 **Contenu** :
+
 - **Vidéo courte** : Format TikTok-like (15s-3min), scroll vertical infini
 - **Vidéo longue** : Format YouTube-like (jusqu'à 60min)
 - **Stories** : Contenu éphémère 24h
@@ -106,6 +110,7 @@ creators.imuchat.app
 ### 📺 `/live` — Live Streaming
 
 **Contenu** :
+
 - Streaming en direct (caméra, écran, jeu)
 - Gifts en direct (ImuCoins animés, réactions visuelles)
 - Chat en temps réel avec modération Alice
@@ -117,6 +122,7 @@ creators.imuchat.app
 ### 📊 `/analytics` — Dashboard Analytics
 
 **Contenu** :
+
 - Vues, likes, partages, commentaires (par contenu et global)
 - Audience : démographie, géographie, heures de pointe
 - Revenus : breakdown par source (pourboires, abonnements, ventes)
@@ -127,6 +133,7 @@ creators.imuchat.app
 ### 👥 `/community` — Construire sa communauté
 
 **Contenu** :
+
 - Création de communauté créateur (type serveur)
 - Channels exclusifs pour abonnés premium
 - Sondages et interactions (questions/réponses, votes)
@@ -137,6 +144,7 @@ creators.imuchat.app
 ### 🏪 `/store` — Vendre dans le Store
 
 **Contenu** :
+
 - Créer et vendre : stickers, thèmes, emojis animés, sons
 - Mini-apps : si vous savez coder, publiez vos créations
 - Templates : modèles ImuOffice vendables
@@ -147,6 +155,7 @@ creators.imuchat.app
 ### 🌟 `/success` — Stories de créateurs
 
 **Format** :
+
 - 5-8 profils de créateurs (diversifiés : vidéaste, artiste, gamer, éducateur, musicien)
 - Pour chacun : photo, bio, type de contenu, revenus (fourchette), citation
 - Parcours : comment ils ont démarré, ce qui a fonctionné
@@ -164,6 +173,7 @@ creators.imuchat.app
 | **Star** | 10 000+ abonnés | Manager dédié, mise en avant, revenus sponsoring |
 
 **Formulaire** :
+
 - Pseudo ImuChat
 - Plateformes actuelles (YouTube, TikTok, Instagram, Twitch)
 - Type de contenu
@@ -194,18 +204,21 @@ creators.imuchat.app
 ## 📅 Roadmap d'implémentation
 
 ### Phase 1 (Semaines 1-2)
+
 - [ ] Page `/` — Home créateurs
 - [ ] Page `/monetization` — Sources de revenus + simulateur
 - [ ] Page `/imufeed` — Présentation ImuFeed
 - [ ] Page `/apply` — Programme créateur
 
 ### Phase 2 (Semaines 3-4)
+
 - [ ] Pages `/tools`, `/live`, `/analytics`
 - [ ] Page `/community` — Construire sa communauté
 - [ ] Page `/success` — Stories créateurs
 - [ ] Traductions FR/EN
 
 ### Phase 3 (Semaines 5-6)
+
 - [ ] Page `/store` — Vendre dans le Store
 - [ ] Page `/faq` — FAQ créateurs
 - [ ] SEO (mots-clés monétisation, créateurs)

@@ -35,7 +35,7 @@ export default function Footer() {
   return (
     <footer className="bg-slate-900 text-slate-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-8 mb-12">
+        <div className="grid grid-cols-2 md:grid-cols-6 gap-8 mb-12">
           {/* Brand */}
           <div className="col-span-2 md:col-span-1">
             <div className="flex items-center gap-2 mb-4">
@@ -113,6 +113,31 @@ export default function Footer() {
                   </Link>
                 </li>
               ))}
+            </ul>
+          </div>
+
+          {/* Écosystème */}
+          <div>
+            <h4 className="font-semibold text-white mb-4">Écosystème</h4>
+            <ul className="space-y-2.5">
+              <li>
+                <a href="https://app.imuchat.app" className="text-sm hover:text-white transition-colors">Application</a>
+              </li>
+              <li>
+                <a href="https://store.imuchat.app" className="text-sm hover:text-white transition-colors">Abonnements</a>
+              </li>
+              <li>
+                <a href="https://blog.imuchat.app" className="text-sm hover:text-white transition-colors">Blog</a>
+              </li>
+              <li>
+                <a href="https://help.imuchat.app" className="text-sm hover:text-white transition-colors">Aide</a>
+              </li>
+              <li>
+                <a href="https://enterprise.imuchat.app" className="text-sm hover:text-white transition-colors">Entreprise</a>
+              </li>
+              <li>
+                <a href="https://developers.imuchat.app" className="text-sm hover:text-white transition-colors">Développeurs</a>
+              </li>
             </ul>
           </div>
         </div>

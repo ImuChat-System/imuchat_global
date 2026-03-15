@@ -1,0 +1,133 @@
+{
+  "landing": {
+    "meta": {
+      "title": "ImuChat — European Sovereign Super-App",
+      "description": "Messaging, office suite, Alice AI and ImuArena competitions. Hosted in Europe, GDPR-native, zero ads.",
+      "og_title": "ImuChat — Chat. Work. Everything in one app.",
+      "og_description": "The European super-app uniting messaging, AI, productivity and gaming. Sovereign, GDPR-native, hosted in EU."
+    },
+    "nav": {
+      "features": "Features",
+      "pricing": "Pricing",
+      "login": "Sign in",
+      "register": "Sign up"
+    },
+    "hero": {
+      "badge": "European Sovereign Super-App",
+      "headline_1": "Chat. Work.",
+      "headline_2": "Everything in one app.",
+      "subheadline": "ImuChat combines messaging, office suite, AI and gaming in a European super-app that respects your privacy.",
+      "cta_primary": "Join the beta",
+      "cta_secondary": "Watch demo",
+      "trust_1": "GDPR-native",
+      "trust_2": "EU-hosted",
+      "trust_3": "Ad-free"
+    },
+    "stats": {
+      "eu": "EU-hosted",
+      "modules": "Modules included",
+      "rgpd": "GDPR from day 1",
+      "platforms": "Platforms",
+      "free": "To get started"
+    },
+    "features": {
+      "label": "Features",
+      "title_1": "Everything you need,",
+      "title_2": "in one app",
+      "subtitle": "Not just another chat app. A complete platform.",
+      "messaging": {
+        "name": "Messaging",
+        "badge": "Core",
+        "desc": "1:1 chat, groups, communities, HD audio/video calls, file sharing and stories."
+      },
+      "alice": {
+        "name": "Alice AI",
+        "badge": "EU Unique",
+        "desc": "Your contextual AI assistant: summaries, writing, translation, analysis. Data stays in EU."
+      },
+      "office": {
+        "name": "ImuOffice",
+        "badge": "Included",
+        "desc": "Sovereign office suite: ImuDocs, Sheets, Slides, Drive. Microsoft 365 alternative."
+      },
+      "store": {
+        "name": "ImuStore",
+        "badge": "100+ apps",
+        "desc": "Install mini-apps à la carte to enrich your experience as needed."
+      },
+      "arena": {
+        "name": "ImuArena",
+        "badge": "Competitive",
+        "desc": "Community competitions across 6 domains: gaming, creative, tech, writing, quiz, photo."
+      },
+      "themes": {
+        "name": "Themes & Imu",
+        "badge": "Kawaii",
+        "desc": "Deep customization: themes, animated backgrounds, Live2D avatars and Imu the mascot."
+      }
+    },
+    "modules": {
+      "label": "Ecosystem",
+      "title": "18+ modules available at launch",
+      "cta": "View Store"
+    },
+    "sovereignty": {
+      "eu": {
+        "title": "European sovereignty",
+        "desc": "Data hosted exclusively in France and Germany. No dependency on US tech giants."
+      },
+      "privacy": {
+        "title": "GDPR-native",
+        "desc": "E2E encryption, zero ads, zero data resale. Your privacy, truly protected."
+      },
+      "open": {
+        "title": "Open-core",
+        "desc": "Open architecture. Developers can build modules for the ImuChat Store."
+      }
+    },
+    "pricing": {
+      "label": "Pricing",
+      "title_1": "Start",
+      "title_2": "for free",
+      "subtitle": "No credit card required. Scale when you're ready.",
+      "per_month": "/month",
+      "per_user_month": "/user/month",
+      "recommended": "RECOMMENDED",
+      "enterprise_note": "Are you a business or institution?",
+      "enterprise_cta": "Contact us →",
+      "free": {
+        "name": "Free",
+        "cta": "Create account",
+        "f1": "Unlimited messaging",
+        "f2": "Alice AI (50 req/day)",
+        "f3": "5 GB ImuDrive",
+        "f4": "3 Store modules"
+      },
+      "premium": {
+        "name": "Premium",
+        "cta": "Try 14 days free",
+        "f1": "Everything in Free",
+        "f2": "Unlimited Alice AI",
+        "f3": "100 GB ImuDrive",
+        "f4": "Full ImuOffice",
+        "f5": "Arena + Gaming Hub"
+      },
+      "team": {
+        "name": "Team",
+        "cta": "Contact sales",
+        "f1": "Everything in Premium",
+        "f2": "Workspaces",
+        "f3": "Centralized admin",
+        "f4": "SSO available",
+        "f5": "Dedicated support"
+      }
+    },
+    "download": {
+      "title": "Available everywhere",
+      "subtitle": "Web · iOS · Android · Desktop Windows/macOS/Linux"
+    },
+    "footer": {
+      "tagline": "European sovereign super-app. Communication, work and entertainment in one place."
+    }
+  }
+}

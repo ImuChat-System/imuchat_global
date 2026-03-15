@@ -1,0 +1,133 @@
+{
+  "landing": {
+    "meta": {
+      "title": "ImuChat — Super-app européenne souveraine",
+      "description": "Messagerie, suite bureautique, IA Alice et compétitions ImuArena. Hébergé en Europe, RGPD natif, 0 publicité.",
+      "og_title": "ImuChat — Chat. Travail. Tout dans une seule app.",
+      "og_description": "La super-application européenne qui réunit messagerie, IA, bureautique et jeux. Souveraine, RGPD natif, hébergée en UE."
+    },
+    "nav": {
+      "features": "Fonctionnalités",
+      "pricing": "Tarifs",
+      "login": "Se connecter",
+      "register": "S'inscrire"
+    },
+    "hero": {
+      "badge": "Super-app souveraine européenne",
+      "headline_1": "Chat. Travail.",
+      "headline_2": "Tout dans une seule app.",
+      "subheadline": "ImuChat réunit messagerie, suite bureautique, IA et jeux dans une super-application hébergée en Europe et respectueuse de vos données.",
+      "cta_primary": "Rejoindre la bêta",
+      "cta_secondary": "Voir la démo",
+      "trust_1": "RGPD natif",
+      "trust_2": "Hébergé en UE",
+      "trust_3": "Sans publicité"
+    },
+    "stats": {
+      "eu": "Hébergé en UE",
+      "modules": "Modules inclus",
+      "rgpd": "Natif dès le 1er jour",
+      "platforms": "Plateformes",
+      "free": "Pour commencer"
+    },
+    "features": {
+      "label": "Fonctionnalités",
+      "title_1": "Tout ce dont vous avez besoin,",
+      "title_2": "en une seule app",
+      "subtitle": "Pas une messagerie de plus. Une plateforme complète.",
+      "messaging": {
+        "name": "Messagerie",
+        "badge": "Core",
+        "desc": "Chat 1:1, groupes, communautés, appels audio/vidéo HD, partage de fichiers et stories."
+      },
+      "alice": {
+        "name": "Alice IA",
+        "badge": "Unique EU",
+        "desc": "Votre assistante IA contextuelle : résumés, rédaction, traduction, analyse. Données en UE."
+      },
+      "office": {
+        "name": "ImuOffice",
+        "badge": "Inclus",
+        "desc": "Suite bureautique souveraine : ImuDocs, Sheets, Slides, Drive. Alternative à Microsoft 365."
+      },
+      "store": {
+        "name": "ImuStore",
+        "badge": "100+ apps",
+        "desc": "Mini-apps installables à la carte pour enrichir votre expérience selon vos besoins."
+      },
+      "arena": {
+        "name": "ImuArena",
+        "badge": "Compétitif",
+        "desc": "Concours communautaires dans 6 domaines : gaming, créatif, tech, écriture, quiz, photo."
+      },
+      "themes": {
+        "name": "Thèmes & Imu",
+        "badge": "Kawaii",
+        "desc": "Personnalisation poussée : thèmes, fonds animés, avatars Live2D et Imu la mascotte."
+      }
+    },
+    "modules": {
+      "label": "Écosystème",
+      "title": "18+ modules disponibles au lancement",
+      "cta": "Voir le Store"
+    },
+    "sovereignty": {
+      "eu": {
+        "title": "Souveraineté européenne",
+        "desc": "Données hébergées en France et Allemagne exclusivement. Aucune dépendance aux GAFAM."
+      },
+      "privacy": {
+        "title": "RGPD natif",
+        "desc": "Chiffrement E2E, zéro publicité, zéro revente de données. Votre vie privée, vraiment protégée."
+      },
+      "open": {
+        "title": "Open-core",
+        "desc": "Architecture ouverte. Les développeurs peuvent créer des modules pour le Store ImuChat."
+      }
+    },
+    "pricing": {
+      "label": "Tarifs",
+      "title_1": "Démarrez",
+      "title_2": "gratuitement",
+      "subtitle": "Pas de carte bancaire requise. Évoluez quand vous êtes prêt.",
+      "per_month": "/mois",
+      "per_user_month": "/user/mois",
+      "recommended": "RECOMMANDÉ",
+      "enterprise_note": "Vous êtes une entreprise ou une institution ?",
+      "enterprise_cta": "Contactez-nous →",
+      "free": {
+        "name": "Gratuit",
+        "cta": "Créer un compte",
+        "f1": "Messagerie illimitée",
+        "f2": "Alice IA (50 req/jour)",
+        "f3": "ImuDrive 5 Go",
+        "f4": "3 modules Store"
+      },
+      "premium": {
+        "name": "Premium",
+        "cta": "Essayer 14j gratuits",
+        "f1": "Tout Gratuit inclus",
+        "f2": "Alice IA illimitée",
+        "f3": "ImuDrive 100 Go",
+        "f4": "ImuOffice complet",
+        "f5": "Arena + Gaming Hub"
+      },
+      "team": {
+        "name": "Team",
+        "cta": "Contacter l'équipe",
+        "f1": "Tout Premium inclus",
+        "f2": "Espaces de travail",
+        "f3": "Admin centralisé",
+        "f4": "SSO disponible",
+        "f5": "Support dédié"
+      }
+    },
+    "download": {
+      "title": "Disponible partout",
+      "subtitle": "Web · iOS · Android · Desktop Windows/macOS/Linux"
+    },
+    "footer": {
+      "tagline": "Super-app européenne souveraine. Communication, travail et loisirs en un seul endroit."
+    }
+  }
+}

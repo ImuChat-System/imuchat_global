@@ -1,0 +1,331 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans);color:var(--color-text-primary)}
+.btn-primary{background:#6B3FC5;color:white;border:none;border-radius:8px;padding:10px 20px;font-size:13px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+.btn-ghost{background:transparent;border:0.5px solid var(--color-border-secondary);border-radius:8px;padding:10px 20px;font-size:13px;font-weight:500;cursor:pointer;color:var(--color-text-primary)}
+.card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:12px;padding:1.25rem}
+.badge{display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:600}
+.section-label{font-size:11px;font-weight:700;letter-spacing:.08em;color:#6B3FC5;text-transform:uppercase;margin-bottom:.5rem}
+</style>
+
+<div>
+
+<!-- NAV -->
+<nav style="display:flex;align-items:center;justify-content:space-between;padding:0 1.5rem;height:52px;border-bottom:0.5px solid var(--color-border-tertiary);background:var(--color-background-primary);position:sticky;top:0;z-index:50">
+  <div style="display:flex;align-items:center;gap:8px">
+    <div style="width:26px;height:26px;border-radius:7px;background:#6B3FC5;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:white">I</div>
+    <span style="font-weight:700;font-size:15px">ImuChat</span>
+    <span class="badge" style="background:#FEF3C7;color:#92400E">Bêta 2026</span>
+  </div>
+  <div style="display:flex;gap:1.5rem;font-size:13px;color:var(--color-text-secondary)">
+    <span style="cursor:pointer">Fonctionnalités</span>
+    <span style="cursor:pointer">Tarifs</span>
+    <span style="cursor:pointer">ImuOffice</span>
+    <span style="cursor:pointer">ImuArena</span>
+  </div>
+  <div style="display:flex;gap:8px">
+    <button class="btn-ghost" style="padding:6px 14px;font-size:12px">Se connecter</button>
+    <button class="btn-primary" style="padding:6px 14px;font-size:12px">S'inscrire →</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section style="padding:3rem 1.5rem 2rem;display:grid;grid-template-columns:1fr 1fr;gap:2.5rem;align-items:center;max-width:1100px;margin:0 auto">
+  <div>
+    <div style="display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:999px;border:0.5px solid #6B3FC540;background:#F3EFFE;font-size:11px;color:#6B3FC5;font-weight:700;margin-bottom:1.25rem">
+      🇪🇺 Super-app souveraine européenne
+    </div>
+    <h1 style="font-size:42px;font-weight:900;line-height:1.08;margin-bottom:1.25rem;color:var(--color-text-primary)">
+      Chat. Travail.<br><span style="color:#6B3FC5">Tout dans<br>une seule app.</span>
+    </h1>
+    <p style="font-size:16px;color:var(--color-text-secondary);margin-bottom:1.75rem;line-height:1.7;max-width:400px">
+      ImuChat réunit messagerie, suite bureautique, IA et jeux dans une super-application hébergée en Europe et respectueuse de vos données.
+    </p>
+    <div style="display:flex;gap:10px;margin-bottom:1.5rem;flex-wrap:wrap">
+      <button class="btn-primary" style="font-size:14px;padding:11px 22px">Rejoindre la bêta →</button>
+      <button class="btn-ghost" style="font-size:14px;padding:11px 22px">Voir la démo</button>
+    </div>
+    <div style="display:flex;gap:1.25rem;font-size:12px;color:var(--color-text-tertiary)">
+      <span style="font-weight:600">✓ RGPD natif</span>
+      <span style="font-weight:600">✓ Hébergé en UE</span>
+      <span style="font-weight:600">✓ Sans pub</span>
+    </div>
+  </div>
+
+  <!-- App mockup -->
+  <div style="border:0.5px solid var(--color-border-tertiary);border-radius:14px;overflow:hidden;background:var(--color-background-secondary)">
+    <!-- Chrome bar -->
+    <div style="padding:9px 12px;border-bottom:0.5px solid var(--color-border-tertiary);display:flex;align-items:center;justify-content:space-between;background:var(--color-background-primary)">
+      <div style="display:flex;gap:5px">
+        <div style="width:9px;height:9px;border-radius:50%;background:#EC6B6B"></div>
+        <div style="width:9px;height:9px;border-radius:50%;background:#F0C040"></div>
+        <div style="width:9px;height:9px;border-radius:50%;background:#72C472"></div>
+      </div>
+      <span style="font-size:11px;color:var(--color-text-secondary);font-weight:600">app.imuchat.app</span>
+      <div style="width:44px"></div>
+    </div>
+    <!-- App layout -->
+    <div style="display:flex;height:310px">
+      <!-- Sidebar icons -->
+      <div style="width:48px;border-right:0.5px solid var(--color-border-tertiary);display:flex;flex-direction:column;align-items:center;padding:10px 0;gap:10px;background:var(--color-background-primary)">
+        <div style="width:26px;height:26px;border-radius:7px;background:#6B3FC5;font-size:13px;font-weight:800;display:flex;align-items:center;justify-content:center;color:white">I</div>
+        <div style="width:2px;height:8px;border-radius:1px;background:var(--color-border-tertiary)"></div>
+        <div style="width:30px;height:30px;border-radius:8px;background:#EDE9FE;font-size:15px;display:flex;align-items:center;justify-content:center">💬</div>
+        <div style="width:30px;height:30px;border-radius:8px;font-size:15px;display:flex;align-items:center;justify-content:center">🤖</div>
+        <div style="width:30px;height:30px;border-radius:8px;font-size:15px;display:flex;align-items:center;justify-content:center">📄</div>
+        <div style="width:30px;height:30px;border-radius:8px;font-size:15px;display:flex;align-items:center;justify-content:center">🛍️</div>
+        <div style="width:30px;height:30px;border-radius:8px;font-size:15px;display:flex;align-items:center;justify-content:center">🏆</div>
+      </div>
+      <!-- Conv list -->
+      <div style="width:145px;border-right:0.5px solid var(--color-border-tertiary);padding:10px 8px;background:var(--color-background-primary)">
+        <p style="font-size:10px;font-weight:700;color:var(--color-text-secondary);margin-bottom:8px;padding:0 4px;letter-spacing:.06em">MESSAGES</p>
+        <div style="background:#EDE9FE;border-radius:8px;padding:7px 8px;margin-bottom:4px">
+          <p style="font-size:11px;font-weight:700;margin-bottom:1px;color:#6B3FC5">Alice IA 🤖</p>
+          <p style="font-size:10px;color:var(--color-text-tertiary);overflow:hidden;white-space:nowrap;text-overflow:ellipsis">Voici le résumé...</p>
+        </div>
+        <div style="border-radius:8px;padding:7px 8px;margin-bottom:4px">
+          <p style="font-size:11px;font-weight:600;margin-bottom:1px">Équipe Dev</p>
+          <p style="font-size:10px;color:var(--color-text-tertiary);overflow:hidden;white-space:nowrap;text-overflow:ellipsis">Sprint review à 15h</p>
+        </div>
+        <div style="border-radius:8px;padding:7px 8px;margin-bottom:4px">
+          <p style="font-size:11px;font-weight:600;margin-bottom:1px">Marie</p>
+          <p style="font-size:10px;color:var(--color-text-tertiary);overflow:hidden;white-space:nowrap;text-overflow:ellipsis">Merci pour le doc !</p>
+        </div>
+        <div style="border-radius:8px;padding:7px 8px">
+          <p style="font-size:11px;font-weight:600;margin-bottom:1px">ImuArena 🏆</p>
+          <p style="font-size:10px;color:var(--color-text-tertiary);overflow:hidden;white-space:nowrap;text-overflow:ellipsis">Nouveau concours !</p>
+        </div>
+      </div>
+      <!-- Chat area -->
+      <div style="flex:1;display:flex;flex-direction:column;padding:10px">
+        <div style="display:flex;align-items:center;gap:8px;padding-bottom:8px;border-bottom:0.5px solid var(--color-border-tertiary);margin-bottom:10px">
+          <div style="width:22px;height:22px;border-radius:50%;background:#0EA5E9;display:flex;align-items:center;justify-content:center;font-size:11px">🤖</div>
+          <span style="font-size:12px;font-weight:700">Alice IA</span>
+          <span class="badge" style="background:#D1FAE5;color:#065F46">En ligne</span>
+        </div>
+        <div style="flex:1;display:flex;flex-direction:column;gap:8px;overflow:hidden">
+          <div style="display:flex;gap:6px;align-items:flex-start">
+            <div style="width:20px;height:20px;border-radius:50%;background:#0EA5E9;flex-shrink:0;font-size:10px;display:flex;align-items:center;justify-content:center;color:white">🤖</div>
+            <div style="background:#E0F4FA;border-radius:8px 8px 8px 2px;padding:7px 10px;max-width:190px;font-size:11px;line-height:1.4;color:var(--color-text-primary)">Bonjour ! Je suis Alice. Comment puis-je vous aider ?</div>
+          </div>
+          <div style="display:flex;justify-content:flex-end">
+            <div style="background:#6B3FC5;border-radius:8px 8px 2px 8px;padding:7px 10px;max-width:170px;font-size:11px;color:white;line-height:1.4">Résume le document ImuDocs sur le projet Q2</div>
+          </div>
+          <div style="display:flex;gap:6px;align-items:flex-start">
+            <div style="width:20px;height:20px;border-radius:50%;background:#0EA5E9;flex-shrink:0;font-size:10px;display:flex;align-items:center;justify-content:center;color:white">🤖</div>
+            <div style="background:#E0F4FA;border-radius:8px 8px 8px 2px;padding:7px 10px;font-size:11px;color:#0EA5E9">●●●</div>
+          </div>
+        </div>
+        <div style="border:0.5px solid var(--color-border-secondary);border-radius:8px;padding:7px 10px;display:flex;align-items:center;gap:8px;background:var(--color-background-primary);margin-top:8px">
+          <span style="font-size:11px;color:var(--color-text-tertiary);flex:1">Écrire un message...</span>
+          <div style="width:22px;height:22px;border-radius:6px;background:#6B3FC5;display:flex;align-items:center;justify-content:center;color:white;font-size:11px">→</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS BAR -->
+<div style="border-top:0.5px solid var(--color-border-tertiary);border-bottom:0.5px solid var(--color-border-tertiary);padding:1.25rem 1.5rem;display:flex;justify-content:center;gap:3.5rem;background:var(--color-background-secondary)">
+  <div style="text-align:center"><p style="font-size:20px;font-weight:900;color:#6B3FC5">100%</p><p style="font-size:11px;color:var(--color-text-secondary)">Hébergé en UE</p></div>
+  <div style="text-align:center"><p style="font-size:20px;font-weight:900;color:#6B3FC5">18+</p><p style="font-size:11px;color:var(--color-text-secondary)">Modules inclus</p></div>
+  <div style="text-align:center"><p style="font-size:20px;font-weight:900;color:#6B3FC5">RGPD</p><p style="font-size:11px;color:var(--color-text-secondary)">Natif dès le 1er jour</p></div>
+  <div style="text-align:center"><p style="font-size:20px;font-weight:900;color:#6B3FC5">6</p><p style="font-size:11px;color:var(--color-text-secondary)">Plateformes</p></div>
+  <div style="text-align:center"><p style="font-size:20px;font-weight:900;color:#6B3FC5">0€</p><p style="font-size:11px;color:var(--color-text-secondary)">Pour commencer</p></div>
+</div>
+
+<!-- FEATURES -->
+<section style="padding:3.5rem 1.5rem;max-width:1100px;margin:0 auto">
+  <div style="text-align:center;margin-bottom:2.5rem">
+    <p class="section-label">Fonctionnalités</p>
+    <h2 style="font-size:32px;font-weight:900;margin-bottom:.75rem">Tout ce dont vous avez besoin,<br><span style="color:#6B3FC5">en une seule app</span></h2>
+    <p style="color:var(--color-text-secondary);font-size:15px">Pas une messagerie de plus. Une plateforme complète.</p>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px">
+    <div class="card" style="border-top:3px solid #6B3FC5">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:.875rem">
+        <div style="width:34px;height:34px;border-radius:8px;background:#EDE9FE;font-size:17px;display:flex;align-items:center;justify-content:center">💬</div>
+        <div><p style="font-weight:700;font-size:14px;margin-bottom:2px">Messagerie</p><span class="badge" style="background:#EDE9FE;color:#6B3FC5">Core</span></div>
+      </div>
+      <p style="font-size:12px;color:var(--color-text-secondary);line-height:1.6">Chat 1:1, groupes, communautés, appels audio/vidéo HD, partage de fichiers et stories.</p>
+    </div>
+    <div class="card" style="border-top:3px solid #0EA5E9">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:.875rem">
+        <div style="width:34px;height:34px;border-radius:8px;background:#E0F4FA;font-size:17px;display:flex;align-items:center;justify-content:center">🤖</div>
+        <div><p style="font-weight:700;font-size:14px;margin-bottom:2px">Alice IA</p><span class="badge" style="background:#E0F4FA;color:#0369A1">Unique EU</span></div>
+      </div>
+      <p style="font-size:12px;color:var(--color-text-secondary);line-height:1.6">Votre assistante IA contextuelle : résumés, rédaction, traduction, analyse. Données en UE.</p>
+    </div>
+    <div class="card" style="border-top:3px solid #059669">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:.875rem">
+        <div style="width:34px;height:34px;border-radius:8px;background:#D1FAE5;font-size:17px;display:flex;align-items:center;justify-content:center">📄</div>
+        <div><p style="font-weight:700;font-size:14px;margin-bottom:2px">ImuOffice</p><span class="badge" style="background:#D1FAE5;color:#065F46">Inclus</span></div>
+      </div>
+      <p style="font-size:12px;color:var(--color-text-secondary);line-height:1.6">Suite bureautique souveraine : ImuDocs, Sheets, Slides, Drive. Alternative à Microsoft 365.</p>
+    </div>
+    <div class="card" style="border-top:3px solid #D97706">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:.875rem">
+        <div style="width:34px;height:34px;border-radius:8px;background:#FEF3C7;font-size:17px;display:flex;align-items:center;justify-content:center">🛍️</div>
+        <div><p style="font-weight:700;font-size:14px;margin-bottom:2px">ImuStore</p><span class="badge" style="background:#FEF3C7;color:#92400E">100+ apps</span></div>
+      </div>
+      <p style="font-size:12px;color:var(--color-text-secondary);line-height:1.6">Mini-apps installables à la carte pour enrichir votre expérience selon vos besoins.</p>
+    </div>
+    <div class="card" style="border-top:3px solid #DC2626">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:.875rem">
+        <div style="width:34px;height:34px;border-radius:8px;background:#FEE2E2;font-size:17px;display:flex;align-items:center;justify-content:center">🏆</div>
+        <div><p style="font-weight:700;font-size:14px;margin-bottom:2px">ImuArena</p><span class="badge" style="background:#FEE2E2;color:#991B1B">Compétitif</span></div>
+      </div>
+      <p style="font-size:12px;color:var(--color-text-secondary);line-height:1.6">Concours communautaires dans 6 domaines : gaming, créatif, tech, écriture, quiz, photo.</p>
+    </div>
+    <div class="card" style="border-top:3px solid #7C3AED">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:.875rem">
+        <div style="width:34px;height:34px;border-radius:8px;background:#EDE9FE;font-size:17px;display:flex;align-items:center;justify-content:center">🎨</div>
+        <div><p style="font-weight:700;font-size:14px;margin-bottom:2px">Thèmes & Imu</p><span class="badge" style="background:#EDE9FE;color:#6D28D9">Kawaii</span></div>
+      </div>
+      <p style="font-size:12px;color:var(--color-text-secondary);line-height:1.6">Personnalisation poussée : thèmes, fonds animés, avatars Live2D et Imu la mascotte.</p>
+    </div>
+  </div>
+</section>
+
+<!-- MODULE ECOSYSTEM -->
+<section style="background:var(--color-background-secondary);border-top:0.5px solid var(--color-border-tertiary);border-bottom:0.5px solid var(--color-border-tertiary);padding:2.5rem 1.5rem">
+  <div style="max-width:1100px;margin:0 auto">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;flex-wrap:wrap;gap:.5rem">
+      <div>
+        <p class="section-label">Écosystème</p>
+        <h2 style="font-size:22px;font-weight:800">18+ modules disponibles au lancement</h2>
+      </div>
+      <button class="btn-ghost" style="font-size:12px;padding:7px 14px">Voir le Store →</button>
+    </div>
+    <div style="display:flex;flex-wrap:wrap;gap:8px">
+      <div style="padding:7px 12px;border-radius:8px;border:0.5px solid var(--color-border-tertiary);background:var(--color-background-primary);font-size:12px;font-weight:500;display:flex;align-items:center;gap:5px"><span style="font-size:14px">💬</span>Chat</div>
+      <div style="padding:7px 12px;border-radius:8px;border:0.5px solid var(--color-border-tertiary);background:var(--color-background-primary);font-size:12px;font-weight:500;display:flex;align-items:center;gap:5px"><span style="font-size:14px">📞</span>Appels</div>
+      <div style="padding:7px 12px;border-radius:8px;border:0.5px solid #6B3FC5;background:#EDE9FE;font-size:12px;font-weight:600;display:flex;align-items:center;gap:5px;color:#6B3FC5"><span style="font-size:14px">🤖</span>Alice IA</div>
+      <div style="padding:7px 12px;border-radius:8px;border:0.5px solid var(--color-border-tertiary);background:var(--color-background-primary);font-size:12px;font-weight:500;display:flex;align-items:center;gap:5px"><span style="font-size:14px">📄</span>ImuDocs</div>
+      <div style="padding:7px 12px;border-radius:8px;border:0.5px solid var(--color-border-tertiary);background:var(--color-background-primary);font-size:12px;font-weight:500;display:flex;align-items:center;gap:5px"><span style="font-size:14px">📊</span>ImuSheets</div>
+      <div style="padding:7px 12px;border-radius:8px;border:0.5px solid var(--color-border-tertiary);background:var(--color-background-primary);font-size:12px;font-weight:500;display:flex;align-items:center;gap:5px"><span style="font-size:14px">📽️</span>ImuSlides</div>
+      <div style="padding:7px 12px;border-radius:8px;border:0.5px solid var(--color-border-tertiary);background:var(--color-background-primary);font-size:12px;font-weight:500;display:flex;align-items:center;gap:5px"><span style="font-size:14px">☁️</span>ImuDrive</div>
+      <div style="padding:7px 12px;border-radius:8px;border:0.5px solid var(--color-border-tertiary);background:var(--color-background-primary);font-size:12px;font-weight:500;display:flex;align-items:center;gap:5px"><span style="font-size:14px">🛍️</span>Store</div>
+      <div style="padding:7px 12px;border-radius:8px;border:0.5px solid var(--color-border-tertiary);background:var(--color-background-primary);font-size:12px;font-weight:500;display:flex;align-items:center;gap:5px"><span style="font-size:14px">🏆</span>Arena</div>
+      <div style="padding:7px 12px;border-radius:8px;border:0.5px solid var(--color-border-tertiary);background:var(--color-background-primary);font-size:12px;font-weight:500;display:flex;align-items:center;gap:5px"><span style="font-size:14px">🎮</span>Gaming</div>
+      <div style="padding:7px 12px;border-radius:8px;border:0.5px solid var(--color-border-tertiary);background:var(--color-background-primary);font-size:12px;font-weight:500;display:flex;align-items:center;gap:5px"><span style="font-size:14px">📸</span>ImuFeed</div>
+      <div style="padding:7px 12px;border-radius:8px;border:0.5px solid var(--color-border-tertiary);background:var(--color-background-primary);font-size:12px;font-weight:500;display:flex;align-items:center;gap:5px"><span style="font-size:14px">💰</span>Finance</div>
+      <div style="padding:7px 12px;border-radius:8px;border:0.5px solid var(--color-border-tertiary);background:var(--color-background-primary);font-size:12px;font-weight:500;display:flex;align-items:center;gap:5px"><span style="font-size:14px">🎓</span>Éducation</div>
+      <div style="padding:7px 12px;border-radius:8px;border:0.5px solid var(--color-border-tertiary);background:var(--color-background-primary);font-size:12px;font-weight:500;display:flex;align-items:center;gap:5px"><span style="font-size:14px">👨‍👩‍👧</span>Famille</div>
+      <div style="padding:7px 12px;border-radius:8px;border:0.5px solid var(--color-border-tertiary);background:var(--color-background-primary);font-size:12px;font-weight:500;display:flex;align-items:center;gap:5px"><span style="font-size:14px">🗓️</span>Agenda</div>
+      <div style="padding:7px 12px;border-radius:8px;border:0.5px solid var(--color-border-tertiary);background:var(--color-background-primary);font-size:12px;font-weight:500;display:flex;align-items:center;gap:5px"><span style="font-size:14px">✅</span>Tâches</div>
+      <div style="padding:7px 12px;border-radius:8px;border:0.5px solid var(--color-border-tertiary);background:var(--color-background-primary);font-size:12px;font-weight:500;display:flex;align-items:center;gap:5px"><span style="font-size:14px">🎵</span>Musique</div>
+      <div style="padding:7px 12px;border-radius:8px;border:0.5px solid var(--color-border-tertiary);background:var(--color-background-primary);font-size:12px;font-weight:500;display:flex;align-items:center;gap:5px"><span style="font-size:14px">🔒</span>Sécurité</div>
+    </div>
+  </div>
+</section>
+
+<!-- SOVEREIGN BANNER -->
+<section style="padding:2.5rem 1.5rem;max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem">
+  <div class="card" style="border-left:3px solid #6B3FC5">
+    <p style="font-size:22px;margin-bottom:.5rem">🇪🇺</p>
+    <h3 style="font-size:15px;font-weight:700;margin-bottom:.5rem">Souveraineté européenne</h3>
+    <p style="font-size:12px;color:var(--color-text-secondary);line-height:1.6">Données hébergées en France et Allemagne exclusivement. Aucune dépendance aux GAFAM.</p>
+  </div>
+  <div class="card" style="border-left:3px solid #059669">
+    <p style="font-size:22px;margin-bottom:.5rem">🔒</p>
+    <h3 style="font-size:15px;font-weight:700;margin-bottom:.5rem">RGPD natif</h3>
+    <p style="font-size:12px;color:var(--color-text-secondary);line-height:1.6">Chiffrement E2E, zéro publicité, zéro revente de données. Votre vie privée, vraiment protégée.</p>
+  </div>
+  <div class="card" style="border-left:3px solid #0EA5E9">
+    <p style="font-size:22px;margin-bottom:.5rem">🧩</p>
+    <h3 style="font-size:15px;font-weight:700;margin-bottom:.5rem">Open-core</h3>
+    <p style="font-size:12px;color:var(--color-text-secondary);line-height:1.6">Architecture ouverte. Les développeurs peuvent créer des modules pour le Store ImuChat.</p>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section style="padding:3.5rem 1.5rem;max-width:900px;margin:0 auto">
+  <div style="text-align:center;margin-bottom:2.5rem">
+    <p class="section-label">Tarifs</p>
+    <h2 style="font-size:32px;font-weight:900;margin-bottom:.75rem">Démarrez <span style="color:#6B3FC5">gratuitement</span></h2>
+    <p style="color:var(--color-text-secondary);font-size:15px">Pas de carte bancaire requise. Évoluez quand vous êtes prêt.</p>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px">
+    <!-- Free -->
+    <div class="card">
+      <p style="font-weight:700;font-size:14px;margin-bottom:.5rem;color:var(--color-text-secondary)">Gratuit</p>
+      <div style="display:flex;align-items:baseline;gap:2px;margin-bottom:1.25rem">
+        <span style="font-size:32px;font-weight:900">0€</span>
+        <span style="font-size:12px;color:var(--color-text-secondary)">/mois</span>
+      </div>
+      <ul style="list-style:none;margin-bottom:1.5rem;display:flex;flex-direction:column;gap:6px">
+        <li style="font-size:12px;color:var(--color-text-secondary);display:flex;align-items:center;gap:6px;padding-bottom:6px;border-bottom:0.5px solid var(--color-border-tertiary)"><span style="color:#059669;font-weight:700">✓</span>Messagerie illimitée</li>
+        <li style="font-size:12px;color:var(--color-text-secondary);display:flex;align-items:center;gap:6px;padding-bottom:6px;border-bottom:0.5px solid var(--color-border-tertiary)"><span style="color:#059669;font-weight:700">✓</span>Alice IA (50 req/jour)</li>
+        <li style="font-size:12px;color:var(--color-text-secondary);display:flex;align-items:center;gap:6px;padding-bottom:6px;border-bottom:0.5px solid var(--color-border-tertiary)"><span style="color:#059669;font-weight:700">✓</span>ImuDrive 5 Go</li>
+        <li style="font-size:12px;color:var(--color-text-secondary);display:flex;align-items:center;gap:6px"><span style="color:#059669;font-weight:700">✓</span>3 modules Store</li>
+      </ul>
+      <button class="btn-ghost" style="width:100%;padding:9px;font-size:13px;font-weight:600">Créer un compte</button>
+    </div>
+    <!-- Premium -->
+    <div style="background:var(--color-background-primary);border:2px solid #6B3FC5;border-radius:12px;padding:1.25rem;position:relative">
+      <div style="position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:#6B3FC5;color:white;font-size:10px;font-weight:700;padding:3px 10px;border-radius:4px;white-space:nowrap">RECOMMANDÉ</div>
+      <p style="font-weight:700;font-size:14px;margin-bottom:.5rem;color:#6B3FC5">Premium</p>
+      <div style="display:flex;align-items:baseline;gap:2px;margin-bottom:1.25rem">
+        <span style="font-size:32px;font-weight:900">4,99€</span>
+        <span style="font-size:12px;color:var(--color-text-secondary)">/mois</span>
+      </div>
+      <ul style="list-style:none;margin-bottom:1.5rem;display:flex;flex-direction:column;gap:6px">
+        <li style="font-size:12px;color:var(--color-text-secondary);display:flex;align-items:center;gap:6px;padding-bottom:6px;border-bottom:0.5px solid var(--color-border-tertiary)"><span style="color:#059669;font-weight:700">✓</span>Tout Gratuit inclus</li>
+        <li style="font-size:12px;color:var(--color-text-secondary);display:flex;align-items:center;gap:6px;padding-bottom:6px;border-bottom:0.5px solid var(--color-border-tertiary)"><span style="color:#059669;font-weight:700">✓</span>Alice IA illimitée</li>
+        <li style="font-size:12px;color:var(--color-text-secondary);display:flex;align-items:center;gap:6px;padding-bottom:6px;border-bottom:0.5px solid var(--color-border-tertiary)"><span style="color:#059669;font-weight:700">✓</span>ImuDrive 100 Go</li>
+        <li style="font-size:12px;color:var(--color-text-secondary);display:flex;align-items:center;gap:6px;padding-bottom:6px;border-bottom:0.5px solid var(--color-border-tertiary)"><span style="color:#059669;font-weight:700">✓</span>ImuOffice complet</li>
+        <li style="font-size:12px;color:var(--color-text-secondary);display:flex;align-items:center;gap:6px"><span style="color:#059669;font-weight:700">✓</span>Arena + Gaming Hub</li>
+      </ul>
+      <button class="btn-primary" style="width:100%;padding:9px;font-size:13px;justify-content:center">Essayer 14j gratuits →</button>
+    </div>
+    <!-- Team -->
+    <div class="card">
+      <p style="font-weight:700;font-size:14px;margin-bottom:.5rem;color:#0EA5E9">Team</p>
+      <div style="display:flex;align-items:baseline;gap:2px;margin-bottom:1.25rem">
+        <span style="font-size:32px;font-weight:900">9,99€</span>
+        <span style="font-size:12px;color:var(--color-text-secondary)">/user/mois</span>
+      </div>
+      <ul style="list-style:none;margin-bottom:1.5rem;display:flex;flex-direction:column;gap:6px">
+        <li style="font-size:12px;color:var(--color-text-secondary);display:flex;align-items:center;gap:6px;padding-bottom:6px;border-bottom:0.5px solid var(--color-border-tertiary)"><span style="color:#059669;font-weight:700">✓</span>Tout Premium inclus</li>
+        <li style="font-size:12px;color:var(--color-text-secondary);display:flex;align-items:center;gap:6px;padding-bottom:6px;border-bottom:0.5px solid var(--color-border-tertiary)"><span style="color:#059669;font-weight:700">✓</span>Espaces de travail</li>
+        <li style="font-size:12px;color:var(--color-text-secondary);display:flex;align-items:center;gap:6px;padding-bottom:6px;border-bottom:0.5px solid var(--color-border-tertiary)"><span style="color:#059669;font-weight:700">✓</span>Admin centralisé</li>
+        <li style="font-size:12px;color:var(--color-text-secondary);display:flex;align-items:center;gap:6px;padding-bottom:6px;border-bottom:0.5px solid var(--color-border-tertiary)"><span style="color:#059669;font-weight:700">✓</span>SSO disponible</li>
+        <li style="font-size:12px;color:var(--color-text-secondary);display:flex;align-items:center;gap:6px"><span style="color:#059669;font-weight:700">✓</span>Support dédié</li>
+      </ul>
+      <button class="btn-ghost" style="width:100%;padding:9px;font-size:13px;font-weight:600">Contacter l'équipe</button>
+    </div>
+  </div>
+</section>
+
+<!-- DOWNLOAD CTA -->
+<section style="background:#6B3FC5;padding:3rem 1.5rem;text-align:center">
+  <h2 style="font-size:28px;font-weight:900;color:white;margin-bottom:.5rem">Disponible partout</h2>
+  <p style="color:rgba(255,255,255,.7);margin-bottom:1.75rem;font-size:14px">Web · iOS · Android · Desktop Windows/macOS/Linux</p>
+  <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+    <button style="padding:10px 18px;font-size:13px;font-weight:700;border:none;border-radius:8px;background:white;color:#6B3FC5;cursor:pointer;display:inline-flex;align-items:center;gap:6px"><span style="font-size:14px">🌐</span>Ouvrir l'app web</button>
+    <button style="padding:10px 18px;font-size:13px;font-weight:600;border:1.5px solid rgba(255,255,255,.4);border-radius:8px;background:transparent;color:white;cursor:pointer;display:inline-flex;align-items:center;gap:6px"><span style="font-size:14px">📱</span>iOS</button>
+    <button style="padding:10px 18px;font-size:13px;font-weight:600;border:1.5px solid rgba(255,255,255,.4);border-radius:8px;background:transparent;color:white;cursor:pointer;display:inline-flex;align-items:center;gap:6px"><span style="font-size:14px">🤖</span>Android</button>
+    <button style="padding:10px 18px;font-size:13px;font-weight:600;border:1.5px solid rgba(255,255,255,.4);border-radius:8px;background:transparent;color:white;cursor:pointer;display:inline-flex;align-items:center;gap:6px"><span style="font-size:14px">💻</span>Desktop</button>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer style="padding:1.5rem;border-top:0.5px solid var(--color-border-tertiary);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;background:var(--color-background-secondary)">
+  <div style="display:flex;align-items:center;gap:8px">
+    <div style="width:22px;height:22px;border-radius:6px;background:#6B3FC5;display:flex;align-items:center;justify-content:center;color:white;font-size:11px;font-weight:800">I</div>
+    <span style="font-weight:700;font-size:13px">ImuChat</span>
+    <span style="font-size:11px;color:var(--color-text-tertiary)">Super-app européenne · © 2026</span>
+  </div>
+  <div style="display:flex;gap:1.25rem;font-size:12px;color:var(--color-text-secondary)">
+    <span style="cursor:pointer">Confidentialité</span>
+    <span style="cursor:pointer">CGU</span>
+    <span style="cursor:pointer">Sécurité</span>
+    <span style="cursor:pointer">Blog</span>
+    <span style="cursor:pointer">Contact</span>
+  </div>
+  <div style="font-size:12px;color:var(--color-text-tertiary)">🇪🇺 Hébergé en Europe · RGPD natif</div>
+</footer>
+
+</div>

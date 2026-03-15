@@ -75,6 +75,18 @@ export default function WalletLayout() {
         options={{ title: "Paiement", presentation: "modal" }}
       />
       <Stack.Screen name="creator-settings" options={{ title: "Créateur" }} />
+      {/* Sprint M-F1 — Finance Hub */}
+      <Stack.Screen
+        name="finance-hub"
+        options={{ title: "Finance Hub", headerLargeTitle: true }}
+      />
+      <Stack.Screen name="badges" options={{ title: "Badges" }} />
+      {/* Sprint M-F2 — KYC Verification */}
+      <Stack.Screen
+        name="kyc-verification"
+        options={{ title: "Vérification KYC" }}
+      />
+      <Stack.Screen name="kyc-status" options={{ title: "Statut KYC" }} />
     </Stack>
   );
 }

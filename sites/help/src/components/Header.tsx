@@ -38,6 +38,9 @@ export function Header() {
             <Link href={`/${locale}/contact`} className="text-gray-600 dark:text-gray-300 hover:text-primary-600 transition-colors">
               {t('contact.button')}
             </Link>
+            <a href="https://app.imuchat.app" className="px-4 py-2 bg-primary-600 text-white text-sm font-semibold rounded-lg hover:bg-primary-700 transition-colors">
+              Se connecter
+            </a>
 
             <div className="relative">
               <button onClick={() => setIsLangOpen(!isLangOpen)} className="flex items-center gap-2 text-gray-600 dark:text-gray-300 hover:text-primary-600 transition-colors">

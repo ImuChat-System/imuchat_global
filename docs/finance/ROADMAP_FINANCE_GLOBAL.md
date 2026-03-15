@@ -55,6 +55,43 @@
 
 ---
 
+### 📱 Progression Mobile App — Finance
+
+> Portage intégral des 8 macro-phases desktop. Détails : [`ROADMAP_FINANCE_MOBILE.md`](ROADMAP_FINANCE_MOBILE.md)  
+> **Baseline mobile :** 124 suites · 2788 tests · Stack : RN 0.81 · Expo 54 · Jest 30
+
+| Sprint Mobile | Desktop Equiv. | Contenu Finance | Tests | Status |
+|:-------------:|:--------------:|-----------------|:-----:|:------:|
+| **M-F1** | S44 | Finance Hub (dashboard, gamification, streaks, badges) | +XX → XXXX | 🔲 |
+| **M-F2** | S45 | KYC Onfido niveaux 0-2 | +XX → XXXX | 🔲 |
+| **M-F3** | S45 | P2P Payments (envoi/requête, QR scan) | +XX → XXXX | 🔲 |
+| **M-F4** | S46 | Economy A1 — 15 types transactions IC + stats | +XX → XXXX | 🔲 |
+| **M-F5** | S47 | Split Bill + Cagnottes de groupe | +XX → XXXX | 🔲 |
+| **M-F6** | S48 | Economy A2 — Cycle économique IC↔fiat | +XX → XXXX | 🔲 |
+| **M-F7** | S49 | Economy A3 — Commissions, revenue share | +XX → XXXX | 🔲 |
+| **M-F8** | S50 | Cartes virtuelles Stripe Issuing | +XX → XXXX | 🔲 |
+| **M-F9** | S51 | Tips / Pourboires | +XX → XXXX | 🔲 |
+| **M-F10** | S52 | Apple Pay / Google Pay / QR / NFC | +XX → XXXX | 🔲 |
+| **M-F11** | S53 | Cadeaux Live (7 animations Lottie) | +XX → XXXX | 🔲 |
+| **M-F12** | S54 | Coffres d'épargne + règles auto | +XX → XXXX | 🔲 |
+| **M-F13** | S55 | Super-likes, votes premium, boosts | +XX → XXXX | 🔲 |
+| **M-F14** | S56 | Cashback + Parrainage | +XX → XXXX | 🔲 |
+| **M-F15** | S57 | Cadeaux Live avancés (RPCs, commissions) | +XX → XXXX | 🔲 |
+| **M-F16** | S58 | Tournois gaming + pass saison | +XX → XXXX | 🔲 |
+| **M-F17** | S59 | Abonnements fans + ventes créateurs | +XX → XXXX | 🔲 |
+| **M-F18** | S60 | Boutique gaming (skins, lootboxes) | +XX → XXXX | 🔲 |
+| **M-F19** | S61 | Business Hub (marchands, QR terminal) | +XX → XXXX | 🔲 |
+| **M-F20** | S62 | Store enrichi (avis, bundles, promos) | +XX → XXXX | 🔲 |
+| **M-F21** | S63 | Developer payouts v2 | +XX → XXXX | 🔲 |
+| **M-F22** | S64 | Marketplace escrow & litiges | +XX → XXXX | 🔲 |
+| **M-F23** | S65 | Investissements (actions, ETF) | +XX → XXXX | 🔲 |
+| **M-F24** | S66 | Crypto Hub (BTC, ETH, SOL, staking) | +XX → XXXX | 🔲 |
+| **M-F25** | S67 | Régie pub self-service | +XX → XXXX | 🔲 |
+| **M-F26** | S68 | Premium multi-tiers + dashboard revenus | +XX → XXXX | 🔲 |
+| **M-F27** | S69-S70 | Alice Finance IA + Compliance | +XX → XXXX | 🔲 |
+
+---
+
 ## Timeline consolidée
 
 ```

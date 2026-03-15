@@ -52,6 +52,7 @@ pay.imuchat.app
 ### 🏠 `/` — Page d'accueil
 
 **Sections** :
+
 1. **Hero** — "Votre argent. Votre contrôle. Partout." + visuel carte ImuChat + interface wallet
 2. **En 1 phrase** — "ImuPay intègre un wallet, des cartes, des paiements P2P et de l'investissement, directement dans votre super-app."
 3. **Fonctionnalités clés** — 6 piliers visuels : Wallet, Envoyer, Cartes, Épargne, Investir, Commerçants
@@ -63,6 +64,7 @@ pay.imuchat.app
 ### 👛 `/wallet` — ImuWallet
 
 **Contenu** :
+
 - **Multi-devises** : EUR, USD, GBP, JPY, CHF (conversion instantanée)
 - **ImuCoins** : Monnaie interne (100 IC = 1€), utilisable partout dans l'écosystème
 - **Solde unifié** : Un seul écran pour tout voir
@@ -73,6 +75,7 @@ pay.imuchat.app
 ### 💸 `/send` — Paiements P2P
 
 **Contenu** :
+
 - **Envoyer** : Envoyer de l'argent à un contact ImuChat en 1 tap
 - **Demander** : Créer une demande de paiement
 - **Diviser** : Partager une note (restaurant, courses, voyages)
@@ -83,6 +86,7 @@ pay.imuchat.app
 ### 💳 `/cards` — Cartes ImuChat
 
 **Contenu** :
+
 - **Carte virtuelle** : Générable instantanément, utilisable en ligne
 - **Carte physique** : Visa/Mastercard, livraison à domicile
 - **Contrôles** : Bloquer/débloquer, limites de dépense, zones géographiques
@@ -93,6 +97,7 @@ pay.imuchat.app
 ### 🐖 `/savings` — Épargne & Objectifs
 
 **Contenu** :
+
 - **Coffres-objectifs** : Créer un objectif d'épargne (vacances, gadget, urgence)
 - **Arrondi automatique** : Arrondir chaque dépense au supérieur, la différence va dans l'épargne
 - **Épargne programmée** : Virements automatiques récurrents
@@ -102,6 +107,7 @@ pay.imuchat.app
 ### 📈 `/invest` — Investissements
 
 **Contenu** :
+
 - **Actions fractionnées** : Investir dès 1€ (Apple, Tesla, LVMH…)
 - **ETF** : Portefeuilles diversifiés clé en main
 - **Crypto Hub** : Acheter/vendre (BTC, ETH, SOL…), staking, portfolio
@@ -112,6 +118,7 @@ pay.imuchat.app
 ### 🏪 `/merchants` — Solutions commerçants
 
 **Contenu** :
+
 - **QR Code** : Paiement par scan QR (rapide, sans matériel)
 - **NFC** : Paiement sans contact via carte ou téléphone
 - **Terminal** : Application terminal de paiement (tablette/smartphone)
@@ -123,6 +130,7 @@ pay.imuchat.app
 ### 🪙 `/imucoins` — ImuCoins
 
 **Contenu** :
+
 - **Qu'est-ce qu'un ImuCoin ?** — Monnaie interne de l'écosystème (100 IC = 1€)
 - **Où les utiliser ?** — Store (achats mini-apps), Arena (tickets concours), Feed (pourboires), Gaming (in-game), Chat (cadeaux)
 - **Comment en obtenir ?** :
@@ -135,6 +143,7 @@ pay.imuchat.app
 ### 🔒 `/security` — Sécurité financière
 
 **Contenu** :
+
 - **Chiffrement** : TLS 1.3, AES-256, PCI DSS
 - **Licence** : Objectif licence EME (Établissement de Monnaie Électronique) / agent PSP
 - **Fonds séquestrés** : L'argent des utilisateurs est séparé des fonds de l'entreprise
@@ -161,6 +170,7 @@ pay.imuchat.app
 ### ❓ `/faq` — Questions fréquentes
 
 **Catégories** :
+
 - Sécurité & confiance
 - Wallet & solde
 - Cartes
@@ -195,6 +205,7 @@ pay.imuchat.app
 ## 📅 Roadmap d'implémentation
 
 ### Phase 1 (Semaines 1-2)
+
 - [ ] Page `/` — Home finance (rassurance)
 - [ ] Page `/wallet` — ImuWallet
 - [ ] Page `/security` — Sécurité financière
@@ -202,12 +213,14 @@ pay.imuchat.app
 - [ ] Page `/faq` — FAQ
 
 ### Phase 2 (Semaines 3-4)
+
 - [ ] Pages `/send`, `/cards`, `/imucoins`
 - [ ] Page `/merchants` — Solutions commerçants
 - [ ] Page `/contact` — Support financier
 - [ ] Traductions FR/EN
 
 ### Phase 3 (Semaines 5-6)
+
 - [ ] Pages `/savings`, `/invest`
 - [ ] Mockup 3D carte
 - [ ] SEO fintech keywords

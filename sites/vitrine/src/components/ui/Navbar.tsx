@@ -75,6 +75,8 @@ export default function Navbar() {
     { href: `/${locale}/about`, label: t('about') },
   ];
 
+  const signInLabel = locale === 'fr' ? 'Se connecter' : 'Sign in';
+
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-lg border-b border-slate-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -102,8 +104,14 @@ export default function Navbar() {
 
           {/* CTA Button + Language + Theme (Desktop) */}
           <div className="hidden md:flex items-center gap-3">
+            <a href="https://store.imuchat.app" className="text-slate-700 hover:text-primary-600 font-medium transition-colors text-sm">
+              Store
+            </a>
             <LanguageSwitcher />
             <ThemeToggle />
+            <a href="https://app.imuchat.app" className="px-4 py-2 border border-slate-300 text-slate-700 rounded-full font-semibold text-sm hover:bg-slate-50 transition-all">
+              {signInLabel}
+            </a>
             <Link href={`/${locale}/contact`} className="px-6 py-2 bg-slate-900 text-white rounded-full font-semibold text-sm hover:bg-slate-800 transition-all shadow-sm hover:shadow-md">
               {t('cta')}
             </Link>
@@ -137,7 +145,13 @@ export default function Navbar() {
               <LanguageSwitcher />
               <ThemeToggle />
             </div>
-            <Link href={`/${locale}/contact`} className="block w-full mt-4 px-6 py-3 bg-slate-900 text-white rounded-full font-semibold text-sm hover:bg-slate-800 transition-all text-center">
+            <a href="https://store.imuchat.app" className="block px-4 py-2 text-slate-700 hover:bg-slate-50 rounded-lg font-medium transition-colors text-sm">
+              Store
+            </a>
+            <a href="https://app.imuchat.app" className="block w-full mt-2 px-6 py-3 border border-slate-300 text-slate-700 rounded-full font-semibold text-sm hover:bg-slate-50 transition-all text-center">
+              {signInLabel}
+            </a>
+            <Link href={`/${locale}/contact`} className="block w-full mt-2 px-6 py-3 bg-slate-900 text-white rounded-full font-semibold text-sm hover:bg-slate-800 transition-all text-center">
               {t('cta')}
             </Link>
           </div>

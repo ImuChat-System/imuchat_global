@@ -41,6 +41,10 @@ export default function Home() {
           </div>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center mt-8">
+            <a href="https://app.imuchat.app" className="group px-8 py-4 bg-gradient-to-r from-primary-600 to-primary-500 text-white rounded-full font-semibold text-lg hover:from-primary-700 hover:to-primary-600 transition-all shadow-lg hover:shadow-primary-500/25 transform hover:-translate-y-0.5">
+              Commencer gratuitement
+              <span className="inline-block ml-2 transition-transform group-hover:translate-x-1">→</span>
+            </a>
             <Link href="#waitlist" className="group px-8 py-4 bg-slate-900 text-white rounded-full font-semibold text-lg hover:bg-slate-800 transition-all shadow-lg hover:shadow-primary-500/25 transform hover:-translate-y-0.5">
               {t('cta_waitlist')}
               <span className="inline-block ml-2 transition-transform group-hover:translate-x-1">→</span>

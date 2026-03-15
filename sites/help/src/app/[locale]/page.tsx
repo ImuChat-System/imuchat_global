@@ -92,6 +92,23 @@ export default function HelpHomePage() {
           </Link>
         </div>
       </section>
+
+      {/* Ecosystem Banner */}
+      <section className="py-8 container mx-auto px-4">
+        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center p-6 bg-gray-50 dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700">
+          <p className="text-gray-700 dark:text-gray-200 font-medium text-sm">
+            Pas encore client ? Découvrez ImuChat →
+          </p>
+          <div className="flex gap-3">
+            <a href="https://app.imuchat.app" className="px-5 py-2 bg-primary-600 text-white text-sm font-semibold rounded-lg hover:bg-primary-700 transition-colors">
+              Essayer ImuChat →
+            </a>
+            <a href="https://store.imuchat.app" className="px-5 py-2 border border-primary-600 text-primary-600 dark:text-primary-400 dark:border-primary-400 text-sm font-semibold rounded-lg hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-colors">
+              Gérer mon abonnement →
+            </a>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }

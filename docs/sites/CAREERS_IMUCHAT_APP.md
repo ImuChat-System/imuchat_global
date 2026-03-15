@@ -46,6 +46,7 @@ careers.imuchat.app
 ### 🏠 `/` — Accueil Carrières
 
 **Sections** :
+
 1. **Hero** — "Construis le futur de la communication souveraine" + vidéo culture
 2. **Mission** — Pourquoi ImuChat existe
 3. **Chiffres** — Taille équipe, pays, âge moyen, ratio remote
@@ -56,12 +57,14 @@ careers.imuchat.app
 ### 📋 `/jobs` — Liste des Offres
 
 **Filtres** :
+
 - **Département** : Engineering, Design, Product, Marketing, Commercial, Ops
 - **Type** : CDI, CDD, Freelance, Stage, Alternance
 - **Localisation** : Remote, Paris, Hybride
 - **Niveau** : Junior, Confirmé, Senior, Lead
 
 **Card offre** :
+
 - Titre du poste
 - Département + Localisation + Type
 - Résumé (2 lignes)
@@ -71,6 +74,7 @@ careers.imuchat.app
 ### 📝 `/jobs/[slug]` — Fiche de Poste
 
 **Structure** :
+
 1. **Header** — Titre, département, localisation, type, salaire (fourchette)
 2. **À propos du poste** — Contexte et mission
 3. **Responsabilités** — Liste à puces (5-8 items)
@@ -103,6 +107,7 @@ careers.imuchat.app
 ### 🔄 `/process` — Processus de Recrutement
 
 **4 étapes** :
+
 1. **Screening CV** (48h) — Review candidature
 2. **Call RH** (30 min) — Fit culturel, motivations
 3. **Entretien technique** (1h) — Live coding ou case study selon le rôle
@@ -113,6 +118,7 @@ Timeline : 2-3 semaines max.
 ### 👥 `/teams` — Équipes
 
 Cards par équipe :
+
 - **Engineering** — Frontend, Backend, Mobile, DevOps, IA
 - **Design** — UI/UX, Brand, Motion
 - **Product** — Product Managers, Data Analysts
@@ -163,12 +169,14 @@ Cards par équipe :
 ## 📅 Roadmap
 
 ### Phase 1 (Semaines 1-2)
+
 - [ ] Page d'accueil `/`
 - [ ] Page `/jobs` + `/jobs/[slug]`
 - [ ] Formulaire candidature `/apply/[slug]`
 - [ ] 5-10 offres initiales
 
 ### Phase 2 (Semaines 3-4)
+
 - [ ] Pages `/culture`, `/benefits`, `/process`
 - [ ] Pages `/teams`
 - [ ] Traductions EN

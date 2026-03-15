@@ -43,6 +43,16 @@
 
 **✅ Macro-Phase 6 — Investissements & Crypto : TERMINÉE (S65→S66)**
 
+| **S67** | ECONOMY E1 (Régie pub self-service — 5 formats, ciblage, dashboard) | +89 → 6112 | ✅ |
+| **S68** | ECONOMY E2 (Premium multi-tiers, dashboard revenus consolidé, export) | +89 → 6201 | ✅ |
+
+**✅ Macro-Phase 7 — Publicité & Premium : TERMINÉE (S67→S68)**
+
+| **S69** | IMUBANK 18 (Alice Finance — analyse dépenses IA, alertes proactives, budgets intelligents) | +113 → 6319 | ✅ |
+| **S70** | Compliance (KYC3, PSD2/SCA, détection fraude ML, audit PCI DSS) | +118 → 6437 | ✅ |
+
+**✅ Macro-Phase 8 — IA Finance & Compliance : TERMINÉE (S69→S70)**
+
 ---
 
 ## Timeline consolidée

@@ -47,6 +47,7 @@ sandbox.imuchat.app
 ### 🏠 `/` — Accueil
 
 **Sections** :
+
 1. **Hero** — "Votre labo pour construire sur ImuChat"
 2. **Caractéristiques** — API Explorer, Mini-app Preview, Webhooks, Mock Data
 3. **Différences Sandbox vs Production** — Tableau comparatif
@@ -55,6 +56,7 @@ sandbox.imuchat.app
 ### 🖥️ `/console` — Console Développeur
 
 **Dashboard** :
+
 - Apps en développement (nombre, dernière activité)
 - Requêtes API sandbox (volume, erreurs)
 - Webhooks actifs
@@ -63,6 +65,7 @@ sandbox.imuchat.app
 ### 🔍 `/console/api` — API Explorer
 
 **Interface interactive** :
+
 - Liste de tous les endpoints API
 - Pour chaque endpoint :
   - Méthode + URL
@@ -77,6 +80,7 @@ sandbox.imuchat.app
 ### 📱 `/preview/[appId]` — Preview Mini-App
 
 **Simulateur** :
+
 - Frame simulant l'interface ImuChat (mobile/desktop toggle)
 - Mini-app chargée dans un iframe isolé
 - Console de debug (logs ImuAPI Bridge)
@@ -102,6 +106,7 @@ sandbox.imuchat.app
 ### 🎭 `/mock` — Données de Test
 
 **Données pré-remplies** :
+
 | Type | Quantité | Description |
 |---|---|---|
 | Utilisateurs | 50 | Profils fictifs variés |
@@ -111,6 +116,7 @@ sandbox.imuchat.app
 | Transactions | 200 | Paiements simulés (ImuPay) |
 
 **Actions** :
+
 - Reset des données (retour à l'état initial)
 - Générer des données custom (seed)
 - Simuler des événements temps réel
@@ -161,12 +167,14 @@ sandbox.imuchat.app
 ## 📅 Roadmap
 
 ### Phase 1 (Semaines 1-3)
+
 - [ ] Console développeur
 - [ ] API Explorer basique (top 10 endpoints)
 - [ ] Mock data (users, messages, servers)
 - [ ] Auth développeurs
 
 ### Phase 2 (Semaines 4-6)
+
 - [ ] Preview mini-app (simulateur)
 - [ ] Webhook inspector
 - [ ] Logs complets

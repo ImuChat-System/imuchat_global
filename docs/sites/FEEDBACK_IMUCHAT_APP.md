@@ -45,6 +45,7 @@ feedback.imuchat.app
 ### 🏠 `/` — Accueil
 
 **Sections** :
+
 1. **Hero** — "Construisons ImuChat ensemble" + stats (X idées, Y votes, Z implémentées)
 2. **Tendances** — Top 5 idées les plus votées cette semaine
 3. **Catégories** — Messagerie, Alice IA, ImuOffice, Store, Arena, Pay, Mobile, Desktop, Web
@@ -54,11 +55,13 @@ feedback.imuchat.app
 ### 💡 `/ideas` — Suggestions
 
 **Filtres** :
+
 - **Statut** : Nouvelle, En revue, Planifiée, En cours, Livrée, Refusée
 - **Catégorie** : Par produit/module
 - **Tri** : Plus votées, Récentes, Tendances, Commentées
 
 **Card suggestion** :
+
 - Compteur de votes (▲ upvote)
 - Titre
 - Catégorie (tag coloré)
@@ -78,6 +81,7 @@ feedback.imuchat.app
 ### 📝 `/ideas/new` — Soumettre une idée
 
 **Formulaire** :
+
 - Titre (obligatoire, 10-100 caractères)
 - Description (obligatoire, Markdown supporté)
 - Catégorie (dropdown)
@@ -87,6 +91,7 @@ feedback.imuchat.app
 ### 🗺️ `/roadmap` — Roadmap Publique
 
 **Vue Kanban** 4 colonnes :
+
 | En réflexion | Planifié | En cours | Livré |
 |---|---|---|---|
 | Idées en évaluation | Sprint planifié | Développement actif | Déployé en production |
@@ -156,12 +161,14 @@ feedback.imuchat.app
 ## 📅 Roadmap
 
 ### Phase 1 (Semaines 1-2)
+
 - [ ] Page d'accueil + listing idées
 - [ ] Soumission d'idées + votes (upvote)
 - [ ] Détail idée + commentaires
 - [ ] Auth Supabase
 
 ### Phase 2 (Semaines 3-4)
+
 - [ ] Roadmap publique (Kanban)
 - [ ] Changelog
 - [ ] Programme bêta

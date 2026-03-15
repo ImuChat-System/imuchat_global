@@ -55,6 +55,7 @@ go.imuchat.app
 ### Tracking
 
 Chaque redirection capture :
+
 - **UTM parameters** (source, medium, campaign, content, term)
 - **User-Agent** (OS, navigateur, device)
 - **Géolocalisation** (pays, ville)
@@ -108,12 +109,14 @@ Chaque redirection capture :
 ## 📅 Roadmap
 
 ### Phase 1 (Semaine 1)
+
 - [ ] Setup Cloudflare Worker
 - [ ] Redirections `/download` (smart link)
 - [ ] Redirections statiques prédéfinies
 - [ ] Tracking analytics basique
 
 ### Phase 2 (Semaine 2-3)
+
 - [ ] Dashboard admin (CRUD liens)
 - [ ] Générateur QR codes
 - [ ] Analytics détaillés par lien

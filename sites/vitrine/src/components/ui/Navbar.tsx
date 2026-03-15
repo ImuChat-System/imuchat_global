@@ -1,9 +1,66 @@
 'use client';
 
-import { Menu, X } from 'lucide-react';
+import { Menu, X, Globe, ChevronDown } from 'lucide-react';
 import { useLocale, useTranslations } from 'next-intl';
 import Link from 'next/link';
+import { usePathname, useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { ThemeToggle } from '@/components/ui/ThemeToggle';
+
+const LOCALES = [
+  { code: 'fr', label: 'FR', name: 'Français' },
+  { code: 'en', label: 'EN', name: 'English' },
+  { code: 'de', label: 'DE', name: 'Deutsch' },
+  { code: 'es', label: 'ES', name: 'Español' },
+  { code: 'ja', label: 'JA', name: '日本語' },
+];
+
+function LanguageSwitcher() {
+  const [open, setOpen] = useState(false);
+  const locale = useLocale();
+  const pathname = usePathname();
+  const router = useRouter();
+
+  function switchLocale(newLocale: string) {
+    const segments = pathname.split('/');
+    if (['fr', 'en', 'de', 'es', 'ja'].includes(segments[1])) {
+      segments[1] = newLocale;
+    } else {
+      segments.splice(1, 0, newLocale);
+    }
+    router.push(segments.join('/'));
+    setOpen(false);
+  }
+
+  return (
+    <div className="relative">
+      <button
+        type="button"
+        onClick={() => setOpen(!open)}
+        className="flex items-center gap-1 px-2 py-1.5 rounded-lg border border-slate-200 hover:border-primary text-sm font-medium"
+      >
+        <Globe size={14} />
+        {locale.toUpperCase()}
+        <ChevronDown size={12} className={open ? 'rotate-180' : ''} />
+      </button>
+      {open && (
+        <div className="absolute right-0 mt-1 py-1 w-36 bg-white border border-slate-200 rounded-xl shadow-lg z-50">
+          {LOCALES.map(l => (
+            <button
+              key={l.code}
+              type="button"
+              onClick={() => switchLocale(l.code)}
+              className={`w-full text-left px-3 py-1.5 text-sm hover:bg-slate-50 flex items-center justify-between ${locale === l.code ? 'text-primary font-semibold' : 'text-slate-700'}`}
+            >
+              <span>{l.name}</span>
+              <span className="text-xs text-slate-400">{l.label}</span>
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -43,8 +100,10 @@ export default function Navbar() {
             ))}
           </div>
 
-          {/* CTA Button (Desktop) */}
-          <div className="hidden md:flex items-center gap-4">
+          {/* CTA Button + Language + Theme (Desktop) */}
+          <div className="hidden md:flex items-center gap-3">
+            <LanguageSwitcher />
+            <ThemeToggle />
             <Link href={`/${locale}/contact`} className="px-6 py-2 bg-slate-900 text-white rounded-full font-semibold text-sm hover:bg-slate-800 transition-all shadow-sm hover:shadow-md">
               {t('cta')}
             </Link>
@@ -74,6 +133,10 @@ export default function Navbar() {
                 {link.label}
               </Link>
             ))}
+            <div className="flex items-center gap-2 px-4 pt-2">
+              <LanguageSwitcher />
+              <ThemeToggle />
+            </div>
             <Link href={`/${locale}/contact`} className="block w-full mt-4 px-6 py-3 bg-slate-900 text-white rounded-full font-semibold text-sm hover:bg-slate-800 transition-all text-center">
               {t('cta')}
             </Link>

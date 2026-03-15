@@ -555,7 +555,7 @@ Mes Abonnements
 ├── ImuChat Premium (5 €/mois)
 │   ├── Stockage cloud 50 Go
 │   ├── Thèmes premium (accès complet)
-│   ├── IA Alice avancée (GPT-4)
+│   ├── IA Alice avancée ()
 │   ├── Avatar 3D
 │   ├── Badge Premium ✨
 │   ├── Appels vidéo HD 4K

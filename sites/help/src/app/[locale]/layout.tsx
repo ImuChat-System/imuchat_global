@@ -5,6 +5,7 @@ import { Inter } from 'next/font/google';
 import '../globals.css';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
+import { ThemeProvider } from '@/providers/ThemeProvider';
 
 const inter = Inter({ subsets: ['latin'] });
 const locales = ['fr', 'en', 'de', 'es', 'ja'];
@@ -32,11 +33,13 @@ export default async function LocaleLayout({
   return (
     <html lang={locale}>
       <body className={`${inter.className} min-h-screen flex flex-col bg-gray-50 dark:bg-gray-900`}>
-        <NextIntlClientProvider messages={messages}>
-          <Header />
-          <main className="flex-1">{children}</main>
-          <Footer />
-        </NextIntlClientProvider>
+        <ThemeProvider>
+          <NextIntlClientProvider messages={messages}>
+            <Header />
+            <main className="flex-1">{children}</main>
+            <Footer />
+          </NextIntlClientProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

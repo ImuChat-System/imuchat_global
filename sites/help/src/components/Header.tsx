@@ -4,6 +4,7 @@ import { useTranslations, useLocale } from 'next-intl';
 import Link from 'next/link';
 import { useState } from 'react';
 import { Menu, X, Globe, HelpCircle } from 'lucide-react';
+import { ThemeToggle } from './ThemeToggle';
 
 const languages = [
   { code: 'fr', label: 'Français' },
@@ -53,6 +54,8 @@ export function Header() {
                 </div>
               )}
             </div>
+
+            <ThemeToggle className="border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 hover:text-primary-600 hover:border-primary-400 bg-transparent" />
           </nav>
 
           <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="md:hidden p-2 text-gray-600 dark:text-gray-300">
@@ -74,6 +77,10 @@ export function Header() {
                     </Link>
                   ))}
                 </div>
+              </div>
+              <div className="border-t border-gray-100 dark:border-gray-800 pt-4 flex items-center gap-2">
+                <span className="text-sm text-gray-500">Thème</span>
+                <ThemeToggle className="border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 hover:text-primary-600 hover:border-primary-400 bg-transparent" />
               </div>
             </div>
           </nav>

@@ -38,6 +38,11 @@
 
 **✅ Macro-Phase 5 — Store Economy & Marketplace : TERMINÉE (S62→S64)**
 
+| **S65** | IMUBANK 16 (Investissements — actions fractionnées, ETF, watchlist) | +100 → 5868 | ✅ |
+| **S66** | IMUBANK 17 (Crypto Hub — BTC, ETH, SOL, staking, alertes) | +100 → 5968 | ✅ |
+
+**✅ Macro-Phase 6 — Investissements & Crypto : TERMINÉE (S65→S66)**
+
 ---
 
 ## Timeline consolidée

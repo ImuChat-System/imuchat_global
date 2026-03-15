@@ -92,7 +92,7 @@ Le marché des ENT en France représente des dizaines de milliers d'établisseme
 ImuChat Éducation est le seul produit qui combine ENT + bureautique collaborative + messagerie + IA dans une seule plateforme souveraine. Pas besoin de jongler entre Pronote pour les notes et Teams pour les cours.
 
 **2. Alice IA vraiment pédagogique**
-Contrairement à Copilot (Microsoft) ou Gemini (Google), Alice IA est conçue pour l'éducation : elle aide à comprendre sans donner les réponses directement, génère des exercices adaptés au niveau de l'élève, et respecte la vie privée (pas de données envoyées vers des serveurs américains).
+Contrairement à Copilot (Microsoft) ou Gemini (Google), Alice IA est conçue pour l'éducation : elle aide à comprendre sans donner les réponses directement, génère des exercices adaptés au niveau de l'élève, et respecte la vie privée (pas de données envoyées vers des serveurs hors Union Européenne).
 
 **3. Architecture age-tier native**
 ImuChat a déjà une architecture de segmentation par âge (KIDS/JUNIOR/TEEN/ADULT) avec consentement parental, contrôle parental (ImuGuardian) et feature flags par tranche d'âge. Aucun concurrent ne propose cela nativement.

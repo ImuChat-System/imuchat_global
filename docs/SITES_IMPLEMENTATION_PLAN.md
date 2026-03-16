@@ -250,7 +250,7 @@ sites/
 | `press.imuchat.app` | Espace presse — kit média, communiqués `
 | `careers.imuchat.app` | Offres d'emploi, culture d'entreprise |
 | `logs.imuchat.app` | Status page publique + historique incidents |
-| `admin.imuchat.app` | Back-office interne (modération, support, users) | (existe déjà )
+| `admin.imuchat.app` | Back-office interne (modération, support, users) | (existe déjà, mais à vérifier)
 
 ---
 

@@ -1,0 +1,20 @@
+{
+  "title": "go.imuchat.app — Liens courts ImuChat",
+  "sub": "Service de redirections marketing pour l'écosystème ImuChat.",
+  "links_title": "Liens rapides",
+  "download": "Télécharger ImuChat",
+  "download_desc": "iOS, Android, Desktop",
+  "app": "Ouvrir l'application",
+  "app_desc": "Accéder à app.imuchat.app",
+  "enterprise": "Solutions Enterprise",
+  "enterprise_desc": "enterprise.imuchat.app",
+  "docs": "Documentation API",
+  "docs_desc": "docs.imuchat.app",
+  "github": "GitHub ImuChat",
+  "github_desc": "Code source et SDK",
+  "service_title": "Service de redirections",
+  "service_desc": "go.imuchat.app est le service de liens courts d'ImuChat. Il centralise toutes les redirections marketing avec tracking UTM, analytics et vanity URLs pour les campagnes.",
+  "tech_title": "Stack technique",
+  "tech_desc": "Cloudflare Workers + KV — latence < 10ms à l'échelle mondiale.",
+  "footer": "© 2026 ImuChat"
+}

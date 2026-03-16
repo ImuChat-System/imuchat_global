@@ -50,6 +50,11 @@ sites/
 ├── sandbox/        → sandbox.imuchat.app
 ├── analytics/      → analytics.imuchat.app
 ├── community/      → community.imuchat.app
+├── creators/       → creators.imuchat.app
+├── pay/            → pay.imuchat.app
+├── arena/          → arena.imuchat.app
+├── go/             → go.imuchat.app
+├── gaming/         → gaming.imuchat.app
 └── shared/         → Composants partagés entre sites
 ```
 
@@ -182,15 +187,57 @@ sites/
 
 ---
 
-## 📋 TIER 4 — Phase Expansion (À implémenter)
+## ✅ TIER 4 — Phase Expansion (Complétés)
 
-| Site | Description | Priorité |
-|------|-------------|----------|
-| `creators.imuchat.app` | Studio créateurs — monétisation, analytics, outils live | 🔴 Haute |
-| `pay.imuchat.app` | ImuPay — paiements, portefeuille, transactions | 🔴 Haute |
-| `arena.imuchat.app` | Gaming/compétition — tournois, leaderboards, clans | 🟠 Moyenne |
-| `go.imuchat.app` | Redirecteur de liens marketing courts | 🟡 Basse |
-| `gaming.imuchat.app` | Landing page gaming verticale | 🟡 Basse |
+### 14. creators.imuchat.app — Studio Créateurs
+
+| Statut | ✅ Implémenté |
+|--------|---------------|
+| **Port dev** | 3140 |
+| **i18n** | FR, EN, JA |
+| **Pages** | Home, monetize, analytics, live, tools, community, academy, events, apply, success-stories, pricing, about, legal |
+| **Build** | 41 pages générées |
+| **Note** | Design rose/violet, RevenueSimulator (client, sliders), ApplyForm (4 plateformes) |
+
+### 15. pay.imuchat.app — ImuPay
+
+| Statut | ✅ Implémenté |
+|--------|---------------|
+| **Port dev** | 3150 |
+| **i18n** | FR, EN, DE |
+| **Pages** | Home, wallet, send, receive, card, exchange, merchants, security, fees, compliance, developers, about, contact, legal |
+| **Build** | 41 pages générées |
+| **Note** | Design vert/noir fintech, TrustBar, WalletPreview, CardPreview, FAQAccordion, ContactForm |
+
+### 16. arena.imuchat.app — ImuArena
+
+| Statut | ✅ Implémenté |
+|--------|---------------|
+| **Port dev** | 3160 |
+| **i18n** | FR, EN, JA |
+| **Pages** | Home, contests, contest détail, leagues, league détail, rankings, rewards, seasons, organize, sponsors, about, legal |
+| **Build** | 66 pages générées |
+| **Note** | Design gaming compétition, tournois natifs ImuArena. Leagues dynamiques (6 slugs), contests dynamiques (5 ids), saisons, récompenses, sponsors, organize |
+
+### 17. go.imuchat.app — Redirecteur Marketing
+
+| Statut | ✅ Implémenté |
+|--------|---------------|
+| **Port dev** | 3180 |
+| **i18n** | FR, EN |
+| **Pages** | Landing (liens marketing rapides vers toutes destinations) |
+| **Build** | 4 pages générées |
+| **Note** | Site minimal, ICON_MAP + quick links table |
+
+### 18. gaming.imuchat.app — Landing Gaming
+
+| Statut | ✅ Implémenté |
+|--------|---------------|
+| **Port dev** | 3170 |
+| **i18n** | FR, EN, JA |
+| **Pages** | Home, features, games, voice, communities, streaming, profiles, compare, about, legal |
+| **Build** | 33 pages générées |
+| **Note** | Dark theme only (--color-primary: #a855f7), comparatif vs Discord/Guilded (12 critères) |
 
 ---
 
@@ -198,18 +245,19 @@ sites/
 
 | Site | Description |
 |------|-------------|
-| `education.imuchat.app` | Offre éducation — classes, établissements |
+| `education.imuchat.app` | Offre éducation — classes, établissements | (À consulter : `./education/00_INDEX.md`) |
 | `partners.imuchat.app` | Programme partenaires — revendeurs, intégrateurs |
-| `press.imuchat.app` | Espace presse — kit média, communiqués |
+| `press.imuchat.app` | Espace presse — kit média, communiqués `
 | `careers.imuchat.app` | Offres d'emploi, culture d'entreprise |
 | `logs.imuchat.app` | Status page publique + historique incidents |
-| `admin.imuchat.app` | Back-office interne (modération, support, users) |
+| `admin.imuchat.app` | Back-office interne (modération, support, users) | (existe déjà )
 
 ---
 
 ## 🔗 Interconnexions Écosystème
 
 Tous les sites existants ont des liens croisés vers :
+
 - `app.imuchat.app` — Application principale (bouton "Se connecter" en navbar)
 - `store.imuchat.app` — Gestion abonnements (lien dans footer + pages pricing)
 - `imuchat.app` — Site vitrine (lien "Retour au site" dans footer)
@@ -241,10 +289,10 @@ Pour chaque nouveau site :
 ```text
 Mars 2026     : TIER 1 (vitrine, help, docs) + TIER 2 (blog, feedback, alice, store, developers) ✅
 Mars 2026     : TIER 3 (enterprise, office, sandbox, analytics, community) ✅
-Avril 2026    : TIER 4 (creators, pay, arena, go, gaming)
+Mars 2026     : TIER 4 (creators, pay, arena, go, gaming) ✅
 Q3 2026       : TIER 5 (education, partners, press, careers, logs, admin)
 ```
 
 ---
 
-Dernière mise à jour : 15 mars 2026
+Dernière mise à jour : 16 mars 2026

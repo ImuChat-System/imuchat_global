@@ -1,0 +1,468 @@
+{
+  "meta": {
+    "title": "ImuPay — Ihr finanzielles Super-Wallet",
+    "description": "Multi-Währungs-Wallet, Karten, P2P-Zahlungen, Ersparnisse und Investitionen — alles in ImuChat."
+  },
+  "Navbar": {
+    "wallet": "Wallet",
+    "send": "Senden",
+    "cards": "Karten",
+    "savings": "Sparen",
+    "invest": "Investieren",
+    "merchants": "Händler",
+    "imucoins": "ImuCoins",
+    "pricing": "Preise",
+    "security": "Sicherheit",
+    "openWallet": "Mein Wallet öffnen",
+    "home": "Startseite"
+  },
+  "Footer": {
+    "tagline": "Ihr Geld. Ihre Kontrolle. Überall.",
+    "product": "Produkt",
+    "links": {
+      "wallet": "ImuWallet",
+      "send": "P2P-Zahlungen",
+      "cards": "Karten",
+      "savings": "Sparen",
+      "invest": "Investieren",
+      "merchants": "Händler",
+      "imucoins": "ImuCoins"
+    },
+    "resources": "Ressourcen",
+    "resourceLinks": {
+      "security": "Sicherheit",
+      "pricing": "Preise",
+      "faq": "FAQ",
+      "contact": "Kontakt",
+      "legal": "AGB Finanzen"
+    },
+    "ecosystem": "Ökosystem",
+    "ecosystemLinks": {
+      "app": "Anwendung",
+      "store": "Abonnements",
+      "creators": "Ersteller",
+      "developers": "API-Entwickler",
+      "help": "Hilfe",
+      "enterprise": "Enterprise"
+    },
+    "copyright": "© 2026 ImuChat. Alle Rechte vorbehalten. ImuPay beantragt die EME-Lizenz.",
+    "legal": "Impressum",
+    "privacy": "Datenschutz"
+  },
+  "Home": {
+    "hero": {
+      "badge": "Fintech der nächsten Generation",
+      "title": "Ihr Geld.",
+      "title2": "Ihre Kontrolle.",
+      "title3": "Überall.",
+      "subtitle": "ImuPay integriert ein Wallet, Karten, P2P-Zahlungen und Investitionen direkt in Ihre Super-App.",
+      "cta": "Mein Wallet öffnen",
+      "ctaSecondary": "Mehr erfahren"
+    },
+    "pillars": {
+      "title": "Alles was Sie brauchen, an einem Ort",
+      "wallet": { "title": "Multi-Währungs-Wallet", "desc": "EUR, USD, GBP, JPY, CHF — ein einheitliches Guthaben" },
+      "send": { "title": "P2P senden", "desc": "Sofortige Überweisungen zwischen ImuChat-Nutzern" },
+      "cards": { "title": "ImuChat-Karten", "desc": "Sofortige virtuelle Karte + physische Mastercard" },
+      "savings": { "title": "Sparen & Ziele", "desc": "Intelligente Tresore, automatisches Aufrunden, geplantes Sparen" },
+      "invest": { "title": "Investieren", "desc": "Bruchteilsaktien ab 1€, ETFs, Krypto-Hub" },
+      "merchants": { "title": "Händler", "desc": "QR-Code, NFC, Terminal — Zahlungen einfach akzeptieren" }
+    },
+    "comparison": {
+      "title": "Alles-in-einem, wo andere getrennt sind",
+      "subtitle": "Was Revolut, Lydia und PayPal getrennt tun, macht ImuChat an einem Ort.",
+      "revolut": "Revolut",
+      "lydia": "Lydia",
+      "paypal": "PayPal",
+      "imuchat": "ImuChat",
+      "features": {
+        "wallet": "Multi-Währungs-Wallet",
+        "p2p": "P2P-Zahlungen",
+        "cards": "Virtuelle Karten",
+        "invest": "Investition",
+        "social": "Integriertes soziales Netzwerk",
+        "imucoins": "Interne Währung"
+      }
+    },
+    "testimonials": {
+      "title": "Sie vertrauen ImuPay",
+      "t1": { "name": "Lucas M.", "age": "23 — Student", "text": "Ich sende meinen Mitbewohnern in 2 Sekunden Geld. Kein Jonglieren mehr zwischen 3 verschiedenen Apps." },
+      "t2": { "name": "Sophie & Marc T.", "age": "38 — Familie", "text": "Wir verwalten unser Familienbudget, gemeinsame Einkäufe und Urlaubsersparnisse von einer Oberfläche." },
+      "t3": { "name": "Antoine V.", "age": "31 — Freiberufler", "text": "Ich empfange Kundenzahlungen und investiere den Überschuss direkt. Alice-KI berät mich wirklich gut." }
+    },
+    "cta": {
+      "title": "Bereit, die Kontrolle über Ihr Geld zu übernehmen?",
+      "subtitle": "Schließen Sie sich Tausenden von Nutzern an, die ImuPay vertrauen.",
+      "button": "Mein Wallet kostenlos öffnen"
+    }
+  },
+  "TrustBar": {
+    "pci": "PCI DSS Level 1",
+    "aes": "AES-256-Verschlüsselung",
+    "rgpd": "DSGVO-konform",
+    "funds": "Getrennte Gelder",
+    "secure3d": "3D Secure"
+  },
+  "Wallet": {
+    "meta": { "title": "ImuWallet — Multi-Währungs-Wallet", "description": "Verwalten Sie Ihre Währungen, ImuCoins und Transaktionen von einem Ort." },
+    "hero": {
+      "badge": "Intelligentes Wallet",
+      "title": "Ein Wallet für alles verwalten",
+      "subtitle": "EUR, USD, GBP, JPY, CHF — alle Ihre Währungen an einem Ort, mit Ihren ImuCoins."
+    },
+    "features": {
+      "title": "Wallet-Funktionen",
+      "currencies": { "title": "Multi-Währung", "desc": "Verwalten Sie EUR, USD, GBP, JPY und CHF mit sofortiger Konvertierung zum besten Kurs." },
+      "imucoins": { "title": "Integrierte ImuCoins", "desc": "100 IC = 1€. Verwenden Sie Ihre ImuCoins überall im ImuChat-Ökosystem." },
+      "unified": { "title": "Einheitliches Guthaben", "desc": "Ein Bildschirm zum Anzeigen aller Ihrer Bestände in Echtzeit." },
+      "history": { "title": "Vollständige Geschichte", "desc": "Detaillierte Transaktionen, Datum-/Kategoriefilter, CSV-Export." },
+      "notifications": { "title": "Intelligente Benachrichtigungen", "desc": "Anpassbare Benachrichtigungen für Einnahmen, Ausgaben und Schwellenwerte." },
+      "topup": { "title": "Einfaches Aufladen", "desc": "SEPA-Überweisung, Bankkarte, Apple Pay, Google Pay — in Sekunden aufladen." }
+    },
+    "cta": "Mein Wallet öffnen"
+  },
+  "Send": {
+    "meta": { "title": "P2P-Zahlungen — Senden, Anfordern, Teilen", "description": "Sofortüberweisungen, Gruppensammelbüchsen und internationale Zahlungen." },
+    "hero": {
+      "badge": "Sofortzahlungen",
+      "title": "Geld senden war noch nie so einfach",
+      "subtitle": "Sofortige Überweisungen zwischen ImuChat-Wallets, grenzenlos."
+    },
+    "features": {
+      "send": { "title": "Senden", "desc": "Senden Sie Geld an jeden ImuChat-Kontakt mit 1 Tipp. Sofort und kostenlos." },
+      "request": { "title": "Anfordern", "desc": "Erstellen Sie eine Zahlungsanforderung mit Betrag und Nachricht. Ihr Kontakt erhält sofort eine Benachrichtigung." },
+      "split": { "title": "Teilen", "desc": "Teilen Sie eine Rechnung fair zwischen Freunden — Restaurant, Einkäufe, Urlaub." },
+      "pool": { "title": "Sammelbüchse", "desc": "Gruppensammelbüchsen für Geburtstage, Reisen, gemeinsame Projekte. Jeder kann einfach beitragen." },
+      "instant": { "title": "Sofort", "desc": "Die Überweisung kommt in Echtzeit im Wallet des Empfängers an. Kein Warten." },
+      "international": { "title": "International", "desc": "Senden Sie international mit automatischer Konvertierung. Transparenter Kurs, 0,5% Provision." }
+    },
+    "cta": "Jetzt senden"
+  },
+  "Cards": {
+    "meta": { "title": "ImuChat-Karten — Virtuell & Physisch", "description": "Sofortige virtuelle Karte und physische Mastercard mit Cashback." },
+    "hero": {
+      "badge": "ImuChat-Karten",
+      "title": "Ihre Karte, überall auf der Welt",
+      "subtitle": "Sofortige virtuelle Karte für Online-Einkäufe, physische Karte für den Alltag."
+    },
+    "virtual": {
+      "title": "Virtuelle Karte",
+      "subtitle": "Kostenlos & sofort",
+      "desc": "In Sekunden generiert, sofort für alle Online-Einkäufe verwendbar.",
+      "features": ["Sofortige Generierung", "Online-Zahlungen", "Erneuerbarer Sicherheitscode", "In 1 Tipp einfrieren"]
+    },
+    "physical": {
+      "title": "Physische Karte",
+      "subtitle": "9,90€ — einmalige Zahlung",
+      "desc": "Mastercard an Ihre Haustür geliefert, weltweit mit NFC verwendbar.",
+      "features": ["Lieferung in 5 Tagen", "NFC kontaktlos", "In 210 Ländern akzeptiert", "Apple Pay & Google Pay"]
+    },
+    "controls": {
+      "title": "Volle Kontrolle",
+      "block": { "title": "Sperren / Entsperren", "desc": "Sofort eingefroren oder über die App reaktiviert." },
+      "limits": { "title": "Ausgabenlimits", "desc": "Setzen Sie tägliche, wöchentliche oder kategoriebasierte Limits." },
+      "geo": { "title": "Geografische Zonen", "desc": "Erlauben oder sperren Sie Zahlungen nach Ländern." },
+      "cashback": { "title": "Cashback", "desc": "Erhalten Sie ImuCoins bei Einkäufen bei Partnerhändlern." }
+    },
+    "cta": "Meine Karte bestellen"
+  },
+  "Savings": {
+    "meta": { "title": "Sparen & Ziele — ImuPay", "description": "Zieltresore, automatisches Aufrunden und geplantes Sparen." },
+    "hero": {
+      "badge": "Intelligentes Sparen",
+      "title": "Sparen ohne nachzudenken",
+      "subtitle": "Zieltresore, automatisches Aufrunden, wiederkehrende Überweisungen — Ihre Ersparnisse bauen sich von selbst auf."
+    },
+    "features": {
+      "vaults": { "title": "Zieltresore", "desc": "Erstellen Sie einen Tresor für jedes Projekt: Urlaub, Gadget, Notfall, Rente. Verfolgen Sie Ihren Fortschritt." },
+      "round": { "title": "Automatisches Aufrunden", "desc": "Jeder Kauf wird auf den nächsten Euro aufgerundet. Die Differenz geht direkt in Ihren Tresor." },
+      "scheduled": { "title": "Geplantes Sparen", "desc": "Richten Sie automatische Überweisungen ein — täglich, wöchentlich oder monatlich." },
+      "progress": { "title": "Visuelle Verfolgung", "desc": "Fortschrittsbalken, Entwicklungsdiagramme, Meilenstein-Benachrichtigungen." }
+    },
+    "cta": "Meinen ersten Tresor erstellen"
+  },
+  "Invest": {
+    "meta": { "title": "Investitionen — Aktien, ETFs, Krypto", "description": "Investieren Sie ab 1€ in Bruchteilsaktien, fertige ETFs und Krypto." },
+    "hero": {
+      "badge": "Einfach investieren",
+      "title": "Lassen Sie Ihr Geld arbeiten",
+      "subtitle": "Bruchteilsaktien ab 1€, diversifizierte ETFs, Krypto-Hub — mit Alice-KI als Leitfaden."
+    },
+    "features": {
+      "stocks": { "title": "Bruchteilsaktien", "desc": "Investieren Sie ab 1€ in Apple, Tesla, LVMH und Hunderte anderer Unternehmen." },
+      "etf": { "title": "Fertige ETFs", "desc": "Diversifizierte Portfolios für verschiedene Risikoprofile. Ohne Fachwissen investieren." },
+      "crypto": { "title": "Krypto-Hub", "desc": "Kaufen und verkaufen Sie BTC, ETH, SOL und mehr. Staking für passives Einkommen verfügbar." },
+      "alice": { "title": "Alice Finance KI", "desc": "Unsere KI analysiert Ihr Profil, Ihre Gewohnheiten und schlägt Investitionen passend zu Ihren Zielen vor." },
+      "education": { "title": "Finanzielle Bildung", "desc": "Integrierte Kurse \"Investitionsgrundlagen\" — lernen Sie beim Investieren." }
+    },
+    "warning": "Investitionen sind mit Risiken verbunden. Der Wert Ihres Portfolios kann sinken. Vergangene Wertentwicklung garantiert keine zukünftigen Ergebnisse. ImuPay ist kein zugelassener Anlageberater.",
+    "aliceLink": "Alice Finance entdecken",
+    "cta": "Mit dem Investieren beginnen"
+  },
+  "Merchants": {
+    "meta": { "title": "Händlerlösungen — ImuPay", "description": "Akzeptieren Sie ImuPay-Zahlungen per QR-Code, NFC oder Terminal. Dashboard inklusive." },
+    "hero": {
+      "badge": "Für Händler",
+      "title": "ImuPay-Zahlungen akzeptieren",
+      "subtitle": "QR-Code, NFC, Terminal auf Smartphone oder Tablet — transparente 1,5% Provision."
+    },
+    "solutions": {
+      "title": "Unsere Zahlungslösungen",
+      "qr": { "title": "QR-Code", "desc": "Generieren Sie in Sekunden einen Zahlungs-QR-Code. Kunden scannen und zahlen. Keine Hardware erforderlich." },
+      "nfc": { "title": "NFC / Kontaktlos", "desc": "Akzeptieren Sie kontaktlose Zahlungen per Karte oder ImuChat-Smartphone." },
+      "terminal": { "title": "Terminal-App", "desc": "Verwandeln Sie Ihr Tablet oder Smartphone in ein professionelles Zahlungsterminal." },
+      "dashboard": { "title": "Dashboard", "desc": "Verfolgen Sie Ihre Verkäufe, Analysen, Berichte — alles in Echtzeit aus Ihrem Händlerbereich." },
+      "api": { "title": "Zahlungs-API", "desc": "Integrieren Sie ImuPay in Ihren E-Commerce. Vollständige Dokumentation verfügbar." },
+      "commission": { "title": "Transparente Provision", "desc": "1,5% pro Transaktion, keine versteckten Gebühren. Kein Pflichtabonnement." }
+    },
+    "pricing": {
+      "title": "Einfache Preisgestaltung",
+      "rate": "1,5%",
+      "desc": "pro Transaktion",
+      "features": ["Keine Einrichtungsgebühr", "Kein monatliches Abonnement", "Auszahlungen innerhalb 24h", "Dedizierter Händlersupport"]
+    },
+    "apiLink": "API-Dokumentation anzeigen",
+    "cta": "Partnerhändler werden"
+  },
+  "ImuCoins": {
+    "meta": { "title": "ImuCoins — Die ImuChat-Ökosystemwährung", "description": "100 IC = 1€. Kaufen, verdienen, ausgeben im gesamten ImuChat-Ökosystem." },
+    "hero": {
+      "badge": "Interne Währung",
+      "title": "ImuCoins: die Ökosystemwährung",
+      "subtitle": "100 IC = 1€. Fester Kurs. Keine Spekulation. Überall in ImuChat verwendbar."
+    },
+    "what": {
+      "title": "Was ist ein ImuCoin?",
+      "desc": "ImuCoins (IC) sind die interne Währung des ImuChat-Ökosystems. Der Kurs ist fest: 100 IC = 1€ immer. Keine Blockchain, keine Spekulation — eine stabile und transparente Währung.",
+      "features": {
+        "fixed": { "title": "Fester Kurs", "desc": "1€ = 100 IC, immer. Keine Volatilität." },
+        "noCrypto": { "title": "Keine Blockchain", "desc": "Zuverlässige zentralisierte Technologie, keine Gas-Gebühren." },
+        "ecosystem": { "title": "Vollständiges Ökosystem", "desc": "In allen ImuChat-Apps verwendbar." }
+      }
+    },
+    "uses": {
+      "title": "Wo können Sie Ihre ImuCoins verwenden?",
+      "store": { "title": "ImuStore", "desc": "Kaufen Sie Mini-Apps, Erweiterungen und Premium-Abonnements." },
+      "arena": { "title": "ImuArena", "desc": "Tickets für Wettbewerbe und Turniere." },
+      "feed": { "title": "ImuFeed", "desc": "Geben Sie Ihren Lieblingscreatorn Trinkgeld." },
+      "gaming": { "title": "Gaming", "desc": "In-Game-Käufe in Ökosystem-Spielen." },
+      "chat": { "title": "ImuChat", "desc": "Senden Sie Geschenke und Belohnungen in Ihren Gesprächen." }
+    },
+    "earn": {
+      "title": "Wie bekommt man ImuCoins?",
+      "buy": { "title": "Kaufen", "desc": "5 Pakete verfügbar. Keine Provision." },
+      "earn": { "title": "Verdienen", "desc": "Wettbewerbe, tägliche Quests, ImuArena-Challenges." },
+      "receive": { "title": "Empfangen", "desc": "Trinkgelder von Ihren Abonnenten, Geschenke von Ihren Kontakten." }
+    },
+    "packages": {
+      "title": "ImuCoins-Pakete",
+      "popular": "Beliebt",
+      "bonus": "Bonus"
+    },
+    "conversion": {
+      "title": "IC → EUR-Umrechnung (Creator)",
+      "desc": "Zertifizierte Creator können ihre ImuCoins in Euro umrechnen. Bedingungen und Mindestmengen gelten.",
+      "link": "Creator-Bedingungen anzeigen"
+    },
+    "cta": "ImuCoins kaufen"
+  },
+  "Security": {
+    "meta": { "title": "Finanzielle Sicherheit — ImuPay", "description": "TLS 1.3, AES-256, PCI DSS Level 1, 3D Secure — Ihr Geld ist geschützt." },
+    "hero": {
+      "badge": "Banking-Sicherheit",
+      "title": "Ihr Geld ist in guten Händen",
+      "subtitle": "Banking-Verschlüsselung, getrennte Gelder, PCI-DSS-Konformität — wir nehmen finanzielle Sicherheit ernst."
+    },
+    "features": {
+      "encryption": { "title": "AES-256 & TLS 1.3 Verschlüsselung", "desc": "Alle Kommunikationen werden mit den höchsten Banking-Standards verschlüsselt." },
+      "pci": { "title": "PCI DSS Level 1", "desc": "Die höchste Zertifizierung für die Verarbeitung von Kartenzahlungsdaten." },
+      "eme": { "title": "EME-Lizenz (Ziel)", "desc": "ImuPay befindet sich im Prozess der Erlangung der E-Geld-Institut-Lizenz von europäischen Regulierungsbehörden." },
+      "segregated": { "title": "Getrennte Gelder", "desc": "Nutzergelder sind von Betriebsgeldern des Unternehmens getrennt. Ihr Geld gehört Ihnen." },
+      "secure3d": { "title": "3D Secure", "desc": "Erweiterte Authentifizierung für jede Kartenzahlung. Systematische Doppelvalidierung." },
+      "antifraud": { "title": "KI-Betrugsschutz", "desc": "Echtzeit-Anomalieerkennung, Transaktionsgeolokalisierung, automatische Limits." },
+      "insurance": { "title": "100.000€ Versicherung", "desc": "Ihre Gelder sind gemäß den geltenden Vorschriften bis zu 100.000€ geschützt." },
+      "audit": { "title": "Audits & Bug Bounty", "desc": "Jährliche Sicherheitsprüfungen durch unabhängige Dritte. Bug-Bounty-Programm für Forscher." }
+    },
+    "cta": "Mehr über Sicherheit erfahren"
+  },
+  "Pricing": {
+    "meta": { "title": "ImuPay-Preise — Transparent & Wettbewerbsfähig", "description": "Vollständiges Preisraster: kostenlose Kontoeröffnung, Karten, Zahlungen, ImuCoins, Investitionen." },
+    "hero": {
+      "badge": "Transparente Preisgestaltung",
+      "title": "Klare Preise, keine Überraschungen",
+      "subtitle": "Kostenlose Kontoeröffnung. Keine versteckten Gebühren. Alles ist hier."
+    },
+    "table": {
+      "service": "Service",
+      "cost": "Kosten",
+      "note": "Details"
+    },
+    "rows": {
+      "account": { "service": "Kontoeröffnung", "cost": "Kostenlos", "note": "Keine Bedingungen" },
+      "virtualCard": { "service": "Virtuelle Karte", "cost": "Kostenlos", "note": "Sofortige Generierung" },
+      "physicalCard": { "service": "Physische Karte", "cost": "9,90€", "note": "Einmalige Zahlung, Lieferung inklusive" },
+      "p2p": { "service": "P2P-Zahlung (ImuChat→ImuChat)", "cost": "Kostenlos", "note": "Sofort, unbegrenzt" },
+      "conversion": { "service": "Währungsumrechnung", "cost": "0,5%", "note": "Marktkurs + 0,5% Provision" },
+      "atm": { "service": "Geldautomatenabhebung", "cost": "2 kostenlos/Monat", "note": "Dann 2€ pro Abhebung" },
+      "imucoins": { "service": "ImuCoins-Kauf", "cost": "0%", "note": "Keine Kaufprovision" },
+      "merchant": { "service": "Händler (pro Transaktion)", "cost": "1,5%", "note": "Keine Fixkosten oder Abonnement" },
+      "investBuy": { "service": "Investment — Kauf", "cost": "0%", "note": "Aktien, ETFs, Krypto" },
+      "investSell": { "service": "Investment — Verkauf", "cost": "0,5%", "note": "Aktien, ETFs, Krypto" }
+    },
+    "note": "* Preise sind indikativ und können sich ändern. Vollständige Bedingungen in den AGB.",
+    "cta": "Mein kostenloses Konto öffnen"
+  },
+  "FAQ": {
+    "meta": { "title": "FAQ — ImuPay Häufige Fragen", "description": "Antworten auf die häufigsten Fragen zu ImuPay, Wallet, Karten und Zahlungen." },
+    "hero": {
+      "title": "Häufig gestellte Fragen",
+      "subtitle": "Finden Sie schnell Antworten auf Ihre Fragen zu ImuPay."
+    },
+    "categories": {
+      "security": {
+        "title": "Sicherheit & Vertrauen",
+        "questions": [
+          { "q": "Ist ImuPay sicher?", "a": "Ja. ImuPay verwendet AES-256-Verschlüsselung und TLS 1.3, die höchsten Banking-Standards. Wir sind PCI DSS Level 1 für die Verarbeitung von Kartendaten zertifiziert." },
+          { "q": "Sind meine Gelder im Insolvenzfall geschützt?", "a": "Ja. Nutzergelder sind von Unternehmensgeldern getrennt und bis zu 100.000€ gemäß geltendem Recht geschützt." },
+          { "q": "Ist ImuPay reguliert?", "a": "ImuPay beantragt die EME-Lizenz (E-Geld-Institut) bei europäischen Regulierungsbehörden. In der Zwischenzeit operieren wir im geltenden regulatorischen Rahmen." },
+          { "q": "Was passiert, wenn ich mein Telefon verliere?", "a": "Sperren Sie sofort Ihre Karten über unsere Website oder rufen Sie den Support an. Ihr Wallet bleibt mit Ihrem Passwort zugänglich. Die Gelder bleiben sicher." }
+        ]
+      },
+      "wallet": {
+        "title": "Wallet & Guthaben",
+        "questions": [
+          { "q": "Wie lade ich mein Wallet auf?", "a": "Per SEPA-Überweisung, Visa/Mastercard, Apple Pay oder Google Pay. Das Aufladen ist in der Regel sofort (wenige Sekunden bis Minuten)." },
+          { "q": "Welche Währungen werden unterstützt?", "a": "EUR, USD, GBP, JPY und CHF. Weitere Währungen werden bald hinzugefügt. Konvertierung zum Marktkurs + 0,5% Provision." },
+          { "q": "Gibt es ein Mindestguthaben?", "a": "Nein. Ihr Guthaben kann 0€ betragen. Es gibt kein Mindestguthaben für ein offenes Konto." },
+          { "q": "Wie überweise ich mein Guthaben auf mein Bankkonto?", "a": "Über die App, Wallet-Bereich > Abhebung. Die Überweisung kommt je nach Bank innerhalb von 1-3 Werktagen an. SEPA-Überweisungen sind kostenlos." }
+        ]
+      },
+      "cards": {
+        "title": "Karten",
+        "questions": [
+          { "q": "Wie erhalte ich eine virtuelle Karte?", "a": "Über die ImuChat-App, ImuPay-Bereich > Karten > Neue virtuelle Karte. Sofort generiert, sofort für Online-Einkäufe verwendbar." },
+          { "q": "Was kostet die physische Karte?", "a": "9,90€ bei Bestellung, einmalige Zahlung. Lieferung in 5 Werktagen. Keine Jahresgebühren." },
+          { "q": "Wie sperre ich meine Karte?", "a": "In der App, Karten-Bereich, tippen Sie auf Ihre Karte, dann 'Sperren'. Die Karte ist sofort eingefroren. Sie können sie jederzeit entsperren." },
+          { "q": "Funktioniert die Karte im Ausland?", "a": "Ja. Die Mastercard wird in über 210 Ländern akzeptiert. Automatische Konvertierung zum Marktkurs + 0,5%." }
+        ]
+      },
+      "payments": {
+        "title": "Zahlungen",
+        "questions": [
+          { "q": "Sind P2P-Zahlungen wirklich kostenlos?", "a": "Ja, Überweisungen zwischen ImuChat-Wallets sind kostenlos und sofort, ohne Betragsbegrenzung (innerhalb regulatorischer Obergrenzen)." },
+          { "q": "Kann ich Geld an jemanden senden, der ImuChat nicht hat?", "a": "Noch nicht. P2P-Überweisungen sind auf ImuChat-Nutzer beschränkt. Sie können jedoch einen Einladungslink senden." },
+          { "q": "Wie funktioniert das Rechnungsteilen?", "a": "Erstellen Sie in der App eine gemeinsame Anforderung, fügen Sie Teilnehmer und Beträge hinzu. Jeder erhält eine Benachrichtigung und kann mit 1 Tipp zahlen." },
+          { "q": "Gibt es Transaktionslimits?", "a": "Ja, regulatorische Limits gelten je nach Identitätsverifizierungsstufe (KYC). Ohne KYC: 150€/Monat. Mit vollständigem KYC: 10.000€/Monat." }
+        ]
+      },
+      "imucoins": {
+        "title": "ImuCoins",
+        "questions": [
+          { "q": "Was ist ein ImuCoin?", "a": "Ein ImuCoin (IC) ist die interne Währung des ImuChat-Ökosystems. 100 IC = 1€, fester Kurs. Überall im Ökosystem verwendbar." },
+          { "q": "Können ImuCoins an Wert verlieren?", "a": "Nein. Der Kurs ist fest: 100 IC = 1€ immer. Sie sind keine Kryptowährungen. Sie unterliegen keiner Spekulation." },
+          { "q": "Wie verdiene ich kostenlose ImuCoins?", "a": "Nehmen Sie an täglichen Quests, ImuArena-Wettbewerben, Community-Challenges teil. Erhalten Sie Trinkgelder von Ihren Abonnenten als Creator." },
+          { "q": "Kann ich meine ImuCoins in echtes Geld umrechnen?", "a": "Die IC → EUR-Umrechnung ist zertifizierten Creatorn vorbehalten, unter Bedingungen und über einem Mindestschwellenwert." }
+        ]
+      },
+      "invest": {
+        "title": "Investitionen",
+        "questions": [
+          { "q": "Was ist der Mindestbetrag für Investitionen?", "a": "1€ für Bruchteilsaktien. 10€ für ETFs. 10€ für Kryptowährungen." },
+          { "q": "Sind meine Investitionen sicher?", "a": "Aktien- und ETF-Investitionen werden über unseren regulierten Custody-Partner gehalten. Krypto wird mit institutioneller Sicherheit gespeichert. Hinweis: Investitionen tragen Kapitalverlustrisiko." },
+          { "q": "Was ist Alice Finance?", "a": "Alice Finance ist unsere KI für Finanzanalyse. Sie analysiert Ihr Risikoprofil, Ihre Spargewohnheiten und schlägt Investitionen passend zu Ihren Zielen vor." },
+          { "q": "Kann ich meine Investitionen jederzeit abheben?", "a": "Ja für Aktien und ETFs (1-3 Werktage Liquidation). Krypto ist sofort verfügbar. Staking kann Sperrfristen haben." }
+        ]
+      },
+      "merchants": {
+        "title": "Händler",
+        "questions": [
+          { "q": "Welche Hardware wird benötigt, um ImuPay zu akzeptieren?", "a": "Keine für QR-Code-Zahlungen — Ihr Smartphone reicht. Für NFC ein NFC-kompatibles Terminal. Die Terminal-App funktioniert auf jedem Android/iOS-Tablet oder Smartphone." },
+          { "q": "Wann erhalte ich die Gelder aus Zahlungen?", "a": "Gelder sind innerhalb von 24 Arbeitsstunden in Ihrem Dashboard verfügbar. Überweisung auf Ihr Bankkonto sofort oder automatisch geplant möglich." },
+          { "q": "Gibt es Installations- oder Abonnementgebühren?", "a": "Nein. Nur 1,5% pro Transaktion. Keine Fixkosten, kein Abonnement, keine Installationsgebühren." },
+          { "q": "Kann ich die API für meinen E-Commerce nutzen?", "a": "Ja. Unsere REST-API ist auf developers.imuchat.app dokumentiert. SDKs für PHP, Python, Node.js und andere verfügbar." }
+        ]
+      },
+      "disputes": {
+        "title": "Streitigkeiten & Rückerstattungen",
+        "questions": [
+          { "q": "Ich wurde zu Unrecht belastet. Was tun?", "a": "Kontaktieren Sie unseren Support innerhalb von 60 Tagen. Fechten Sie die Transaktion über die App an (Verlauf > Transaktion > Anfechten). Wir eröffnen sofort eine Untersuchung." },
+          { "q": "Wie lange dauert eine Rückerstattung?", "a": "Für P2P-Zahlungen: sofort wenn der Empfänger zustimmt. Für angefochtene Kartenzahlungen: 5-15 Werktage je nach Bankverfahren." },
+          { "q": "Meine Bestellung ist nicht angekommen. Kann ich über ImuPay eine Rückerstattung erhalten?", "a": "Ja, wenn Sie mit Ihrer ImuChat-Karte bezahlt haben. Kontaktieren Sie zuerst den Händler. Bei keiner Antwort eröffnen Sie innerhalb von 60 Tagen einen Streitfall über die App." },
+          { "q": "Wie kontaktiere ich den Support in einer Notlage?", "a": "24/7-Support über die App (KI + menschlicher Chat). Telefon: +33 1 XX XX XX XX (Mo-Fr 9-18 Uhr). E-Mail: support-pay@imuchat.app" }
+        ]
+      }
+    }
+  },
+  "Contact": {
+    "meta": { "title": "Kontakt — ImuPay-Support", "description": "Kontaktieren Sie unser Support-Team für Fragen zu ImuPay." },
+    "hero": {
+      "title": "ImuPay-Support kontaktieren",
+      "subtitle": "Unser Team ist hier, um Ihnen zu helfen."
+    },
+    "form": {
+      "name": "Vollständiger Name",
+      "email": "E-Mail-Adresse",
+      "subject": "Betreff",
+      "subjects": {
+        "wallet": "Wallet & Guthaben",
+        "cards": "Karten",
+        "payments": "Zahlungen",
+        "imucoins": "ImuCoins",
+        "invest": "Investitionen",
+        "merchants": "Händlerkonto",
+        "security": "Sicherheit",
+        "other": "Sonstiges"
+      },
+      "message": "Ihre Nachricht",
+      "submit": "Senden",
+      "success": "Nachricht gesendet! Unser Team antwortet innerhalb von 24 Stunden.",
+      "error": "Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut."
+    },
+    "info": {
+      "phone": { "title": "Telefon", "value": "+33 1 XX XX XX XX", "hours": "Mo-Fr 9-18 Uhr" },
+      "email": { "title": "E-Mail", "value": "support-pay@imuchat.app" },
+      "chat": { "title": "In-App-Chat", "value": "24/7-Support über die ImuChat-App" }
+    }
+  },
+  "Legal": {
+    "meta": { "title": "Finanzielle AGB — ImuPay", "description": "Allgemeine Nutzungsbedingungen der ImuPay-Finanzdienstleistungen." },
+    "hero": {
+      "title": "Allgemeine Geschäftsbedingungen für Finanzdienstleistungen",
+      "subtitle": "Zuletzt aktualisiert: 15. März 2026"
+    },
+    "sections": {
+      "intro": {
+        "title": "1. Einleitung",
+        "content": "Diese Allgemeinen Geschäftsbedingungen (AGB) regeln die Nutzung der ImuPay-Finanzdienstleistungen von ImuChat SAS. Durch die Nutzung von ImuPay akzeptieren Sie diese Bedingungen vollumfänglich."
+      },
+      "services": {
+        "title": "2. Angebotene Dienstleistungen",
+        "content": "ImuPay bietet folgende Dienstleistungen an: Multi-Währungs-Wallet, virtuelle und physische Zahlungskarten, P2P-Zahlungen, Sparen mit Zieltresoren, Investitionen in Aktien und ETFs, Kauf und Nutzung von ImuCoins sowie Zahlungslösungen für Händler."
+      },
+      "eligibility": {
+        "title": "3. Anspruchsberechtigung",
+        "content": "Um ImuPay zu nutzen, müssen Sie: mindestens 18 Jahre alt sein, in der Europäischen Union wohnen, genaue Angaben bei der Registrierung machen und sich den gesetzlich vorgeschriebenen Identitätsverifizierungsverfahren (KYC) unterziehen."
+      },
+      "limits": {
+        "title": "4. Transaktionslimits",
+        "content": "Regulatorische Limits gelten je nach Verifizierungsstufe. Ohne KYC: max. 150€/Monat. Mit Standard-KYC: 2.500€/Monat. Mit vollständigem KYC: 10.000€/Monat. Diese Limits können ohne Vorankündigung aus regulatorischen oder Sicherheitsgründen geändert werden."
+      },
+      "liability": {
+        "title": "5. Haftung",
+        "content": "ImuChat SAS verpflichtet sich, Ihre Gelder und Daten zu sichern. Im Falle von Betrug oder unbefugter Nutzung, die innerhalb der erforderlichen Fristen gemeldet wird, verpflichtet sich ImuPay, eine Untersuchung zu eröffnen und Sie gemäß den geltenden Verfahren zu erstatten. ImuChat SAS kann nicht für Investitionsverluste haftbar gemacht werden."
+      },
+      "closure": {
+        "title": "6. Kontoschließung",
+        "content": "Sie können Ihr ImuPay-Konto jederzeit über die Anwendung schließen. Vor der Schließung muss Ihr Guthaben null sein oder auf eine externe IBAN übertragen werden. ImuChat SAS behält sich das Recht vor, ein Konto bei AGB-Verstößen, betrügerischen Aktivitäten oder auf Anfrage der zuständigen Behörden zu sperren oder zu schließen."
+      },
+      "invest_warning": {
+        "title": "7. Investitionswarnung",
+        "content": "Die von ImuPay angebotenen Investitionsdienstleistungen bergen Kapitalverlustrisiken. Vergangene Wertentwicklung garantiert keine zukünftigen Ergebnisse. ImuPay ist kein zugelassener Anlageberater. Von Alice Finance bereitgestellte Informationen dienen nur zu Informationszwecken."
+      },
+      "contact": {
+        "title": "8. Kontakt und Beschwerden",
+        "content": "Für Beschwerden bezüglich der ImuPay-Finanzdienstleistungen kontaktieren Sie: support-pay@imuchat.app. Beschwerden werden innerhalb von 15 Werktagen bearbeitet. Bei ungelösten Streitigkeiten können Sie den AMF-Mediator oder die Banque de France kontaktieren."
+      }
+    }
+  }
+}

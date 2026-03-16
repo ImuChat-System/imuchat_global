@@ -1,0 +1,4 @@
+User-agent: *
+Disallow: /
+
+# go.imuchat.app is a redirect service — no public indexing

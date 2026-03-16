@@ -1,0 +1,31 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-bg: #0a0a0a;
+  --color-bg-alt: #111827;
+  --color-text: #f9fafb;
+  --color-muted: #9ca3af;
+  --color-border: #1f2937;
+  --color-primary: #059669;
+  --color-accent: #f59e0b;
+}
+[data-theme="light"] {
+  --color-bg: #f0fdf4;
+  --color-bg-alt: #dcfce7;
+  --color-text: #111827;
+  --color-muted: #6b7280;
+  --color-border: #bbf7d0;
+  --color-primary: #047857;
+  --color-accent: #d97706;
+}
+body { background: var(--color-bg); color: var(--color-text); font-family: 'Inter', sans-serif; }
+.py-card { @apply rounded-2xl p-5; background: var(--color-bg-alt); border: 1px solid var(--color-border); }
+.py-card:hover { border-color: var(--color-primary); transition: border-color 0.15s; }
+.py-btn-primary { @apply px-6 py-3 rounded-xl font-semibold text-white transition-opacity; background: var(--color-primary); }
+.py-btn-primary:hover { opacity: 0.9; }
+.py-btn-ghost { @apply px-6 py-3 rounded-xl font-semibold transition-colors; border: 1.5px solid var(--color-border); color: var(--color-text); }
+.py-badge { @apply inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold; background: rgba(5,150,105,0.1); color: var(--color-primary); }
+.text-gradient-py { background: linear-gradient(135deg, #059669, #10b981); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.py-trust-badge { @apply flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold; background: rgba(5,150,105,0.1); color: var(--color-primary); border: 1px solid rgba(5,150,105,0.2); }

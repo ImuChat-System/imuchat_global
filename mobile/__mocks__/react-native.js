@@ -36,6 +36,11 @@ const FlatList = ({ data, renderItem, keyExtractor, children, ...props }) => {
 };
 FlatList.displayName = "FlatList";
 const Image = createMockComponent("Image");
+// Add static methods that hooks rely on
+Image.prefetch = jest.fn(() => Promise.resolve());
+Image.getSize = jest.fn();
+Image.getSizeWithHeaders = jest.fn();
+Image.resolveAssetSource = jest.fn(() => ({ uri: "", width: 0, height: 0 }));
 const TextInput = createMockComponent("TextInput");
 const ActivityIndicator = createMockComponent("ActivityIndicator");
 const Button = createMockComponent("Button");

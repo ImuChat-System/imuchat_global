@@ -7,7 +7,7 @@
  * Sprint S14A — Lazy Loading
  */
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 export interface LazySectionOptions {
     /** Délai en ms avant chargement automatique (fallback) */
@@ -101,11 +101,15 @@ export interface SectionConfig {
 export function useLazySectionGroup(sections: SectionConfig[]): Record<string, boolean> {
     const [loaded, setLoaded] = useState<Record<string, boolean>>({});
 
+    // Stabilize sections reference to avoid infinite re-render loops
+    const sectionsKey = JSON.stringify(sections);
+    const stableSections = useMemo(() => sections, [sectionsKey]); // eslint-disable-line react-hooks/exhaustive-deps
+
     useEffect(() => {
         const grouped = {
-            high: sections.filter((s) => s.priority === "high"),
-            medium: sections.filter((s) => s.priority === "medium"),
-            low: sections.filter((s) => s.priority === "low"),
+            high: stableSections.filter((s) => s.priority === "high"),
+            medium: stableSections.filter((s) => s.priority === "medium"),
+            low: stableSections.filter((s) => s.priority === "low"),
         };
 
         const timers: ReturnType<typeof setTimeout>[] = [];
@@ -142,7 +146,7 @@ export function useLazySectionGroup(sections: SectionConfig[]): Record<string, b
         }
 
         return () => timers.forEach(clearTimeout);
-    }, [sections]);
+    }, [stableSections]);
 
     return loaded;
 }

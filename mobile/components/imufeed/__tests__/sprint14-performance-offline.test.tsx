@@ -75,15 +75,8 @@ jest.mock("@react-native-community/netinfo", () => ({
   addEventListener: jest.fn(() => jest.fn()),
 }));
 
-// Mock Image.prefetch
+// Mock Image.prefetch — attached after imports below
 const mockPrefetch = jest.fn();
-jest.mock("react-native/Libraries/Image/Image", () => {
-  const actual = jest.requireActual("react-native/Libraries/Image/Image");
-  return {
-    ...actual,
-    prefetch: (...args) => mockPrefetch(...args),
-  };
-});
 
 // ─── Imports ──────────────────────────────────────────────────
 
@@ -106,6 +99,10 @@ import {
 } from "@/hooks/useMemoryMonitor";
 import { useOfflineCache } from "@/hooks/useOfflineCache";
 import { renderHook } from "@testing-library/react-native";
+import { Image } from "react-native";
+
+// Attach mockPrefetch to the mocked Image
+Image.prefetch = mockPrefetch;
 
 // ============================================================================
 // useOfflineCache — Cache offline avec TTL
@@ -158,7 +155,7 @@ describe("useOfflineCache", () => {
   it("restoreFromCache loads from AsyncStorage", async () => {
     const cachedPayload = JSON.stringify({
       data: { name: "test" },
-      cachedAt: Date.now(),
+      timestamp: Date.now(),
     });
     mockAsyncStorage["offline_cache:restore-test"] = cachedPayload;
 
@@ -176,7 +173,7 @@ describe("useOfflineCache", () => {
   it("respects TTL — expired cache returns null", async () => {
     const expiredPayload = JSON.stringify({
       data: "old-data",
-      cachedAt: Date.now() - 2 * 60 * 60 * 1000, // 2 hours ago
+      timestamp: Date.now() - 2 * 60 * 60 * 1000, // 2 hours ago
     });
     mockAsyncStorage["offline_cache:ttl-test"] = expiredPayload;
 

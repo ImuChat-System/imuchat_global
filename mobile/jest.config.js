@@ -1,7 +1,6 @@
-const path = require("path");
-
 module.exports = {
   // No preset - manual config to avoid RN 0.81.5 ESM issues
+  rootDir: __dirname,
   testEnvironment: "node",
   setupFilesAfterEnv: ["<rootDir>/jest.setup.js"],
   transformIgnorePatterns: [
@@ -12,7 +11,7 @@ module.exports = {
     "^.+\\.(js|jsx|ts|tsx)$": [
       "babel-jest",
       {
-        configFile: path.resolve(__dirname, "babel.config.js"),
+        configFile: require("path").resolve(__dirname, "babel.config.js"),
         plugins: ["@babel/plugin-transform-dynamic-import"],
       },
     ],

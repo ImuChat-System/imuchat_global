@@ -37,6 +37,10 @@ export function useImagePreload(
 ): ImagePreloadStatus & { preload: () => Promise<void> } {
     const { urls, immediate = true, concurrency = 3 } = options;
 
+    // Stabilize urls reference to avoid infinite re-render loops
+    const urlsRef = useRef(urls);
+    urlsRef.current = urls;
+
     const [loaded, setLoaded] = useState<string[]>([]);
     const [failed, setFailed] = useState<string[]>([]);
     const [pending, setPending] = useState<string[]>([]);
@@ -58,7 +62,7 @@ export function useImagePreload(
     }, []);
 
     const preload = useCallback(async () => {
-        const validUrls = urls.filter((u) => u && typeof u === "string");
+        const validUrls = urlsRef.current.filter((u) => u && typeof u === "string");
         if (validUrls.length === 0) return;
 
         if (mountedRef.current) {
@@ -88,7 +92,7 @@ export function useImagePreload(
                 }
             });
         }
-    }, [urls, concurrency, preloadSingle]);
+    }, [concurrency, preloadSingle]);
 
     useEffect(() => {
         if (immediate && urls.length > 0) {

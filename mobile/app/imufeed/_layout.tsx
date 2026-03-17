@@ -78,6 +78,20 @@ export default function ImuFeedLayout() {
           gestureEnabled: true,
         }}
       />
+      <Stack.Screen
+        name="live/create"
+        options={{
+          animation: "slide_from_bottom",
+          gestureEnabled: false,
+        }}
+      />
+      <Stack.Screen
+        name="live/[id]"
+        options={{
+          animation: "slide_from_bottom",
+          gestureEnabled: true,
+        }}
+      />
     </Stack>
   );
 }

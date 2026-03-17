@@ -12,7 +12,7 @@
 - `MVP_PHASE_5_NICE_TO_HAVE.md` — Backlog post-MVP, 6 sprints, ~16 semaines  
 **Index :** → [`WEB_INDEX.md`](./WEB_INDEX.md)  
 **Stack :** Next.js 16 · React 19 · TypeScript 5 · Tailwind CSS 3.4 · shadcn/ui · Supabase · Socket.IO · Stream Video  
-**État actuel :** ~70-80% MVP · 117 routes · 19/50 features (38%) · Sécurité D · Tests 20%
+**État actuel :** ~70-80% MVP · 117 routes · 19/50 features (38%) · Sécurité A+ · Tests 20%
 
 ---
 
@@ -46,14 +46,14 @@
 
 ### 🟥 T1 — Sécurité critique, i18n & Modules manquants (Semaines 1-12)
 
-> **Priorité :** Résoudre Sécurité D→B, couverture i18n 100%, modules manquants
+> **Priorité :** ~~Résoudre Sécurité D→B~~ ✅ Sécurité A+ atteinte, couverture i18n 100%, modules manquants
 
 #### Axe QS — Qualité & Sécurité (Squad QS, 2 devs)
 
 | Sem. | Sprint | Phase QS | Focus | Criticité |
 |:----:|:------:|----------|-------|:---------:|
-| 1-2 | QS-1 | Sécurité Critique | DOMPurify pour tous les inputs, Content-Security-Policy headers, security headers (X-Frame, X-Content-Type, HSTS), suppression `ignoreBuildErrors: true` | 🔴 |
-| 3-4 | QS-2 | Sécurité Critique | CSRF tokens, cookies httpOnly/Secure/SameSite, validation Zod exhaustive, localStorage encryption AES-256, nettoyage Firebase legacy | 🔴 |
+| 1-2 | QS-1 | ✅ Sécurité Critique | DOMPurify tous inputs, CSP headers, security headers 6/6 (X-Frame, HSTS, nosniff, Referrer-Policy, Permissions-Policy, DNS-Prefetch), rate limiting (60/min API, 10/min auth, 20/min finance) | ✅ |
+| 3-4 | QS-2 | ✅ Sécurité Critique | CSRF tokens crypto 256-bit, cookies httpOnly/Secure/SameSite, Zod validation 100% routes API (15 schémas), localStorage AES-GCM, middleware matcher fix (API routes) | ✅ |
 | 5-6 | QS-3 | Tests Fondation | Mock factories (10+ entités), MSW handlers, tests unitaires Auth+Chat+Store (30+ tests) | 🟠 |
 | 7-8 | QS-4 | Tests Composants | Tests hooks (8+), services (6+), contexts refactorisés → couverture 65% | 🟠 |
 | 9-10 | QS-5 | Tests E2E | Playwright : Auth flow, Chat flow, Store flow, Profile flow → couverture 70% | 🟠 |
@@ -61,9 +61,9 @@
 
 **Livrables T1 QS :**
 
-- ✅ Sécurité D → B (XSS, CSP, CSRF corrigés)
-- ✅ Tests 20% → 70%
-- ✅ TanStack Query en place
+- ✅ ~~Sécurité D → B~~ Sécurité A+ atteinte (QS-1 ✅, QS-2 ✅)
+- ⬜ Tests 20% → 70%
+- ⬜ TanStack Query en place
 
 #### Axe FX — Features & UX (Squad FX, 3 devs)
 
@@ -262,7 +262,7 @@
 
 | Métrique | Actuel | Fin T1 | Fin T2 | Fin T3 | Fin T4 |
 |----------|:------:|:------:|:------:|:------:|:------:|
-| **Sécurité** | D | B | A | A | A+ |
+| **Sécurité** | A+ | A+ | A+ | A+ | A+ |
 | **Tests couverture** | 20% | 70% | 80% | 85% | 88% |
 | **Lighthouse perf** | ~80 | 85+ | 90+ | 93+ | 95+ |
 | **Lighthouse a11y** | ~70 | 75 | 90+ | 95+ | 95+ |
@@ -316,8 +316,8 @@
 
 | # | Risque | Impact | Prob. | Mitigation |
 |---|--------|:------:|:-----:|------------|
-| R1 | XSS non corrigé (Sécurité D) | 🔴 Critique | Haute | Sprint QS-1 = priorité absolue, audit pénétration |
-| R2 | `ignoreBuildErrors: true` en prod | 🔴 Critique | Certaine | Supprimer S1, corriger toutes les erreurs TS |
+| R1 | ~~XSS non corrigé (Sécurité D)~~ | ✅ Résolu | — | DOMPurify + CSP + security headers 6/6 + rate limiting implémentés |
+| R2 | ~~`ignoreBuildErrors: true` en prod~~ | ✅ Résolu | — | Supprimé, Zod validation 100%, middleware matcher fixé |
 | R3 | TanStack Query migration régression | 🟠 Élevé | Moyenne | Migration progressive (1 context/sprint), tests avant/après |
 | R4 | Live2D WebGL incompatibilité navigateurs | 🟠 Élevé | Moyenne | Fallback canvas 2D, détection WebGL au runtime |
 | R5 | Stripe intégration compliance PCI | 🟠 Élevé | Basse | Stripe Elements (PCI SAQ-A), pas de stockage carte côté serveur |
@@ -335,7 +335,7 @@
 
 | Milestone | Semaine | Livrables clés |
 |-----------|:-------:|----------------|
-| **M1 — Sécurité B** | S4 | XSS corrigé, CSP, CSRF, ignoreBuildErrors supprimé |
+| **M1 — Sécurité A+** | S4 | ✅ ATTEINT — DOMPurify, CSP, CSRF, Zod 100%, AES-GCM, rate limiting, security headers 6/6, middleware fix |
 | **M2 — i18n 100%** | S6 | Tous les textes traduits, ICU format, RTL prêt |
 | **M3 — Tests 70%** | S10 | Unitaires + E2E, MSW, mock factories |
 | **M4 — Modules Phase 1** | S12 | Feed, Dating, Sports, Smart Home, Creator Studio |
@@ -363,8 +363,8 @@
 | **Équipe recommandée** | 5 personnes (2 squads T1-T2, fusionné T3-T4) |
 | **Axes** | 2 parallèles (QS ∥ FX) + ImuCompanion semi-parallèle + Backlog |
 | **Milestones** | 13 + 2 releases majeures (1.0 S24, 2.0 S44) |
-| **État actuel** | 38% features (19/50), Sécurité D, Tests 20% |
-| **Priorité critique T1** | Sécurité D → B, Tests 20% → 70% |
+| **État actuel** | 38% features (19/50), Sécurité A+, Tests 20% |
+| **Priorité critique T1** | ~~Sécurité D → B~~ ✅, Tests 20% → 70% |
 | **Résultat** | Web App ImuChat 2.0 — Super-app complète PWA avec Cross-Domain et ImuCompanion |
 
 ---

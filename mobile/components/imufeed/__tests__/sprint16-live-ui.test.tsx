@@ -50,7 +50,7 @@ jest.mock("@/providers/ThemeProvider", () => ({
 // I18nProvider
 jest.mock("@/providers/I18nProvider", () => ({
   useI18n: () => ({
-    t: (key, fallback) => fallback || key,
+    t: (key, opts) => (opts && opts.defaultValue) || key,
     locale: "fr",
   }),
 }));

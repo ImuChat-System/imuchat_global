@@ -46,7 +46,7 @@ export default function LiveViewerScreen() {
   // Store
   const currentLive = useLiveStreamingStore((s) => s.currentLive);
   const chatMessages = useLiveStreamingStore((s) => s.chatMessages);
-  const pinnedMessage = useLiveStreamingStore((s) => s.pinMessage);
+  const pinnedMessage = useLiveStreamingStore((s) => s.pinnedMessage);
   const viewerCount = useLiveStreamingStore((s) => s.viewerCount);
   const isHosting = useLiveStreamingStore((s) => s.isHosting);
   const connectionStatus = useLiveStreamingStore((s) => s.connectionStatus);
@@ -168,15 +168,18 @@ export default function LiveViewerScreen() {
   const handleEndLive = useCallback(async () => {
     if (!id) return;
     Alert.alert(
-      t("live.endTitle", "Terminer le live ?"),
-      t(
-        "live.endMessage",
-        "Ton live sera terminé et tes viewers seront déconnectés.",
-      ),
+      t("live.endTitle", { defaultValue: "Terminer le live ?" }),
+      t("live.endMessage", {
+        defaultValue:
+          "Ton live sera terminé et tes viewers seront déconnectés.",
+      }),
       [
-        { text: t("common.cancel", "Annuler"), style: "cancel" },
         {
-          text: t("live.endConfirm", "Terminer"),
+          text: t("common.cancel", { defaultValue: "Annuler" }),
+          style: "cancel",
+        },
+        {
+          text: t("live.endConfirm", { defaultValue: "Terminer" }),
           style: "destructive",
           onPress: async () => {
             await liveService.endLive(id);
@@ -200,7 +203,7 @@ export default function LiveViewerScreen() {
       <View testID="live-loading" style={styles.loadingContainer}>
         <ActivityIndicator size="large" color="#FF0000" />
         <Text style={styles.loadingText}>
-          {t("live.connecting", "Connexion au live...")}
+          {t("live.connecting", { defaultValue: "Connexion au live..." })}
         </Text>
       </View>
     );
@@ -248,7 +251,7 @@ export default function LiveViewerScreen() {
             onPress={handleEndLive}
           >
             <Text style={styles.endButtonText}>
-              {t("live.end", "Terminer")}
+              {t("live.end", { defaultValue: "Terminer" })}
             </Text>
           </TouchableOpacity>
         ) : (
@@ -263,8 +266,8 @@ export default function LiveViewerScreen() {
         <View testID="connection-status" style={styles.connectionBanner}>
           <Text style={styles.connectionText}>
             {connectionStatus === "connecting"
-              ? t("live.connecting", "Connexion...")
-              : t("live.disconnected", "Déconnecté")}
+              ? t("live.connecting", { defaultValue: "Connexion..." })
+              : t("live.disconnected", { defaultValue: "Déconnecté" })}
           </Text>
         </View>
       )}

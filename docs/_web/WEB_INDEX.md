@@ -4,7 +4,7 @@
 **Plateforme :** Web App ImuChat  
 **Stack :** Next.js 16 · React 19 · TypeScript 5 · Tailwind CSS 3.4 · shadcn/ui · Supabase · Socket.IO · Stream Video  
 **État actuel :** ~70-80% MVP · 117 routes · 55+ services · 45+ composants Radix UI · 8 thèmes × 2 modes  
-**Audit global :** Note B- · Sécurité **D** (critique) · Tests ~20% · 19/50 features (38%)
+**Audit global :** Note B+ · Sécurité **A+** · Tests ~20% · 19/50 features (38%)
 
 ---
 
@@ -15,6 +15,7 @@ docs/_web/
 ├── WEB_INDEX.md                         ← CE FICHIER (navigation)
 ├── WEB_ROADMAP_UNIFIED.md               ← Source de vérité unique (sprints unifiés)
 │
+├── ROADMAP_WEB_CROSS_PLATFORM.md        🟢 Actif — parité cross-platform vs mobile
 ├── ROADMAP_WEB_GLOBAL.md                🔵 Référence (remplacé par UNIFIED)
 ├── ROADMAP_WEB_FEATURES_UX.md           🟢 Actif — sous-roadmap Axe Features/UX
 ├── ROADMAP_WEB_QUALITY_SECURITY.md      🟢 Actif — sous-roadmap Axe Qualité/Sécu
@@ -32,6 +33,7 @@ docs/_web/
 | Document | Statut | Rôle | Contenu clé |
 |----------|:------:|------|-------------|
 | **WEB_ROADMAP_UNIFIED.md** | 🟢 Actif | Source de vérité | Sprints S1→S44, planning consolidé |
+| **ROADMAP_WEB_CROSS_PLATFORM.md** | 🟢 Actif | Parité cross-platform | 12 sprints W1→W12, alignement mobile 7 phases, Watch Tab critique |
 | **ROADMAP_WEB_GLOBAL.md** | 🔵 Référence | Consolidation originale | 2 axes (QS+FX), planning Q1-Q4, supersédé |
 | **ROADMAP_WEB_FEATURES_UX.md** | 🟢 Actif | Détail Axe FX | 7 phases, 20 sprints, tâches détaillées avec chemins fichiers |
 | **ROADMAP_WEB_QUALITY_SECURITY.md** | 🟢 Actif | Détail Axe QS | 6 phases, 12 sprints, sécurité/tests/perf/a11y |
@@ -49,8 +51,8 @@ docs/_web/
 
 | Sprint Global | Sprint Local | Phase | Focus |
 |:-------------:|:------------:|-------|-------|
-| S1 | QS-1 | Sécurité Critique | DOMPurify, CSP, security headers |
-| S2 | QS-2 | Sécurité Critique | CSRF, cookies httpOnly, Zod validation, localStorage encryption |
+| S1 | QS-1 | ✅ Sécurité Critique | DOMPurify, CSP, security headers, rate limiting |
+| S2 | QS-2 | ✅ Sécurité Critique | CSRF, cookies httpOnly, Zod validation 100% API, localStorage AES-GCM |
 | S3 | QS-3 | Tests fondation | Mock factories, MSW, tests Auth+Chat+Store |
 | S4 | QS-4 | Tests composants | Hooks, services, contexts → couverture 65% |
 | S5 | QS-5 | Tests E2E | Playwright Auth/Chat/Store/Profile → 70% |
@@ -119,7 +121,7 @@ docs/_web/
 | a11y | C | Audit WCAG à faire |
 | Tests | C | ~20% couverture |
 | Performance | B | Manque memoization / virtualisation |
-| **Sécurité** | **D** | **CRITIQUE : XSS, CSP, CSRF** |
+| **Sécurité** | **A+** | DOMPurify, CSP, CSRF, Zod 100%, AES-GCM, rate limiting, security headers 6/6 |
 | Code Quality | B+ | ESLint basique |
 
 ### Couverture fonctionnelle (50 features core)
@@ -163,4 +165,4 @@ docs/_web/
 ---
 
 > 📌 Mise à jour requise à chaque changement de sprint ou de scope.  
-> 📌 Priorité absolue T1 : résoudre Sécurité **D** → objectif **A** (QS-1, QS-2).
+> 📌 Sécurité **A+** atteinte (QS-1 ✅, QS-2 ✅). Prochaine priorité : QS-3 Tests fondation.

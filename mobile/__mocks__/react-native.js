@@ -47,6 +47,8 @@ const Button = createMockComponent("Button");
 const Switch = createMockComponent("Switch");
 const SafeAreaView = createMockComponent("SafeAreaView");
 const Modal = createMockComponent("Modal");
+const KeyboardAvoidingView = createMockComponent("KeyboardAvoidingView");
+const StatusBar = createMockComponent("StatusBar");
 
 // StyleSheet mock
 const StyleSheet = {
@@ -319,6 +321,8 @@ module.exports = {
   Switch,
   SafeAreaView,
   Modal,
+  KeyboardAvoidingView,
+  StatusBar,
 
   // APIs
   StyleSheet,

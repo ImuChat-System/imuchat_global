@@ -217,14 +217,16 @@ export interface LiveStreamStoreState {
     currentLive: LiveStream | null;
     /** Chat messages (most recent) */
     chatMessages: LiveChatMessage[];
-    /** Active viewers (sample) */
-    viewers: LiveViewer[];
+    /** Current viewer count */
+    viewerCount: number;
+    /** Peak viewer count */
+    peakViewerCount: number;
     /** Is user currently hosting */
     isHosting: boolean;
-    /** Is user a moderator for current live */
-    isModerator: boolean;
     /** Connection status */
     connectionStatus: "connecting" | "connected" | "disconnected" | "error";
+    /** Pinned chat message */
+    pinnedMessage: LiveChatMessage | null;
     /** Recent donations for animation queue */
     donationQueue: LiveDonation[];
     /** Floating reactions to animate */

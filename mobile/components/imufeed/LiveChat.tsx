@@ -194,7 +194,9 @@ export default function LiveChat({
             style={styles.input}
             value={inputText}
             onChangeText={setInputText}
-            placeholder={t("live.chatPlaceholder", "Dire quelque chose...")}
+            placeholder={t("live.chatPlaceholder", {
+              defaultValue: "Dire quelque chose...",
+            })}
             placeholderTextColor="rgba(255,255,255,0.4)"
             maxLength={200}
             returnKeyType="send"
@@ -215,7 +217,7 @@ export default function LiveChat({
       ) : (
         <View testID="chat-disabled" style={styles.chatDisabled}>
           <Text style={styles.chatDisabledText}>
-            {t("live.chatDisabled", "Le chat est désactivé")}
+            {t("live.chatDisabled", { defaultValue: "Le chat est désactivé" })}
           </Text>
         </View>
       )}

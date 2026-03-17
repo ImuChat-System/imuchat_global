@@ -85,8 +85,11 @@ export default function CreateLiveScreen() {
 
     if (error || !data) {
       Alert.alert(
-        t("live.error", "Erreur"),
-        error || t("live.createFailed", "Impossible de lancer le live"),
+        t("live.error", { defaultValue: "Erreur" }),
+        error ||
+          t("live.createFailed", {
+            defaultValue: "Impossible de lancer le live",
+          }),
       );
       return;
     }
@@ -118,7 +121,7 @@ export default function CreateLiveScreen() {
           <Ionicons name="close" size={28} color={colors.text} />
         </TouchableOpacity>
         <Text style={[styles.headerTitle, { color: colors.text }]}>
-          {t("live.createTitle", "Lancer un live")}
+          {t("live.createTitle", { defaultValue: "Lancer un live" })}
         </Text>
         <View style={{ width: 28 }} />
       </View>
@@ -129,7 +132,7 @@ export default function CreateLiveScreen() {
       >
         {/* Title */}
         <Text style={[styles.label, { color: colors.text }]}>
-          {t("live.titleLabel", "Titre du live")}
+          {t("live.titleLabel", { defaultValue: "Titre du live" })}
         </Text>
         <TextInput
           testID="live-title-input"
@@ -139,14 +142,16 @@ export default function CreateLiveScreen() {
           ]}
           value={title}
           onChangeText={setTitle}
-          placeholder={t("live.titlePlaceholder", "De quoi parle ton live ?")}
+          placeholder={t("live.titlePlaceholder", {
+            defaultValue: "De quoi parle ton live ?",
+          })}
           placeholderTextColor={colors.textSecondary}
           maxLength={100}
         />
 
         {/* Description */}
         <Text style={[styles.label, { color: colors.text }]}>
-          {t("live.descLabel", "Description (optionnel)")}
+          {t("live.descLabel", { defaultValue: "Description (optionnel)" })}
         </Text>
         <TextInput
           testID="live-description-input"
@@ -157,10 +162,9 @@ export default function CreateLiveScreen() {
           ]}
           value={description}
           onChangeText={setDescription}
-          placeholder={t(
-            "live.descPlaceholder",
-            "Dis-en plus à tes viewers...",
-          )}
+          placeholder={t("live.descPlaceholder", {
+            defaultValue: "Dis-en plus à tes viewers...",
+          })}
           placeholderTextColor={colors.textSecondary}
           multiline
           maxLength={300}
@@ -169,7 +173,7 @@ export default function CreateLiveScreen() {
 
         {/* Category */}
         <Text style={[styles.label, { color: colors.text }]}>
-          {t("live.categoryLabel", "Catégorie")}
+          {t("live.categoryLabel", { defaultValue: "Catégorie" })}
         </Text>
         <View testID="category-grid" style={styles.categoryGrid}>
           {CATEGORIES.map((cat) => (
@@ -219,7 +223,7 @@ export default function CreateLiveScreen() {
             <View style={styles.settingInfo}>
               <Ionicons name="gift" size={20} color={colors.text} />
               <Text style={[styles.settingLabel, { color: colors.text }]}>
-                {t("live.donations", "Donations")}
+                {t("live.donations", { defaultValue: "Donations" })}
               </Text>
             </View>
             <Switch
@@ -234,7 +238,9 @@ export default function CreateLiveScreen() {
             <View style={styles.settingInfo}>
               <Ionicons name="videocam" size={20} color={colors.text} />
               <Text style={[styles.settingLabel, { color: colors.text }]}>
-                {t("live.autoRecord", "Enregistrer le replay")}
+                {t("live.autoRecord", {
+                  defaultValue: "Enregistrer le replay",
+                })}
               </Text>
             </View>
             <Switch
@@ -249,7 +255,7 @@ export default function CreateLiveScreen() {
             <View style={styles.settingInfo}>
               <Ionicons name="warning" size={20} color={colors.text} />
               <Text style={[styles.settingLabel, { color: colors.text }]}>
-                {t("live.adultOnly", "Contenu 18+")}
+                {t("live.adultOnly", { defaultValue: "Contenu 18+" })}
               </Text>
             </View>
             <Switch
@@ -279,7 +285,7 @@ export default function CreateLiveScreen() {
             <>
               <Ionicons name="radio" size={22} color="#fff" />
               <Text style={styles.goLiveText}>
-                {t("live.goLive", "Passer en live")}
+                {t("live.goLive", { defaultValue: "Passer en live" })}
               </Text>
             </>
           )}

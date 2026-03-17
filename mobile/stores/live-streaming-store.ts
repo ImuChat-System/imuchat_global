@@ -115,7 +115,7 @@ export const useLiveStreamingStore = create<LiveStreamingStore>((set, get) => ({
     updateViewerCount: (count) =>
         set((state) => ({
             viewerCount: count,
-            peakViewerCount: Math.max(state.setPeakViewerCount, count),
+            peakViewerCount: Math.max(state.peakViewerCount, count),
         })),
 
     setPeakViewerCount: (count) => set({ peakViewerCount: count }),

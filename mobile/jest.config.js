@@ -1,3 +1,5 @@
+const path = require("path");
+
 module.exports = {
   // No preset - manual config to avoid RN 0.81.5 ESM issues
   testEnvironment: "node",
@@ -10,7 +12,7 @@ module.exports = {
     "^.+\\.(js|jsx|ts|tsx)$": [
       "babel-jest",
       {
-        configFile: "./babel.config.js",
+        configFile: path.resolve(__dirname, "babel.config.js"),
         plugins: ["@babel/plugin-transform-dynamic-import"],
       },
     ],

@@ -210,6 +210,52 @@ export interface LiveModerationEntry {
     createdAt: string;
 }
 
+// ─── Polls ────────────────────────────────────────────────────
+
+export interface LivePollOption {
+    id: string;
+    text: string;
+    voteCount: number;
+}
+
+export interface LivePoll {
+    id: string;
+    liveId: string;
+    question: string;
+    options: LivePollOption[];
+    /** Total votes */
+    totalVotes: number;
+    /** Has the current user voted? */
+    hasVoted: boolean;
+    /** Index the user voted for (null if not voted) */
+    votedOptionIndex: number | null;
+    /** Duration in seconds (0 = until manually closed) */
+    durationSeconds: number;
+    /** Is poll still accepting votes */
+    isActive: boolean;
+    createdAt: string;
+    closedAt: string | null;
+}
+
+// ─── Replay ───────────────────────────────────────────────────
+
+export interface LiveReplay {
+    id: string;
+    liveId: string;
+    hostId: string;
+    hostName: string;
+    title: string;
+    category: LiveCategory;
+    thumbnailUrl: string | null;
+    replayUrl: string;
+    /** Duration in seconds */
+    duration: number;
+    viewCount: number;
+    likeCount: number;
+    peakViewerCount: number;
+    createdAt: string;
+}
+
 // ─── Store State ──────────────────────────────────────────────
 
 export interface LiveStreamStoreState {
@@ -231,4 +277,12 @@ export interface LiveStreamStoreState {
     donationQueue: LiveDonation[];
     /** Floating reactions to animate */
     reactionQueue: LiveReaction[];
+    /** Active poll during live */
+    activePoll: LivePoll | null;
+    /** Co-host requests */
+    coHostRequests: CoHostRequest[];
+    /** Active co-hosts user IDs */
+    activeCoHosts: string[];
+    /** Assigned moderator user IDs */
+    moderators: string[];
 }

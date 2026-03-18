@@ -20,7 +20,21 @@ const Pressable = createMockComponent("Pressable");
 const ScrollView = createMockComponent("ScrollView");
 
 // FlatList mock that actually renders items via data + renderItem
-const FlatList = ({ data, renderItem, keyExtractor, children, ...props }) => {
+const FlatList = ({
+  data,
+  renderItem,
+  keyExtractor,
+  ListEmptyComponent,
+  children,
+  ...props
+}) => {
+  if ((!data || data.length === 0) && ListEmptyComponent) {
+    const empty =
+      typeof ListEmptyComponent === "function"
+        ? React.createElement(ListEmptyComponent)
+        : ListEmptyComponent;
+    return React.createElement("FlatList", props, empty);
+  }
   const items =
     data && renderItem
       ? data.map((item, index) => {

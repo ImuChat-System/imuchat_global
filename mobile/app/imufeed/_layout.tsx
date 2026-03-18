@@ -92,6 +92,20 @@ export default function ImuFeedLayout() {
           gestureEnabled: true,
         }}
       />
+      <Stack.Screen
+        name="live/replays"
+        options={{
+          animation: "slide_from_right",
+          gestureEnabled: true,
+        }}
+      />
+      <Stack.Screen
+        name="moderation-queue"
+        options={{
+          animation: "slide_from_right",
+          gestureEnabled: true,
+        }}
+      />
     </Stack>
   );
 }

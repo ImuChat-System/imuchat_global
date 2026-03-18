@@ -12,8 +12,10 @@ import type {
     LiveCategory,
     LiveChatMessage,
     LiveDonation,
+    LivePoll,
     LiveReaction,
     LiveReactionType,
+    LiveReplay,
     LiveStream,
     LiveStreamSettings,
     LiveStreamStatus,
@@ -430,7 +432,207 @@ export class LiveStreamingService {
         return { error: error?.message || null };
     }
 
+    // ── Assign Moderator ──────────────────────────────────────
+
+    /**
+     * Assign a user as moderator for this live
+     */
+    async assignModerator(
+        liveId: string,
+        targetUserId: string,
+    ): Promise<{ error: string | null }> {
+        const { data: user } = await supabase.auth.getUser();
+        if (!user?.user) return { error: "Not authenticated" };
+
+        const { error } = await supabase
+            .from("imufeed_live_moderators")
+            .insert({
+                live_id: liveId,
+                user_id: targetUserId,
+                assigned_by: user.user.id,
+            });
+
+        return { error: error?.message || null };
+    }
+
+    /**
+     * Remove a moderator
+     */
+    async removeModerator(
+        liveId: string,
+        targetUserId: string,
+    ): Promise<{ error: string | null }> {
+        const { error } = await supabase
+            .from("imufeed_live_moderators")
+            .delete()
+            .eq("live_id", liveId)
+            .eq("user_id", targetUserId);
+
+        return { error: error?.message || null };
+    }
+
+    // ── Polls ─────────────────────────────────────────────────
+
+    /**
+     * Create an interactive poll during a live
+     */
+    async createPoll(params: {
+        liveId: string;
+        question: string;
+        options: string[];
+        durationSeconds?: number;
+    }): Promise<{ data: LivePoll | null; error: string | null }> {
+        const { data: user } = await supabase.auth.getUser();
+        if (!user?.user) return { data: null, error: "Not authenticated" };
+
+        const { data, error } = await supabase
+            .from("imufeed_live_polls")
+            .insert({
+                live_id: params.liveId,
+                question: params.question,
+                options: params.options.map((text, i) => ({
+                    id: `opt_${i}`,
+                    text,
+                    voteCount: 0,
+                })),
+                duration_seconds: params.durationSeconds ?? 0,
+                is_active: true,
+            })
+            .select()
+            .single();
+
+        if (error) return { data: null, error: error.message };
+        return { data: this.mapPollRow(data), error: null };
+    }
+
+    /**
+     * Vote on a poll option
+     */
+    async votePoll(
+        pollId: string,
+        optionIndex: number,
+    ): Promise<{ error: string | null }> {
+        const { data: user } = await supabase.auth.getUser();
+        if (!user?.user) return { error: "Not authenticated" };
+
+        const { error } = await supabase
+            .from("imufeed_live_poll_votes")
+            .insert({
+                poll_id: pollId,
+                user_id: user.user.id,
+                option_index: optionIndex,
+            });
+
+        return { error: error?.message || null };
+    }
+
+    /**
+     * Close a poll
+     */
+    async closePoll(pollId: string): Promise<{ error: string | null }> {
+        const { error } = await supabase
+            .from("imufeed_live_polls")
+            .update({
+                is_active: false,
+                closed_at: new Date().toISOString(),
+            })
+            .eq("id", pollId);
+
+        return { error: error?.message || null };
+    }
+
+    /**
+     * Subscribe to poll updates via broadcast
+     */
+    subscribeToPollChannel(
+        liveId: string,
+        onPoll: (poll: LivePoll) => void,
+    ): () => void {
+        const channel = supabase
+            .channel(`live-poll:${liveId}`)
+            .on(
+                "broadcast",
+                { event: "poll_update" },
+                (payload) => {
+                    onPoll(payload.payload as LivePoll);
+                },
+            )
+            .subscribe();
+
+        return () => {
+            supabase.removeChannel(channel);
+        };
+    }
+
+    // ── Replays ───────────────────────────────────────────────
+
+    /**
+     * Get replays for a host
+     */
+    async getReplaysByHost(
+        hostId: string,
+        limit: number = 20,
+    ): Promise<{ data: LiveReplay[]; error: string | null }> {
+        const { data, error } = await supabase
+            .from("imufeed_lives")
+            .select()
+            .eq("host_id", hostId)
+            .eq("status", "ended")
+            .eq("has_replay", true)
+            .order("ended_at", { ascending: false })
+            .limit(limit);
+
+        if (error) return { data: [], error: error.message };
+
+        return {
+            data: (data || []).map((row: any): LiveReplay => ({
+                id: row.id,
+                liveId: row.id,
+                hostId: row.host_id,
+                hostName: row.host_name || "",
+                title: row.title,
+                category: row.category,
+                thumbnailUrl: row.thumbnail_url || null,
+                replayUrl: row.replay_url || "",
+                duration: row.duration || 0,
+                viewCount: row.view_count || 0,
+                likeCount: row.like_count || 0,
+                peakViewerCount: row.peak_viewer_count || 0,
+                createdAt: row.ended_at || row.created_at,
+            })),
+            error: null,
+        };
+    }
+
+    /**
+     * Delete a replay (set has_replay to false)
+     */
+    async deleteReplay(liveId: string): Promise<{ error: string | null }> {
+        const { error } = await supabase
+            .from("imufeed_lives")
+            .update({ has_replay: false, replay_url: null })
+            .eq("id", liveId);
+
+        return { error: error?.message || null };
+    }
+
     // ── Helpers ───────────────────────────────────────────────
+
+    private mapPollRow(row: any): LivePoll {
+        return {
+            id: row.id,
+            liveId: row.live_id,
+            question: row.question,
+            options: row.options || [],
+            totalVotes: row.total_votes || 0,
+            hasVoted: false,
+            votedOptionIndex: null,
+            durationSeconds: row.duration_seconds || 0,
+            isActive: row.is_active ?? true,
+            createdAt: row.created_at,
+            closedAt: row.closed_at || null,
+        };
+    }
 
     private mapLiveRow(row: any): LiveStream {
         return {
